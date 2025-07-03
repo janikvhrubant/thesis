@@ -1,0 +1,307 @@
+%----------------------------------------------------------------------------------------
+%	PACKAGES AND OTHER DOCUMENT CONFIGURATIONS
+%----------------------------------------------------------------------------------------
+
+\documentclass[
+11pt, % The default document font size, options: 10pt, 11pt, 12pt
+%oneside, % Two side (alternating margins) for binding by default, uncomment to switch to one side
+english, % ngerman for German
+singlespacing, % Single line spacing, alternatives: onehalfspacing or doublespacing
+%draft, % Uncomment to enable draft mode (no pictures, no links, overfull hboxes indicated)
+%nolistspacing, % If the document is onehalfspacing or doublespacing, uncomment this to set spacing in lists to single
+%liststotoc, % Uncomment to add the list of figures/tables/etc to the table of contents
+%toctotoc, % Uncomment to add the main table of contents to the table of contents
+%parskip, % Uncomment to add space between paragraphs
+%nohyperref, % Uncomment to not load the hyperref package
+headsepline, % Uncomment to get a line under the header
+%chapterinoneline, % Uncomment to place the chapter title next to the number on one line
+%consistentlayout, % Uncomment to change the layout of the declaration, abstract and acknowledgements pages to match the default layout
+]{MastersThesis} % The class file specifying the document structure
+
+\usepackage[utf8]{inputenc} % Required for inputting international characters
+\usepackage[T1]{fontenc} % Output font encoding for international characters
+
+\usepackage{mathpazo} % Use the Palatino font by default
+\usepackage{tikz}
+\usepackage{acronym} % Acronyms
+\usetikzlibrary{decorations.pathreplacing,positioning, arrows.meta}
+\newcommand{\ImageWidth}{11cm}
+\definecolor{myLightGray}{RGB}{191,191,191}
+\definecolor{myGray}{RGB}{160,160,160}
+\definecolor{myDarkGray}{RGB}{144,144,144}
+\definecolor{myDarkRed}{RGB}{167,114,115}
+\definecolor{myRed}{RGB}{255,58,70}
+\definecolor{myGreen}{RGB}{0,255,71}
+\usepackage{hyperref}
+\usepackage{parskip}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+% \hypersetup{
+%     colorlinks=true,
+%     linkcolor=blue,
+%     filecolor=magenta,      
+%     urlcolor=cyan,
+%     pdftitle={Overleaf Example},
+%     pdfpagemode=FullScreen,
+% }
+
+\usepackage[backend=bibtex,style=authoryear,natbib=true]{biblatex} % Use the bibtex backend with the authoryear citation style (which resembles APA)
+
+\addbibresource{example.bib} % The filename of the bibliography
+
+\usepackage[autostyle=true]{csquotes} % Required to generate language-dependent quotes in the bibliography
+
+%----------------------------------------------------------------------------------------
+%	MARGIN SETTINGS
+%----------------------------------------------------------------------------------------
+
+\geometry{
+	paper=a4paper, % Change to letterpaper for US letter
+	inner=2.5cm, % Inner margin
+	outer=3.8cm, % Outer margin
+	bindingoffset=.5cm, % Binding offset
+	top=1.5cm, % Top margin
+	bottom=1.5cm, % Bottom margin
+	head=27.2pt, % Adjust head height to avoid warnings
+	%showframe, % Uncomment to show how the type block is set on the page
+}
+
+%----------------------------------------------------------------------------------------
+%	THESIS INFORMATION
+%----------------------------------------------------------------------------------------
+
+\thesistitle{Quasi-Monte Carlo Methods \\ and Neural Networks} % Your thesis title, this is used in the title and abstract, print it elsewhere with \ttitle
+\supervisor{Prof. Dr. Andreas \textsc{Neuenkirch}} % Your supervisor's name, this is used in the title page, print it elsewhere with \supname
+\examiner{} % Your examiner's name, this is not currently used anywhere in the template, print it elsewhere with \examname
+\degree{Master of Science} % Your degree name, this is used in the title page and abstract, print it elsewhere with \degreename
+\author{Janik V. \textsc{Hrubant}} % Your name, this is used in the title page and abstract, print it elsewhere with \authorname
+\addresses{} % Your address, this is not currently used anywhere in the template, print it elsewhere with \addressname
+
+\subject{Mathematics} % Your subject area, this is not currently used anywhere in the template, print it elsewhere with \subjectname
+\keywords{} % Keywords for your thesis, this is not currently used anywhere in the template, print it elsewhere with \keywordnames
+\university{\href{https://www.uni-mannheim.de/en/}{University of Mannheim}} % Your university's name and URL, this is used in the title page and abstract, print it elsewhere with \univname
+\department{\href{http://department.university.com}{Department or School Name}} % Your department's name and URL, this is used in the title page and abstract, print it elsewhere with \deptname
+\group{\href{http://researchgroup.university.com}{Research Group Name}} % Your research group's name and URL, this is used in the title page, print it elsewhere with \groupname
+\faculty{\href{http://faculty.university.com}{Faculty Name}} % Your faculty's name and URL, this is used in the title page and abstract, print it elsewhere with \facname
+
+\AtBeginDocument{
+\hypersetup{pdftitle=\ttitle} % Set the PDF's title to your title
+\hypersetup{pdfauthor=\authorname} % Set the PDF's author to your name
+\hypersetup{pdfkeywords=\keywordnames} % Set the PDF's keywords to your keywords
+}
+
+\begin{document}
+
+\frontmatter % Use roman page numbering style (i, ii, iii, iv...) for the pre-content pages
+
+\pagestyle{plain} % Default to the plain heading style until the thesis style is called for the body content
+
+%----------------------------------------------------------------------------------------
+%	TITLE PAGE
+%----------------------------------------------------------------------------------------
+
+\begin{titlepage}
+\begin{center}
+
+\vspace*{.06\textheight}
+{\scshape\LARGE \univname\par}\vspace{1.5cm} % University name
+\textsc{\Large Master Thesis}\\[0.5cm] % Thesis type
+
+\HRule \\[0.4cm] % Horizontal line
+{\huge \bfseries \ttitle\par}\vspace{0.4cm} % Thesis title
+\HRule \\[1.5cm] % Horizontal line
+ 
+\begin{minipage}[t]{0.4\textwidth}
+\begin{flushleft} \large
+\emph{Author:}\\
+\authorname % Author name - remove the \href bracket to remove the link
+\end{flushleft}
+\end{minipage}
+\begin{minipage}[t]{0.4\textwidth}
+\begin{flushright} \large
+\emph{Supervisors:} \\
+\supname % Supervisor name - remove the \href bracket to remove the link  
+\end{flushright}
+\end{minipage}\\[3cm]
+ 
+\vfill
+
+\large \textit{A thesis submitted in fulfillment of the requirements\\ for the degree of \degreename}\\[0.3cm] % University requirement text
+\textit{in the}\\[0.4cm]
+\groupname\\\deptname\\[2cm] % Research group name and department name
+ 
+\vfill
+
+{\large \today}\\[4cm] % Date
+%\includegraphics{Logo} % University/department logo - uncomment to place it
+ 
+\vfill
+\end{center}
+\end{titlepage}
+
+%----------------------------------------------------------------------------------------
+%	DECLARATION PAGE
+%----------------------------------------------------------------------------------------
+
+\begin{declaration}
+\addchaptertocentry{\authorshipname} % Add the declaration to the table of contents
+\noindent I, \authorname, declare that this thesis titled, \enquote{\ttitle} and the work presented in it are my own. I confirm that:
+
+\begin{itemize} 
+\item This work was done wholly or mainly while in candidature for a research degree at this University.
+\item Where any part of this thesis has previously been submitted for a degree or any other qualification at this University or any other institution, this has been clearly stated.
+\item Where I have consulted the published work of others, this is always clearly attributed.
+\item Where I have quoted from the work of others, the source is always given. With the exception of such quotations, this thesis is entirely my own work.
+\item I have acknowledged all main sources of help.
+\item Where the thesis is based on work done by myself jointly with others, I have made clear exactly what was done by others and what I have contributed myself. \\
+\end{itemize}
+ 
+\noindent Signed:\\
+\rule[0.5em]{25em}{0.5pt} % This prints a line for the signature
+ 
+\noindent Date:\\
+\rule[0.5em]{25em}{0.5pt} % This prints a line to write the date
+\end{declaration}
+
+\cleardoublepage
+
+%----------------------------------------------------------------------------------------
+%	QUOTATION PAGE
+%----------------------------------------------------------------------------------------
+
+% \vspace*{0.2\textheight}
+
+% \noindent\enquote{\itshape Thanks to my solid academic training, today I can write hundreds of words on virtually any topic without possessing a shred of information, which is how I got a good job in journalism.}\bigbreak
+
+% \hfill Dave Barry
+
+%----------------------------------------------------------------------------------------
+%	ABSTRACT PAGE
+%----------------------------------------------------------------------------------------
+
+\begin{abstract}
+\addchaptertocentry{\abstractname} % Add the abstract to the table of contents
+This thesis explores the application of quasi-Monte Carlo (QMC) methods for generating training data for neural networks, with a particular emphasis on convergence behavior in both deterministic and stochastic settings. In contrast to classical Monte Carlo (MC) approaches, which rely on pseudorandom sampling, QMC methods use low-discrepancy sequences to achieve more uniform coverage of the input space, which can lead to improved approximation performance, especially in high-dimensional problems.
+
+In the first part of the thesis, QMC methods are applied to sample training inputs from a bounded domain. The corresponding function values are computed, and the resulting dataset is used to train neural networks. The convergence of the network output with respect to the number of training points is analyzed and compared against networks trained on MC-sampled data. The goal is to quantify the advantage of QMC-based training in terms of learning efficiency and approximation accuracy.
+
+The second part extends this investigation to stochastic functions. Here, the randomness in the system—such as in photon transport models—is explicitly modeled, and both QMC and MC sampling are used to sample from the stochastic variables. The focus is on physically motivated functions that simulate scattered photon radiation, a key challenge in medical imaging applications such as x-ray or CT simulations. Neural networks are trained on data generated from these stochastic models, and their convergence behavior is evaluated under QMC and MC sampling regimes.
+
+Through these experiments, the thesis demonstrates how QMC-based sampling can enhance neural network training, particularly when approximating complex physical processes. The results provide both theoretical insights and empirical evidence that QMC methods offer significant advantages over standard MC approaches in terms of convergence speed and generalization quality in high-dimensional learning problems.
+\end{abstract}
+% The idea of PRP is to help both, stores and distribuition centers by making arguable suggestions to automize their replenishment decisions. As their replenishment decisions highly impact their service and different retailers like Mirgros, Coop, Aldi or Lidl have cardinaly different strategies, these tools need to be adjusted for customer needs and product requirements. these results are highly dependent on Notably boths business results are highly dependent from their replanishment decisions on either restocking stores from deliveries by distribuition centers or distribuition center from further suppliers. \\
+% These decisions are arguably taken to the \emph{Theory of Constraints (TOC)}
+% Procurement of goods and products is a multifaceted process that presents substantial challenges for companies. Each decision, notably those around supplier orders, requires a comprehensive understanding of numerous essential business factors and limitations.This process begins with the critical task of demand prediction, followed by assessing variable prices relative to order quantities, and optimizing logistics considering the spatial and weight capacities of transport methods. Concurrently, while striving to maintain ample inventory, companies must be cognizant of definite expiration dates and anticipate potential spoilage.\\
+% This thesis concentrates on the accumulation of research outcomes pertaining to multiple dimensions and strategies for resolving the intricate optimization problem inherent in replenishment planning.\\
+% Funded by SAP, this research project is aimed at providing informed recommendations to the development team to enhance production code, ultimately leading to the creation of the Predictive Replenishment Planning (PRP) tool, a feature within the S4/HANA Cloud offering.\end{abstract}
+
+%----------------------------------------------------------------------------------------
+%	ACKNOWLEDGEMENTS
+%----------------------------------------------------------------------------------------
+
+% \begin{acknowledgements}
+% \addchaptertocentry{\acknowledgementname} % Add the acknowledgements to the table of contents
+% The acknowledgments and the people to thank go here, don't forget to include your project advisor\ldots
+% \end{acknowledgements}
+
+%----------------------------------------------------------------------------------------
+%	LIST OF CONTENTS/FIGURES/TABLES PAGES
+%----------------------------------------------------------------------------------------
+
+\tableofcontents % Prints the main table of contents
+
+% \listoffigures % Prints the list of figures
+
+% \listoftables % Prints the list of tables
+
+%----------------------------------------------------------------------------------------
+%	ABBREVIATIONS
+%----------------------------------------------------------------------------------------
+
+\newpage
+\begin{acronym}
+\include{Chapters/acronyms}
+\end{acronym}
+
+%----------------------------------------------------------------------------------------
+%	PHYSICAL CONSTANTS/OTHER DEFINITIONS
+%----------------------------------------------------------------------------------------
+
+% \begin{constants}{lr@{${}={}$}l} % The list of physical constants is a three column table
+
+% % The \SI{}{} command is provided by the siunitx package, see its documentation for instructions on how to use it
+
+% Speed of Light & $c_{0}$ & \SI{2.99792458e8}{\meter\per\second} (exact)\\
+% %Constant Name & $Symbol$ & $Constant Value$ with units\\
+
+% \end{constants}
+
+%----------------------------------------------------------------------------------------
+%	SYMBOLS
+%----------------------------------------------------------------------------------------
+
+% \begin{symbols}{lll} % Include a list of Symbols (a three column table)
+
+% $a$ & distance & \si{\meter} \\
+% $P$ & power & \si{\watt} (\si{\joule\per\second}) \\
+% %Symbol & Name & Unit \\
+
+% \addlinespace % Gap to separate the Roman symbols from the Greek
+
+% $\omega$ & angular frequency & \si{\radian} \\
+
+% \end{symbols}
+
+%----------------------------------------------------------------------------------------
+%	ACRONYMS
+%----------------------------------------------------------------------------------------
+
+\include{acronyms}
+
+%----------------------------------------------------------------------------------------
+%	DEDICATION
+%----------------------------------------------------------------------------------------
+
+% \dedicatory{For/Dedicated to/To my\ldots} 
+
+%----------------------------------------------------------------------------------------
+%	THESIS CONTENT - CHAPTERS
+%----------------------------------------------------------------------------------------
+
+\mainmatter % Begin numeric (1,2,3...) page numbering
+
+\pagestyle{thesis} % Return the page headers back to the "thesis" style
+
+% Include the chapters of the thesis as separate files from the Chapters folder
+% Uncomment the lines as you write the chapters
+
+\include{Chapters/Chapter1}
+\include{Chapters/Chapter2}
+\include{Chapters/Chapter3}
+\include{Chapters/Chapter4}
+\include{Chapters/Chapter5}
+\include{Chapters/Chapter6}
+\include{Chapters/Chapter7}
+
+%----------------------------------------------------------------------------------------
+%	THESIS CONTENT - APPENDICES
+%----------------------------------------------------------------------------------------
+
+\appendix % Cue to tell LaTeX that the following "chapters" are Appendices
+
+% Include the appendices of the thesis as separate files from the Appendices folder
+% Uncomment the lines as you write the Appendices
+
+\include{Appendices/AppendixA}
+%\include{Appendices/AppendixB}
+%\include{Appendices/AppendixC}
+
+%----------------------------------------------------------------------------------------
+%	BIBLIOGRAPHY
+%----------------------------------------------------------------------------------------
+
+% \printbibliography[heading=bibintoc]
+
+%----------------------------------------------------------------------------------------
+
+\end{document}  
