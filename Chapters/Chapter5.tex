@@ -1,114 +1,259 @@
-% % Chapter Template
-
-
 \part{X-ray Simulation using QMC Methods}
-\chapter{X-Ray Simulation using QMC methods} % Main chapter title
 
-% \label{Chapter5} % Change X to a consecutive number; for referencing this chapter elsewhere, use \ref{ChapterX}
+\chapter{Motivation and Problem Statement} % Main chapter title
+\label{Chapter6}
 
-% %-------------------------------------------------------------------------------
-% %	SECTION 1
-% %-------------------------------------------------------------------------------
+%-------------------------------------------------------------------------------
+%	SECTION 1
+\section{Computed Tomography Imaging}
+%-------------------------------------------------------------------------------
 
-% \section{Algorithm}
+\ac{ct} imaging is a powerful medical imaging technique that provides detailed
+cross-sectional images of a body by combining multiple X-ray projections taken
+from different angles. This technique is widely used for diagnostic purposes,
+allowing clinicians to visualize internal structures with high spatial
+resolution.
 
-% In this section the gQMCFFD algorithm from \cite{qmcXray2023} is introduced. The gQMCFFD algorithm uses QMC methods to simulate an X-ray image efficiently including scattering effects. The algorithm is designed to handle multiple scatter orders and utilizes 
-% In this section the Algorithm~\ref{alg:gQMCFFD} from \cite{qmcXray2023} is presented. The \ac{qmc}-Method is used to simulate the X-ray image. Therefore the algorithm is used 
-% The following pseudoalgorithm outlines the process of simulating X-ray photon transport using Quasi-Monte Carlo (QMC) methods. The algorithm generates a sequence of QMC samples to determine the initial positions and directions of photons, simulates their transport through a defined geometry, and records the results of interactions with materials. By that many other algorithms are used such als the \ac{rita} algorithm.
-% \begin{algorithm}{gQMCFFD}
-% \caption{gQMCFFD: X-ray Scatter Simulation (Part 1)}
-% \label{alg:gQMCFFD}
-% \begin{algorithmic}[1]
-% \State \textbf{Input:} Max. scatter order $N$, phantom geometry $\mathcal{P}$, energy spectrum $\phi$, beam angle $\alpha$, set of detector pixels $\mathcal{G}=\{G_1, ..., G_s\}$, QMC point $u^j \in [0,1]^{4N}$, step size $\Delta s$
-% \vspace{.25cm}
+The process involves rotating an X-ray source around the patient while
+simultaneously capturing X-ray projections on a detector array. Each projection
+represents the cumulative attenuation of X-rays as they pass through various
+tissues, which is influenced by the density and composition of the materials
+they encounter. 
 
-% \State \textbf{Initialize photon using } $u^j_1, u^j_2, u^j_3$:
-% \begin{itemize}
-%     \item energy $E_0 \sim \phi(E)$ by inverse transform sampling with $u^j_1$
-%     \item direction $\vec{\omega}_0$ within cone angle $\alpha$ using $u^j_2, u^j_3$
-%     \item weight $W_0 = I_0(\vec{\omega}_0) = 1$
-%     \item escape probability $p_0 = 0$ \textcolor{red}{TODO: ist das richtig initialisiert?}
-%     \end{itemize}
-%     \State Compute entry point: find smallest $t_0$ s.t. $A_0 = S + t_0 \cdot \vec{\omega}_0 \in \partial\mathcal{P}$
+The collected data is then reconstructed into a three-dimensional volume
+using sophisticated algorithms, such as filtered backprojection or iterative
+reconstruction methods. These algorithms convert the raw projection data into
+cross-sectional images, which can be further processed to enhance contrast,
+reduce noise and improve overall image quality.
 
-% \vspace{.25cm}
-% \State Initialize: $f_{n,k} = 0$ for all $D_k \in \mathcal{G}$
+To achieve accurate reconstructions, it is crucial to have precise and high-quality X-ray images. However, one of the most significant challenges in CT imaging is
+the presence of scattered radiation, which can lead to artifacts and distortions
+in the reconstructed images.
 
-% \For{$i = 1$ to $N$} \State $t_i\gets\Delta s$ \Comment{Initialize path length}
-%     \State$A_i \gets A_{i-1} + t_i \cdot \vec{\omega}_{i-1}$ \Comment{Initialize
-%     position} \LineComment{
-%     \parbox[t]{\dimexpr\linewidth-\algorithmicindent}{Sample free path length
-%     $t_i$ with $u^j_{4i}$}}
-    
-%     \While{$A_{i} \in \mathcal{P}$ \textbf{and} $\int\limits_0^{t_i}
-%     \mu_{\text{tot}}(A_{i-1} + s\vec{\omega}_{i-1}, E_{i-1}) ds < -\ln{\big(1 -
-%     (1 - p_{i-1}) u^j_{4i} \big)}$} \State $t_i \gets t_i + \Delta s$
-%     \Comment{Update path length} \State $A_i \gets A_{i-1} + t_i \cdot
-%     \vec{\omega}_{i-1}$ \Comment{Update position} \EndWhile
-    
-%     \LineComment{Sample interaction type}
-%     \If{$\mu_{\text{tot}}(A_i, E_i) \cdot u^j_{4i+3} < \mu_{\text{comp}}(A_i, E_i)$}
+Throughout this thesis, the term \textit{scatter reduction in \ac{ct}} refers to the mitigation of scatter-induced artifacts in the 2D X-ray projection images acquired by the detector array during a CT scan. These projections serve as the input for reconstructing the final 3D volume. Given the complexity of the full reconstruction process, the focus of this work will be limited to analyzing and correcting scatter effects at the level of the 2D projection data. 
 
-%         \State $\delta^i=0$ $\to$ \textbf{Compton Scattering}
-%         \State $p_{y_0}$ gemäß Gleichung (5)
-%         \State $\vec{\omega}_{i} \gets \text{comptonDirectionSampling}(E_{i-1}, \vec{\omega}_{i-1}, u^j_{4i+1}, u^j_{4i+2})$
 
-%         \ElsIf{$\mu_{\text{comp}}(A_i, E_i) \leq \mu_{\text{tot}}(A_i, E_i)
-%         \cdot u^j_{4i+3} < \mu_{\text{comp}}(A_i, E_i) + \mu_{\text{ray}}(A_i,
-%         E_i)$}
-        
-%         \State $\delta^i=1$ $\to$ \textbf{Rayleigh Scattering} \State
-%         $p_{y_1}$ gemäß Gleichung (6)
+%-------------------------------------------------------------------------------
+%	SECTION 2
+\section{X-ray Imaging and the Challenge of Scatter}
+%-------------------------------------------------------------------------------
 
-%         \Else 
-%             \State \textbf{Photoelectric Absorption} $\to$ \textbf{break}
-%     \EndIf
-%     \State Sample new direction $\vec{\omega}_i$ using RITA using randoms $u^j_{4i+1}, u^j_{4i+2}$
-%     \State \textcolor{red}{TODO: herausfinden, wie neue Energie berechnet wird}
-%     \State Compute escape probability along $\vec{\omega}_{i-1}$:
-%     $$p_{i-1} = \exp\left(-\int_0^{c_{i-1}} \mu_{\text{tot}}(A_{i-1} + s\vec{\omega}_{i-1}, E_{i-1}) ds\right)$$
-    
-%     \State Update weight: $W_i = W_{i-1} \cdot (1 - p_{i-1})$
+X-ray \ac{ct} relies on measuring the attenuation of X-ray photons as they
+traverse straight-line paths through a phantom. These trajectories typically
+extend from an X-ray source $S$ to a detector element $\mathcal{D}_j$, forming
+the path:
 
-%     \For{each detector pixel $D_j \in \mathcal{G}$}
-%         \State Determine forced direction $\vec{\omega}_{i,j}$ from $A_i \to D_j$
-%         \State Compute transmission factor:
-%         \[
-%         T_{i,j} = \exp\left(-\int_0^{b_{i,j}} \mu_{\text{tot}}(A_i + s\vec{\omega}_{i,j}, E_i) ds\right)
-%         \]
-%         \State Compute directional scatter PDF: $p^y(A_i, E_{i-1} \rightarrow E_i, \vec{\omega}_{i-1} \rightarrow \vec{\omega}_{i,j})$
-%         \State Update scatter contribution:
-%         \[
-%         f_{n,j} \mathrel{+}= W_i \cdot p^y \cdot T_{i,j}
-%         \]
-%     \EndFor
+$$l=\overrightarrow{S\mathcal{D}_j}$$
 
-% \EndFor
+Under idealized conditions, the attenuation process is goverend by the
+Lambert-Beer law, which describes an exponential decay in intensity as the beam
+interacts with the material. As stated in \cite[Chap.
+7]{medicalImagingSystemsIntro2019:} ,this relationship is given by
 
-% \algstore{myalg}
-% \end{algorithmic}
-% \end{algorithm}
+\begin{equation}
+    \label{eq:lambert_beer_law}
+     I = \int_0^{E_\text{max}}{I_0(E)\cdot \exp\bigg(-\int_{S}^{\mathcal{D}_j}{\mu(x,E)dx}\bigg)} dE
+\end{equation}
+where $I_0(E)$ denotes the incident intensity of X-rays with energy $E$ at
+source $S$. Further $\mu(x,E)$ represents the linear attenuation coefficient of
+a photon at any spatial location $x$ along the path $l$ with energy $E$. The
+resulting intensity $I$ is measured at the detector element $\mathcal{D}_j$.
 
-% \begin{algorithm}
-% \caption{gQMCFFD: X-ray Scatter Simulation (Part 2)}
-% \begin{algorithmic}[1]
-% \algrestore{myalg}
+Although exponential attenuation along straight-line paths is the idealized
+model for X-ray imaging, this assumption is systematically violated in practice.
+As X-rays traverse the scanned object, many photons undergo scattering
+interactions - such as Compton or Rayleigh scattering - which alter their
+trajectories. Despite deviating from the primary path, these scattered photons
+may still reach the detector, adding unintended signal components. As a result,
+the measured intensities no longer represent pure line integrals of the
+attenuation map. This discrepancy introduces nonlinear errors and visible
+artifacts in the reconstructed image, ultimately degrading both visual quality
+and quantitative accuracy.
 
-% \vspace{.25cm}
-% \State \textbf{Primary intensity (if unscattered):}
-% \For{each detector pixel $D_j \in \mathcal{G}$}
-%     \State Determine direct line $\vec{\omega}_{0,j}$ from $A_0$ to $D_j$
-%     \State Compute:
-%     \[
-%     T_{0,j} = \exp\left(-\int_0^{b_{0,j}} \mu_{\text{tot}}(A_0 + s\vec{\omega}_{0,j}, E_0) ds\right)
-%     \]
-%     \State Add primary contribution:
-%     \[
-%     f_{n,j} \mathrel{+}= W_0 \cdot T_{0,j}
-%     \]
-% \EndFor
+Scattered radiation is a major source of image artifacts - such as cupping and
+streaks - and reduces both spatial and contrast resolution. These effects not
+only degrade visual image quality but also compromise the accuracy of
+quantitative measurements, such as Hounsfield units $\mu_*$ \cite[Chap.
+8]{medicalImagingSystemsIntro2019:}, which are used for clinical interpretation
+such as tissue characterization. Hounsfield units are representing a
+normalized attenuation to the attenuation of water.
 
-% \State \textbf{Output:} $f_{n,j}$ for each detector pixel $D_j \in \mathcal{G}$
+$$\mu_* = \left(\frac{\mu}{\mu_{\text{water}}} -1\right) \cdot 1000$$
 
-% \end{algorithmic}
-% \end{algorithm}
+The impact of scatter becomes especially pronounced in modern CT systems using
+high-energy X-rays or large-area flat-panel detectors, where scatter may
+dominate the measured signal. As such, accurate modeling and correction of
+scatter is essential for achieving high-fidelity CT images, particularly in
+clinical applications where precision and reliability are paramount
+\citep{medicalImagingSystemsIntro2019:}.
+
+
+%-------------------------------------------------------------------------------
+%	SECTION 3
+\section{Scatter Correction Methods for X-ray Imaging}
+%-------------------------------------------------------------------------------
+
+\subsection{Overview of Scatter Correction Techniques}
+
+In \ac{ct}, scattered photons are a major source of image artifacts and
+quantitative inaccuracies. To mitigate these effects, a range of computational
+scatter correction methods has been developed. These approaches can be broadly
+classified into the following categories:
+
+\begin{itemize}
+    \item \textbf{Empirical and Analytical Methods:} \\
+        These include techniques such as primary modulation, convolution-based
+        correction and energy windowing. Scatter is typically estimated using
+        simplified models or empirical kernels, often assuming a smooth
+        background distribution and then subtracted from the measured signal.
+        While computationally efficient, these methods rely on assumptions
+        regarding the spatial and energy distribution of scattered photons. As a
+        result, they may fail to accurately model complex scatter phenomena in
+        heterogeneous anatomical structures.
+    \item \textbf{Physics-Based Models:} \\
+        These methods aim to provide a more accurate representation of the
+        underlying photon transport physics, including scattering phenomena.
+        Among them, Monte Carlo (MC) simulation is regarded as the most rigorous
+        and comprehensive technique due to its ability to statistically model
+        complex photon interactions without relying on simplifying assumptions.
+        In such models, primary and scattered photon contributions are simulated
+        separately, allowing the estimated scatter signal to be subtracted from
+        measured data in order to restore image fidelity.
+    \item \textcolor{green}{TODO: AI Method from Josha Maier?}
+\end{itemize}
+
+In \citeyear{mcffd2011} \citeauthor{mcffd2011} \cite{mcffd2011} already
+demonstrated promising results using the computationally expensive \ac{mc}
+simulation of the \ac{ct} of a cylinder phantom with two bone inserts. The
+results show significant improvements in the image quality as demonstrated by
+\citeauthor{mcffd2011} in Figure~\ref{fig:scatter_correction_comparison}.
+
+\captionsetup{justification=justified,singlelinecheck=false}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{Figures/mcffd.png}
+    \caption{\ac{cbct} of a 70 mm soft-tissue cylinder with two bone inserts.
+    Left: Image after scatter correction using the gMCFFD method ($5e6$
+    photons), showing improved uniformity and quantitative accuracy. Right:
+    Image without correction, exhibiting typical cupping and streak artifacts.
+    (from \cite{mcffd2011})}
+    \label{fig:scatter_correction_comparison}
+\end{figure}
+
+\subsection{Monte Carlo Simulation}
+
+The \ac{mc} simulation is a powerful computational technique that follows
+phyics-based principles to model the transport of photons through matter. It is
+widely recognized as the gold standard for scatter correction in CT and related
+imaging modalities. This status is attributed to several key factors:
+
+\begin{itemize}
+    \item \textbf{Physical Accuracy:} \\
+    \ac{mc} methods simulate the stochastic nature of photon interactions
+    (including Compton and Rayleigh scattering, photoelectric absorption and
+    multiple scattering events) based on fundamental physical cross-sections and
+    material properties.
+
+    \item \textbf{Comprehensive Modeling:} \\
+    Unlike analytical or empirical methods, \ac{mc} simulation can account for
+    complex geometries, heterogeneous materials and realistic X-ray spectra,
+    providing highly accurate estimates of the scatter signal.
+
+    \item \textbf{Validation Benchmark:} \\
+    Due to their accuracy, \ac{mc}-based scatter estimates are routinely used as
+    reference standards for validating and benchmarking faster, approximate
+    correction methods.
+\end{itemize}
+
+
+% ------------------------------------------------------------------------------
+%	SECTION 4
+\section{High-Level Overview of the Monte Carlo Simulation}
+%-------------------------------------------------------------------------------
+
+Monte Carlo simulation of photon transport for scatter correction involves the
+following key steps \cite{mcffd2011}:
+
+\begin{enumerate}
+    \item \textbf{Photon Emission:} \\
+        Photons are emitted from a virtual X-ray source, with energies sampled
+        from the source spectrum.
+    \item \textbf{Photon Tracking:} \\
+        Each photon is tracked as it propagates through the object. At each
+        step, the probability of interaction (scattering or absorption) is
+        determined by the local material properties and cross-sections.
+    \item \textbf{Interaction Sampling:} \\
+        When an interaction occurs, the type (e.g., Compton, Rayleigh or
+        Absorption) and the resulting change in photon direction and energy are
+        sampled from the relevant probability distributions.
+    \item \textbf{Detection:} \\
+        Photons that reach the detector (either unscattered or after one or more
+        scatter events) are recorded. The simulation keeps track of both primary
+        and scattered photons, allowing for the estimation of the scatter
+        contribution to each detector element.
+    \item \textbf{Statistical Averaging:} \\
+        By simulating a large number of photons the method builds up a
+        statistical robust estimate of the scatter distribution. The accuracy of
+        the result increases with the number of simulated photons and eventually
+        converges to a stable intensity distribution.
+\end{enumerate}
+
+The schematic flow of the Monte Carlo simulation process is illustrated in
+Figure~\ref{fig:photon-transport-pseudocode}.
+
+\begin{figure}[H]
+\centering
+\begin{tcolorbox}[colback=white!95!gray, colframe=black!60, width=0.9 \textwidth, title=Monte Carlo Photon Transport Algorithm, fonttitle=\bfseries]
+\begin{itemize}[leftmargin=1.5em]
+    \item \textbf{Initialization:} Define geometry, materials and source
+    spectrum.
+    \item \textbf{Loop over photons:}
+    \begin{itemize}
+        \item Sample step size to next interaction.
+        \item Move photon; check for boundary crossing.
+        \item Sample interaction type; update direction/energy.
+        \item If photon reaches detector, record event.
+        \item If photon is absorbed or leaves the system, terminate.
+    \end{itemize}
+    \item \textbf{Aggregate results:} Compute scatter and primary distributions.
+\end{itemize}
+\end{tcolorbox}
+\caption{Pseudocode for photon transport simulation in Monte Carlo scatter modeling.}
+\label{fig:photon-transport-pseudocode}
+\end{figure}
+
+
+%-------------------------------------------------------------------------------%	SECTION 5
+\section{Monte Carlo Methods: Benefits \& Drawbacks}
+%-------------------------------------------------------------------------------
+\textcolor{green}{QMC still does not appear in the caption}
+
+Monte Carlo (MC) simulations are widely regarded as the gold standard for
+scatter correction in computed tomography due to their ability to model
+photon-matter interactions from first principles. These simulations faithfully
+reproduce all relevant physical scattering phenomena - including Compton and
+Rayleigh scattering - and can accommodate arbitrarily complex object geometries
+and heterogeneous material compositions. Owing to this high level of physical
+realism, MC-based methods yield highly accurate scatter estimates and are
+therefore commonly used as a reference benchmark for evaluating and validating
+alternative correction approaches.
+
+However, the high accuracy of Monte Carlo simulations comes at the cost of
+substantial computational demand. Achieving low-noise scatter estimates requires
+simulating a large number of photon histories to ensure statistical convergence.
+As a result, the runtime scales with the desired level of accuracy and can span
+from several minutes to multiple hours or even days, depending on the complexity
+of the problem and the available computational resources. This computational
+burden poses a major practical limitation, particularly in scenarios involving
+large datasets or iterative reconstruction workflows.
+
+In response to the computational burden of slow converging traditional Monte
+Carlo methods, recent research has focused on approaches to accelerate this type
+of precisely correct photon transport simulations. Among these, the application
+\ac{qmc} methods has gained increasing attention. By replacing random sampling
+with deterministic low-discrepancy sequences, QMC techniques achieve
+significantly faster convergence while maintaining comparable accuracy.
+Contemporary QMC-based scatter correction algorithms have demonstrated runtime
+reductions of one to two orders of magnitude, thereby enabling high-fidelity
+simulations even in time-sensitive or resource-constrained settings
+\cite{qmcXray2023}.

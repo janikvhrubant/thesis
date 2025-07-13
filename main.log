@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.27 (TeX Live 2025) (preloaded format=pdflatex 2025.7.4)  13 JUL 2025 19:24
+This is pdfTeX, Version 3.141592653-2.6-1.40.27 (TeX Live 2025) (preloaded format=pdflatex 2025.7.4)  13 JUL 2025 19:31
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -1075,11 +1075,11 @@ Package csquotes Info: ... found 'babel' package.
 LaTeX Font Info:    Trying to load font information for T1+ppl on input line 127.
  (/usr/local/texlive/2025/texmf-dist/tex/latex/psnfss/t1ppl.fd
 File: t1ppl.fd 2001/06/04 font definitions for T1/ppl.
-) (./main.aux (./Chapters/acronyms.aux) (./acronyms.aux) (./Chapters/Chapter1.aux) (./Chapters/Chapter2.aux) (./Chapters/Chapter3.aux) (./Chapters/Chapter4.aux) (./Chapters/Chapter5.aux) (./Chapters/Chapter6.aux) (./Chapters/Chapter7.aux
+) (./main.aux (./Chapters/acronyms.aux) (./acronyms.aux) (./Chapters/Chapter1.aux) (./Chapters/Chapter2.aux) (./Chapters/Chapter3.aux) (./Chapters/Chapter4.aux) (./Chapters/Chapter5.aux) (./Chapters/Chapter6.aux
 
 LaTeX Warning: Label `fig:tungsten_atomic_model' multiply defined.
 
-) (./Appendices/AppendixA.aux))
+) (./Chapters/Chapter7.aux) (./Appendices/AppendixA.aux))
 \openout1 = `main.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 127.
@@ -1275,12 +1275,6 @@ File: ot1zplm.fd 2002/09/08 Fontinst v1.914 font definitions for OT1/zplm.
 
  (./Chapters/acronyms.tex
 
-LaTeX Warning: Hyper reference `acro:rita' on page ix undefined on input line 1.
-
-
-LaTeX Warning: Hyper reference `acro:rita' on page ix undefined on input line 1.
-
-
 LaTeX Warning: Hyper reference `acro:cdf' on page ix undefined on input line 2.
 
 
@@ -1384,78 +1378,60 @@ Chapter 4.
 
 [12]
 Chapter 5.
-)
+Package acronym Info: Label `acro:ct' newly defined as it shall be overridden
+although it is yet undefined on input line 11.
+
 
 [13
 
 ]
+
+[14]
+Package acronym Info: Label `acro:mc' newly defined as it shall be overridden
+although it is yet undefined on input line 126.
+<Figures/mcffd.png, id=438, 1642.135pt x 790.955pt>
+File: Figures/mcffd.png Graphic file (type png)
+<use Figures/mcffd.png>
+Package pdftex.def Info: Figures/mcffd.png  used on input line 134.
+(pdftex.def)             Requested size: 323.22449pt x 155.67784pt.
+Package acronym Info: Label `acro:cbct' newly defined as it shall be overridden
+although it is yet undefined on input line 139.
+
+
+[15 <./Figures/mcffd.png>]
+
+[16]
+Package acronym Info: Label `acro:qmc' newly defined as it shall be overridden
+although it is yet undefined on input line 253.
+)
+
+[17]
 \openout2 = `Chapters/Chapter6.aux'.
 
  (./Chapters/Chapter6.tex
 
-[14
+[18
 
 
 
 
 ]
 Chapter 6.
-Package acronym Info: Label `acro:ct' newly defined as it shall be overridden
-although it is yet undefined on input line 13.
 
-
-[15]
-
-[16]
-Package acronym Info: Label `acro:mc' newly defined as it shall be overridden
-although it is yet undefined on input line 128.
-<Figures/mcffd.png, id=439, 1642.135pt x 790.955pt>
-File: Figures/mcffd.png Graphic file (type png)
-<use Figures/mcffd.png>
-Package pdftex.def Info: Figures/mcffd.png  used on input line 136.
-(pdftex.def)             Requested size: 323.22449pt x 155.67784pt.
-Package acronym Info: Label `acro:cbct' newly defined as it shall be overridden
-although it is yet undefined on input line 141.
-
-
-[17 <./Figures/mcffd.png>]
-
-LaTeX Warning: `!h' float specifier changed to `!ht'.
-
-
-
-[18]
-Package acronym Info: Label `acro:qmc' newly defined as it shall be overridden
-although it is yet undefined on input line 255.
-)
 
 [19]
-\openout2 = `Chapters/Chapter7.aux'.
 
- (./Chapters/Chapter7.tex
-
-[20
-
-
-
-
-]
-Chapter 7.
-
-
-[21]
-
-[22]
-<Figures/spectrum_without_filter.png, id=496, 410.0118pt x 323.7696pt>
+[20]
+<Figures/spectrum_without_filter.png, id=495, 410.0118pt x 323.7696pt>
 File: Figures/spectrum_without_filter.png Graphic file (type png)
 <use Figures/spectrum_without_filter.png>
 Package pdftex.def Info: Figures/spectrum_without_filter.png  used on input line 436.
 (pdftex.def)             Requested size: 323.22449pt x 255.24162pt.
 
 
-[23]
+[21]
 
-[24 <./Figures/spectrum_without_filter.png>]
+[22 <./Figures/spectrum_without_filter.png>]
 <Figures/spectrum_with_filter.png, id=516, 410.0118pt x 323.7696pt>
 File: Figures/spectrum_with_filter.png Graphic file (type png)
 <use Figures/spectrum_with_filter.png>
@@ -1463,35 +1439,64 @@ Package pdftex.def Info: Figures/spectrum_with_filter.png  used on input line 52
 (pdftex.def)             Requested size: 323.22449pt x 255.24162pt.
 
 
-[25]
+[23]
 LaTeX Font Info:    Trying to load font information for U+fplmbb on input line 552.
  (/usr/local/texlive/2025/texmf-dist/tex/latex/psnfss/ufplmbb.fd
 File: ufplmbb.fd 2003/10/30 Fontinst v1.914 font definitions for U/fplmbb.
 )
 
-[26 <./Figures/spectrum_with_filter.png>]
+[24 <./Figures/spectrum_with_filter.png>]
 
-[27]
+[25]
+
+[26]
+
+[27])
 
 [28]
+\openout2 = `Chapters/Chapter7.aux'.
 
-[29])
+ (./Chapters/Chapter7.tex
+Chapter 7.
+Package acronym Info: Label `acro:rita' newly defined as it shall be overridden
+although it is yet undefined on input line 16.
+Package hyperref Info: bookmark level for unknown algorithm defaults to 0 on input line 18.
+
+Overfull \hbox (17.43225pt too wide) in paragraph at lines 40--41
+[] [][]\T1/ppl/m/n/10.95 //[]  [][] 
+ []
+
+
+LaTeX Warning: Float too large for page by 74.27885pt on input line 89.
+
+)
+
+[29
+
+
+
+
+]
 
 [30]
+
+[31]
 \openout2 = `Appendices/AppendixA.aux'.
 
  (./Appendices/AppendixA.tex
+
+[32
+
+
+
+
+]
 Appendix A.
 )
 
-[31
+[33{/usr/local/texlive/2025/texmf-dist/fonts/enc/dvips/cm-super/cm-super-t1.enc}]
 
-
-
-
-{/usr/local/texlive/2025/texmf-dist/fonts/enc/dvips/cm-super/cm-super-t1.enc}]
-
-[32
+[34
 
 
 
@@ -1502,7 +1507,7 @@ Overfull \hbox (14.89879pt too wide) in paragraph at lines 337--337
 
 
 
-[33] (./main.aux (./Chapters/acronyms.aux) (./acronyms.aux) (./Chapters/Chapter1.aux) (./Chapters/Chapter2.aux) (./Chapters/Chapter3.aux) (./Chapters/Chapter4.aux) (./Chapters/Chapter5.aux) (./Chapters/Chapter6.aux) (./Chapters/Chapter7.aux) (./Appendices/AppendixA.aux))
+[35] (./main.aux (./Chapters/acronyms.aux) (./acronyms.aux) (./Chapters/Chapter1.aux) (./Chapters/Chapter2.aux) (./Chapters/Chapter3.aux) (./Chapters/Chapter4.aux) (./Chapters/Chapter5.aux) (./Chapters/Chapter6.aux) (./Chapters/Chapter7.aux) (./Appendices/AppendixA.aux))
  ***********
 LaTeX2e <2024-11-01> patch level 2
 L3 programming layer <2020/03/25>
@@ -1515,24 +1520,24 @@ LaTeX Warning: There were undefined references.
 LaTeX Warning: There were multiply-defined labels.
 
 Package rerunfilecheck Info: File `main.out' has not changed.
-(rerunfilecheck)             Checksum: AC1ED9795F055207387105BF98168140;11236.
+(rerunfilecheck)             Checksum: C1C14F8481F42782018CBB97EA1C6CD8;11336.
 Package logreq Info: Writing requests to 'main.run.xml'.
 \openout1 = `main.run.xml'.
 
  ) 
 Here is how much of TeX's memory you used:
- 50142 strings out of 473190
- 1122835 string characters out of 5715801
- 1783421 words of memory out of 5000000
- 72457 multiletter control sequences out of 15000+600000
- 620580 words of font info for 141 fonts, out of 8000000 for 9000
+ 50208 strings out of 473190
+ 1123907 string characters out of 5715801
+ 1783593 words of memory out of 5000000
+ 72513 multiletter control sequences out of 15000+600000
+ 622984 words of font info for 146 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  96i,20n,96p,1889b,2941s stack positions out of 10000i,1000n,20000p,200000b,200000s
 </usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/mathpazo/fplmbb.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/mathpazo/fplmr.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/mathpazo/fplmri.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/cm-super/sftt1000.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/cm-super/sftt1095.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/urw/palatino/uplb8a.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/urw/palatino/uplr8a.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/urw/palatino/uplr8a.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/urw/palatino/uplri8a.pfb>
-Output written on main.pdf (43 pages, 6151671 bytes).
+Output written on main.pdf (45 pages, 6161966 bytes).
 PDF statistics:
- 683 PDF objects out of 1000 (max. 8388607)
- 576 compressed objects within 6 object streams
- 139 named destinations out of 1000 (max. 500000)
- 556 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 708 PDF objects out of 1000 (max. 8388607)
+ 599 compressed objects within 6 object streams
+ 145 named destinations out of 1000 (max. 500000)
+ 564 words of extra memory for PDF output out of 10000 (max. 10000000)
 
