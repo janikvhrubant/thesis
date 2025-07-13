@@ -8,7 +8,6 @@ efficiently, including scattering effects. It is specifically adapted to the
 needs of this thesis to analyse and compare the performance of the different
 sampling methods.
 
-\section{Forced Fixed Detection}
 
 \ac{ffd} is a method used to simulate X-ray images efficiently, particularly in the context of X-ray imaging systems. It is designed to handle multiple scatter orders and can be used either with Monte Carlo sequences or with Quasi-Monte Carlo (QMC) sequences for sampling the random variables involved in the simulation
 %-------------------------------------------------------------------------------
@@ -17,8 +16,46 @@ sampling methods.
 %-------------------------------------------------------------------------------
 
 
+%-------------------------------------------------------------------------------
+%	SECTION 1
+\section{Sub-Algirthms}
+%-------------------------------------------------------------------------------
+To structure the algirthms into the different physical effects, this section is
+gathering highly relevant algirithms which are later orchestrated by the main
+simulation algorithm.
 
+\subsection{Photon Generation}
+For the photon generation, two main properties for each photon do need to be
+sampled:
 
+\begin{itemize}
+    \item The \emph{Photon Energy} which is sampled with one random variable
+    from the spectrum.
+    \item The \emph{Photon Direction} which is sampled with two random 
+    variables uniformly in the cone of the beam with direction $d$ and angle
+    $\alpha$. 
+\end{itemize}
+
+For the photon energy the spectrum of the X-ray tube is referenced with an array
+of energies and another array with the according fluence.
+
+\begin{algorithmic}
+\State \textbf{Primary intensity (if unscattered):}
+\For{each detector pixel $D_j \in \mathcal{G}$}
+    \State Determine direct line $\vec{\omega}_{0,j}$ from $A_0$ to $D_j$
+    \State Compute:
+    \[
+    T_{0,j} = \exp\left(-\int_0^{b_{0,j}} \mu_{\text{tot}}(A_0 + s\vec{\omega}_{0,j}, E_0) ds\right)
+    \]
+    \State Add primary contribution:
+    \[
+    f_{n,j} \mathrel{+}= W_0 \cdot T_{0,j}
+    \]
+\EndFor
+
+\State \textbf{Output:} $f_{n,j}$ for each detector pixel $D_j \in \mathcal{G}$
+
+\end{algorithmic}
 
 
 
