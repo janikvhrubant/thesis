@@ -1,0 +1,52 @@
+\babel@toc {english}{}\relax 
+\contentsline {chapter}{Declaration of Authorship}{iii}{section*.1}%
+\contentsline {chapter}{Abstract}{v}{section*.2}%
+\contentsline {part}{I\hspace {1em}QMC for training of Neural Networks}{1}{part.4}%
+\contentsline {chapter}{\numberline {1}Quasi-Monte Carlo Methods for Deep Learning: Motivation and Objectives}{3}{chapter.5}%
+\contentsline {section}{\numberline {1.1}Challenges in Neural Network Training}{3}{section.6}%
+\contentsline {section}{\numberline {1.2}Limitations of Monte Carlo Sampling}{3}{section.7}%
+\contentsline {section}{\numberline {1.3}Objectives and Scope of the Thesis}{3}{section.8}%
+\contentsline {section}{\numberline {1.4}Outline of the Thesis}{4}{section.9}%
+\contentsline {chapter}{\numberline {2}Theoretical Foundations}{5}{chapter.10}%
+\contentsline {section}{\numberline {2.1}Function Approximation with Neural Networks}{5}{section.11}%
+\contentsline {section}{\numberline {2.2}Sampling-Based Learning: MC vs. QMC}{5}{section.12}%
+\contentsline {subsection}{\numberline {2.2.1}Monte Carlo Sampling in High Dimensions}{5}{subsection.13}%
+\contentsline {subsection}{\numberline {2.2.2}Low-Discrepancy Sequences and QMC Theory}{5}{subsection.14}%
+\contentsline {section}{\numberline {2.3}Convergence in Deterministic and Stochastic Learning}{6}{section.15}%
+\contentsline {section}{\numberline {2.4}Stochastic Functions and Photon Transport Models}{6}{section.16}%
+\contentsline {chapter}{\numberline {3}Neural Network Training with QMC in Deterministic Settings}{7}{chapter.17}%
+\contentsline {section}{\numberline {3.1}Problem Setup and Input Space Design}{7}{section.18}%
+\contentsline {section}{\numberline {3.2}Generation of Training Sets via QMC and MC}{7}{section.19}%
+\contentsline {section}{\numberline {3.3}Network Architecture and Training Protocols}{7}{section.20}%
+\contentsline {section}{\numberline {3.4}Convergence Evaluation and Error Metrics}{8}{section.21}%
+\contentsline {section}{\numberline {3.5}Comparative Results}{8}{section.22}%
+\contentsline {chapter}{\numberline {4}Neural Network Training for Stochastic Functions}{9}{chapter.23}%
+\contentsline {section}{\numberline {4.1}Modeling Randomness in Physical Simulations}{9}{section.24}%
+\contentsline {section}{\numberline {4.2}Sampling Stochastic Variables with QMC and MC}{9}{section.25}%
+\contentsline {section}{\numberline {4.3}Data Generation: Simulating Photon Scatter}{9}{section.26}%
+\contentsline {section}{\numberline {4.4}Learning Setup and Experimental Design}{10}{section.27}%
+\contentsline {section}{\numberline {4.5}Convergence and Performance Comparison}{10}{section.28}%
+\contentsline {part}{II\hspace {1em}X-ray Simulation using QMC Methods}{11}{part.29}%
+\contentsline {chapter}{\numberline {5}Motivation and Problem Statement}{13}{chapter.30}%
+\contentsline {section}{\numberline {5.1}Computed Tomography Imaging}{13}{section.31}%
+\contentsline {section}{\numberline {5.2}X-ray Imaging and the Challenge of Scatter}{13}{section.33}%
+\contentsline {section}{\numberline {5.3}Scatter Correction Methods for X-ray Imaging}{14}{section.35}%
+\contentsline {subsection}{\numberline {5.3.1}Overview of Scatter Correction Techniques}{14}{subsection.36}%
+\contentsline {subsection}{\numberline {5.3.2}Monte Carlo Simulation}{15}{subsection.40}%
+\contentsline {section}{\numberline {5.4}High-Level Overview of the Monte Carlo Simulation}{16}{section.41}%
+\contentsline {section}{\numberline {5.5}Monte Carlo Methods: Benefits \& Drawbacks}{17}{section.48}%
+\contentsline {chapter}{\numberline {6}Physical laws of Photon Simulation}{19}{chapter.50}%
+\contentsline {section}{\numberline {6.1}X-Ray Tube}{20}{section.52}%
+\contentsline {subsection}{\numberline {6.1.1}Photon Generation}{20}{subsection.54}%
+\contentsline {subsection}{\numberline {6.1.2}Filter}{23}{subsection.58}%
+\contentsline {section}{\numberline {6.2}Photon Generation}{24}{section.61}%
+\contentsline {section}{\numberline {6.3}Scattering and Attenuation}{25}{section.71}%
+\contentsline {subsection}{\numberline {6.3.1}Free Path Length}{26}{subsection.73}%
+\contentsline {subsection}{\numberline {6.3.2}Compton Scattering}{28}{subsection.76}%
+\contentsline {subsection}{\numberline {6.3.3}Rayleigh Scattering}{28}{subsection.77}%
+\contentsline {chapter}{\numberline {7}The Simulation Algorithm}{29}{chapter.78}%
+\contentsline {section}{\numberline {7.1}Forced Fixed Detection}{29}{section.79}%
+\contentsline {section}{\numberline {7.2}Algorithm overview}{29}{section.81}%
+\contentsline {chapter}{\numberline {A}Frequently Asked Questions}{33}{appendix.85}%
+\contentsline {section}{\numberline {A.1}How do I change the colors of links?}{33}{section.86}%
+\contentsline {chapter}{Bibliography}{35}{appendix*.87}%
