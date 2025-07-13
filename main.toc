@@ -28,13 +28,22 @@
 \contentsline {section}{\numberline {4.5}Convergence and Performance Comparison}{10}{section.28}%
 \contentsline {part}{II\hspace {1em}X-ray Simulation using QMC Methods}{11}{part.29}%
 \contentsline {chapter}{\numberline {5}X-Ray Simulation using QMC methods}{13}{chapter.30}%
-\contentsline {section}{\numberline {5.1}Algorithm}{13}{section.31}%
-\contentsline {chapter}{\numberline {6}Synthesis and Discussion}{15}{chapter.34}%
-\contentsline {section}{\numberline {6.1}Summary of Results Across Experiments}{15}{section.35}%
-\contentsline {section}{\numberline {6.2}Strengths and Limitations of QMC-Based Learning}{15}{section.36}%
-\contentsline {section}{\numberline {6.3}Implications for Simulation and Medical Imaging}{15}{section.37}%
-\contentsline {chapter}{\numberline {7}Conclusion and Future Work}{17}{chapter.38}%
-\contentsline {section}{\numberline {7.1}Main Contributions}{17}{section.39}%
-\contentsline {section}{\numberline {7.2}Directions for Future Research}{17}{section.40}%
-\contentsline {chapter}{\numberline {A}Frequently Asked Questions}{19}{appendix.42}%
-\contentsline {section}{\numberline {A.1}How do I change the colors of links?}{19}{section.43}%
+\contentsline {chapter}{\numberline {6}Motivation and Problem Statement}{15}{chapter.31}%
+\contentsline {section}{\numberline {6.1}Computed Tomography Imaging}{15}{section.32}%
+\contentsline {section}{\numberline {6.2}X-ray Imaging and the Challenge of Scatter}{15}{section.34}%
+\contentsline {section}{\numberline {6.3}Scatter Correction Methods for X-ray Imaging}{16}{section.36}%
+\contentsline {subsection}{\numberline {6.3.1}Overview of Scatter Correction Techniques}{16}{subsection.37}%
+\contentsline {subsection}{\numberline {6.3.2}Monte Carlo Simulation}{17}{subsection.41}%
+\contentsline {section}{\numberline {6.4}High-Level Overview of the Monte Carlo Simulation}{18}{section.42}%
+\contentsline {section}{\numberline {6.5}Monte Carlo Methods: Benefits \& Drawbacks}{18}{section.49}%
+\contentsline {chapter}{\numberline {7}Physical laws of Photon Simulation}{21}{chapter.51}%
+\contentsline {section}{\numberline {7.1}X-Ray Tube}{22}{section.53}%
+\contentsline {subsection}{\numberline {7.1.1}Photon Generation}{22}{subsection.55}%
+\contentsline {subsection}{\numberline {7.1.2}Filter}{25}{subsection.59}%
+\contentsline {section}{\numberline {7.2}Photon Generation}{26}{section.62}%
+\contentsline {section}{\numberline {7.3}Scattering and Attenuation}{27}{section.72}%
+\contentsline {subsection}{\numberline {7.3.1}Free Path Length}{28}{subsection.74}%
+\contentsline {subsection}{\numberline {7.3.2}Compton Scattering}{30}{subsection.77}%
+\contentsline {chapter}{\numberline {A}Frequently Asked Questions}{31}{appendix.78}%
+\contentsline {section}{\numberline {A.1}How do I change the colors of links?}{31}{section.79}%
+\contentsline {chapter}{Bibliography}{33}{appendix*.80}%

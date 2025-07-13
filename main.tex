@@ -1,18 +1,19 @@
-%----------------------------------------------------------------------------------------
+%-------------------------------------------------------------------------------
 %	PACKAGES AND OTHER DOCUMENT CONFIGURATIONS
-%----------------------------------------------------------------------------------------
+%-------------------------------------------------------------------------------
 
 \documentclass[
 11pt, % The default document font size, options: 10pt, 11pt, 12pt
 %oneside, % Two side (alternating margins) for binding by default, uncomment to switch to one side
 english, % ngerman for German
 singlespacing, % Single line spacing, alternatives: onehalfspacing or doublespacing
-%draft, % Uncomment to enable draft mode (no pictures, no links, overfull hboxes indicated)
-%nolistspacing, % If the document is onehalfspacing or doublespacing, uncomment this to set spacing in lists to single
-%liststotoc, % Uncomment to add the list of figures/tables/etc to the table of contents
-%toctotoc, % Uncomment to add the main table of contents to the table of contents
-%parskip, % Uncomment to add space between paragraphs
-%nohyperref, % Uncomment to not load the hyperref package
+%draft, % Uncomment to enable draft mode (no pictures, no links, overfull hboxes
+%indicated) nolistspacing, % If the document is onehalfspacing or doublespacing,
+%uncomment this to set spacing in lists to single liststotoc, % Uncomment to add
+%the list of figures/tables/etc to the table of contents toctotoc, % Uncomment
+%to add the main table of contents to the table of contents parskip, % Uncomment
+%to add space between paragraphs nohyperref, % Uncomment to not load the
+%hyperref package
 headsepline, % Uncomment to get a line under the header
 %chapterinoneline, % Uncomment to place the chapter title next to the number on one line
 %consistentlayout, % Uncomment to change the layout of the declaration, abstract and acknowledgements pages to match the default layout
@@ -36,6 +37,39 @@ headsepline, % Uncomment to get a line under the header
 \usepackage{parskip}
 \usepackage{algorithm}
 \usepackage{algpseudocode}
+\usepackage{etoolbox}
+\usepackage{enumitem}
+\usepackage[most]{tcolorbox}
+\usepackage{siunitx}
+\DeclareSIUnit{\voltpeak}{Vp}
+\usepackage{svg}
+\usepackage{amsthm}
+\usepackage{etoolbox} % for patching
+
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}[section]
+\theoremstyle{plain}
+\newtheorem{theorem}[definition]{Theorem}
+\makeatletter
+\patchcmd{\@begintheorem}{\ignorespaces}{\vspace{1em}\ignorespaces}{}{}
+\patchcmd{\@opargbegintheorem}{\ignorespaces}{\vspace{1em}\ignorespaces}{}{}
+\patchcmd{\@endtheorem}{\unskip}{\unskip\vspace{1em}}{}{}
+\makeatother
+
+\usetikzlibrary{decorations.pathmorphing} % for zigzag
+
+
+% Linecomments in algorithms
+\usepackage{xcolor}
+\newcommand{\commentsymbol}{\textcolor{green!50!black}{//}}% or \% or $\triangleright$
+\algrenewcommand\algorithmiccomment[1]{\hfill {\color{green!50!black}\commentsymbol{} #1}}
+\makeatletter
+\newcommand{\LineComment}[2][\algorithmicindent]{\Statex \hspace{#1}{\color{green!50!black}\commentsymbol{} #2}}
+\makeatother
+\newcommand{\varfont}{\texttt}
+
+% \usepackage{cleveref}
+
 % \hypersetup{
 %     colorlinks=true,
 %     linkcolor=blue,
@@ -45,7 +79,7 @@ headsepline, % Uncomment to get a line under the header
 %     pdfpagemode=FullScreen,
 % }
 
-\usepackage[backend=bibtex,style=authoryear,natbib=true]{biblatex} % Use the bibtex backend with the authoryear citation style (which resembles APA)
+\usepackage[backend=bibtex,natbib=true]{biblatex} % Use the bibtex backend with the authoryear citation style (which resembles APA)
 
 \addbibresource{example.bib} % The filename of the bibliography
 
@@ -300,7 +334,7 @@ Through these experiments, the thesis demonstrates how QMC-based sampling can en
 %	BIBLIOGRAPHY
 %----------------------------------------------------------------------------------------
 
-% \printbibliography[heading=bibintoc]
+\printbibliography[heading=bibintoc]
 
 %----------------------------------------------------------------------------------------
 
