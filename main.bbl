@@ -127,7 +127,7 @@
     \field{sortinithash}{P}
     \field{title}{SpekPy: Python package for simulating X-ray spectra}
     \verb{url}
-    \verb https://pypi.org/project/spekpy/
+    \verb https://bitbucket.org/caxtus/book/src/master/
     \endverb
     \field{version}{2.0.13}
     \field{year}{08.08.2024}
