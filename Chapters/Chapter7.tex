@@ -2,12 +2,11 @@
 \label{Chapter5} % Change X to a consecutive number; for referencing this chapter elsewhere, use \ref{ChapterX}
 
 
-In this chapter the implementation algorithm is presented. The algorithm is
-based on the gQMCFFD algorithm from \cite{qmcXray2023} to simulate X-ray images
-efficiently, including scattering effects. It is specifically adapted to the
-needs of this thesis to analyse and compare the performance of the different
-sampling methods.
-
+In this chapter the implementation algorithm is presented. The algorithm takes
+elements from the gQMCFFD algorithm from \cite{qmcXray2023} and adapts it to the
+needs of this thesis. The algorithm is designed to simulate X-ray images
+efficiently, including scattering effects and is specifically tailored to
+analyze and compare the performance of different sampling methods.
 
 \ac{ffd} is a method used to simulate X-ray images efficiently, particularly in the context of X-ray imaging systems. It is designed to handle multiple scatter orders and can be used either with Monte Carlo sequences or with Quasi-Monte Carlo (QMC) sequences for sampling the random variables involved in the simulation
 %-------------------------------------------------------------------------------
@@ -18,7 +17,7 @@ sampling methods.
 
 %-------------------------------------------------------------------------------
 %	SECTION 1
-\section{Sub-Algirthms}
+\section{Sub-Algorithms}
 %-------------------------------------------------------------------------------
 To structure the algirthms into the different physical effects, this section is
 gathering highly relevant algirithms which are later orchestrated by the main
@@ -38,24 +37,93 @@ sampled:
 
 For the photon energy the spectrum of the X-ray tube is referenced with an array
 of energies and another array with the according fluence.
+These spectrum values are sampled with \emph{Spekpy} \cite{spekpy,poludniowski2021spekpy} for a X-ray tube with the following parameters:
+\begin{itemize}
+    \item \textbf{Tube Voltage:} 120 kV
+    \item \textbf{Anode Material:} Tungsten
+    \item \textbf{Filtration:} $0.4$ \si{\milli\meter} of Tin (Sn) and $0.1$ \si
+    {\milli\meter} of Copper (Cu)
+    \item \textbf{Target Angle:} 12.5°
+\end{itemize}
 
-\begin{algorithmic}
-\State \textbf{Primary intensity (if unscattered):}
-\For{each detector pixel $D_j \in \mathcal{G}$}
-    \State Determine direct line $\vec{\omega}_{0,j}$ from $A_0$ to $D_j$
-    \State Compute:
-    \[
-    T_{0,j} = \exp\left(-\int_0^{b_{0,j}} \mu_{\text{tot}}(A_0 + s\vec{\omega}_{0,j}, E_0) ds\right)
-    \]
-    \State Add primary contribution:
-    \[
-    f_{n,j} \mathrel{+}= W_0 \cdot T_{0,j}
-    \]
+The following algorithm samples the photon energy from the spectrum using
+inverse transform sampling. The algorithm takes an array of energies and their
+corresponding fluence values, normalizes the fluence to create a probability
+density function (PDF), computes the cumulative distribution function (CDF)
+and then uses a random variable to sample the photon energy based on the CDF.
+
+\begin{algorithm}[H]
+\caption{Photon Energy Sampling from Spectrum}
+\begin{algorithmic}[1]
+\Require Array of energies $E = [E_1, E_2, \dots, E_n]$ 
+\Require Corresponding fluence values $\Phi = [\phi_1, \phi_2, \dots, \phi_n]$ 
+\Require Number of samples $N$ 
+\Require Random variable $u \sim \mathcal{U}(0, 1)$ \Ensure Sampled photon
+energies $S = [s_1, s_2, \dots, s_N]$
+
+\LineComment{Normalize fluence values:} \State $$T \gets \sum_{i=1}^{n} \phi_i$$
+\State $$\text{PDF}[i] \gets \frac{\phi_i}{T}$$
+
+\LineComment{Compute cumulative distribution function:} 
+\State $$\text{CDF}[1] \gets \text{PDF}[1]$$ 
+\For{$i = 2$ to $n$} 
+\State $\text{CDF}[i] \gets \text{CDF}[i-1] + \text{PDF}[i]$ 
 \EndFor
 
-\State \textbf{Output:} $f_{n,j}$ for each detector pixel $D_j \in \mathcal{G}$
+\LineComment{Note: $PDF[i]>0$ in the spectrum, therefore $\text{CDF}$ is
+strictly increasing.}
+
+\State Create interpolating function $\text{ InverseCDF}(u)$ from
+$(\text{CDF}[i], E[i])$
+
+\State \Return $\text{InverseCDF}(u)$
 
 \end{algorithmic}
+\end{algorithm}
+
+Further the photon direction is sampled uniformly in the cone with angle
+$\alpha$ of the beam of the X-ray tube with spherical direction $\vec{d}$.
+Therefore two random variables are required $u_1, u_2 \sim \mathcal{U}(0, 1)$.
+
+\begin{algorithm}[H]
+\caption{Uniform Direction Sampling Within a Cone}
+\begin{algorithmic}[1]
+\Require Cone angle $\alpha$
+\Require Unit beam direction vector $\vec{d} = (d_1, d_2, d_3)$
+\Require Random variables $u_1, u_2 \sim \mathcal{U}(0,1)$
+\Ensure Sampled direction vector $\vec{v}$ uniformly within cone around
+$\vec{d}$
+
+\LineComment{Calculate angles according to samples}
+
+\State $\theta \gets \arccos(1 - u_1 (1 - \cos \alpha))$ \Comment{Polar angle}
+\State $\phi \gets 2\pi u_2$ \Comment{Azimuthal angle}
+
+\LineComment{Calculate local direction vector in spherical coordinates}
+
+\State $$\vec{v}_{\text{local}} \gets 
+\begin{pmatrix}
+\sin\theta \cos\phi \\
+\sin\theta \sin\phi \\
+\cos\theta \end{pmatrix}$$
+
+\LineComment{Orthonormal basis construction (Gram-Schmidt)}
+\State $\vec{w} \gets \vec{d} / \|\vec{d}\|$ \Comment{Normalized cone axis}
+\If{$|w_3| < 0.999$}
+    \State $\vec{a} \gets (0, 0, 1)$
+\Else
+    \State $\vec{a} \gets (1, 0, 0)$
+\EndIf
+\State $\vec{u} \gets \frac{\vec{a} \times \vec{w}}{\|\vec{a} \times \vec{w}\|}$ \Comment{Orthogonal vector}
+\State $\vec{v} \gets \vec{w} \times \vec{u}$ \Comment{Complete right-handed basis}
+
+\LineComment{Rotate local vector into global coordinates}
+\State $\vec{v}_{\text{global}} \gets \vec{u} (\vec{v}_{\text{local}})_x + \vec{v} (\vec{v}_{\text{local}})_y + \vec{w} (\vec{v}_{\text{local}})_z$
+
+\State \Return $\vec{v}_{\text{global}}$
+
+\end{algorithmic}
+\end{algorithm}
 
 
 

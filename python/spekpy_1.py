@@ -9,7 +9,7 @@ from numpy import arange # Import stuff from numpy
 filters = [("Sn", 0.4),("Cu", 0.1)]
 kvp = 120. # Define the tube potential in kV
 target_material = 'W' # Tungsten target
-theta = 12. # Anode angle in degrees
+theta = 12.5 # Anode angle in degrees
 
 spectrum = Spek(kvp=120.,th=theta) # Create a spectrum
 spectrum.multi_filter(filters) # Apply the filtration to the spectrum
