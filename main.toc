@@ -48,6 +48,6 @@
 \contentsline {section}{\numberline {7.1}Algorithm overview}{31}{section.80}%
 \contentsline {section}{\numberline {7.2}Sub-Algorithms}{31}{section.81}%
 \contentsline {subsection}{\numberline {7.2.1}Photon Generation}{31}{subsection.82}%
-\contentsline {chapter}{\numberline {A}Frequently Asked Questions}{37}{appendix.88}%
-\contentsline {section}{\numberline {A.1}How do I change the colors of links?}{37}{section.89}%
-\contentsline {chapter}{Bibliography}{39}{appendix*.90}%
+\contentsline {chapter}{\numberline {A}Frequently Asked Questions}{35}{appendix.85}%
+\contentsline {section}{\numberline {A.1}How do I change the colors of links?}{35}{section.86}%
+\contentsline {chapter}{Bibliography}{37}{appendix*.87}%
