@@ -40,7 +40,7 @@ structural detail.
 %-------------------------------------------------------------------------------
 
 The algorithm begins by initializing a set of photons, each assigned an initial
-energy $E_0$, sampled from the X-ray tube spectrum, and an initial direction
+energy $E_0$, sampled from the X-ray tube spectrum and an initial direction
 $\vec{\omega}_0$ sampled uniformly within a cone centered around the principal
 beam axis. A total of three random variables are drawn for each photon to
 determine its energy and direction.
@@ -197,7 +197,7 @@ Table~\ref{tab:xray_params}.
 
 Photon energies are sampled using inverse transform sampling. The algorithm
 normalizes the fluence values to obtain a probability density function (PDF),
-computes the corresponding cumulative distribution function (CDF), and uses a
+computes the corresponding cumulative distribution function (CDF) and uses a
 uniformly distributed random variable to select an energy according to the CDF.
 
 \begin{algorithm}[H]
@@ -684,21 +684,24 @@ and therefore utilizes the electron rest energy $E_\text{rest}$ and follow this
 procedure:
 
 \begin{enumerate}[label=\Roman*.]
-    \item Initialize $\kappa = E_i/ E_\text{rest}$.
-    \item Initialize $\varepsilon_0 = \frac{1}{2\kappa + 1}$.
-    \item While loop:
+    \item Initialize $\kappa = E_i/ E_\text{rest}, \qquad \varepsilon_0 = \frac{1}{2\kappa + 1}$.
+    \item Rejection Sampling loop:
         \begin{enumerate}[label=\arabic*.]
-            \item If $u_1 < 0.5$, set $\varepsilon = \varepsilon_0 +
-            (1-\varepsilon_0) \cdot 2u_1$.
-            \item If $u_1 \geq 0.5$, set $\varepsilon = \varepsilon_0 +
-            (1-\varepsilon_0) \cdot 2(1-u_1)$.
+            \item Generate random number $r\sim\mathcal{U}(0,1)$.
+            \item \textbf{If} $r < 0.5$, set $\varepsilon = \varepsilon_0 +
+            (1-\varepsilon_0) \cdot 2r$.
+            \item \textbf{If} $r \geq 0.5$, set $\varepsilon = \varepsilon_0 +
+            (1-\varepsilon_0) \cdot 2(1-r)$.
             \item Compute: $\cos \theta = 1 + \frac{1}{\kappa} \cdot (1-\frac{1}{\varepsilon})$.
-            \item If $\vert \cos \theta \vert \leq 1$, the following is calculated:
+            \item \textbf{If} $\vert \cos \theta \vert \leq 1$, the following is calculated:
                 \begin{align*}
                     \sin^2 \theta &= 1 - \cos^2 \theta \\
-                    rejectionValue &= \frac{1}{2}\bigg(\varepsilon + \frac{1}{\varepsilon}- \sin^2 \theta\bigg)  \\
                     % randomReject = 
                 \end{align*}
+                \textbf{If} $u_1 \leq \frac{1}{2}\bigg(\varepsilon + \frac{1}{\varepsilon}- \sin^2 \theta\bigg)$, 
+                    \begin{itemize}
+                        \item \textbf{return } $\theta = \arccos(\cos \theta)$
+                    \end{itemize}
         \end{enumerate}
     \item 
 \end{enumerate}
@@ -759,8 +762,8 @@ The algorithm is initialized with the following parameters:
     \item The number of scatter events $N$ to simulate.
     \item The opening angle $\alpha$ of the X-ray beam.
     \item The voxel size $s$ of the voxel grid.
-    \item A sequence of random variables $u \sim \mathcal{U}(0, 1)^{3(N+1)}$ t
-    sample the photon energies, directions, and free path lengths.
+    \item A sequence of random variables $u \sim \mathcal{U}(0, 1)^{3(N+1)}$ to
+    sample the photon energies, directions and free path lengths.
 \end{itemize}
 
 Hereby, the photon generation algorithm is called to generate the photon energies and directions.

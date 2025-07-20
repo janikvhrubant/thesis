@@ -449,7 +449,7 @@ increase patient dose. Therefore, X-ray tubes are often equipped with filters to
 selectively attenuate these low-energy photons while allowing higher-energy
 photons to pass through. This process, known as beam hardening, improves image
 quality by reducing scatter and enhancing contrast. Common filter materials
-include aluminum, copper, and molybdenum, which are chosen based on their atomic
+include aluminum, copper and molybdenum, which are chosen based on their atomic
 number and thickness to effectively absorb low-energy photons while minimizing
 the impact on higher-energy photons \cite{poludniowski2022calculating}.
 
@@ -559,7 +559,7 @@ Inverse transform sampling \cite{muller2012monte} is a method to generate random
 \end{definition}
 
 \begin{theorem}\ \\
-Let $F_X$ be a continuous and strictly increasing cumulative distribution function, and let $U \sim \mathcal{U}(0,1)$. Then the random variable
+Let $F_X$ be a continuous and strictly increasing cumulative distribution function and let $U \sim \mathcal{U}(0,1)$. Then the random variable
 \[
 X := F_X^{-1}(U)
 \]
@@ -838,7 +838,7 @@ produces a positive ion, the "recoil electron" and a scattered photon. If the de
 \subsection{Rayleigh Scattering}
 \emph{Rayleigh scattering} is a type of elastic scattering that occurs at low X-ray energies \cite[Chap. 7]{medicalImagingSystemsIntro2019:}. The incident photon interacts with several electrons that are
 usually bound in the outer shells of the atom. In this process, the low energy photon is not ejected, but rather the electrons and in turn thw whole atom is
-set to vibration with respect to the incident photon’s wavelength. The vibrating photon transfers its excess energy to an electromagnetic photon with the same wavelength but probably a different direction than the incident photon. The majority of these scattered photons are emitted in a forward direction. This interaction does not result in the ejection of electrons from the atom, and no ionization occurs as no energy is converted into kinetic energy.
+set to vibration with respect to the incident photon’s wavelength. The vibrating photon transfers its excess energy to an electromagnetic photon with the same wavelength but probably a different direction than the incident photon. The majority of these scattered photons are emitted in a forward direction. This interaction does not result in the ejection of electrons from the atom and no ionization occurs as no energy is converted into kinetic energy.
 
 Although Rayleigh scattering is taking place in the X-ray tube, it can be 
 excluded from the linear attenuation coefficient, as it does not contribute to
