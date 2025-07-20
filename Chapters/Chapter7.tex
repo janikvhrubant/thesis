@@ -684,10 +684,10 @@ The algorithm applies the Klein-Nishina procedure to compute the scatter angle
 and therefore utilizes the electron rest energy $E_\text{rest}$ and follow this
 procedure:
 
-\begin{enumerate}[label=\Roman*.]
+\begin{enumerate}[label=\arabic*.]
     \item Initialize $\kappa = E_i/ E_\text{rest}, \qquad \varepsilon_0 = \frac{1}{2\kappa + 1}$.
     \item Rejection Sampling loop:
-        \begin{enumerate}[label=\arabic*.]
+        \begin{enumerate}[label*=\arabic*.]
             \item Generate random number $r\sim\mathcal{U}(0,1)$.
             \item \textbf{If} $r < 0.5$, set $\varepsilon = \varepsilon_0 +
             (1-\varepsilon_0) \cdot 2r$.
@@ -695,16 +695,11 @@ procedure:
             (1-\varepsilon_0) \cdot 2(1-r)$.
             \item Compute: $\cos \theta = 1 + \frac{1}{\kappa} \cdot (1-\frac{1}{\varepsilon})$.
             \item \textbf{If} $\vert \cos \theta \vert \leq 1$, the following is calculated:
-                \begin{align*}
-                    \sin^2 \theta &= 1 - \cos^2 \theta \\
-                    % randomReject = 
-                \end{align*}
-                \textbf{If} $u_1 \leq \frac{1}{2}\bigg(\varepsilon + \frac{1}{\varepsilon}- \sin^2 \theta\bigg)$, 
-                    \begin{itemize}
-                        \item \textbf{return } $\theta = \arccos(\cos \theta)$
-                    \end{itemize}
+            \begin{itemize}[label={}]
+                \item $\sin^2 \theta = 1 - \cos^2 \theta$
+                \item \textbf{If} $u_1 \leq \frac{1}{2}\bigg(\varepsilon + \frac{1}{\varepsilon}- \sin^2 \theta\bigg)$\textbf{: \qquad return } $\theta = \arccos(\cos \theta)$
+            \end{itemize}
         \end{enumerate}
-    \item 
 \end{enumerate}
 
 Given the scatter angle $\theta$, the new photon energy $E_{i+1}$ is computed as in \cite{nelsoncompton}:
@@ -737,9 +732,46 @@ details.
 \label{alg:comptonScatteringBlank}
 \begin{algorithmic}[1]
 \Require Initial photon energy $E_i$, direction $\vec{\omega}_i$
-\Require Compton scattering coefficient $\mu_{\text{CS}}$ at $A_{i+1}$
+\Require Electron rest energy $E_\text{rest}$
 \Require Random variables $u_1, u_2 \sim \mathcal{U}(0, 1)$
 \Ensure New photon energy $E_{i+1}$, direction $\vec{\omega}_{i+1}$
+
+\LineComment{Scatter angle sampling}
+\State $\kappa \gets E_i / E_\text{rest}$
+\State $\varepsilon_0 \gets 1 / (2\kappa + 1)$
+\Repeat
+    \State Generate $r \sim \mathcal{U}(0, 1)$
+    \If{$r < 0.5$}
+        \State $\varepsilon \gets \varepsilon_0 + (1 - \varepsilon_0) \cdot 2r$
+    \Else
+        \State $\varepsilon \gets \varepsilon_0 + (1 - \varepsilon_0) \cdot 2(1 - r)$
+    \EndIf
+    \State $\cos\theta \gets 1 + \frac{1}{\kappa} \left(1 - \frac{1}{\varepsilon}\right)$
+    \If{$|\cos\theta| \leq 1$}
+        \State $\sin^2\theta \gets 1 - \cos^2\theta$
+        \If{$u_1 \leq \frac{1}{2}\left(\varepsilon + \frac{1}{\varepsilon} - \sin^2\theta\right)$}
+            \State $\theta \gets \arccos(\cos\theta)$
+            \State \textbf{break}
+        \EndIf
+    \EndIf
+\Until{accepted}
+
+\LineComment{New photon energy calculation}
+\State $E_{i+1} \gets \frac{E_i}{1 + \kappa (1 - \cos\theta)}$
+
+\LineComment{Orthonormal basis construction}
+\State $\phi \gets 2\pi u_2$
+\If{$|(\vec{\omega}_i)_z| < 0.999$}
+    \State $\vec{a} \gets (0, 0, 1)$
+\Else
+    \State $\vec{a} \gets (1, 0, 0)$
+\EndIf
+\State $\vec{u} \gets \frac{\vec{a} \times \vec{\omega}_i}{\|\vec{a} \times \vec{\omega}_i\|}$
+\State $\vec{v} \gets \vec{\omega}_i \times \vec{u}$
+\LineComment{New direction calculation}
+\State $\vec{\omega}_{i+1} \gets \sin\theta \cos\phi \cdot \vec{u} + \sin\theta \sin\phi \cdot \vec{v} + \cos\theta \cdot \vec{\omega}_i$
+
+\State \Return $E_{i+1}, \vec{\omega}_{i+1}$
 \end{algorithmic}
 \end{algorithm}
 
@@ -793,3 +825,47 @@ energy $E_i$, the direction $\vec{\omega}_i$ and the Compton scattering
 coefficient $\mu_{\text{CS}}$ at $A_{i+1}$. Together with two random variables,
 the new photon energy $E_{i+1}$ with an according direction $\vec{\omega}_{i+1}$
 is sampled.
+
+\begin{algorithm}[H]
+\caption{Main Simulation Algorithm Composition}
+\label{alg:mainSimulation}
+\begin{algorithmic}[1]
+\Require Material grid $materialGrid$
+\Require Total attenuation grid $totalAttenuationGrid$
+\Require Compton attenuation grid $comptonAttenuationGrid$
+\Require Absorption grid $absorptionGrid$
+\Require Source position $S$
+\Require Number of scatter events $N$
+\Require Beam opening angle $\alpha$
+\Require Voxel size $s$
+\Require Random variables $u \sim \mathcal{U}(0, 1)^{3(N+1)}$
+\Ensure Detector contributions (primary and scatter signals)
+
+\LineComment{Photon generation}
+\State $E_0 \gets$ Algorithm~\ref{alg:photonEnergySampling}(spectrum, $u_1$)
+\State $\vec{\omega}_0 \gets$ Algorithm~\ref{alg:uniformDirectionSampling}($\alpha$, beam axis, $u_2$, $u_3$)
+\State $W_0 \gets 1$
+
+\LineComment{Traverse photon through air to phantom}
+\State $A_0, \ldots \gets$ Algorithm~\ref{alg:rayTraversal}(throughAir=true, $materialGrid$, $s$, $S$, $\vec{\omega}_0$)
+
+\For{$i = 0$ to $N-1$}
+    \LineComment{Forced detection step}
+    \State $A_{i+1}, W_{i+1}, W^\text{escape}_{i}, C^\text{phantom}_{i}, \mu_\text{CS} \gets$ Algorithm~\ref{alg:forcedDetection}($materialGrid$, $totalAttenuationGrid$, $comptonAttenuationGrid$, $absorptionGrid$, $A_i$, $\vec{\omega}_i$, $E_i$, $W_i$, $u_{3i+1}$, $s$)
+    
+    \LineComment{Record escaped photon contribution}
+    \If{$W^\text{escape}_i > 0$}
+        \State $C^\text{world}_i, \ldots \gets$ Algorithm~\ref{alg:exitPointComputation}($C^\text{phantom}_i$, $\vec{\omega}_i$, grid shape, $s$)
+        \State Add $E \cdot W^\text{escape}_i$ to detector pixel at $C^\text{world}_i$
+    \EndIf
+
+    \LineComment{Compton scatter step}
+    \State $E_{i+1}, \vec{\omega}_{i+1} \gets$ Algorithm~\ref{alg:comptonScatteringBlank}($E$, $\vec{\omega}_i$, $\mu_\text{CS}$, $u_{3i+2}$, $u_{3i+3}$)
+\EndFor
+
+\LineComment{Handle leftover intensity}
+\State $C^\text{world}_N, \ldots \gets$ Algorithm~\ref{alg:exitPointComputation}($A_N$, $\vec{\omega}_N$, grid shape, $s$)
+\State Add $E \cdot W$ to detector pixel intensity at $C^\text{world}_N$
+
+\end{algorithmic}
+\end{algorithm}

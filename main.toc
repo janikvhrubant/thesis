@@ -30,7 +30,7 @@
 \contentsline {subsection}{\numberline {4.2.3}Forced Detection}{31}{subsection.96}%
 \contentsline {subsection}{\numberline {4.2.4}Photon Exit Point Determination}{33}{subsection.100}%
 \contentsline {subsection}{\numberline {4.2.5}Compton Scattering}{34}{subsection.102}%
-\contentsline {section}{\numberline {4.3}Algorithm Composition}{35}{section.115}%
-\contentsline {chapter}{\numberline {A}Frequently Asked Questions}{37}{appendix.117}%
-\contentsline {section}{\numberline {A.1}How do I change the colors of links?}{37}{section.118}%
-\contentsline {chapter}{Bibliography}{39}{appendix*.119}%
+\contentsline {section}{\numberline {4.3}Algorithm Composition}{36}{section.114}%
+\contentsline {chapter}{\numberline {A}Frequently Asked Questions}{39}{appendix.117}%
+\contentsline {section}{\numberline {A.1}How do I change the colors of links?}{39}{section.118}%
+\contentsline {chapter}{Bibliography}{41}{appendix*.119}%
