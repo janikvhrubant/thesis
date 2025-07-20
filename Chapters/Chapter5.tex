@@ -119,7 +119,7 @@ classified into the following categories:
         In such models, primary and scattered photon contributions are simulated
         separately, allowing the estimated scatter signal to be subtracted from
         measured data in order to restore image fidelity.
-    \item \textcolor{green}{TODO: AI Method from Josha Maier?}
+    % \item \textcolor{green}{TODO: AI Method from Josha Maier?}
 \end{itemize}
 
 In \citeyear{mcffd2011} \citeauthor{mcffd2011} \cite{mcffd2011} already
@@ -141,6 +141,14 @@ results show significant improvements in the image quality as demonstrated by
 \end{figure}
 
 \subsection{Monte Carlo Simulation}
+
+To achieve scatter correction, by using \ac{mc} simulation, first a three-dimensional phantom is estimated by analysing the X-ray projection. Then a \ac{mc} simulation is performed to estimate the scatter signal $I_\text{scattered}$ for each detector pixel. Then the estimated scatter signal is subtracted from the measured intensity $I_\text{measured}$:
+\begin{equation}
+    \label{eq:scatter_correction}
+    I_{\text{corrected}} = I_\text{measured} - I_\text{scattered}
+\end{equation}
+
+The functionality of \ac{mc} based scatter correction is based on the following key steps:
 
 The \ac{mc} simulation is a powerful computational technique that follows
 phyics-based principles to model the transport of photons through matter. It is
@@ -226,7 +234,7 @@ Figure~\ref{fig:photon-transport-pseudocode}.
 %-------------------------------------------------------------------------------%	SECTION 5
 \section{Monte Carlo Methods: Benefits \& Drawbacks}
 %-------------------------------------------------------------------------------
-\textcolor{green}{QMC still does not appear in the caption}
+% \textcolor{green}{TODO: QMC still does not appear in the caption}
 
 Monte Carlo (MC) simulations are widely regarded as the gold standard for
 scatter correction in computed tomography due to their ability to model

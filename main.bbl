@@ -17,6 +17,47 @@
 \endgroup
 
 \datalist[entry]{nty/global//global/global/global}
+  \entry{fd2001}{article}{}{}
+    \name{author}{3}{}{%
+      {{hash=dJH}{%
+         prefix={de},
+         prefixi={d\bibinitperiod},
+         family={Jong},
+         familyi={J\bibinitperiod},
+         given={H.W.A.M.},
+         giveni={H\bibinitperiod},
+      }}%
+      {{hash=SE}{%
+         family={Slijpen},
+         familyi={S\bibinitperiod},
+         given={E.T.P.},
+         giveni={E\bibinitperiod},
+      }}%
+      {{hash=BF}{%
+         family={Beekman},
+         familyi={B\bibinitperiod},
+         given={F.J.},
+         giveni={F\bibinitperiod},
+      }}%
+    }
+    \keyw{Acceleration;Monte Carlo methods;Computational fluid dynamics;Single photon emission computed tomography;Computational modeling;Electromagnetic scattering;Particle scattering;Computed tomography;Electrical capacitance tomography;Cameras}
+    \strng{namehash}{JHdSEBF1}
+    \strng{fullhash}{JHdSEBF1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{J}
+    \field{sortinithash}{J}
+    \verb{doi}
+    \verb 10.1109/23.910833
+    \endverb
+    \field{number}{1}
+    \field{pages}{58\bibrangedash 64}
+    \field{title}{Acceleration of Monte Carlo SPECT simulation using convolution-based forced detection}
+    \field{volume}{48}
+    \field{journaltitle}{IEEE Transactions on Nuclear Science}
+    \field{year}{2001}
+  \endentry
+
   \entry{qmcXray2023}{article}{}{}
     \name{author}{3}{}{%
       {{hash=LG}{%
@@ -108,6 +149,29 @@
     \field{sortinithash}{M}
     \field{title}{Monte Carlo-Algorithmen}
     \field{year}{2012}
+  \endentry
+
+  \entry{nelsoncompton}{article}{}{}
+    \name{author}{1}{}{%
+      {{hash=NDR}{%
+         family={Nelson},
+         familyi={N\bibinitperiod},
+         given={Dylan\bibnamedelima R},
+         giveni={D\bibinitperiod\bibinitdelim R\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{NDR1}
+    \strng{fullhash}{NDR1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{N}
+    \field{sortinithash}{N}
+    \field{title}{COMPTON SCATTERING}
+    \verb{url}
+    \verb https://www.ita.uni-heidelberg.de/~dnelson/storage/ucb.phy111.spr2007
+    \verb /dnelson.com.pdf
+    \endverb
+    \field{year}{2007}
   \endentry
 
   \entry{spekpy}{software}{}{}
@@ -302,6 +366,28 @@
     \field{volume}{49}
     \field{journaltitle}{Medical physics}
     \field{year}{2022}
+  \endentry
+
+  \entry{venkatapathi2021n}{article}{}{}
+    \true{moreauthor}
+    \true{morelabelname}
+    \name{author}{1}{}{%
+      {{hash=VM}{%
+         family={Venkatapathi},
+         familyi={V\bibinitperiod},
+         given={Murugesan},
+         giveni={M\bibinitperiod},
+      }}%
+    }
+    \strng{namehash}{VM+1}
+    \strng{fullhash}{VM+1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{V}
+    \field{sortinithash}{V}
+    \field{title}{An O (n) algorithm for generating uniform random vectors in n-dimensional cones}
+    \field{journaltitle}{arXiv preprint arXiv:2101.00936}
+    \field{year}{2021}
   \endentry
 \enddatalist
 \endinput

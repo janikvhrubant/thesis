@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.27 (TeX Live 2025) (preloaded format=pdflatex 2025.7.4)  15 JUL 2025 09:31
+This is pdfTeX, Version 3.141592653-2.6-1.40.27 (TeX Live 2025) (preloaded format=pdflatex 2025.7.4)  20 JUL 2025 21:11
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -800,7 +800,27 @@ Package: transparent 2022-10-27 v1.5 Transparency with color stacks
 Package: transparent-nometadata 2022-10-27 v1.5 Transparency via pdfTeX's color stack (HO)
  (/usr/local/texlive/2025/texmf-dist/tex/latex/auxhook/auxhook.sty
 Package: auxhook 2019-12-17 v1.6 Hooks for auxiliary files (HO)
-))) (/usr/local/texlive/2025/texmf-dist/tex/latex/amscls/amsthm.sty
+))) (/usr/local/texlive/2025/texmf-dist/tex/latex/tikz-3dplot/tikz-3dplot.sty (/usr/local/texlive/2025/texmf-dist/tex/generic/pgf/frontendlayer/tikz/libraries/tikzlibrarycalc.code.tex
+File: tikzlibrarycalc.code.tex 2023-01-15 v3.1.10 (3.1.10)
+) (/usr/local/texlive/2025/texmf-dist/tex/generic/pgf/frontendlayer/tikz/libraries/tikzlibrary3d.code.tex
+File: tikzlibrary3d.code.tex 2023-01-15 v3.1.10 (3.1.10)
+) (/usr/local/texlive/2025/texmf-dist/tex/generic/pgf/frontendlayer/tikz/libraries/tikzlibraryarrows.code.tex
+File: tikzlibraryarrows.code.tex 2023-01-15 v3.1.10 (3.1.10)
+ (/usr/local/texlive/2025/texmf-dist/tex/generic/pgf/libraries/pgflibraryarrows.code.tex
+File: pgflibraryarrows.code.tex 2023-01-15 v3.1.10 (3.1.10)
+\arrowsize=\dimen321
+))) (/usr/local/texlive/2025/texmf-dist/tex/latex/esvect/esvect.sty
+Package: esvect 
+\symesvector=\mathgroup5
+LaTeX Font Info:    Redeclaring math symbol \fldr on input line 38.
+) (/usr/local/texlive/2025/texmf-dist/tex/latex/lipsum/lipsum.sty (/usr/local/texlive/2025/texmf-dist/tex/latex/l3packages/l3keys2e/l3keys2e.sty
+Package: l3keys2e 2024-08-16 LaTeX2e option processing using LaTeX3 keys
+)
+Package: lipsum 2021-09-20 v2.7 150 paragraphs of Lorem Ipsum dummy text
+\g__lipsum_par_int=\count380
+\l__lipsum_a_int=\count381
+\l__lipsum_b_int=\count382
+ (/usr/local/texlive/2025/texmf-dist/tex/latex/lipsum/lipsum.ltd.tex)) (/usr/local/texlive/2025/texmf-dist/tex/latex/amscls/amsthm.sty
 Package: amsthm 2020/05/29 v2.20.6
 \thm@style=\toks49
 \thm@bodyfont=\toks50
@@ -812,58 +832,58 @@ Package: amsthm 2020/05/29 v2.20.6
 \thm@headsep=\skip69
 \dth@everypar=\toks54
 )
-\c@definition=\count380
+\c@definition=\count383
  (/usr/local/texlive/2025/texmf-dist/tex/generic/pgf/frontendlayer/tikz/libraries/tikzlibrarydecorations.pathmorphing.code.tex (/usr/local/texlive/2025/texmf-dist/tex/generic/pgf/libraries/decorations/pgflibrarydecorations.pathmorphing.code.tex)) (/usr/local/texlive/2025/texmf-dist/tex/latex/biblatex/biblatex.sty
 Package: biblatex 2024/03/21 v3.20 programmable bibliographies (PK/MW)
  (/usr/local/texlive/2025/texmf-dist/tex/latex/logreq/logreq.sty
 Package: logreq 2010/08/04 v1.0 xml request logger
-\lrq@indent=\count381
+\lrq@indent=\count384
  (/usr/local/texlive/2025/texmf-dist/tex/latex/logreq/logreq.def
 File: logreq.def 2010/08/04 v1.0 logreq spec v1.0
 ))
-\c@tabx@nest=\count382
-\c@listtotal=\count383
-\c@listcount=\count384
-\c@liststart=\count385
-\c@liststop=\count386
-\c@citecount=\count387
-\c@citetotal=\count388
-\c@multicitecount=\count389
-\c@multicitetotal=\count390
-\c@instcount=\count391
-\c@maxnames=\count392
-\c@minnames=\count393
-\c@maxitems=\count394
-\c@minitems=\count395
-\c@citecounter=\count396
-\c@maxcitecounter=\count397
-\c@savedcitecounter=\count398
-\c@uniquelist=\count399
-\c@uniquename=\count400
-\c@refsection=\count401
-\c@refsegment=\count402
-\c@maxextratitle=\count403
-\c@maxextratitleyear=\count404
-\c@maxextraname=\count405
-\c@maxextradate=\count406
-\c@maxextraalpha=\count407
-\c@abbrvpenalty=\count408
-\c@highnamepenalty=\count409
-\c@lownamepenalty=\count410
-\c@maxparens=\count411
-\c@parenlevel=\count412
-\blx@tempcnta=\count413
-\blx@tempcntb=\count414
-\blx@tempcntc=\count415
-\c@blx@maxsection=\count416
-\blx@maxsegment@0=\count417
-\blx@notetype=\count418
-\blx@parenlevel@text=\count419
-\blx@parenlevel@foot=\count420
-\blx@sectionciteorder@0=\count421
-\blx@sectionciteorderinternal@0=\count422
-\blx@entrysetcounter=\count423
-\blx@biblioinstance=\count424
+\c@tabx@nest=\count385
+\c@listtotal=\count386
+\c@listcount=\count387
+\c@liststart=\count388
+\c@liststop=\count389
+\c@citecount=\count390
+\c@citetotal=\count391
+\c@multicitecount=\count392
+\c@multicitetotal=\count393
+\c@instcount=\count394
+\c@maxnames=\count395
+\c@minnames=\count396
+\c@maxitems=\count397
+\c@minitems=\count398
+\c@citecounter=\count399
+\c@maxcitecounter=\count400
+\c@savedcitecounter=\count401
+\c@uniquelist=\count402
+\c@uniquename=\count403
+\c@refsection=\count404
+\c@refsegment=\count405
+\c@maxextratitle=\count406
+\c@maxextratitleyear=\count407
+\c@maxextraname=\count408
+\c@maxextradate=\count409
+\c@maxextraalpha=\count410
+\c@abbrvpenalty=\count411
+\c@highnamepenalty=\count412
+\c@lownamepenalty=\count413
+\c@maxparens=\count414
+\c@parenlevel=\count415
+\blx@tempcnta=\count416
+\blx@tempcntb=\count417
+\blx@tempcntc=\count418
+\c@blx@maxsection=\count419
+\blx@maxsegment@0=\count420
+\blx@notetype=\count421
+\blx@parenlevel@text=\count422
+\blx@parenlevel@foot=\count423
+\blx@sectionciteorder@0=\count424
+\blx@sectionciteorderinternal@0=\count425
+\blx@entrysetcounter=\count426
+\blx@biblioinstance=\count427
 \labelnumberwidth=\skip70
 \labelalphawidth=\skip71
 \biblabelsep=\skip72
@@ -875,9 +895,9 @@ File: logreq.def 2010/08/04 v1.0 logreq spec v1.0
 \blx@bcfin=\read5
 \blx@bcfout=\write4
 \blx@langwohyphens=\language91
-\c@mincomprange=\count425
-\c@maxcomprange=\count426
-\c@mincompwidth=\count427
+\c@mincomprange=\count428
+\c@maxcomprange=\count429
+\c@mincompwidth=\count430
 Package biblatex Info: Trying to load biblatex default data model...
 Package biblatex Info: ... file 'blx-dm.def' found.
  (/usr/local/texlive/2025/texmf-dist/tex/latex/biblatex/blx-dm.def
@@ -885,74 +905,74 @@ File: blx-dm.def 2024/03/21 v3.20 biblatex datamodel (PK/MW)
 )
 Package biblatex Info: Trying to load biblatex custom data model...
 Package biblatex Info: ... file 'biblatex-dm.cfg' not found.
-\c@afterword=\count428
-\c@savedafterword=\count429
-\c@annotator=\count430
-\c@savedannotator=\count431
-\c@author=\count432
-\c@savedauthor=\count433
-\c@bookauthor=\count434
-\c@savedbookauthor=\count435
-\c@commentator=\count436
-\c@savedcommentator=\count437
-\c@editor=\count438
-\c@savededitor=\count439
-\c@editora=\count440
-\c@savededitora=\count441
-\c@editorb=\count442
-\c@savededitorb=\count443
-\c@editorc=\count444
-\c@savededitorc=\count445
-\c@foreword=\count446
-\c@savedforeword=\count447
-\c@holder=\count448
-\c@savedholder=\count449
-\c@introduction=\count450
-\c@savedintroduction=\count451
-\c@namea=\count452
-\c@savednamea=\count453
-\c@nameb=\count454
-\c@savednameb=\count455
-\c@namec=\count456
-\c@savednamec=\count457
-\c@translator=\count458
-\c@savedtranslator=\count459
-\c@shortauthor=\count460
-\c@savedshortauthor=\count461
-\c@shorteditor=\count462
-\c@savedshorteditor=\count463
-\c@labelname=\count464
-\c@savedlabelname=\count465
-\c@institution=\count466
-\c@savedinstitution=\count467
-\c@lista=\count468
-\c@savedlista=\count469
-\c@listb=\count470
-\c@savedlistb=\count471
-\c@listc=\count472
-\c@savedlistc=\count473
-\c@listd=\count474
-\c@savedlistd=\count475
-\c@liste=\count476
-\c@savedliste=\count477
-\c@listf=\count478
-\c@savedlistf=\count479
-\c@location=\count480
-\c@savedlocation=\count481
-\c@organization=\count482
-\c@savedorganization=\count483
-\c@origlocation=\count484
-\c@savedoriglocation=\count485
-\c@origpublisher=\count486
-\c@savedorigpublisher=\count487
-\c@publisher=\count488
-\c@savedpublisher=\count489
-\c@language=\count490
-\c@savedlanguage=\count491
-\c@origlanguage=\count492
-\c@savedoriglanguage=\count493
-\c@pageref=\count494
-\c@savedpageref=\count495
+\c@afterword=\count431
+\c@savedafterword=\count432
+\c@annotator=\count433
+\c@savedannotator=\count434
+\c@author=\count435
+\c@savedauthor=\count436
+\c@bookauthor=\count437
+\c@savedbookauthor=\count438
+\c@commentator=\count439
+\c@savedcommentator=\count440
+\c@editor=\count441
+\c@savededitor=\count442
+\c@editora=\count443
+\c@savededitora=\count444
+\c@editorb=\count445
+\c@savededitorb=\count446
+\c@editorc=\count447
+\c@savededitorc=\count448
+\c@foreword=\count449
+\c@savedforeword=\count450
+\c@holder=\count451
+\c@savedholder=\count452
+\c@introduction=\count453
+\c@savedintroduction=\count454
+\c@namea=\count455
+\c@savednamea=\count456
+\c@nameb=\count457
+\c@savednameb=\count458
+\c@namec=\count459
+\c@savednamec=\count460
+\c@translator=\count461
+\c@savedtranslator=\count462
+\c@shortauthor=\count463
+\c@savedshortauthor=\count464
+\c@shorteditor=\count465
+\c@savedshorteditor=\count466
+\c@labelname=\count467
+\c@savedlabelname=\count468
+\c@institution=\count469
+\c@savedinstitution=\count470
+\c@lista=\count471
+\c@savedlista=\count472
+\c@listb=\count473
+\c@savedlistb=\count474
+\c@listc=\count475
+\c@savedlistc=\count476
+\c@listd=\count477
+\c@savedlistd=\count478
+\c@liste=\count479
+\c@savedliste=\count480
+\c@listf=\count481
+\c@savedlistf=\count482
+\c@location=\count483
+\c@savedlocation=\count484
+\c@organization=\count485
+\c@savedorganization=\count486
+\c@origlocation=\count487
+\c@savedoriglocation=\count488
+\c@origpublisher=\count489
+\c@savedorigpublisher=\count490
+\c@publisher=\count491
+\c@savedpublisher=\count492
+\c@language=\count493
+\c@savedlanguage=\count494
+\c@origlanguage=\count495
+\c@savedoriglanguage=\count496
+\c@pageref=\count497
+\c@savedpageref=\count498
 \shorthandwidth=\skip78
 \shortjournalwidth=\skip79
 \shortserieswidth=\skip80
@@ -986,19 +1006,19 @@ Package biblatex Info: Trying to load generic definitions...
 Package biblatex Info: ... file 'biblatex.def' found.
  (/usr/local/texlive/2025/texmf-dist/tex/latex/biblatex/biblatex.def
 File: biblatex.def 2024/03/21 v3.20 biblatex compatibility (PK/MW)
-\c@textcitecount=\count496
-\c@textcitetotal=\count497
-\c@textcitemaxnames=\count498
-\c@biburlbigbreakpenalty=\count499
-\c@biburlbreakpenalty=\count500
-\c@biburlnumpenalty=\count501
-\c@biburlucpenalty=\count502
-\c@biburllcpenalty=\count503
+\c@textcitecount=\count499
+\c@textcitetotal=\count500
+\c@textcitemaxnames=\count501
+\c@biburlbigbreakpenalty=\count502
+\c@biburlbreakpenalty=\count503
+\c@biburlnumpenalty=\count504
+\c@biburlucpenalty=\count505
+\c@biburllcpenalty=\count506
 \biburlbigskip=\muskip19
 \biburlnumskip=\muskip20
 \biburlucskip=\muskip21
 \biburllcskip=\muskip22
-\c@smartand=\count504
+\c@smartand=\count507
 )
 Package biblatex Info: Trying to load natbib compatibility...
 Package biblatex Info: ... file 'blx-natbib.def' found.
@@ -1014,8 +1034,8 @@ Package biblatex Info: Trying to load bibliography style 'standard'...
 Package biblatex Info: ... file 'standard.bbx' found.
  (/usr/local/texlive/2025/texmf-dist/tex/latex/biblatex/bbx/standard.bbx
 File: standard.bbx 2024/03/21 v3.20 biblatex bibliography style (PK/MW)
-\c@bbx:relatedcount=\count505
-\c@bbx:relatedtotal=\count506
+\c@bbx:relatedcount=\count508
+\c@bbx:relatedtotal=\count509
 ))
 Package biblatex Info: Trying to load citation style 'numeric'...
 Package biblatex Info: ... file 'numeric.cbx' found.
@@ -1048,12 +1068,12 @@ Package biblatex Info: ... and expl3
 Package: blx-case-expl3 2024/03/21 v3.20 expl3 case changing code for biblatex
 )) (/usr/local/texlive/2025/texmf-dist/tex/latex/csquotes/csquotes.sty
 Package: csquotes 2024-04-04 v5.2o context-sensitive quotations (JAW)
-\csq@reset=\count507
-\csq@gtype=\count508
-\csq@glevel=\count509
-\csq@qlevel=\count510
-\csq@maxlvl=\count511
-\csq@tshold=\count512
+\csq@reset=\count510
+\csq@gtype=\count511
+\csq@glevel=\count512
+\csq@qlevel=\count513
+\csq@maxlvl=\count514
+\csq@tshold=\count515
 \csq@ltx@everypar=\toks55
  (/usr/local/texlive/2025/texmf-dist/tex/latex/csquotes/csquotes.def
 File: csquotes.def 2024-04-04 v5.2o csquotes generic definitions (JAW)
@@ -1065,57 +1085,61 @@ File: csquotes.cfg
 )
 Package csquotes Info: Enabling multilingual quotes.
 )
-Package hyperref Info: Option `bookmarksopen' set `true' on input line 127.
-Package hyperref Info: Option `hypertexnames' set `false' on input line 127.
-Package hyperref Info: Option `colorlinks' set `true' on input line 127.
-Package hyperref Info: Option `unicode' set `true' on input line 127.
-Package hyperref Info: Option `breaklinks' set `true' on input line 127.
+Package hyperref Info: Option `bookmarksopen' set `true' on input line 130.
+Package hyperref Info: Option `hypertexnames' set `false' on input line 130.
+Package hyperref Info: Option `colorlinks' set `true' on input line 130.
+Package hyperref Info: Option `unicode' set `true' on input line 130.
+Package hyperref Info: Option `breaklinks' set `true' on input line 130.
 Package csquotes Info: Checking for multilingual support...
 Package csquotes Info: ... found 'babel' package.
-LaTeX Font Info:    Trying to load font information for T1+ppl on input line 127.
+LaTeX Font Info:    Trying to load font information for T1+ppl on input line 130.
  (/usr/local/texlive/2025/texmf-dist/tex/latex/psnfss/t1ppl.fd
 File: t1ppl.fd 2001/06/04 font definitions for T1/ppl.
 ) (./main.aux (./Chapters/acronyms.aux) (./acronyms.aux) (./Chapters/Chapter1.aux) (./Chapters/Chapter2.aux) (./Chapters/Chapter3.aux) (./Chapters/Chapter4.aux) (./Chapters/Chapter5.aux) (./Chapters/Chapter6.aux
 
 LaTeX Warning: Label `fig:tungsten_atomic_model' multiply defined.
 
-) (./Chapters/Chapter7.aux) (./Appendices/AppendixA.aux))
+) (./Chapters/Chapter7.aux
+
+LaTeX Warning: Label `Chapter5' multiply defined.
+
+) (./Appendices/AppendixA.aux))
 \openout1 = `main.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 127.
-LaTeX Font Info:    ... okay on input line 127.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 127.
-LaTeX Font Info:    ... okay on input line 127.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 127.
-LaTeX Font Info:    ... okay on input line 127.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 127.
-LaTeX Font Info:    ... okay on input line 127.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 127.
-LaTeX Font Info:    ... okay on input line 127.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 127.
-LaTeX Font Info:    ... okay on input line 127.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 127.
-LaTeX Font Info:    ... okay on input line 127.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 127.
-LaTeX Font Info:    ... okay on input line 127.
-LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 127.
-LaTeX Font Info:    ... okay on input line 127.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 130.
+LaTeX Font Info:    ... okay on input line 130.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 130.
+LaTeX Font Info:    ... okay on input line 130.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 130.
+LaTeX Font Info:    ... okay on input line 130.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 130.
+LaTeX Font Info:    ... okay on input line 130.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 130.
+LaTeX Font Info:    ... okay on input line 130.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 130.
+LaTeX Font Info:    ... okay on input line 130.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 130.
+LaTeX Font Info:    ... okay on input line 130.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 130.
+LaTeX Font Info:    ... okay on input line 130.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 130.
+LaTeX Font Info:    ... okay on input line 130.
  (/usr/local/texlive/2025/texmf-dist/tex/latex/translations/translations-basic-dictionary-english.trsl
 File: translations-basic-dictionary-english.trsl (english translation file `translations-basic-dictionary')
 )
-Package translations Info: loading dictionary `translations-basic-dictionary' for `english'. on input line 127.
+Package translations Info: loading dictionary `translations-basic-dictionary' for `english'. on input line 130.
  (/usr/local/texlive/2025/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count513
-\scratchdimen=\dimen321
+\scratchcounter=\count516
+\scratchdimen=\dimen322
 \scratchbox=\box102
-\nofMPsegments=\count514
-\nofMParguments=\count515
+\nofMPsegments=\count517
+\nofMParguments=\count518
 \everyMPshowfont=\toks56
-\MPscratchCnt=\count516
-\MPscratchDim=\dimen322
-\MPnumerator=\count517
-\makeMPintoPDFobject=\count518
+\MPscratchCnt=\count519
+\MPscratchDim=\dimen323
+\MPnumerator=\count520
+\makeMPintoPDFobject=\count521
 \everyMPtoPDFconversion=\toks57
 ) (/usr/local/texlive/2025/texmf-dist/tex/latex/epstopdf-pkg/epstopdf-base.sty
 Package: epstopdf-base 2020-01-24 v2.11 Base part for package epstopdf
@@ -1170,21 +1194,21 @@ Package caption Info: End \AtBeginDocument code.
 * \@reversemarginfalse
 * (1in=72.27pt=25.4mm, 1cm=28.453pt)
 
-Package scrbase Info: activating english \abbrevname on input line 127.
-Package scrbase Info: activating english \byname on input line 127.
-Package scrbase Info: activating english \acknowledgementname on input line 127.
-Package scrbase Info: activating english \authorshipname on input line 127.
-Package scrbase Info: activating english \constantsname on input line 127.
-Package scrbase Info: activating english \symbolsname on input line 127.
-Package hyperref Info: Link coloring ON on input line 127.
+Package scrbase Info: activating english \abbrevname on input line 130.
+Package scrbase Info: activating english \byname on input line 130.
+Package scrbase Info: activating english \acknowledgementname on input line 130.
+Package scrbase Info: activating english \authorshipname on input line 130.
+Package scrbase Info: activating english \constantsname on input line 130.
+Package scrbase Info: activating english \symbolsname on input line 130.
+Package hyperref Info: Link coloring ON on input line 130.
 (./main.out) (./main.out)
 \@outlinefile=\write5
 \openout5 = `main.out'.
 
 
 Couldn't patch \deferred@thm@head!
-\c@lstlisting=\count519
-Package tocbasic Info: setting babel extension for `lol' on input line 127.
+\c@lstlisting=\count522
+Package tocbasic Info: setting babel extension for `lol' on input line 130.
 Package biblatex Info: Trying to load language 'english'...
 Package biblatex Info: ... file 'english.lbx' found.
 (/usr/local/texlive/2025/texmf-dist/tex/latex/biblatex/lbx/english.lbx
@@ -1201,8 +1225,8 @@ Package biblatex Info: Data encoding 'utf8' specified.
 Package biblatex Info: Trying to load bibliographic data...
 Package biblatex Info: ... file 'main.bbl' found.
  (./main.bbl)
-Package biblatex Info: Reference section=0 on input line 127.
-Package biblatex Info: Reference segment=0 on input line 127.
+Package biblatex Info: Reference section=0 on input line 130.
+Package biblatex Info: Reference segment=0 on input line 130.
 
 
 [1
@@ -1217,35 +1241,39 @@ Package biblatex Info: Reference segment=0 on input line 127.
 --------------------
  Declaration of Authorship
 --------------------
-LaTeX Font Info:    Trying to load font information for TS1+ppl on input line 185.
+LaTeX Font Info:    Trying to load font information for TS1+ppl on input line 188.
 (/usr/local/texlive/2025/texmf-dist/tex/latex/psnfss/ts1ppl.fd
 File: ts1ppl.fd 2001/06/04 font definitions for TS1/ppl.
 )
-Underfull \hbox (badness 10000) in paragraph at lines 190--191
+Underfull \hbox (badness 10000) in paragraph at lines 193--194
 
  []
 
 
 
-LaTeX Font Info:    Trying to load font information for OT1+ppl on input line 200.
+LaTeX Font Info:    Trying to load font information for OT1+ppl on input line 203.
 (/usr/local/texlive/2025/texmf-dist/tex/latex/psnfss/ot1ppl.fd
 File: ot1ppl.fd 2001/06/04 font definitions for OT1/ppl.
 )
-LaTeX Font Info:    Trying to load font information for OML+zplm on input line 200.
+LaTeX Font Info:    Trying to load font information for OML+zplm on input line 203.
  (/usr/local/texlive/2025/texmf-dist/tex/latex/psnfss/omlzplm.fd
 File: omlzplm.fd 2002/09/08 Fontinst v1.914 font definitions for OML/zplm.
 )
-LaTeX Font Info:    Trying to load font information for OMS+zplm on input line 200.
+LaTeX Font Info:    Trying to load font information for OMS+zplm on input line 203.
  (/usr/local/texlive/2025/texmf-dist/tex/latex/psnfss/omszplm.fd
 File: omszplm.fd 2002/09/08 Fontinst v1.914 font definitions for OMS/zplm.
 )
-LaTeX Font Info:    Trying to load font information for OMX+zplm on input line 200.
+LaTeX Font Info:    Trying to load font information for OMX+zplm on input line 203.
  (/usr/local/texlive/2025/texmf-dist/tex/latex/psnfss/omxzplm.fd
 File: omxzplm.fd 2002/09/08 Fontinst v1.914 font definitions for OMX/zplm.
 )
-LaTeX Font Info:    Trying to load font information for OT1+zplm on input line 200.
+LaTeX Font Info:    Trying to load font information for OT1+zplm on input line 203.
  (/usr/local/texlive/2025/texmf-dist/tex/latex/psnfss/ot1zplm.fd
 File: ot1zplm.fd 2002/09/08 Fontinst v1.914 font definitions for OT1/zplm.
+)
+LaTeX Font Info:    Trying to load font information for U+esvect on input line 203.
+ (/usr/local/texlive/2025/texmf-dist/tex/latex/esvect/uesvect.fd
+File: uesvect.fd 
 ) [3]
 
 [4
@@ -1292,6 +1320,12 @@ LaTeX Warning: Hyper reference `acro:hu' on page ix undefined on input line 5.
 
 LaTeX Warning: Hyper reference `acro:hu' on page ix undefined on input line 5.
 
+
+LaTeX Warning: Hyper reference `acro:ffd' on page ix undefined on input line 8.
+
+
+LaTeX Warning: Hyper reference `acro:ffd' on page ix undefined on input line 8.
+
 )
 
 [9
@@ -1313,89 +1347,51 @@ No file acronyms.tex.
 ]
 \openout2 = `Chapters/Chapter1.aux'.
 
- (./Chapters/Chapter1.tex
+ (./Chapters/Chapter1.tex)
+\openout2 = `Chapters/Chapter2.aux'.
+
+ (./Chapters/Chapter2.tex)
+\openout2 = `Chapters/Chapter3.aux'.
+
+ (./Chapters/Chapter3.tex)
+\openout2 = `Chapters/Chapter4.aux'.
+
+ (./Chapters/Chapter4.tex)
+\openout2 = `Chapters/Chapter5.aux'.
+
+ (./Chapters/Chapter5.tex
 
 [1
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 ]
 
 [2]
 Chapter 1.
-
-
-[3
-
-])
-
-[4]
-\openout2 = `Chapters/Chapter2.aux'.
-
- (./Chapters/Chapter2.tex
-Chapter 2.
-
-
-[5
-
-
-
-
-])
-
-[6]
-\openout2 = `Chapters/Chapter3.aux'.
-
- (./Chapters/Chapter3.tex
-Chapter 3.
-
-
-[7
-
-
-
-
-])
-
-[8]
-\openout2 = `Chapters/Chapter4.aux'.
-
- (./Chapters/Chapter4.tex
-Chapter 4.
-
-
-[9
-
-
-
-
-])
-
-[10]
-\openout2 = `Chapters/Chapter5.aux'.
-
- (./Chapters/Chapter5.tex
-
-[11
-
-
-
-
-]
-
-[12]
-Chapter 5.
 Package acronym Info: Label `acro:ct' newly defined as it shall be overridden
 although it is yet undefined on input line 11.
 
 
-[13
+[3
 
 ]
 
-[14]
+[4]
 Package acronym Info: Label `acro:mc' newly defined as it shall be overridden
 although it is yet undefined on input line 126.
-<Figures/mcffd.png, id=455, 1642.135pt x 790.955pt>
+<Figures/mcffd.png, id=323, 1642.135pt x 790.955pt>
 File: Figures/mcffd.png Graphic file (type png)
 <use Figures/mcffd.png>
 Package pdftex.def Info: Figures/mcffd.png  used on input line 134.
@@ -1404,113 +1400,159 @@ Package acronym Info: Label `acro:cbct' newly defined as it shall be overridden
 although it is yet undefined on input line 139.
 
 
-[15 <./Figures/mcffd.png>]
+[5 <./Figures/mcffd.png>]
 
-[16]
+[6]
 Package acronym Info: Label `acro:qmc' newly defined as it shall be overridden
-although it is yet undefined on input line 253.
+although it is yet undefined on input line 261.
 )
 
-[17]
+[7]
 \openout2 = `Chapters/Chapter6.aux'.
 
  (./Chapters/Chapter6.tex
 
-[18
+[8
 
 
 
 
 ]
-Chapter 6.
+Chapter 2.
 
 
-[19]
+[9]
 
-[20]
-<Figures/spectrum_without_filter.png, id=511, 410.0118pt x 323.7696pt>
+[10]
+<Figures/spectrum_without_filter.png, id=384, 410.0118pt x 323.7696pt>
 File: Figures/spectrum_without_filter.png Graphic file (type png)
 <use Figures/spectrum_without_filter.png>
 Package pdftex.def Info: Figures/spectrum_without_filter.png  used on input line 436.
 (pdftex.def)             Requested size: 323.22449pt x 255.24162pt.
 
 
-[21]
+[11]
 
-[22 <./Figures/spectrum_without_filter.png>]
-<Figures/spectrum_with_filter.png, id=532, 410.0118pt x 323.7696pt>
+[12 <./Figures/spectrum_without_filter.png>]
+<Figures/spectrum_with_filter.png, id=404, 410.0118pt x 323.7696pt>
 File: Figures/spectrum_with_filter.png Graphic file (type png)
 <use Figures/spectrum_with_filter.png>
 Package pdftex.def Info: Figures/spectrum_with_filter.png  used on input line 523.
 (pdftex.def)             Requested size: 323.22449pt x 255.24162pt.
 
 
-[23]
+[13]
 LaTeX Font Info:    Trying to load font information for U+fplmbb on input line 553.
  (/usr/local/texlive/2025/texmf-dist/tex/latex/psnfss/ufplmbb.fd
 File: ufplmbb.fd 2003/10/30 Fontinst v1.914 font definitions for U/fplmbb.
 )
 
-[24 <./Figures/spectrum_with_filter.png>]
+[14 <./Figures/spectrum_with_filter.png>]
 
-[25]
+[15]
 
-[26]
+[16]
 
-[27])
+[17])
 
-[28]
+[18]
 
-[29]
+[19]
 \openout2 = `Chapters/Chapter7.aux'.
 
  (./Chapters/Chapter7.tex
 
-[30
+[20
 
 
 
 
 ]
-Chapter 7.
-Package acronym Info: Label `acro:ffd' newly defined as it shall be overridden
-although it is yet undefined on input line 11.
+Chapter 3.
 
+
+[21]
+
+[22
+
+]
+Chapter 4.
+
+Overfull \hbox (0.5461pt too wide) in paragraph at lines 11--24
+\T1/ppl/m/n/10.95 forced de-tec-tion ap-proach em-ployed, cal-cu-lates the prob-a-bil-ity of es-cap-ing the phan-
+ []
+
+
+
+[23]
+
+[24]
+
+[25]
+Package hyperref Info: bookmark level for unknown algorithm defaults to 0 on input line 204.
+
+
+[26]
+
+[27]
+
+[28]
+
+[29]
+
+[30]
 
 [31]
-Package hyperref Info: bookmark level for unknown algorithm defaults to 0 on input line 56.
+Underfull \hbox (badness 10000) in paragraph at lines 593--596
+[]$\OML/zplm/m/it/10.95 C[]\OT1/ppl/m/n/10.95 , \OML/zplm/m/it/10.95 crossedVoxels\OT1/ppl/m/n/10.95 , \OML/zplm/m/it/10.95 crossedMaterials\OT1/ppl/m/n/10.95 , \OML/zplm/m/it/10.95 entryPoints\OT1/ppl/m/n/10.95 , \OML/zplm/m/it/10.95 distances\OT1/ppl/m/n/10.95 , \OML/zplm/m/it/10.95 exitGrid \OMS/zplm/m/n/10.95  
+ []
 
 
-[32])
+Overfull \hbox (2.91473pt too wide) in paragraph at lines 603--605
+[]$\OML/zplm/m/it/10.95 k\OT1/ppl/m/n/10.95 , \OML/zplm/m/it/10.95 f\OT1/ppl/m/n/10.95 , \OML/zplm/m/it/10.95 escapeProbability \OMS/zplm/m/n/10.95   []\OT1/zplm/m/n/10.95 (\OML/zplm/m/it/10.95 distances\OT1/ppl/m/n/10.95 , \OML/zplm/m/it/10.95 totalAttenuationCoefficients\OT1/ppl/m/n/10.95 , \OML/zplm/m/it/10.95 u\OT1/zplm/m/n/10.95 )$ 
+ []
+
+
+
+[32]
 
 [33]
+
+[34]
+
+[35])
+
+[36]
 \openout2 = `Appendices/AppendixA.aux'.
 
  (./Appendices/AppendixA.tex
-
-[34
-
-
-
-
-]
 Appendix A.
 )
 
-[35{/usr/local/texlive/2025/texmf-dist/fonts/enc/dvips/cm-super/cm-super-t1.enc}]
+[37
 
-[36
+
+
+
+{/usr/local/texlive/2025/texmf-dist/fonts/enc/dvips/cm-super/cm-super-t1.enc}]
+
+[38
 
 
 
 ]
-Overfull \hbox (14.89879pt too wide) in paragraph at lines 337--337
+Overfull \hbox (4.04845pt too wide) in paragraph at lines 340--340
+[]\T1/ppl/m/n/10.95 Guiyuan Lin, Shiwo Deng, and Xi-ao-qun Wang. ^^P  An ef-fi-cient quasi-Monte Carlo
+ []
+
+
+Overfull \hbox (20.37378pt too wide) in paragraph at lines 340--340
 []\T1/ppl/m/n/10.95 Thomas Müller-Gronbach, Erich No-vak, and Klaus Rit-ter. \T1/ppl/m/it/10.95 Monte Carlo-Algorithmen\T1/ppl/m/n/10.95 .
  []
 
 
 
-[37] (./main.aux (./Chapters/acronyms.aux) (./acronyms.aux) (./Chapters/Chapter1.aux) (./Chapters/Chapter2.aux) (./Chapters/Chapter3.aux) (./Chapters/Chapter4.aux) (./Chapters/Chapter5.aux) (./Chapters/Chapter6.aux) (./Chapters/Chapter7.aux) (./Appendices/AppendixA.aux))
+[39] (./main.aux (./Chapters/acronyms.aux) (./acronyms.aux) (./Chapters/Chapter1.aux) (./Chapters/Chapter2.aux) (./Chapters/Chapter3.aux) (./Chapters/Chapter4.aux) (./Chapters/Chapter5.aux) (./Chapters/Chapter6.aux) (./Chapters/Chapter7.aux) (./Appendices/AppendixA.aux))
  ***********
 LaTeX2e <2024-11-01> patch level 2
 L3 programming layer <2020/03/25>
@@ -1523,24 +1565,24 @@ LaTeX Warning: There were undefined references.
 LaTeX Warning: There were multiply-defined labels.
 
 Package rerunfilecheck Info: File `main.out' has not changed.
-(rerunfilecheck)             Checksum: 436489AE0DB47113AC68C17AAEB960C3;11755.
+(rerunfilecheck)             Checksum: 78E66F16EA5622307E4933F130E12550;6380.
 Package logreq Info: Writing requests to 'main.run.xml'.
 \openout1 = `main.run.xml'.
 
  ) 
 Here is how much of TeX's memory you used:
- 50203 strings out of 473190
- 1123779 string characters out of 5715801
- 1783569 words of memory out of 5000000
- 72504 multiletter control sequences out of 15000+600000
- 622486 words of font info for 144 fonts, out of 8000000 for 9000
+ 51590 strings out of 473190
+ 1156864 string characters out of 5715801
+ 1898025 words of memory out of 5000000
+ 73809 multiletter control sequences out of 15000+600000
+ 624537 words of font info for 155 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 96i,20n,96p,1889b,2941s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 96i,20n,96p,1889b,2964s stack positions out of 10000i,1000n,20000p,200000b,200000s
 </usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/mathpazo/fplmbb.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/mathpazo/fplmr.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/mathpazo/fplmri.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/cm-super/sftt1000.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/cm-super/sftt1095.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/urw/palatino/uplb8a.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/urw/palatino/uplr8a.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/urw/palatino/uplr8a.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/urw/palatino/uplri8a.pfb>
-Output written on main.pdf (47 pages, 6165658 bytes).
+Output written on main.pdf (49 pages, 6190360 bytes).
 PDF statistics:
- 736 PDF objects out of 1000 (max. 8388607)
- 624 compressed objects within 7 object streams
- 151 named destinations out of 1000 (max. 500000)
- 588 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 753 PDF objects out of 1000 (max. 8388607)
+ 633 compressed objects within 7 object streams
+ 188 named destinations out of 1000 (max. 500000)
+ 452 words of extra memory for PDF output out of 10000 (max. 10000000)
 
