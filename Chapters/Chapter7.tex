@@ -670,7 +670,9 @@ Coordinates $C^{\text{gridCoords}}$. The algorithm is implemented as follows:
 
 \subsection{Compton Scattering}
 
-The Compton scattering algorithm is responsible for simulating the physical process for the event of Compton scattering. The algorithm is initialized with the following parameters:
+The Compton scattering algorithm is responsible for simulating the physical process for the event of Compton scattering. The scattering simulation
+is based on the Klein-Nishina formula. The according algorithm is adapted from \cite{ozmutlu1992sampling} and initialized with the following parameters:
+
 \begin{itemize}
     \item The initial energy of the photon $E_i$.
     \item The (unit) direction of the photon $\vec{\omega}_i$.
