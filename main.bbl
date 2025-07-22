@@ -17,6 +17,26 @@
 \endgroup
 
 \datalist[entry]{nty/global//global/global/global}
+  \entry{hubbell1969photon}{article}{}{}
+    \name{author}{1}{}{%
+      {{hash=HJ}{%
+         family={Hubbell},
+         familyi={H\bibinitperiod},
+         given={J},
+         giveni={J},
+      }}%
+    }
+    \strng{namehash}{HJ1}
+    \strng{fullhash}{HJ1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{H}
+    \field{sortinithash}{H}
+    \field{title}{Photon cross sections, attenuation coefficients and energy absorption coefficients}
+    \field{journaltitle}{National Bureau of Standards Report NSRDS-NBS29, Washington DC}
+    \field{year}{1969}
+  \endentry
+
   \entry{fd2001}{article}{}{}
     \name{author}{3}{}{%
       {{hash=dJH}{%
@@ -56,6 +76,38 @@
     \field{volume}{48}
     \field{journaltitle}{IEEE Transactions on Nuclear Science}
     \field{year}{2001}
+  \endentry
+
+  \entry{klein1928scattering}{article}{}{}
+    \name{author}{2}{}{%
+      {{hash=KO}{%
+         family={Klein},
+         familyi={K\bibinitperiod},
+         given={Oskar},
+         giveni={O\bibinitperiod},
+      }}%
+      {{hash=NY}{%
+         family={Nishina},
+         familyi={N\bibinitperiod},
+         given={Yoshio},
+         giveni={Y\bibinitperiod},
+      }}%
+    }
+    \list{publisher}{1}{%
+      {Nature Publishing Group UK London}%
+    }
+    \strng{namehash}{KONY1}
+    \strng{fullhash}{KONY1}
+    \field{labelnamesource}{author}
+    \field{labeltitlesource}{title}
+    \field{sortinit}{K}
+    \field{sortinithash}{K}
+    \field{number}{3072}
+    \field{pages}{398\bibrangedash 399}
+    \field{title}{The scattering of light by free electrons according to Dirac's new relativistic dynamics}
+    \field{volume}{122}
+    \field{journaltitle}{Nature}
+    \field{year}{1928}
   \endentry
 
   \entry{qmcXray2023}{article}{}{}

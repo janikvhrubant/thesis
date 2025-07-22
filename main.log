@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.27 (TeX Live 2025) (preloaded format=pdflatex 2025.7.4)  21 JUL 2025 08:44
+This is pdfTeX, Version 3.141592653-2.6-1.40.27 (TeX Live 2025) (preloaded format=pdflatex 2025.7.4)  22 JUL 2025 09:17
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -1099,11 +1099,7 @@ File: t1ppl.fd 2001/06/04 font definitions for T1/ppl.
 
 LaTeX Warning: Label `fig:tungsten_atomic_model' multiply defined.
 
-) (./Chapters/Chapter7.aux
-
-LaTeX Warning: Label `Chapter5' multiply defined.
-
-) (./Appendices/AppendixA.aux))
+) (./Chapters/Chapter7.aux) (./Appendices/AppendixA.aux))
 \openout1 = `main.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 130.
@@ -1290,64 +1286,52 @@ File: uesvect.fd
 
 [6
 
-] (./main.toc
-
-[7])
+] (./main.toc)
 \tf@toc=\write6
 \openout6 = `main.toc'.
 
 
 
-[8]
+[7]
 \openout2 = `Chapters/acronyms.aux'.
 
  (./Chapters/acronyms.tex
 
-LaTeX Warning: Hyper reference `acro:rita' on page ix undefined on input line 1.
+LaTeX Warning: Hyper reference `acro:rita' on page viii undefined on input line 1.
 
 
-LaTeX Warning: Hyper reference `acro:rita' on page ix undefined on input line 1.
+LaTeX Warning: Hyper reference `acro:rita' on page viii undefined on input line 1.
 
 
-LaTeX Warning: Hyper reference `acro:cdf' on page ix undefined on input line 2.
+LaTeX Warning: Hyper reference `acro:cdf' on page viii undefined on input line 2.
 
 
-LaTeX Warning: Hyper reference `acro:cdf' on page ix undefined on input line 2.
+LaTeX Warning: Hyper reference `acro:cdf' on page viii undefined on input line 2.
 
 
-LaTeX Warning: Hyper reference `acro:hu' on page ix undefined on input line 5.
+LaTeX Warning: Hyper reference `acro:hu' on page viii undefined on input line 5.
 
 
-LaTeX Warning: Hyper reference `acro:hu' on page ix undefined on input line 5.
+LaTeX Warning: Hyper reference `acro:hu' on page viii undefined on input line 5.
 
 
-LaTeX Warning: Hyper reference `acro:ffd' on page ix undefined on input line 8.
+LaTeX Warning: Hyper reference `acro:ffd' on page viii undefined on input line 8.
 
 
-LaTeX Warning: Hyper reference `acro:ffd' on page ix undefined on input line 8.
+LaTeX Warning: Hyper reference `acro:ffd' on page viii undefined on input line 8.
 
 )
 
-[9
+[8
 
 ]
 \openout2 = `acronyms.aux'.
 
 
 No file acronyms.tex.
-
-
-[10
-
-
-
-
-
-
-]
 \openout2 = `Chapters/Chapter1.aux'.
 
- (./Chapters/Chapter1.tex)
+(./Chapters/Chapter1.tex)
 \openout2 = `Chapters/Chapter2.aux'.
 
  (./Chapters/Chapter2.tex)
@@ -1362,6 +1346,12 @@ No file acronyms.tex.
  (./Chapters/Chapter5.tex
 
 [1
+
+
+
+
+
+
 
 
 
@@ -1391,7 +1381,7 @@ although it is yet undefined on input line 11.
 [4]
 Package acronym Info: Label `acro:mc' newly defined as it shall be overridden
 although it is yet undefined on input line 126.
-<Figures/mcffd.png, id=323, 1642.135pt x 790.955pt>
+<Figures/mcffd.png, id=309, 1642.135pt x 790.955pt>
 File: Figures/mcffd.png Graphic file (type png)
 <use Figures/mcffd.png>
 Package pdftex.def Info: Figures/mcffd.png  used on input line 134.
@@ -1424,7 +1414,7 @@ Chapter 2.
 [9]
 
 [10]
-<Figures/spectrum_without_filter.png, id=384, 410.0118pt x 323.7696pt>
+<Figures/spectrum_without_filter.png, id=370, 410.0118pt x 323.7696pt>
 File: Figures/spectrum_without_filter.png Graphic file (type png)
 <use Figures/spectrum_without_filter.png>
 Package pdftex.def Info: Figures/spectrum_without_filter.png  used on input line 436.
@@ -1434,7 +1424,7 @@ Package pdftex.def Info: Figures/spectrum_without_filter.png  used on input line
 [11]
 
 [12 <./Figures/spectrum_without_filter.png>]
-<Figures/spectrum_with_filter.png, id=404, 410.0118pt x 323.7696pt>
+<Figures/spectrum_with_filter.png, id=391, 410.0118pt x 323.7696pt>
 File: Figures/spectrum_with_filter.png Graphic file (type png)
 <use Figures/spectrum_with_filter.png>
 Package pdftex.def Info: Figures/spectrum_with_filter.png  used on input line 523.
@@ -1453,9 +1443,9 @@ File: ufplmbb.fd 2003/10/30 Fontinst v1.914 font definitions for U/fplmbb.
 
 [16]
 
-[17])
+[17]
 
-[18]
+[18])
 
 [19]
 \openout2 = `Chapters/Chapter7.aux'.
@@ -1470,27 +1460,23 @@ File: ufplmbb.fd 2003/10/30 Fontinst v1.914 font definitions for U/fplmbb.
 ]
 Chapter 3.
 
-
-[21]
-
-[22
-
-]
-Chapter 4.
-
-Overfull \hbox (0.5461pt too wide) in paragraph at lines 11--24
+Overfull \hbox (0.5461pt too wide) in paragraph at lines 8--21
 \T1/ppl/m/n/10.95 forced de-tec-tion ap-proach em-ployed, cal-cu-lates the prob-a-bil-ity of es-cap-ing the phan-
  []
 
 
 
+[21]
+
+[22]
+
 [23]
+Package hyperref Info: bookmark level for unknown algorithm defaults to 0 on input line 202.
+
 
 [24]
 
 [25]
-Package hyperref Info: bookmark level for unknown algorithm defaults to 0 on input line 205.
-
 
 [26]
 
@@ -1499,58 +1485,54 @@ Package hyperref Info: bookmark level for unknown algorithm defaults to 0 on inp
 [28]
 
 [29]
-
-[30]
-
-[31]
-Underfull \hbox (badness 10000) in paragraph at lines 594--597
+Underfull \hbox (badness 10000) in paragraph at lines 591--594
 []$\OML/zplm/m/it/10.95 C[]\OT1/ppl/m/n/10.95 , \OML/zplm/m/it/10.95 crossedVoxels\OT1/ppl/m/n/10.95 , \OML/zplm/m/it/10.95 crossedMaterials\OT1/ppl/m/n/10.95 , \OML/zplm/m/it/10.95 entryPoints\OT1/ppl/m/n/10.95 , \OML/zplm/m/it/10.95 distances\OT1/ppl/m/n/10.95 , \OML/zplm/m/it/10.95 exitGrid \OMS/zplm/m/n/10.95  
  []
 
 
-Overfull \hbox (2.91473pt too wide) in paragraph at lines 604--606
+Overfull \hbox (2.91473pt too wide) in paragraph at lines 601--603
 []$\OML/zplm/m/it/10.95 k\OT1/ppl/m/n/10.95 , \OML/zplm/m/it/10.95 f\OT1/ppl/m/n/10.95 , \OML/zplm/m/it/10.95 escapeProbability \OMS/zplm/m/n/10.95   []\OT1/zplm/m/n/10.95 (\OML/zplm/m/it/10.95 distances\OT1/ppl/m/n/10.95 , \OML/zplm/m/it/10.95 totalAttenuationCoefficients\OT1/ppl/m/n/10.95 , \OML/zplm/m/it/10.95 u\OT1/zplm/m/n/10.95 )$ 
  []
 
 
+
+[30]
+
+[31]
 
 [32]
 
 [33]
 
 [34]
-
-[35]
-
-[36]
-Underfull \hbox (badness 10000) in paragraph at lines 856--857
+Underfull \hbox (badness 10000) in paragraph at lines 853--854
 [] $\OML/zplm/m/it/10.95 A[]\OT1/ppl/m/n/10.95 , \OML/zplm/m/it/10.95 W[]\OT1/ppl/m/n/10.95 , \OML/zplm/m/it/10.95 W[]\OT1/ppl/m/n/10.95 , \OML/zplm/m/it/10.95 C[]\OT1/ppl/m/n/10.95 , \OML/zplm/m/it/10.95 ^^V[] \OMS/zplm/m/n/10.95  $ \T1/ppl/m/n/10.95 Al-go-rithm [][]6[][]($\OML/zplm/m/it/10.95 materialGrid$\T1/ppl/m/n/10.95 ,
  []
 
 
-Underfull \hbox (badness 1983) in paragraph at lines 856--857
+Underfull \hbox (badness 1983) in paragraph at lines 853--854
 \OML/zplm/m/it/10.95 totalAttenuationGrid$\T1/ppl/m/n/10.95 , $\OML/zplm/m/it/10.95 comptonAttenuationGrid$\T1/ppl/m/n/10.95 , $\OML/zplm/m/it/10.95 absorptionGrid$\T1/ppl/m/n/10.95 , $\OML/zplm/m/it/10.95 A[]$\T1/ppl/m/n/10.95 , $[]$, $\OML/zplm/m/it/10.95 E[]$\T1/ppl/m/n/10.95 ,
  []
 
 )
 
-[37]
+[35]
 
-[38]
+[36]
 \openout2 = `Appendices/AppendixA.aux'.
 
  (./Appendices/AppendixA.tex
 Appendix A.
 )
 
-[39
+[37
 
 
 
 
 {/usr/local/texlive/2025/texmf-dist/fonts/enc/dvips/cm-super/cm-super-t1.enc}]
 
-[40
+[38
 
 
 
@@ -1566,7 +1548,7 @@ Overfull \hbox (20.37378pt too wide) in paragraph at lines 334--334
 
 
 
-[41] (./main.aux (./Chapters/acronyms.aux) (./acronyms.aux) (./Chapters/Chapter1.aux) (./Chapters/Chapter2.aux) (./Chapters/Chapter3.aux) (./Chapters/Chapter4.aux) (./Chapters/Chapter5.aux) (./Chapters/Chapter6.aux) (./Chapters/Chapter7.aux) (./Appendices/AppendixA.aux))
+[39] (./main.aux (./Chapters/acronyms.aux) (./acronyms.aux) (./Chapters/Chapter1.aux) (./Chapters/Chapter2.aux) (./Chapters/Chapter3.aux) (./Chapters/Chapter4.aux) (./Chapters/Chapter5.aux) (./Chapters/Chapter6.aux) (./Chapters/Chapter7.aux) (./Appendices/AppendixA.aux))
  ***********
 LaTeX2e <2024-11-01> patch level 2
 L3 programming layer <2020/03/25>
@@ -1579,24 +1561,24 @@ LaTeX Warning: There were undefined references.
 LaTeX Warning: There were multiply-defined labels.
 
 Package rerunfilecheck Info: File `main.out' has not changed.
-(rerunfilecheck)             Checksum: 150DEAEE7E274545143BCF30F5760C42;6380.
+(rerunfilecheck)             Checksum: 2A160FACDAF7F83FB6E2E8C65040FB38;6203.
 Package logreq Info: Writing requests to 'main.run.xml'.
 \openout1 = `main.run.xml'.
 
  ) 
 Here is how much of TeX's memory you used:
- 51609 strings out of 473190
- 1157307 string characters out of 5715801
- 1898168 words of memory out of 5000000
- 73825 multiletter control sequences out of 15000+600000
+ 51615 strings out of 473190
+ 1157734 string characters out of 5715801
+ 1898315 words of memory out of 5000000
+ 73832 multiletter control sequences out of 15000+600000
  624537 words of font info for 155 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 96i,20n,96p,1889b,2964s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 96i,20n,96p,1889b,1868s stack positions out of 10000i,1000n,20000p,200000b,200000s
 </usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/mathpazo/fplmbb.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/mathpazo/fplmr.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/mathpazo/fplmri.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/cm-super/sftt1000.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/public/cm-super/sftt1095.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/urw/palatino/uplb8a.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/urw/palatino/uplr8a.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/urw/palatino/uplr8a.pfb></usr/local/texlive/2025/texmf-dist/fonts/type1/urw/palatino/uplri8a.pfb>
-Output written on main.pdf (51 pages, 6195386 bytes).
+Output written on main.pdf (47 pages, 6197070 bytes).
 PDF statistics:
- 770 PDF objects out of 1000 (max. 8388607)
- 648 compressed objects within 7 object streams
- 191 named destinations out of 1000 (max. 500000)
- 452 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 754 PDF objects out of 1000 (max. 8388607)
+ 636 compressed objects within 7 object streams
+ 190 named destinations out of 1000 (max. 500000)
+ 444 words of extra memory for PDF output out of 10000 (max. 10000000)
 

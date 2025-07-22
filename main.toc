@@ -18,19 +18,18 @@
 \contentsline {section}{\numberline {2.3}Scattering and Attenuation}{15}{section.47}%
 \contentsline {subsection}{\numberline {2.3.1}Free Path Length}{16}{subsection.49}%
 \contentsline {subsection}{\numberline {2.3.2}Compton Scattering}{18}{subsection.52}%
-\contentsline {subsection}{\numberline {2.3.3}Rayleigh Scattering}{18}{subsection.53}%
-\contentsline {chapter}{\numberline {3}The Simulation Algorithm}{21}{chapter.54}%
-\contentsline {chapter}{\numberline {4}The Simulation Algorithm}{23}{chapter.55}%
-\contentsline {section}{\numberline {4.1}Algorithm overview}{23}{section.56}%
-\contentsline {section}{\numberline {4.2}Sub-Algorithms}{25}{section.65}%
-\contentsline {subsection}{\numberline {4.2.1}Photon Generation}{25}{subsection.66}%
-\contentsline {subsubsection}{Photon Energy Sampling}{25}{section*.67}%
-\contentsline {subsubsection}{Photon Direction Sampling}{26}{section*.70}%
-\contentsline {subsection}{\numberline {4.2.2}Ray Traversal}{28}{subsection.76}%
-\contentsline {subsection}{\numberline {4.2.3}Forced Detection}{31}{subsection.96}%
-\contentsline {subsection}{\numberline {4.2.4}Photon Exit Point Determination}{33}{subsection.100}%
-\contentsline {subsection}{\numberline {4.2.5}Compton Scattering}{34}{subsection.102}%
-\contentsline {section}{\numberline {4.3}Algorithm Composition}{36}{section.114}%
-\contentsline {chapter}{\numberline {A}Frequently Asked Questions}{39}{appendix.117}%
-\contentsline {section}{\numberline {A.1}How do I change the colors of links?}{39}{section.118}%
-\contentsline {chapter}{Bibliography}{41}{appendix*.119}%
+\contentsline {subsection}{\numberline {2.3.3}Rayleigh Scattering}{19}{subsection.55}%
+\contentsline {chapter}{\numberline {3}The Simulation Algorithm}{21}{chapter.56}%
+\contentsline {section}{\numberline {3.1}Algorithm overview}{21}{section.57}%
+\contentsline {section}{\numberline {3.2}Sub-Algorithms}{23}{section.66}%
+\contentsline {subsection}{\numberline {3.2.1}Photon Generation}{23}{subsection.67}%
+\contentsline {subsubsection}{Photon Energy Sampling}{23}{section*.68}%
+\contentsline {subsubsection}{Photon Direction Sampling}{24}{section*.71}%
+\contentsline {subsection}{\numberline {3.2.2}Ray Traversal}{26}{subsection.77}%
+\contentsline {subsection}{\numberline {3.2.3}Forced Detection}{29}{subsection.97}%
+\contentsline {subsection}{\numberline {3.2.4}Photon Exit Point Determination}{31}{subsection.101}%
+\contentsline {subsection}{\numberline {3.2.5}Compton Scattering}{32}{subsection.103}%
+\contentsline {section}{\numberline {3.3}Algorithm Composition}{34}{section.115}%
+\contentsline {chapter}{\numberline {A}Frequently Asked Questions}{37}{appendix.118}%
+\contentsline {section}{\numberline {A.1}How do I change the colors of links?}{37}{section.119}%
+\contentsline {chapter}{Bibliography}{39}{appendix*.120}%

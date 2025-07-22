@@ -835,6 +835,20 @@ A portion of the incident photon energy is transferred to the electron, which
 is referred to as the "recoil electron" or Compton electron. The interaction
 produces a positive ion, the "recoil electron" and a scattered photon. If the deflection angle of the scattered photon is small, most of the energy is retained by the scattered photon. The deflection angle can vary from 0 to 180 degrees, depending on the energy transfer during the interaction.
 
+For the distribution of the scattering angle $\theta$ of the scattered photons, we apply a differential equation derrived by Klein and Nishina in 1928. This equation describes the distribution of the scattering angle of X-ray photons in Compton scattering assuming the electron is initially free and stationary, the relation between energy loss and photon deflection is determined from conservation of momentum and energy between the photon and the recoiling electron \cite{hubbell1969photon,klein1928scattering}.
+
+\begin{equation}
+    \frac{d\sigma}{d\Omega} = \frac{1}{2} r_e^2 \frac{1}{(1 + k(1 - \cos \theta))^2} \left( 1 + \cos^2 \theta + \frac{k^2 (1 - \cos \theta)^2}{1+ k(1 - \cos \theta)} \right)
+\end{equation}
+
+where $k=\frac{e}{mc^2} \approx \frac{E}{0.511}$ with $mc^2$ being the rest mass energy of the electron, $E$ being the energy of the incident photon, and $r_e$ being the classical electron radius.
+
+Once the scattering angle $\theta$ is sampled, the energy of the scattered photon $E'$ can be calculated using the Compton formula:
+
+\begin{equation}
+    E' = \frac{E}{1 + \frac{E}{m_e c^2} (1 - \cos \theta)}
+\end{equation}
+
 \subsection{Rayleigh Scattering}
 \emph{Rayleigh scattering} is a type of elastic scattering that occurs at low X-ray energies \cite[Chap. 7]{medicalImagingSystemsIntro2019:}. The incident photon interacts with several electrons that are
 usually bound in the outer shells of the atom. In this process, the low energy photon is not ejected, but rather the electrons and in turn thw whole atom is
