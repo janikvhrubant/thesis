@@ -59,6 +59,7 @@ headsepline, % Uncomment to get a line under the header
 \patchcmd{\@endtheorem}{\unskip}{\unskip\vspace{1em}}{}{}
 \makeatother
 
+
 \usetikzlibrary{decorations.pathmorphing} % for zigzag
 
 
@@ -107,7 +108,7 @@ headsepline, % Uncomment to get a line under the header
 %	THESIS INFORMATION
 %----------------------------------------------------------------------------------------
 
-\thesistitle{Quasi-Monte Carlo Methods \\ and Neural Networks} % Your thesis title, this is used in the title and abstract, print it elsewhere with \ttitle
+\thesistitle{Quasi-Monte Carlo Methods and Applications} % Your thesis title, this is used in the title and abstract, print it elsewhere with \ttitle
 \supervisor{Prof. Dr. Andreas \textsc{Neuenkirch}} % Your supervisor's name, this is used in the title page, print it elsewhere with \supname
 \examiner{} % Your examiner's name, this is not currently used anywhere in the template, print it elsewhere with \examname
 \degree{Master of Science} % Your degree name, this is used in the title page and abstract, print it elsewhere with \degreename
@@ -182,16 +183,18 @@ headsepline, % Uncomment to get a line under the header
 
 \begin{declaration}
 \addchaptertocentry{\authorshipname} % Add the declaration to the table of contents
-\noindent I, \authorname, declare that this thesis titled, \enquote{\ttitle} and the work presented in it are my own. I confirm that:
-
-\begin{itemize} 
-\item This work was done wholly or mainly while in candidature for a research degree at this University.
-\item Where any part of this thesis has previously been submitted for a degree or any other qualification at this University or any other institution, this has been clearly stated.
-\item Where I have consulted the published work of others, this is always clearly attributed.
-\item Where I have quoted from the work of others, the source is always given. With the exception of such quotations, this thesis is entirely my own work.
-\item I have acknowledged all main sources of help.
-\item Where the thesis is based on work done by myself jointly with others, I have made clear exactly what was done by others and what I have contributed myself. \\
-\end{itemize}
+Hiermit versichere ich, dass diese Arbeit von mir persönlich verfasst wurde und
+dass ich keinerlei fremde Hilfe in Anspruch genommen habe. Ebenso versichere
+ich, dass diese Arbeit oder Teile daraus weder von mir selbst noch von anderen
+als Leistungsnachweise andernorts eingereicht wurden. Wörtliche oder sinngemäße
+Übernahmen aus anderen Schriften und Veröffentlichungen in gedruckter oder
+elektronischer Form sind ge- kennzeichnet. Sämtliche Sekundärliteratur und
+sonstige Quellen sind nachgewiesen und in der Bibliographie aufgeführt. Das
+Gleiche gilt für graphische Darstellungen und Bilder sowie für alle
+Internet-Quellen. Ich bin ferner damit einverstanden, dass meine Arbeit zum
+Zwecke eines Plagiatsabgleichs in elektronischer Form anonymisiert versendet und
+gespeichert werden kann. Mir ist bekannt, dass von der Korrektur der Arbeit ab-
+gesehen werden kann, wenn diese Erklärung nicht erteilt wird.
  
 \noindent Signed:\\
 \rule[0.5em]{25em}{0.5pt} % This prints a line for the signature
@@ -226,18 +229,18 @@ headsepline, % Uncomment to get a line under the header
 % Funded by SAP, this research project is aimed at providing informed recommendations to the development team to enhance production code, ultimately leading to the creation of the Predictive Replenishment Planning (PRP) tool, a feature within the S4/HANA Cloud offering.
 \end{abstract}
 
-%----------------------------------------------------------------------------------------
+%-------------------------------------------------------------------------------
 %	ACKNOWLEDGEMENTS
-%----------------------------------------------------------------------------------------
+%-------------------------------------------------------------------------------
 
 % \begin{acknowledgements}
 % \addchaptertocentry{\acknowledgementname} % Add the acknowledgements to the table of contents
 % The acknowledgments and the people to thank go here, don't forget to include your project advisor\ldots
 % \end{acknowledgements}
 
-%----------------------------------------------------------------------------------------
+%-------------------------------------------------------------------------------
 %	LIST OF CONTENTS/FIGURES/TABLES PAGES
-%----------------------------------------------------------------------------------------
+%-------------------------------------------------------------------------------
 
 \tableofcontents % Prints the main table of contents
 
@@ -245,18 +248,18 @@ headsepline, % Uncomment to get a line under the header
 
 % \listoftables % Prints the list of tables
 
-%----------------------------------------------------------------------------------------
+%-------------------------------------------------------------------------------
 %	ABBREVIATIONS
-%----------------------------------------------------------------------------------------
+%-------------------------------------------------------------------------------
 
 \newpage
 \begin{acronym}
 \include{Chapters/acronyms}
 \end{acronym}
 
-%----------------------------------------------------------------------------------------
+%-------------------------------------------------------------------------------
 %	PHYSICAL CONSTANTS/OTHER DEFINITIONS
-%----------------------------------------------------------------------------------------
+%-------------------------------------------------------------------------------
 
 % \begin{constants}{lr@{${}={}$}l} % The list of physical constants is a three column table
 
@@ -267,9 +270,9 @@ headsepline, % Uncomment to get a line under the header
 
 % \end{constants}
 
-%----------------------------------------------------------------------------------------
-%	SYMBOLS
-%----------------------------------------------------------------------------------------
+%-------------------------------------------------------------------------------
+%	SYMBOL
+%-------------------------------------------------------------------------------
 
 % \begin{symbols}{lll} % Include a list of Symbols (a three column table)
 
@@ -283,21 +286,21 @@ headsepline, % Uncomment to get a line under the header
 
 % \end{symbols}
 
-%----------------------------------------------------------------------------------------
+%-------------------------------------------------------------------------------
 %	ACRONYMS
-%----------------------------------------------------------------------------------------
+%-------------------------------------------------------------------------------
 
 \include{acronyms}
 
-%----------------------------------------------------------------------------------------
+%-------------------------------------------------------------------------------
 %	DEDICATION
-%----------------------------------------------------------------------------------------
+%-------------------------------------------------------------------------------
 
 % \dedicatory{For/Dedicated to/To my\ldots} 
 
-%----------------------------------------------------------------------------------------
+%-------------------------------------------------------------------------------
 %	THESIS CONTENT - CHAPTERS
-%----------------------------------------------------------------------------------------
+%-------------------------------------------------------------------------------
 
 \mainmatter % Begin numeric (1,2,3...) page numbering
 
@@ -306,17 +309,21 @@ headsepline, % Uncomment to get a line under the header
 % Include the chapters of the thesis as separate files from the Chapters folder
 % Uncomment the lines as you write the chapters
 
-\include{Chapters/Chapter1}
-\include{Chapters/Chapter2}
-\include{Chapters/Chapter3}
-\include{Chapters/Chapter4}
-\include{Chapters/Chapter5}
-\include{Chapters/Chapter6}
-\include{Chapters/Chapter7}
+\include{Chapters/Chapter01}
+\include{Chapters/Chapter02}
+\include{Chapters/Chapter03}
+\include{Chapters/Chapter04}
+\include{Chapters/Chapter05}
+\include{Chapters/Chapter06}
+\include{Chapters/Chapter07}
+\include{Chapters/Chapter08}
+\include{Chapters/Chapter09}
+\include{Chapters/Chapter10}
+\include{Chapters/Chapter11}
 
-%----------------------------------------------------------------------------------------
+%-------------------------------------------------------------------------------
 %	THESIS CONTENT - APPENDICES
-%----------------------------------------------------------------------------------------
+%-------------------------------------------------------------------------------
 
 \appendix % Cue to tell LaTeX that the following "chapters" are Appendices
 
@@ -327,12 +334,12 @@ headsepline, % Uncomment to get a line under the header
 %\include{Appendices/AppendixB}
 %\include{Appendices/AppendixC}
 
-%----------------------------------------------------------------------------------------
+%-------------------------------------------------------------------------------
 %	BIBLIOGRAPHY
-%----------------------------------------------------------------------------------------
+%-------------------------------------------------------------------------------
 
 \printbibliography[heading=bibintoc]
 
-%----------------------------------------------------------------------------------------
+%-------------------------------------------------------------------------------
 
 \end{document}  

@@ -1,64 +1,39 @@
-# -*- coding: utf-8 -*-
-
 import pyautogui
 import time
 import random
-import sys
+from pynput import mouse
 
-pyautogui.FAILSAFE = False
+# Movement threshold in pixels
+JIGGLE_DISTANCE = 3
+# Time in seconds between checks
+CHECK_INTERVAL = 20
 
+last_position = pyautogui.position()
+last_move_time = time.time()
 
-def switch_screens() -> None:
-    """
-    Switches the active screen using Alt + Tab
-    a random number of times.
-    """
-    max_switches = random.randint(1, 5)
-    pyautogui.keyDown('alt') 
-    
-    for _ in range(1, max_switches):
-        pyautogui.press('tab')     
-     
-    pyautogui.keyUp('alt')   
+# Track if the user moved the mouse
+def on_move(x, y):
+    global last_position, last_move_time
+    if (x, y) != last_position:
+        last_position = (x, y)
+        last_move_time = time.time()
 
+# Start mouse listener in background
+listener = mouse.Listener(on_move=on_move)
+listener.daemon = True
+listener.start()
 
-def wiggle_mouse() -> None:
-    """
-    Wiggles the mouse between two coordinates.
-    """
-    max_wiggles = random.randint(4, 9)
-    
-    for _ in range(1, max_wiggles):
-        coords = get_random_coords()
-        pyautogui.moveTo(
-            x=coords[0], 
-            y=coords[1],
-            duration=5
-        )
-        time.sleep(10)
-    
-
-def get_random_coords() -> []:
-    """
-    Returns a list of coordinates in the 
-    format [x=1980, y=1080]
-    """
-    screen = pyautogui.size()
-    width = screen[0]
-    height = screen[1]
-    
-    return [
-        random.randint(100, width - 200),
-        random.randint(100, height - 200)
-    ]
-
-
-if __name__ == "__main__":
-    print('Press Ctrl-C to quit.')
-    try:
-        while True:
-            switch_screens()
-            wiggle_mouse()
-            sys.stdout.flush()
-    except KeyboardInterrupt:
-        print("\n")
+print("Mouse jiggler running. Press Ctrl+C to stop.")
+try:
+    while True:
+        now = time.time()
+        if now - last_move_time >= CHECK_INTERVAL:
+            x, y = last_position
+            dx = random.randint(-JIGGLE_DISTANCE, JIGGLE_DISTANCE)
+            dy = random.randint(-JIGGLE_DISTANCE, JIGGLE_DISTANCE)
+            pyautogui.moveTo(x + dx, y + dy, duration=0.1)
+            last_position = pyautogui.position()
+            last_move_time = now
+        time.sleep(1)
+except KeyboardInterrupt:
+    print("\nStopped.")
