@@ -104,23 +104,21 @@ Let $f \in L^2([0,1]^s)$. Then
 \end{theorem}
 
 Beyond this almost sure convergence, the expected integration error of the Monte
-Carlo estimator can be quantified using the root-mean-square error:
+Carlo estimator can be quantified using the root-mean-square error \cite[Section 1.3]{pillichshammer2010zahlentheoretische}:
 
-\begin{theorem}[Monte Carlo Convergence Rate,
-{\cite[Satz~1.2]{pillichshammer2010zahlentheoretische}}] \ \\
-\textcolor{green}{\textbf{TODO: Satz oder Theorem?}} \\
+\begin{theorem}[Monte Carlo Convergence Rate] \ \\
 \label{thm:mc-convergence-rate}
 Let $f \in L^2([0,1]^s)$. Then
 \begin{equation}
-    \mathbb{E}\left[ \left| Q_{N}(f) - I \right| \right] \leq \frac{\sigma[f]}{\sqrt{N}},
+    \mathbb{E}\left[ \left| I_N^{\mathrm{MC}}(f) - I(f) \right| \right] \leq \frac{\sigma[f]}{\sqrt{N}},
 \end{equation}
 where $\sigma[f] := \sqrt{\mathrm{Var}[f]}$.
 \end{theorem}
 
 \begin{proof}[Sketch of Proof]
-Using independence and linearity of expectation, the variance of $Q_N(f)$ is
+Using independence and linearity of expectation, the variance of $I_N^{\mathrm{MC}}(f)$ is
 \begin{equation}
-    \mathrm{Var}[Q_N(f)] = \frac{\mathrm{Var}[f]}{N}.
+    \mathrm{Var}[I_N^{\mathrm{MC}}(f)] = \frac{\mathrm{Var}[f]}{N}.
 \end{equation}
 Applying Jensen's inequality yields the stated bound on the expected absolute error.
 \end{proof}
@@ -179,6 +177,9 @@ I_N^{\mathrm{QMC}}(f) := \frac{1}{N} \sum_{n=1}^{N} f(\boldsymbol{x}_n).
 \end{equation}
 \end{definition}
 
+The functions $I$, $I_N^{\mathrm{MC}}$ and $I_N^{\mathrm{QMC}}$ will be further
+used without explicit reference to the integrand $f$ when the context is clear.
+
 Unlike in the Monte Carlo setting, these points are not drawn from a probability
 distribution, but are generated deterministically — typically by rules that aim
 to avoid clustering and oversampling.
@@ -204,12 +205,12 @@ becomes infeasible even for moderate $s$. Furthermore, grids are not easily
 extensible -- adding new points requires global recomputation and destroys
 nesting.
 
-By contrast, many \ac{qmc} sequences, such as Sobol' and Halton (introduced in
-Chapter~\ref{chapter2}), are designed to be \emph{incremental}: each new point
-can be added without changing the existing ones. This makes \ac{qmc}
-particularly suitable for adaptive algorithms, especially for anytime algorithms
-that might increment the number of samples needed over time. However, not all
-\ac{qmc} constructions share this feature such as lattice rules and some
+By contrast, many \ac{qmc} sequences, such as Sobol' and Halton (will be
+introduced in Chapter~\ref{chapter2}), are designed to be \emph{incremental}:
+each new point can be added without changing the existing ones. This makes
+\ac{qmc} particularly suitable for adaptive algorithms, especially for anytime
+algorithms that might increment the number of samples needed over time. However,
+not all \ac{qmc} constructions share this feature such as lattice rules and some
 optimized designs are fixed-size by nature.
 
 \ac{qmc} methods thus offer the best of both worlds: they combine the
