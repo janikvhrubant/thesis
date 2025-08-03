@@ -102,15 +102,15 @@ due to subtle gaps or clustering in certain regions.
 
 Discrepancy is not just a theoretical construct -- its practical relevance
 becomes evident when comparing the behavior of \ac{qmc} sequences with \ac{mc}
-samples. In particular, structured point sets like Halton and Sobol sequences
+samples. In particular, structured point sets like Halton and Sobol' sequences
 achieve much lower discrepancy than random samples of the same size.
 
 \begin{figure}[H]
 \centering
 \includegraphics[width=0.9\textwidth]{Figures/qmc_discrepancy_comparison.pdf}
-\caption{Comparison of discrepancy growth for Sobol, Halton and random (\ac{mc})
-point sets in 2D. Low-discrepancy sequences exhibit significantly slower
-discrepancy growth.}
+\caption{Comparison of discrepancy growth for Sobol', Halton and random
+(\ac{mc}) point sets in 2D. Low-discrepancy sequences exhibit significantly
+slower discrepancy growth.}
 \label{fig:qmc-discrepancy-comparison}
 \end{figure}
 
@@ -188,12 +188,12 @@ or leaping are commonly employed to mitigate this issue.
 The Halton sequence is extensible in $N$ and $s$, making it suitable for
 applications that require growing or adaptive point sets. However, its
 performance in high dimensions is often inferior to more modern constructions
-like the Sobol sequence.
+like the Sobol' sequence.
 \end{remark}
 
 
 % ------------------------------------------------------------------------------
-  \subsection{The Sobol Sequence}
+  \subsection{The Sobol' Sequence}
 % ------------------------------------------------------------------------------
 
 
@@ -205,7 +205,7 @@ like the Sobol sequence.
 
 
 % ------------------------------------------------------------------------------
-    \subsubsection{Scrambling Techniques for Sobol}
+    \subsubsection{Scrambling Techniques for Sobol'}
 % ------------------------------------------------------------------------------
 
 

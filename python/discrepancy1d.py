@@ -11,7 +11,7 @@ points_sorted = np.sort(points)
 empirical_cdf = np.arange(1, N + 1) / N
 uniform_cdf = points_sorted
 
-# Compute star discrepancy: max(|F_N(x) - x|, |x - F_N(x−)|)
+# Compute star discrepancy: max(|F_N(t) - t|, |t - F_N(t−)|)
 discrepancies = np.maximum(np.abs(empirical_cdf - uniform_cdf),
                            np.abs(np.roll(empirical_cdf, 1, axis=0) - uniform_cdf))
 discrepancies[0] = np.abs(0 - uniform_cdf[0])  # handle left-limit at 0
@@ -20,8 +20,8 @@ max_index = np.argmax(discrepancies)
 
 # Plotting
 plt.figure(figsize=(8, 4))
-plt.step(points_sorted, empirical_cdf, where='post', label='Empirical CDF $F_N(x)$')
-plt.plot([0, 1], [0, 1], 'k--', label='Ideal CDF $F(x) = x$')
+plt.step(points_sorted, empirical_cdf, where='post', label='Empirical CDF $F_N(t)$')
+plt.plot([0, 1], [0, 1], 'k--', label='Ideal CDF $F(t) = t$')
 
 # Highlight max discrepancy
 plt.vlines(points_sorted[max_index], uniform_cdf[max_index], empirical_cdf[max_index],
@@ -29,7 +29,7 @@ plt.vlines(points_sorted[max_index], uniform_cdf[max_index], empirical_cdf[max_i
 plt.scatter(points_sorted, empirical_cdf, color='blue', zorder=5)
 
 # Annotations and styling
-plt.xlabel('$x$')
+plt.xlabel('$t$')
 plt.ylabel('Cumulative Distribution')
 plt.legend()
 plt.grid(True)
