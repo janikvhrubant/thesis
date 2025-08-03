@@ -151,6 +151,7 @@ the decimal point:
 \end{equation*}
 
 \begin{definition}[Van der Corput Sequence] \ \\
+\label{def:van-der-corput-sequence}
 The one-dimensional van der Corput sequence in base $b$ is defined as
 \begin{equation*}
     \mathcal{S}_b = \left( \phi_b(n) \right)_{n\in \mathbb{N}}.
@@ -214,16 +215,55 @@ like the Sobol' sequence.
   \subsection{The Sobol' Sequence}
 % ------------------------------------------------------------------------------
 
+Sobol' sequences are another class of low-discrepancy sequences that are widely
+used in \ac{qmc} methods, particularly for high-dimensional problems.
+Constructed to fill the $s$-dimensional unit cube $[0,1)^s$ as uniformly as
+possible, Sobol' sequences are based on a recursive structure that allows for
+efficient generation and high-dimensional performance.
+
+\begin{definition}[Sobol' Sequence] \ \\
+Let $s \in \mathbb{N}$ denote the number of dimensions. The Sobol' sequence $(\boldsymbol{x}_n)_{n\geq 0}$ in $[0,1)^s$ consists of points $\boldsymbol{x}_n = (x_n^{(1)}, x_n^{(2)}, \dots, x_n^{(s)})$, where each coordinate $x_n^{(j)} \in [0,1)$ is computed from a set of so-called \emph{direction numbers} $v_{j,1}, v_{j,2}, \dots$.
+
+Let the binary representation of the index $n$ be
+\begin{equation*}
+  n = b_0 2^0 + b_1 2^1 + \dots + b_{L-1} 2^{L-1},
+\end{equation*}
+with $b_k \in \{0,1\}$ and $L$ the number of bits. Then the $j$-th coordinate of $\boldsymbol{x}_n$ is given by
+\begin{equation*}
+  x_n^{(j)} = b_0 v_{j,1} \oplus b_1 v_{j,2} \oplus \dots \oplus b_{L-1} v_{j,L},
+\end{equation*}
+where $\oplus$ denotes bitwise exclusive-or (XOR) and $v_{j,k}$ are precomputed direction numbers of the form
+\begin{equation*}
+  v_{j,k} = \frac{m_{j,k}}{2^k}, \quad m_{j,k} \in \mathbb{N}.
+\end{equation*}
+\end{definition}
+
+The values $m_{j,k}$ are computed recursively based on primitive polynomials $P_j(x)$ over the finite field $\mathbb{F}_2$. Each dimension $j$ is assigned a different irreducible polynomial, which governs the recurrence relation used to generate the respective direction numbers. The general form of a primitive polynomial is
+\begin{equation*}
+  P_j(x) = x^d + a_1 x^{d-1} + \dots + a_{d-1} x + 1, \quad a_i \in \{0,1\}.
+\end{equation*}
+
+The initial values $m_{j,1}, \dots, m_{j,d}$ must be chosen to be odd and less than $2^k$ for bit-alignment. Subsequent values $m_{j,k}$ for $k > d$ are then computed recursively using the coefficients $a_i$ of $P_j(x)$.
+
+\begin{remark}
+In practice, many libraries (such as those used in \texttt{SciPy}, \texttt{Intel MKL}, or \texttt{NAG}) provide precomputed direction numbers for hundreds of dimensions, avoiding the need to implement the recurrence relations explicitly.
+\end{remark}
+
+\begin{example}
+In dimension $s = 1$, the Sobol' sequence reduces to the \emph{van der Corput} sequence in base 2, where
+\begin{equation*}
+  x_n = \phi_2(n),
+\end{equation*}
+from Definition~\ref{def:van-der-corput-sequence}.
+\end{example}
+
+The bitwise structure of the Sobol' sequence makes it particularly efficient to generate, and it enables streaming or online sampling in high dimensions. Moreover, the deterministic nature of the sequence allows it to be scrambled (e.g., using Owen scrambling) to enhance variance reduction and improve robustness to structured integrands.
+
 
 
 % ------------------------------------------------------------------------------
-    \subsubsection{Direction Numbers and Gray Code}
-% ------------------------------------------------------------------------------
-
-
-
-% ------------------------------------------------------------------------------
-    \subsubsection{Scrambling Techniques for Sobol'}
+    % \subsubsection{Direction Numbers and Gray Code}
+    % \subsubsection{Scrambling Techniques for Sobol'}
 % ------------------------------------------------------------------------------
 
 
