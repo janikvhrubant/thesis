@@ -128,19 +128,39 @@ sequences and analyze their dimensional performance and implementation details.
 % ------------------------------------------------------------------------------
 \section{Construction of Low-Discrepancy Sequences}
 % ------------------------------------------------------------------------------
+
 In this section, we will explore several well-known constructions of
 low-discrepancy sequences, focusing on their mathematical foundations and
 properties.
-
 
 % ------------------------------------------------------------------------------
 \subsection{The Halton Sequence}
 \label{subsec:halton-sequence}
 % ------------------------------------------------------------------------------
 
-The Halton sequence is one of the earliest and most widely used constructions of low-discrepancy sequences in arbitrary dimensions. It generalizes the one-dimensional van der Corput sequence to multiple dimensions by using mutually prime bases.
+The Halton sequence is one of the earliest and most widely used constructions of
+low-discrepancy sequences in arbitrary dimensions. 
 
-\begin{definition}[Halton Sequence]
+For the construction of the Halton sequence, we utilize the radical-inverse
+functin $\phi_b(n)$. The radical-inverse function $\phi_b(n)$ maps an integer
+$n$ to a real number in $[0,1)$ by reflecting its base-$b$ representation about
+the decimal point:
+\begin{equation*}
+    \phi_b(n) = \sum_{k=0}^\infty d_k b^{-k-1}, \quad \text{where } n = \sum_
+    {k=0}^\infty d_k b^k.
+\end{equation*}
+
+\begin{definition}[Van der Corput Sequence] \ \\
+The one-dimensional van der Corput sequence in base $b$ is defined as
+\begin{equation*}
+    \mathcal{S}_b = \left( \phi_b(n) \right)_{n\in \mathbb{N}}.
+\end{equation*}
+\end{definition}
+
+The Halton sequence generalizes the one-dimensional van der Corput sequence to
+multiple dimensions by using mutually prime bases.
+
+\begin{definition}[Halton Sequence] \ \\
 Let $b_1, \dots, b_s$ be pairwise coprime integers greater than $1$, typically
 chosen as the first $s$ prime numbers. The $n$-th point $\boldsymbol{x}_n \in
 [0,1)^s$ of the $s$-dimensional Halton sequence is defined componentwise by
@@ -168,10 +188,7 @@ This illustrates how the Halton sequence fills the unit square in a low-discrepa
 
 
 
-The radical-inverse function $\phi_b(n)$ maps an integer $n$ to a real number in $[0,1)$ by reflecting its base-$b$ representation about the decimal point:
-\begin{equation*}
-    \phi_b(n) = \sum_{k=0}^\infty d_k b^{-k-1}, \quad \text{where } n = \sum_{k=0}^\infty d_k b^k.
-\end{equation*}
+
 
 Intuitively, this construction ensures that each component of the sequence explores the unit interval in a structured, non-redundant way. By combining several one-dimensional van der Corput sequences in different coprime bases, the resulting multi-dimensional point set avoids regular grid-like patterns and achieves asymptotic uniformity.
 
