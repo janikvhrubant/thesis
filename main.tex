@@ -48,6 +48,36 @@ headsepline, % Uncomment to get a line under the header
 \usepackage{lipsum}
 \usepackage{amsthm}
 \usepackage{etoolbox} % for patching
+\tcbuselibrary{theorems}
+
+
+% Define boxed definition environment with no rounded corners
+\tcolorboxenvironment{definition}{
+  enhanced,
+  colback=red!5,            % light red background
+  boxrule=0pt,            % border thickness
+  arc=0mm,                  % no rounded corners
+  sharp corners,            % enforce sharp edges
+  top=0mm,
+  bottom=1mm,
+  left=2mm,
+  right=2mm,
+  before skip=10pt,
+  after skip=10pt
+}
+\tcolorboxenvironment{theorem}{
+  enhanced,
+  colback=gray!10,        % light grey background
+  boxrule=0pt,            % no border
+  arc=0mm,
+  sharp corners,
+  top=0mm,
+  bottom=1mm,
+  left=2mm,
+  right=2mm,
+  before skip=10pt,
+  after skip=10pt
+}
 
 \theoremstyle{definition}
 \newtheorem{definition}{Definition}[section]
@@ -59,6 +89,10 @@ headsepline, % Uncomment to get a line under the header
 \patchcmd{\@endtheorem}{\unskip}{\unskip\vspace{1em}}{}{}
 \makeatother
 
+\theoremstyle{remark}
+\newtheorem{remark}{Remark}[section]
+\theoremstyle{remark}
+\newtheorem{example}{Example}[section]
 
 \usetikzlibrary{decorations.pathmorphing} % for zigzag
 
@@ -205,9 +239,9 @@ gesehen werden kann, wenn diese Erklärung nicht erteilt wird.
 
 \cleardoublepage
 
-%----------------------------------------------------------------------------------------
+%-------------------------------------------------------------------------------
 %	QUOTATION PAGE
-%----------------------------------------------------------------------------------------
+%-------------------------------------------------------------------------------
 
 % \vspace*{0.2\textheight}
 
@@ -215,9 +249,9 @@ gesehen werden kann, wenn diese Erklärung nicht erteilt wird.
 
 % \hfill Dave Barry
 
-%----------------------------------------------------------------------------------------
+%-------------------------------------------------------------------------------
 %	ABSTRACT PAGE
-%----------------------------------------------------------------------------------------
+%-------------------------------------------------------------------------------d
 
 \begin{abstract}
 \addchaptertocentry{\abstractname} % Add the abstract to the table of contents
@@ -271,7 +305,7 @@ gesehen werden kann, wenn diese Erklärung nicht erteilt wird.
 % \end{constants}
 
 %-------------------------------------------------------------------------------
-%	SYMBOL
+%	SYMBOLS
 %-------------------------------------------------------------------------------
 
 % \begin{symbols}{lll} % Include a list of Symbols (a three column table)
