@@ -1,3 +1,4 @@
+%!TEX root = ../main.tex
 \chapter{Discrepancy Theory and Low-Discrepancy Sequences}
 \label{chapter2}
 
@@ -107,7 +108,7 @@ achieve much lower discrepancy than random samples of the same size.
 
 \begin{figure}[H]
 \centering
-\includegraphics[width=0.9\textwidth]{Figures/qmc_discrepancy_comparison.pdf}
+\includegraphics[width=0.9\textwidth]{Figures/qmc_discrepancy_comparison.png}
 \caption{Comparison of discrepancy growth for Sobol', Halton and random
 (\ac{mc}) point sets in 2D. Low-discrepancy sequences exhibit significantly
 slower discrepancy growth.}
@@ -221,53 +222,113 @@ Constructed to fill the $s$-dimensional unit cube $[0,1)^s$ as uniformly as
 possible, Sobol' sequences are based on a recursive structure that allows for
 efficient generation and high-dimensional performance.
 
-\begin{definition}[Sobol' Sequence] \ \\
-Let $s \in \mathbb{N}$ denote the number of dimensions. The Sobol' sequence $(\boldsymbol{x}_n)_{n\geq 0}$ in $[0,1)^s$ consists of points $\boldsymbol{x}_n = (x_n^{(1)}, x_n^{(2)}, \dots, x_n^{(s)})$, where each coordinate $x_n^{(j)} \in [0,1)$ is computed from a set of so-called \emph{direction numbers} $v_{j,1}, v_{j,2}, \dots$.
+\begin{definition}[Sobol' Sequence Construction]
+Let $p_1, \dots, p_s \in \mathbb{F}_2[x]$ be primitive polynomials ordered by non-decreasing degree. Each polynomial $p_j$ for dimension $j$ is of the form
+\begin{equation*}
+    p_j(x) = x^{e_j} + a_{1,j}x^{e_j - 1} + \dots + a_{e_j - 1,j}x + 1,
+\end{equation*}
+where $e_j \in \mathbb{N}$ and the coefficients $a_{k,j} \in \{0,1\}$.
 
-Let the binary representation of the index $n$ be
+Choose initial values $m_{1,j}, \dots, m_{e_j,j}$ such that each $m_{k,j}$ is an odd integer and $1 \leq m_{k,j} < 2^k$ for $1 \leq k \leq e_j$. For $k > e_j$, the values $m_{k,j}$ are computed recursively as:
 \begin{equation*}
-  n = b_0 2^0 + b_1 2^1 + \dots + b_{L-1} 2^{L-1},
+    m_{k,j} = a_{1,j} \cdot 2 m_{k-1,j} \oplus a_{2,j} \cdot 2^2 m_{k-2,j} \oplus \dots \oplus a_{e_j-1,j} \cdot 2^{e_j-1} m_{k-e_j+1,j} \oplus 2^{e_j} m_{k-e_j,j} \oplus m_{k-e_j,j},
 \end{equation*}
-with $b_k \in \{0,1\}$ and $L$ the number of bits. Then the $j$-th coordinate of $\boldsymbol{x}_n$ is given by
+where $\oplus$ denotes bitwise exclusive-or (XOR).
+
+The corresponding direction numbers are defined by
 \begin{equation*}
-  x_n^{(j)} = b_0 v_{j,1} \oplus b_1 v_{j,2} \oplus \dots \oplus b_{L-1} v_{j,L},
+    v_{k,j} = \frac{m_{k,j}}{2^k}.
 \end{equation*}
-where $\oplus$ denotes bitwise exclusive-or (XOR) and $v_{j,k}$ are precomputed direction numbers of the form
+
+Let $n \in \mathbb{N}_0$ with binary expansion
 \begin{equation*}
-  v_{j,k} = \frac{m_{j,k}}{2^k}, \quad m_{j,k} \in \mathbb{N}.
+    n = n_0 + 2n_1 + \dots + 2^{r-1}n_{r-1}, \quad n_i \in \{0,1\}.
+\end{equation*}
+Then the $j$-th coordinate of the $n$-th Sobol' point is given by
+\begin{equation*}
+    x_{n,j} = n_0 v_{1,j} \oplus n_1 v_{2,j} \oplus \dots \oplus n_{r-1} v_{r,j}.
+\end{equation*}
+The $s$-dimensional Sobol' point is
+\begin{equation*}
+    \boldsymbol{x}_n = (x_{n,1}, \dots, x_{n,s}).
 \end{equation*}
 \end{definition}
 
-The values $m_{j,k}$ are computed recursively based on primitive polynomials $P_j(x)$ over the finite field $\mathbb{F}_2$. Each dimension $j$ is assigned a different irreducible polynomial, which governs the recurrence relation used to generate the respective direction numbers. The general form of a primitive polynomial is
-\begin{equation*}
-  P_j(x) = x^d + a_1 x^{d-1} + \dots + a_{d-1} x + 1, \quad a_i \in \{0,1\}.
-\end{equation*}
-
-The initial values $m_{j,1}, \dots, m_{j,d}$ must be chosen to be odd and less than $2^k$ for bit-alignment. Subsequent values $m_{j,k}$ for $k > d$ are then computed recursively using the coefficients $a_i$ of $P_j(x)$.
-
 \begin{remark}
-In practice, many libraries (such as those used in \texttt{SciPy}, \texttt{Intel MKL}, or \texttt{NAG}) provide precomputed direction numbers for hundreds of dimensions, avoiding the need to implement the recurrence relations explicitly.
+In dimension $j = 1$, the polynomial is typically chosen as $p_1(x) = x$, which
+leads to a construction equivalent to the van der Corput sequence in base $2$
+from Definition~\ref{def:van-der-corput-sequence}.
 \end{remark}
 
-\begin{example}
-In dimension $s = 1$, the Sobol' sequence reduces to the \emph{van der Corput} sequence in base 2, where
-\begin{equation*}
-  x_n = \phi_2(n),
-\end{equation*}
-from Definition~\ref{def:van-der-corput-sequence}.
-\end{example}
-
-The bitwise structure of the Sobol' sequence makes it particularly efficient to generate, and it enables streaming or online sampling in high dimensions. Moreover, the deterministic nature of the sequence allows it to be scrambled (e.g., using Owen scrambling) to enhance variance reduction and improve robustness to structured integrands.
-
-
+The bitwise structure of the Sobol' sequence makes it particularly efficient to
+generate and it enables streaming or online sampling in high dimensions.
 
 % ------------------------------------------------------------------------------
-    % \subsubsection{Direction Numbers and Gray Code}
-    % \subsubsection{Scrambling Techniques for Sobol'}
+\subsection{Dimensional Performance and Sequence Comparison}
+\label{subsec:dimensional-performance}
 % ------------------------------------------------------------------------------
 
+The practical performance of low-discrepancy sequences is strongly influenced by
+the dimension $s$ of the integration domain. Although both Halton and Sobol'
+sequences achieve the asymptotic star discrepancy bound of order
+$\mathcal{O}((\log N)^s / N)$ (as will be shown in Chapter~\ref{chapter3}),
+their behavior in higher dimensions differs significantly in practice.
 
+\paragraph{Halton Sequence.}
+While the Halton sequence performs well in low-dimensional settings, its
+structure leads to correlation artifacts in higher dimensions due to the use of
+increasing prime bases. These artifacts manifest as clustering or gaps in
+certain coordinate directions, which can degrade uniformity. As a result, the
+empirical discrepancy of the Halton sequence often grows faster than the
+theoretical bound suggests in moderate to high dimensions.
 
-% ------------------------------------------------------------------------------
-  \subsection{Dimensional Performance and Sequence Comparison}
-% ------------------------------------------------------------------------------
+\paragraph{Sobol' Sequence.}
+In contrast, the Sobol' sequence is explicitly constructed for high-dimensional
+performance. The use of carefully selected primitive polynomials and direction
+numbers minimizes inter-dimensional correlations. Furthermore, the bitwise
+construction allows for better numerical stability and efficient implementation.
+Sobol' sequences generally exhibit lower discrepancy than Halton sequences in
+dimensions $s > 10$, making them a standard choice in modern \ac{qmc}
+applications.
+
+The below Figure~\ref{fig:dimensional-comparison} illustrates the difference in
+a two-dimensional setting between the two low discrepancy sequences. The Sobol'
+sequence fills the unit square more uniformly, while the Halton sequence shows
+visible clustering.
+
+\begin{figure}[H]
+\label{fig:dimensional-comparison}
+\centering
+\includegraphics[width=0.8\textwidth]{Figures/sobol-vs-halton.png}
+\caption{Comparison of Halton and Sobol' sequences in $s=2$ dimensions for
+$N=1024$ points. The Sobol' sequence fills the unit square more uniformly,
+demonstrating lower star discrepancy than the Halton sequence.}
+\label{fig:dimensional-comparison}
+\end{figure}
+
+\begin{remark}
+In high-dimensional problems, particularly those arising in computational
+finance or scientific simulations, Sobol' sequences with proper scrambling
+consistently outperform Halton sequences in terms of integration accuracy and
+numerical stability.
+\end{remark}
+
+\paragraph{Summary Table.}
+The following table summarizes the key characteristics of both sequences:
+
+\begin{table}[H]
+\centering
+\begin{tabular}{lcc}
+\toprule
+\textbf{Property} & \textbf{Halton} & \textbf{Sobol'} \\
+\midrule
+Extensible in $N$          & Yes  & Yes \\
+Extensible in $s$          & Yes  & Yes \\
+Asymptotic Star Discrepancy & $\mathcal{O}\big(\frac{(\log N)^s}{N}\big)$ & $\mathcal{O}\big(\frac{(\log N)^s}{N}\big)$ \\
+High-Dimensional Performance & Limited & Excellent \\
+Implementation Cost         & Low & Moderate \\
+\bottomrule
+\end{tabular}
+\caption{Qualitative comparison of Halton and Sobol' sequences.}
+\label{tab:halton-sobol-comparison}
+\end{table}

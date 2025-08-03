@@ -41,7 +41,7 @@ for N in Ns:
 plt.figure(figsize=(10, 6))
 plt.loglog(Ns, disc_mc, label='Monte Carlo', color='red', marker='s', markersize=6)      # square
 plt.loglog(Ns, disc_halton, label='Halton', color='blue', marker='^', markersize=6)      # triangle
-plt.loglog(Ns, disc_sobol, label='Sobol', color='gold', marker='o', markersize=6)        # circle
+plt.loglog(Ns, disc_sobol, label='Sobol', color='lime', marker='o', markersize=6)        # circle
 
 plt.xlabel('Number of Points (N)')
 plt.ylabel('Approximate Star Discrepancy $D_N^*$')
@@ -49,5 +49,5 @@ plt.legend()
 plt.grid(True, which="both", ls="--", linewidth=0.5)
 plt.tight_layout()
 os.makedirs("./Figures", exist_ok=True)
-plt.savefig("./Figures/qmc_discrepancy_comparison.pdf")
+plt.savefig("./Figures/qmc_discrepancy_comparison.png", dpi=600)
 plt.close()

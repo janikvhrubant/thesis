@@ -1,29 +1,72 @@
+%!TEX root = ../main.tex
 \chapter{Function Variation and Error Bounds in QMC}
 \label{chapter3}
-
 
 % ------------------------------------------------------------------------------
 \section{Function Variation in Multiple Dimensions}
 % ------------------------------------------------------------------------------
 
-
-
-% ------------------------------------------------------------------------------
-  \subsection{Variation in the Sense of Vitali}
-% ------------------------------------------------------------------------------
-
-
+In \ac{qmc} theory, the variation of a function plays a key role in bounding the integration error. While the total variation is sufficient for univariate functions, higher dimensions necessitate more refined notions. In this section, we introduce two such notions: the Vitali variation and the Hardy–Krause variation. These concepts are crucial for understanding the convergence guarantees provided by the Koksma–Hlawka inequality.
 
 % ------------------------------------------------------------------------------
-  \subsection{Definition of the Hardy--Krause Variation}
+\subsection{Variation in the Sense of Vitali}
+\label{sec:vitali-variation}
 % ------------------------------------------------------------------------------
 
+Let $f \colon [a,b] \subset \mathbb{R}^d \to \mathbb{R}$ be a bounded function defined on a $d$-dimensional hyperrectangle. A classical approach to quantify the variation of $f$ is based on the ladder construction, where each axis is discretized into finite sets of points.
 
+\begin{definition}[Vitali Variation]
+Let $Y = \prod_{j=1}^d Y^j$ be a ladder on $[a,b]$, where each $Y^j$ is a finite set in $(a_j, b_j)$. For each $y \in Y$, let $y^+$ denote its componentwise successor, and define $y_v : y_{-v}^+$ as the vector obtained by combining the components of $y$ in $v \subset \{1,\dots,d\}$ with those of $y^+$ in the complement. Then, the variation of $f$ on $[a,b]$ in the sense of Vitali is
+\begin{equation*}
+    V_{[a,b]}(f) := \sup_{Y \in \mathcal{Y}} \sum_{y \in Y} \sum_{v \subset \{1,\dots,d\}} (-1)^{|v|} f(y_v : y_{-v}^+),
+\end{equation*}
+where $\mathcal{Y}$ denotes the collection of all such ladders on $[a,b]$.
+\end{definition}
+
+This variation captures the total fluctuation of $f$ over axis-aligned rectangular subregions. It generalizes the concept of finite differences and forms the foundation for defining Hardy–Krause variation.
 
 % ------------------------------------------------------------------------------
-  \subsection{Examples and Interpretation of Hardy--Krause Variation}
+\subsection{Definition of the Hardy and Krause Variation}
+\label{sec:hk-variation}
 % ------------------------------------------------------------------------------
 
+While the Vitali variation quantifies joint fluctuations, it does not fully capture mixed directional variation. For this purpose, the Hardy–Krause variation refines the analysis by summing over variations of all axis-aligned projections.
+
+\begin{definition}[Hardy–Krause Variation]
+Let $f \colon [a,b] \to \mathbb{R}$ be a function and $u \subseteq \{1,\dots,d\}$. Let $x_{-u} \in \mathbb{R}^{d - |u|}$ denote the projection onto the complement and $b_u$ be the upper bounds in the $u$-coordinates. Then, the Hardy–Krause variation of $f$ over $[a,b]$ is defined by
+\begin{equation*}
+    V_{\mathrm{HK}}(f) := \sum_{u \subseteq \{1,\dots,d\}, u \neq \emptyset} V_{[a_{-u}, b_{-u}]}(f(x_{-u}; b_u)),
+\end{equation*}
+where $f(x_{-u}; b_u)$ denotes the restriction of $f$ with $x_u = b_u$ fixed and variation is taken with respect to $x_{-u}$.
+\end{definition}
+
+Note that the Hardy–Krause variation reduces to the total variation in the univariate case. Importantly, $V_{\mathrm{HK}}(f) < \infty$ implies that $f$ has bounded variation in all axis-aligned directions, including all lower-dimensional projections.
+
+\begin{remark}
+The Hardy–Krause variation is a seminorm, vanishing for constant functions. It becomes a norm if the sum includes $u = \{1,\dots,d\}$.
+\end{remark}
+
+% ------------------------------------------------------------------------------
+\subsection{Examples and Interpretation of Hardy and Krause Variation}
+\label{sec:hk-examples}
+% ------------------------------------------------------------------------------
+
+Computing the Hardy–Krause variation directly from its definition is impractical for most functions. However, for smooth functions, upper bounds can be derived using mixed partial derivatives:
+
+\begin{equation*}
+    V_{\mathrm{HK}}(f) \leq \int_{[0,1]^d} \left| \frac{\partial^d f}{\partial x_1 \cdots \partial x_d}(x) \right| dx + \sum_{i=1}^d V_{\mathrm{HK}}(f|_{x_i = 1}),
+\end{equation*}
+where the right-hand side can be evaluated recursively. For continuously differentiable functions, this becomes an equality.
+
+\begin{example}
+Let $f(x) = \prod_{i=1}^d x_i$, the $d$-dimensional monomial. Then $f$ is smooth with bounded mixed derivatives, and its Hardy–Krause variation is finite.
+\end{example}
+
+\begin{example}
+Consider $f_{d,r}(x) = \left( \max\left\{ \sum_{i=1}^d x_i - \frac{1}{2}, 0 \right\} \right)^r$, as studied in~\cite{owen2005multidimensional}. For $d > r + 2$, this function has infinite Vitali and hence infinite Hardy–Krause variation. Such examples underline the limitations of QMC for functions with low smoothness or sharp nonlinearity.
+\end{example}
+
+These examples illustrate the importance of regularity assumptions in applying the Koksma–Hlawka inequality. In practice, many physically motivated maps—such as solutions to elliptic or parabolic PDEs—do exhibit sufficient smoothness to ensure bounded Hardy–Krause variation, justifying the use of QMC error bounds.
 
 
 % ------------------------------------------------------------------------------
