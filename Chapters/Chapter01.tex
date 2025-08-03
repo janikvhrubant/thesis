@@ -19,7 +19,7 @@ of the form
 
 \begin{equation}
     \label{eq:integration_problem}
-    I = \int_{[0,1]^s} f(x)\,dx\,,
+    I(f) = \int_{[0,1]^s} f(x)\,dx\,,
 \end{equation}
 
 where $s$ denotes the dimensionality of the problem and $f$ is a function that
@@ -89,7 +89,7 @@ Let $f \in L^2([0,1]^s)$ and let $X_0, \dots, X_{N-1} \sim
 \mathcal{U}([0,1]^s)$ be independent and identically distributed random samples.
 The Monte Carlo estimator of the integral \( I \) is given by
 \begin{equation}
-    I_N^{\mathrm{MC}} := \frac{1}{N} \sum_{n=0}^{N-1} f(X_n)\,.
+    I_N^{\mathrm{MC}}(f) := \frac{1}{N} \sum_{n=0}^{N-1} f(X_n)\,.
 \end{equation}
 \end{definition}
 
@@ -99,14 +99,16 @@ This estimator is unbiased and converges almost surely to the true integral as $
 \begin{theorem}[Strong Law of Large Numbers] \ \\
 Let $f \in L^2([0,1]^s)$. Then
 \begin{equation}
-\mathbb{P}\left[ \lim_{N \to \infty} Q_{N}(f) = \int_{[0,1]^s} f(x)\, dx \right] = 1.
+\mathbb{P}\left[ \lim_{N \to \infty} I_N^{\mathrm{MC}}(f) = \int_{[0,1]^s} f(x)\, dx \right] = 1.
 \end{equation}
 \end{theorem}
 
 Beyond this almost sure convergence, the expected integration error of the Monte
 Carlo estimator can be quantified using the root-mean-square error:
 
-\begin{theorem}[Monte Carlo Convergence Rate, {\cite[Satz~1.2]{pillichshammer2010zahlentheoretische}}] \ \\
+\begin{theorem}[Monte Carlo Convergence Rate,
+{\cite[Satz~1.2]{pillichshammer2010zahlentheoretische}}] \ \\
+\textcolor{green}{\textbf{TODO: Satz oder Theorem?}} \\
 \label{thm:mc-convergence-rate}
 Let $f \in L^2([0,1]^s)$. Then
 \begin{equation}
@@ -205,7 +207,8 @@ nesting.
 By contrast, many \ac{qmc} sequences, such as Sobol' and Halton (introduced in
 Chapter~\ref{chapter2}), are designed to be \emph{incremental}: each new point
 can be added without changing the existing ones. This makes \ac{qmc}
-particularly suitable for adaptive and anytime algorithms. However, not all
+particularly suitable for adaptive algorithms, especially for anytime algorithms
+that might increment the number of samples needed over time. However, not all
 \ac{qmc} constructions share this feature such as lattice rules and some
 optimized designs are fixed-size by nature.
 
