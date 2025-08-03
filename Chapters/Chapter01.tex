@@ -36,7 +36,7 @@ are computationally expensive.
 \ac{qmc} methods offer an alternative paradigm: instead of random samples, they employ deterministic sequences -- so-called low-discrepancy sequences—that aim to fill the integration domain more uniformly. This structured sampling allows for faster convergence under certain smoothness conditions and forms the basis for many state-of-the-art techniques in high-dimensional numerical integration.
 
 The goal of this part is to develop a rigorous mathematical foundation for
-\ac{qmc} methods and to understand how they improve upon classical Monte Carlo
+\ac{qmc} methods and to understand how they improve upon classical \ac{mc}
 integration. The key concepts introduced here -- particularly discrepancy theory
 and low-discrepancy sequences -- serve as theoretical tools that will be
 revisited in later parts of this thesis.
@@ -72,7 +72,7 @@ accuracy, computational cost, and robustness with respect to the structure of
 the integrand.
 
 The remainder of this chapter explores how \ac{mc} and \ac{qmc} methods address
-these challenges. Before doing so, we briefly review the Monte Carlo method and
+these challenges. Before doing so, we briefly review the \ac{mc} method and
 its fundamental convergence properties in the next section.
 
 
@@ -125,7 +125,7 @@ Applying Jensen's inequality yields the stated bound on the expected absolute er
 
 \begin{remark}
 The convergence rate $\mathcal{O}(N^{-1/2})$ is independent of the integration
-dimension $s$, which is a key advantage of the Monte Carlo method. In contrast,
+dimension $s$, which is a key advantage of the \ac{mc} method. In contrast,
 classical grid-based methods often suffer from the curse of dimensionality,
 where the number of required samples grows exponentially with $s$.
 \end{remark}
@@ -145,7 +145,7 @@ Despite its robustness and simplicity, MC integration has several well-known lim
     \item The method does not exploit structural properties of the integrand, such as smoothness or sparsity.
 \end{itemize}
 
-These limitations motivate the development of quasi-Monte Carlo methods, which
+These limitations motivate the development of \ac{qmc} methods, which
 will be introduced in the next section.
 
 
@@ -186,14 +186,14 @@ to avoid clustering and oversampling.
 
 Figure~\ref{fig:mc-vs-qmc} illustrates this contrast by comparing $300$ randomly
 sampled points to $300$ \ac{qmc} points from the Sobol' sequence in two
-dimensions. The quasi-Monte Carlo points distribute more evenly, avoiding both
+dimensions. The \ac{qmc} points distribute more evenly, avoiding both
 gaps and clusters.
 
 \begin{figure}[H]
   \centering
   \includegraphics[width=0.8\textwidth]{Figures/mc_vs_qmc.png}
   \caption{Comparison of $300$ sample points in $[0,1]^2$ using (left) standard 
-  Monte Carlo and (right) a Sobol' sequence. \ac{qmc} points avoid clustering and 
+  \ac{mc} and (right) a Sobol' sequence. \ac{qmc} points avoid clustering and 
   fill the domain more evenly.}
   \label{fig:mc-vs-qmc}
 \end{figure}
@@ -260,7 +260,7 @@ Theoretical convergence & $\mathcal{O}(N^{-1/2})$ & Up to $\mathcal{O}(N^{-1})$ 
 Point extensibility & Trivial & Often supported (e.g., Sobol) \\
 Robustness to noise & High & Low \\
 \end{tabular}}
-\caption{Conceptual comparison of Monte Carlo and quasi-Monte Carlo integration methods.}
+\caption{Conceptual comparison of \ac{mc} and \ac{qmc} integration methods.}
 \label{tab:mc-vs-qmc}
 \end{table}
 
@@ -299,7 +299,7 @@ exploitable.
 
 \ac{qmc} methods, while lacking this universality, offer a fundamentally
 different convergence profile. For sufficiently regular integrands
-(specifically, those of bounded variation in the sense of Hardy and Krause), the
+(specifically, those of bounded variation in the sense of Hardy--Krause), the
 integration error of \ac{qmc} estimators is bounded by
 
 \begin{equation}
@@ -355,23 +355,23 @@ integration.
 
 While the terms \emph{uniform distribution} and \emph{equidistribution} are
 sometimes used interchangeably in informal contexts, they carry distinct
-meanings in the context of numerical integration. In quasi-Monte Carlo methods,
-the notion of \emph{uniform distribution modulo one} provides a rigorous
-criterion for how evenly a sequence covers the unit cube. This concept forms the
+meanings in the context of numerical integration. In \ac{qmc} methods, the
+notion of \emph{uniform distribution modulo one} provides a rigorous criterion
+for how evenly a sequence covers the unit cube. This concept forms the
 foundation for analyzing the convergence behavior of QMC estimators.
 
 \begin{definition}[Uniform Distribution Modulo One] \ \\
 Let $(\boldsymbol{x}_n)_{n \in \mathbb{N}_0} \subset [0,1]^s$ be a sequence of
 sample points. The sequence is said to be \emph{uniformly distributed modulo
-one} (u.d.\ mod~1) if, for every axis-aligned box $[\boldsymbol{a},
+one} (u.d.\ mod~1) if for every axis-aligned box $[\boldsymbol{a}
 \boldsymbol{b}) \subset [0,1]^s$, the proportion of points falling into this box
 converges to its Lebesgue measure:
 \begin{equation*}
     \lim_{N \to \infty} \frac{1}{N} \sum_{n=0}^{N-1} \chi_{[\boldsymbol{a}, \boldsymbol{b})}(\boldsymbol{x}_n)
     = \lambda_s([\boldsymbol{a}, \boldsymbol{b})) \,,
 \end{equation*}
-where $\lambda_s$ denotes the $s$-dimensional Lebesgue measure and $\chi_A$ is
-the indicator function of the set $A$.
+where $\chii_A$ is the indicator function of the set $A$ and $\lambda_s$ denotes
+the $s$-dimensional Lebesgue measure.
 \end{definition}
 
 This definition emphasizes asymptotic spatial coverage: in the limit, every
@@ -380,13 +380,24 @@ this property is purely deterministic and does not rely on any probabilistic
 assumptions — in contrast to Monte Carlo methods, which only guarantee
 uniformity in expectation.
 
-In contrast, when speaking of a random sample $\{X_1, \dots, X_N\} \subset [0,1]^s$ drawn i.i.d.\ from the uniform distribution, we refer to a probabilistic concept of uniformity: each point is independently drawn according to the uniform measure, but the empirical distribution may not be uniformly spread in finite samples. Thus, equidistribution refers to the ideal uniform coverage that we seek deterministically, while uniform random sampling only ensures this behavior in expectation or with high probability.
+In contrast, when speaking of a random sample $\{X_1, \dots, X_N\} \subset
+[0,1]^s$ drawn independent and identically distributed (i.i.d.) from the uniform
+distribution, we refer to a probabilistic concept of uniformity: each point is
+independently drawn according to the uniform measure, but the empirical
+distribution may not be uniformly spread in finite samples. Thus,
+equidistribution refers to the ideal uniform coverage that we seek
+deterministically, while uniform random sampling only ensures this behavior in
+expectation or with high probability.
 
 \begin{remark}
-Uniform distribution modulo one is a necessary condition for the convergence of quasi-Monte Carlo estimators. If a point sequence is not u.d.\ mod 1, then there exists at least one Riemann-integrable function for which the sample average fails to converge to the integral.
+    Uniform distribution modulo one is a necessary condition for the convergence
+    of \ac{qmc} estimators. If a point sequence is not u.d.\ mod 1, then there
+    exists at least one Riemann-integrable function for which the sample average
+    fails to converge to the integral.
 \end{remark}
 
-The following result, known as Weyl’s criterion, provides a necessary and sufficient condition for uniform distribution in terms of exponential sums.
+The following result, known as Weyl’s criterion, provides a necessary and
+sufficient condition for uniform distribution in terms of exponential sums.
 
 \begin{theorem}[Weyl's Criterion] \ \\
 A sequence $(\boldsymbol{x}_n)_{n \geq 0} \subset [0,1)^s$ is uniformly distributed modulo one if and only if, for all nonzero $\boldsymbol{h} \in \mathbb{Z}^s \setminus \{\boldsymbol{0}\}$, we have
