@@ -279,64 +279,6 @@ The next subsection discusses the convergence rates of both methods in more
 detail and highlights the interplay between dimensionality and integration
 error.
 
-
-% ------------------------------------------------------------------------------
-\subsection{Convergence Rates and the Curse of Dimensionality}
-\label{subsec:convergence-vs-dimension}
-% ------------------------------------------------------------------------------
-
-A major appeal of the Monte Carlo method is its dimension-agnostic convergence
-behavior from Theorem~\ref{thm:mc-convergence-rate}. Under the assumption that
-$f \in L^2([0,1]^s)$, the root-mean-square error of the MC estimator satisfies
-
-\begin{equation}
-    \mathbb{E}[ | I_N^{\mathrm{MC}} - I |] = \mathcal{O}(N^{-1/2}),
-\end{equation}
-
-regardless of the dimension $s$. This makes \ac{mc} a go-to method for very
-high-dimensional problems, even when no structure in the integrand is known or
-exploitable.
-
-\ac{qmc} methods, while lacking this universality, offer a fundamentally
-different convergence profile. For sufficiently regular integrands
-(specifically, those of bounded variation in the sense of Hardy--Krause), the
-integration error of \ac{qmc} estimators is bounded by
-
-\begin{equation}
-    | I_N^{\mathrm{QMC}} - I | \leq D_N^* \cdot V_{\mathrm{HK}}(f),
-\end{equation}
-
-where $D_N^*$ is the star discrepancy of the point set and $V_{\mathrm{HK}}(f)$
-is the Hardy--Krause variation of the integrand (both formalized later in
-\textcolor{blue}{\textbf{TODO}}). For well-constructed low-discrepancy
-sequences, it is known that
-
-\begin{equation}
-    D_N^* = \mathcal{O}\left( \frac{(\log N)^s}{N} \right).
-\end{equation}
-
-This bound implies a near-linear convergence rate in $N$ -- much faster than
-\ac{mc} -- but introduces a logarithmic dependence on the dimension $s$. As $s$
-increases, the factor $(\log N)^s$ grows rapidly, leading to the curse of
-dimensionality in worst-case \ac{qmc} analysis.
-
-Fortunately, in many practical problems, the \emph{effective dimension} of the
-integrand is much lower than its nominal input dimension. That is, most of the
-function's variation is concentrated along a small number of directions. When
-this is the case, QMC methods frequently outperform MC in practice, even in
-problems with moderately high $s$.
-
-\begin{example}
-In deep learning applications, such as training neural networks, stochastic
-gradients often lie near low-dimensional manifolds. Similarly, in CT-based
-simulation models, the system's physical response depends more strongly on a few
-dominant input parameters. These scenarios are highly favorable for QMC.
-\end{example}
-
-We will revisit the precise meaning of discrepancy and variation -- and how they
-control the QMC error -- in Chapters~\ref{chapter2} and \ref{chapter3}.
-
-
 % ------------------------------------------------------------------------------
 \section{Uniformity Concepts}
 \label{sec:uniformity-concepts}
@@ -370,7 +312,7 @@ converges to its Lebesgue measure:
     \lim_{N \to \infty} \frac{1}{N} \sum_{n=0}^{N-1} \chi_{[\boldsymbol{a}, \boldsymbol{b})}(\boldsymbol{x}_n)
     = \lambda_s([\boldsymbol{a}, \boldsymbol{b})) \,,
 \end{equation*}
-where $\chii_A$ is the indicator function of the set $A$ and $\lambda_s$ denotes
+where $\chi_A$ is the indicator function of the set $A$ and $\lambda_s$ denotes
 the $s$-dimensional Lebesgue measure.
 \end{definition}
 
@@ -396,8 +338,9 @@ expectation or with high probability.
     fails to converge to the integral.
 \end{remark}
 
-The following result, known as Weyl’s criterion, provides a necessary and
-sufficient condition for uniform distribution in terms of exponential sums.
+The following result, known as Weyl's criterion, provides a necessary and
+sufficient condition for uniform distribution in terms of exponential sums. A
+proof can be found in \cite{leobacher2014introduction}.
 
 \begin{theorem}[Weyl's Criterion] \ \\
 A sequence $(\boldsymbol{x}_n)_{n \geq 0} \subset [0,1)^s$ is uniformly distributed modulo one if and only if, for all nonzero $\boldsymbol{h} \in \mathbb{Z}^s \setminus \{\boldsymbol{0}\}$, we have
@@ -407,7 +350,7 @@ A sequence $(\boldsymbol{x}_n)_{n \geq 0} \subset [0,1)^s$ is uniformly distribu
 \end{theorem}
 
 \begin{example}
-Let $\alpha \in \mathbb{R}$ be irrational. Then the Kronecker sequence $(n \alpha \bmod 1)_{n \geq 0}$ is uniformly distributed in $[0,1]$. This is a consequence of Weyl’s criterion and illustrates the existence of simple, deterministic sequences with excellent uniformity properties.
+Let $\alpha \in \mathbb{R}$ be irrational. Then the Kronecker sequence $(n \alpha \bmod 1)_{n \geq 0}$ is uniformly distributed in $[0,1]$. This is a consequence of Weyl's criterion and illustrates the existence of simple, deterministic sequences with excellent uniformity properties.
 \end{example}
 
 % ------------------------------------------------------------------------------
