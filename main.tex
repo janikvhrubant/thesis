@@ -246,13 +246,19 @@ meine Arbeit zum Zwecke eines Plagiatsabgleichs in elektronischer Form
 anonymisiert versendet und gespeichert werden kann. Mir ist bekannt, dass von
 der Korrektur der Arbeit abgesehen werden kann, wenn diese Erklärung nicht
 erteilt wird.
-\vspace{1cm}
+\vspace{1.5cm}
 
-\noindent Signed:\\
-\rule[0.5em]{25em}{0.5pt} % This prints a line for the signature
- 
-\noindent Date:\\
-\rule[0.5em]{25em}{0.5pt} % This prints a line to write the date
+\begin{flushleft}
+  \begin{minipage}[t]{0.5\textwidth}
+    \noindent\rule[0.5em]{18em}{0.5pt} \\[0em] % Line for place and date
+    Place, Date
+  \end{minipage}%
+  \begin{minipage}[t]{0.45\textwidth}
+    \raggedleft
+    \noindent\rule[0.5em]{12em}{0.5pt} \\[0em] % Line for signature
+    Signature
+  \end{minipage}
+\end{flushleft}
 \end{declaration}
 
 \cleardoublepage
@@ -272,13 +278,8 @@ erteilt wird.
 %-------------------------------------------------------------------------------d
 
 \begin{abstract}
-\addchaptertocentry{\abstractname} % Add the abstract to the table of contents
-\lipsum[1-2]
-% The idea of PRP is to help both, stores and distribuition centers by making arguable suggestions to automize their replenishment decisions. As their replenishment decisions highly impact their service and different retailers like Mirgros, Coop, Aldi or Lidl have cardinaly different strategies, these tools need to be adjusted for customer needs and product requirements. these results are highly dependent on Notably boths business results are highly dependent from their replanishment decisions on either restocking stores from deliveries by distribuition centers or distribuition center from further suppliers. \\
-% These decisions are arguably taken to the \emph{Theory of Constraints (TOC)}
-% Procurement of goods and products is a multifaceted process that presents substantial challenges for companies. Each decision, notably those around supplier orders, requires a comprehensive understanding of numerous essential business factors and limitations.This process begins with the critical task of demand prediction, followed by assessing variable prices relative to order quantities and optimizing logistics considering the spatial and weight capacities of transport methods. Concurrently, while striving to maintain ample inventory, companies must be cognizant of definite expiration dates and anticipate potential spoilage.\\
-% This thesis concentrates on the accumulation of research outcomes pertaining to multiple dimensions and strategies for resolving the intricate optimization problem inherent in replenishment planning.\\
-% Funded by SAP, this research project is aimed at providing informed recommendations to the development team to enhance production code, ultimately leading to the creation of the Predictive Replenishment Planning (PRP) tool, a feature within the S4/HANA Cloud offering.
+\addchaptertocentry{\abstractname}
+Here comes the Abstract or Introduction of the thesis.
 \end{abstract}
 
 %-------------------------------------------------------------------------------
