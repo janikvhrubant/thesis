@@ -3,13 +3,92 @@
 \label{part2}
 
 \chapter{Motivation and Problem Formulation}
+\label{chap:qmc-nn-motivation}
+
+The use of \acp{dnn} as surrogate models has become increasingly common in
+scientific computing. In many-query scenarios—where the evaluation of a physical
+or biological system must be performed repeatedly for varying inputs --
+\acsp{dnn} offer a powerful tool for approximating the underlying map of
+interest. However, their performance crucially depends on the quality and
+distribution of the training data.
+
+% ------------------------------------------------------------------------------
+\section{Many-Query Problems and the Need for Surrogates}
+% ------------------------------------------------------------------------------
+
+In computational science and engineering, one is often interested in evaluating
+a parameter-to-observable map
+\begin{equation*}
+    L \colon Y \subset \mathbb{R}^s \to \mathbb{R},
+\end{equation*}
+where each evaluation $L(y)$ requires solving an expensive simulation, such as a
+\ac{pde}. When $L$ must be evaluated for many different parameters $y \in Y$,
+the problem becomes a \emph{many-query problem}. Examples include:
 
 \begin{itemize}
-    \item Many-query problems and the need for surrogate models
-    \item Limitations of randomly sampled training data in DNNs
-    \item Formal definition of the supervised learning setup
-    \item Motivation for using low-discrepancy sampling in training
+    \item \textbf{Uncertainty Quantification (UQ):} Estimating expectations
+    $\mathbb{E}_\mu[L(y)]$ over uncertain inputs.
+    \item \textbf{Bayesian Inversion:} Inferring model parameters from observed
+    data.
+    \item \textbf{Optimal Design:} Exploring high-dimensional design spaces for
+    control or optimization.
 \end{itemize}
+
+The high computational cost of these tasks motivates the construction of
+efficient surrogates $\hat{L}$ that approximate $L$ accurately at drastically
+reduced evaluation cost.
+
+% ------------------------------------------------------------------------------
+\section{Limitations of Randomly Sampled Training Data}
+% ------------------------------------------------------------------------------
+
+The dominant paradigm in deep supervised learning is to train the network on randomly sampled input–output pairs $\{(y_i, L(y_i))\}_{i=1}^N$. However, this approach has limitations in the many-query context:
+
+\begin{itemize}
+    \item The convergence of the generalization error $E_G$ scales only as $\mathcal{O}(N^{-1/2})$, due to the central limit theorem.
+    \item The number of required samples to reach a given accuracy can be prohibitively high—especially when each $L(y_i)$ entails solving a PDE.
+    \item Standard error bounds assume independence of training points, which is not guaranteed during SGD training and may degrade convergence in practice.
+\end{itemize}
+
+These drawbacks motivate alternative strategies for sample selection—ideally, ones that provide better coverage of the input domain $Y$ and lead to faster convergence.
+
+% ------------------------------------------------------------------------------
+\section{Supervised Learning Setup}
+% ------------------------------------------------------------------------------
+
+We consider the standard supervised learning setting, where the goal is to train a neural network $L_\theta(y)$ with parameters $\theta \in \Theta$ to approximate the target map $L(y)$. Given a training set $S = \{y_1, \dots, y_N\} \subset Y$, the loss function is defined as
+\[
+J(\theta) = \sum_{i=1}^N \ell\left(L(y_i), L_\theta(y_i)\right),
+\]
+where $\ell$ denotes a suitable pointwise loss, typically $\ell(a, b) = |a - b|^p$.
+
+The network is trained via gradient-based optimization to minimize $J(\theta)$, possibly with regularization. The central quantity of interest is the \emph{generalization error}
+\[
+E_G = \int_Y |L(y) - L_\theta(y)| \, d\mu(y),
+\]
+which measures the performance of the trained surrogate on unseen data.
+
+% ------------------------------------------------------------------------------
+\section{Motivation for Low-Discrepancy Sampling}
+% ------------------------------------------------------------------------------
+
+Instead of choosing training points at random, the key idea explored in this part of the thesis is to sample the training set $S$ using \emph{low-discrepancy sequences}, such as Sobol or Halton sequences. These sequences are known from Quasi-Monte Carlo (QMC) theory to fill the input domain more uniformly, and they satisfy provable bounds on integration error:
+\[
+\left| \frac{1}{N} \sum_{i=1}^N f(y_i) - \int_Y f(y) \, dy \right| \leq D^*_N(S) \cdot V_{\mathrm{HK}}(f),
+\]
+where $D^*_N$ is the star discrepancy and $V_{\mathrm{HK}}$ the Hardy–Krause variation.
+
+This observation suggests that QMC techniques—originally developed for numerical integration—can be leveraged to improve the convergence of supervised learning in settings where:
+
+\begin{itemize}
+    \item The underlying map $L$ is sufficiently regular (e.g., $V_{\mathrm{HK}}(L) < \infty$),
+    \item The training budget (number of samples $N$) is limited,
+    \item Uniform coverage of the domain $Y$ is critical.
+\end{itemize}
+
+The remainder of this part explores the theoretical foundations, algorithmic implementation, and empirical performance of deep learning with low-discrepancy sequences.
+
+
 
 % % Chapter Template
 

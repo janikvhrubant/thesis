@@ -6,49 +6,98 @@
 \section{Function Variation in Multiple Dimensions}
 % ------------------------------------------------------------------------------
 
-In \ac{qmc} theory, the variation of a function plays a key role in bounding the integration error. While the total variation is sufficient for univariate functions, higher dimensions necessitate more refined notions. In this section, we introduce two such notions: the Vitali variation and the Hardy–Krause variation. These concepts are crucial for understanding the convergence guarantees provided by the Koksma–Hlawka inequality.
+In \ac{qmc} theory, the variation of a function plays a key role in bounding the
+integration error. While the total variation is sufficient for univariate
+functions, higher dimensions necessitate more refined notions. In this section,
+we introduce two such notions: the Vitali variation and the variation in the
+sense of Hardy--Krause. These concepts are crucial for understanding the
+convergence guarantees provided by the Koksma-Hlawka inequality.
+
 
 % ------------------------------------------------------------------------------
 \subsection{Variation in the Sense of Vitali}
 \label{sec:vitali-variation}
 % ------------------------------------------------------------------------------
 
-Let $f \colon [a,b] \subset \mathbb{R}^d \to \mathbb{R}$ be a bounded function defined on a $d$-dimensional hyperrectangle. A classical approach to quantify the variation of $f$ is based on the ladder construction, where each axis is discretized into finite sets of points.
+Let $f \colon [a,b] \subset \mathbb{R}^s \to \mathbb{R}$ be a bounded function
+defined on a $s$-dimensional hyperrectangle. A classical approach to quantify
+the variation of $f$ is based on the ladder construction, where each axis is
+discretized into finite sets of points.
 
-\begin{definition}[Vitali Variation]
-Let $Y = \prod_{j=1}^d Y^j$ be a ladder on $[a,b]$, where each $Y^j$ is a finite set in $(a_j, b_j)$. For each $y \in Y$, let $y^+$ denote its componentwise successor, and define $y_v : y_{-v}^+$ as the vector obtained by combining the components of $y$ in $v \subset \{1,\dots,d\}$ with those of $y^+$ in the complement. Then, the variation of $f$ on $[a,b]$ in the sense of Vitali is
+A ladder on an hyperrectangle $[a,b] \subset \mathbb{R}^s$ is a Cartesian
+product of finite sets, defined as $\mathcal{Y} = \prod_{j=1}^s \mathcal{Y}^j$,
+where each $\mathcal{Y}^j$ is a finite set in $(a_j, b_j)$. The set of all
+ladders on the hyperrectangle $[a,b]$ is then denoted by $\mathbb{Y}$.
+
+For each $y^j \in \mathcal{Y}^j$, let $y^j_+$ denote its componentwise
+successor, which is the smallest element in $(y^j,\infty)\cap (\mathcal{Y}^j
+\cup \{b_j\})$
 \begin{equation*}
-    V_{[a,b]}(f) := \sup_{Y \in \mathcal{Y}} \sum_{y \in Y} \sum_{v \subset \{1,\dots,d\}} (-1)^{|v|} f(y_v : y_{-v}^+),
+    y^j_+ = \min\{y \in \mathcal{Y}^j \cup \{b_j\} \mid y > y^j\}.
 \end{equation*}
-where $\mathcal{Y}$ denotes the collection of all such ladders on $[a,b]$.
+Hence, for each $\mathbf{y} \in \mathcal{Y}$, the successor vector is defined by
+\begin{equation*}
+    \mathbf{y}_+ = (y^1_+, y^2_+, \ldots, y^s_+).
+\end{equation*}
+
+The Vitali variation of a function $f$ on the hyperrectangle $[a,b]$ is then
+given by the following definition:
+
+\begin{definition}[Vitali Variation] \ \\
+Let $[a,b] \subset \mathbb{R}^s$ be a hyperrectangle and $f \colon [a,b] \to \mathbb{R}$ be a bounded function. The Vitali variation of $f$ on $[a,b]$ is then defined as
+
+\begin{equation*}
+    V_{[a,b]}(f) := \sup\limits_{\mathcal{Y} \in \mathbb{Y}} \sum_{\mathbf{y} \in \mathcal{Y}}\, \sum_{v \subset \{1,\dots,s\}} (-1)^{|v|} f(\mathbf{y}^v : \mathbf{y}^{-v}_+),
+\end{equation*}
+
+with
+\begin{equation*}
+  (\mathbf{y}^v : \mathbf{y}^{-v}_+)_i = \begin{cases}
+    y_i & \text{if } i \in v, \\
+    (y_+)^i & \text{if } i \notin v.
+  \end{cases}
+\end{equation*}
+
 \end{definition}
 
-This variation captures the total fluctuation of $f$ over axis-aligned rectangular subregions. It generalizes the concept of finite differences and forms the foundation for defining Hardy–Krause variation.
+Hereby, the notation $\mathbf{y}^{-v}$ denotes the complement with respect to
+the set $\{1,\dots,s\}$ such that
+$\mathbf{y}=(\mathbf{y}^{-v}\colon\mathbf{y}^{v})$.
+
+This variation captures the total fluctuation of $f$ over axis-aligned
+rectangular subregions. It generalizes the concept of finite differences and
+forms the foundation for defining Hardy--Krause variation.
+
 
 % ------------------------------------------------------------------------------
-\subsection{Definition of the Hardy and Krause Variation}
-\label{sec:hk-variation}
+  \subsection{Definition of the Hardy--Krause Variation}
+  \label{sec:hk-variation}
 % ------------------------------------------------------------------------------
 
-While the Vitali variation quantifies joint fluctuations, it does not fully capture mixed directional variation. For this purpose, the Hardy–Krause variation refines the analysis by summing over variations of all axis-aligned projections.
+While the Vitali variation quantifies joint fluctuations, it does not fully capture mixed directional variation. For this purpose, the Hardy--Krause variation refines the analysis by summing over variations of all axis-aligned projections.
 
-\begin{definition}[Hardy–Krause Variation]
-Let $f \colon [a,b] \to \mathbb{R}$ be a function and $u \subseteq \{1,\dots,d\}$. Let $x_{-u} \in \mathbb{R}^{d - |u|}$ denote the projection onto the complement and $b_u$ be the upper bounds in the $u$-coordinates. Then, the Hardy–Krause variation of $f$ over $[a,b]$ is defined by
+\begin{definition}[Hardy--Krause Variation] \ \\
+\label{def:hk-variation}
+Let $f \colon [a,b] \to \mathbb{R}$ be a function and $u \subseteq \{1,\dots,s\}$.
+
+The Hardy--Krause variation of $f$ is then defined by
 \begin{equation*}
-    V_{\mathrm{HK}}(f) := \sum_{u \subseteq \{1,\dots,d\}, u \neq \emptyset} V_{[a_{-u}, b_{-u}]}(f(x_{-u}; b_u)),
+  V_{\mathrm{HK}}(f) := \sum_{u \subseteq \{1,\dots,s\}, u \neq \emptyset} V_
+  {[a^{-u}, b^{-u}]}(f(x^{-u}: b^u)),
 \end{equation*}
-where $f(x_{-u}; b_u)$ denotes the restriction of $f$ with $x_u = b_u$ fixed and variation is taken with respect to $x_{-u}$.
+where the variation $V_{[a^{-u}, b^{-u}]}$ is taken with respect to the function
+argument $x^{-u}$.
 \end{definition}
 
-Note that the Hardy–Krause variation reduces to the total variation in the univariate case. Importantly, $V_{\mathrm{HK}}(f) < \infty$ implies that $f$ has bounded variation in all axis-aligned directions, including all lower-dimensional projections.
+Note that the Hardy--Krause variation reduces to the total variation in the univariate case. Importantly, $V_{\mathrm{HK}}(f) < \infty$ implies that $f$ has bounded variation in all axis-aligned directions, including all lower-dimensional projections.
 
 \begin{remark}
-The Hardy–Krause variation is a seminorm, vanishing for constant functions. It becomes a norm if the sum includes $u = \{1,\dots,d\}$.
+The Hardy--Krause variation is a seminorm, vanishing for constant functions. It becomes a norm if the sum includes $u = \{1,\dots,d\}$.
 \end{remark}
 
 % ------------------------------------------------------------------------------
-\subsection{Examples and Interpretation of Hardy and Krause Variation}
-\label{sec:hk-examples}
+  \subsection{Examples and Interpretation of Hardy and Krause Variation}
+  \label{sec:hk-examples}
 % ------------------------------------------------------------------------------
 
 Computing the Hardy–Krause variation directly from its definition is impractical for most functions. However, for smooth functions, upper bounds can be derived using mixed partial derivatives:
@@ -68,50 +117,97 @@ Consider $f_{d,r}(x) = \left( \max\left\{ \sum_{i=1}^d x_i - \frac{1}{2}, 0 \rig
 
 These examples illustrate the importance of regularity assumptions in applying the Koksma–Hlawka inequality. In practice, many physically motivated maps—such as solutions to elliptic or parabolic PDEs—do exhibit sufficient smoothness to ensure bounded Hardy–Krause variation, justifying the use of QMC error bounds.
 
-
 % ------------------------------------------------------------------------------
-
 \section{The Koksma--Hlawka Inequality}
 % ------------------------------------------------------------------------------
 
+The Koksma--Hlawka inequality is a central result in quasi-Monte Carlo theory. It provides a deterministic error bound for numerical integration that combines two distinct concepts: the discrepancy of the point set and the variation of the integrand. This inequality formalizes the intuition that more uniformly distributed sample points lead to smaller integration errors—provided the integrand is regular enough.
+
+% ------------------------------------------------------------------------------
+\subsection{Formal Theorem and Preconditions}
+% ------------------------------------------------------------------------------
+
+The inequality relates the QMC integration error to the star discrepancy of the point set and the Hardy--Krause variation of the integrand.
+
+\begin{theorem}[Koksma--Hlawka Inequality]
+Let $f \colon [0,1]^s \to \mathbb{R}$ be a function of bounded variation in the sense of Hardy--Krause, and let $P = \{x_1, \dots, x_N\} \subset [0,1]^s$ be a finite point set. Then the integration error satisfies
+\begin{equation}
+    \left| \frac{1}{N} \sum_{n=1}^N f(x_n) - \int_{[0,1]^s} f(x) \, dx \right|
+    \leq D_N^{*}(P) \cdot V_{\mathrm{HK}}(f),
+\end{equation}
+where $D_N^{*}(P)$ denotes the star discrepancy of the point set $P$, and $V_{\mathrm{HK}}(f)$ is the Hardy--Krause variation of $f$.
+\end{theorem}
+
+\begin{remark}
+This bound is deterministic and non-asymptotic. It applies to any dimension $s$ and makes no probabilistic assumptions on the sampling procedure. However, it requires $f$ to have bounded variation in the Hardy--Krause sense, which excludes some classes of discontinuous or highly irregular functions.
+\end{remark}
+
+% ------------------------------------------------------------------------------
+\subsection{Role of Discrepancy and Function Variation}
+% ------------------------------------------------------------------------------
+
+The two factors on the right-hand side of the inequality—discrepancy and variation—capture complementary aspects of integration error.
+
+\begin{itemize}
+    \item The \textbf{star discrepancy} $D_N^*(P)$ measures how uniformly the point set $P$ samples the unit cube. It is determined entirely by the geometry of the sample points and vanishes if the empirical distribution matches the uniform distribution.
+    \item The \textbf{Hardy--Krause variation} $V_{\mathrm{HK}}(f)$ reflects the total directional variation of the integrand $f$ along all coordinate axes and lower-dimensional projections. It penalizes irregularity and ensures that the integrand behaves well under uniform sampling.
+\end{itemize}
+
+Both quantities are required: even a low-discrepancy point set cannot guarantee small error if the function has unbounded variation. Conversely, even a smooth function may incur large error if the points cluster poorly.
+
+\begin{remark}
+The Koksma--Hlawka inequality can be seen as a product-type estimate: each component controls a different source of error, and their product bounds the total integration error.
+\end{remark}
 
 
 % ------------------------------------------------------------------------------
-  \subsection{Formal Theorem and Preconditions}
+\subsection{Interpretation: Bounding the Integration Error}
 % ------------------------------------------------------------------------------
 
+The Koksma--Hlawka inequality provides valuable insight into the behavior of QMC estimators:
+
+\begin{itemize}
+    \item It motivates the use of low-discrepancy sequences such as Halton or Sobol', which minimize $D_N^*(P)$.
+    \item It emphasizes the importance of function regularity—only functions with bounded Hardy--Krause variation are eligible for the bound.
+    \item It establishes a worst-case, deterministic error guarantee, unlike the probabilistic bounds of Monte Carlo integration.
+\end{itemize}
+
+In practical terms, the inequality implies that for sufficiently smooth integrands and carefully constructed point sets, QMC methods can achieve integration errors of order
+\[
+\mathcal{O}\left( \frac{(\log N)^s}{N} \right),
+\]
+which significantly improves over the $\mathcal{O}(N^{-1/2})$ rate of standard Monte Carlo methods. This improvement, however, comes at the cost of stronger assumptions and increased sensitivity to dimensionality.
+
+\begin{remark}
+The deterministic nature of the bound makes it attractive in settings where reliability and reproducibility are crucial—such as scientific simulations or safety-critical computations.
+\end{remark}
+
+\qquad
+
+Building upon this theoretical foundation, the next parts of this thesis turn
+from abstract principles to concrete applications. Part~\ref{part2} investigates
+how quasi-Monte Carlo methods can enhance the training of neural networks, while
+Part~\ref{part3} applies these techniques to the simulation of X-ray images in
+medical imaging.
+
+% % ------------------------------------------------------------------------------
+% \section{Convergence Implications}
+% % ------------------------------------------------------------------------------
 
 
-% ------------------------------------------------------------------------------
-  \subsection{Role of Discrepancy and Function Variation}
-% ------------------------------------------------------------------------------
+
+% % ------------------------------------------------------------------------------
+%   \subsection{From Error Bound to Convergence Rate}
+% % ------------------------------------------------------------------------------
 
 
 
-% ------------------------------------------------------------------------------
-  \subsection{Interpretation: Bounding the Integration Error}
-% ------------------------------------------------------------------------------
+% % ------------------------------------------------------------------------------
+%   \subsection{Comparison to Monte Carlo: $O(N^{-1/2})$ vs. $O\left(\frac{(\log N)^s}{N}\right)$}
+% % ------------------------------------------------------------------------------
 
 
 
-% ------------------------------------------------------------------------------
-\section{Convergence Implications}
-% ------------------------------------------------------------------------------
-
-
-
-% ------------------------------------------------------------------------------
-  \subsection{From Error Bound to Convergence Rate}
-% ------------------------------------------------------------------------------
-
-
-
-% ------------------------------------------------------------------------------
-  \subsection{Comparison to Monte Carlo: $O(N^{-1/2})$ vs. $O\left(\frac{(\log N)^s}{N}\right)$}
-% ------------------------------------------------------------------------------
-
-
-
-% ------------------------------------------------------------------------------
-  \subsection{Limitations in High Dimensions and Practical Workarounds}
-% ------------------------------------------------------------------------------
+% % ------------------------------------------------------------------------------
+%   \subsection{Limitations in High Dimensions and Practical Workarounds}
+% % ------------------------------------------------------------------------------

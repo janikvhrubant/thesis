@@ -130,9 +130,20 @@ sequences and analyze their dimensional performance and implementation details.
 \section{Construction of Low-Discrepancy Sequences}
 % ------------------------------------------------------------------------------
 
-In this section, we will explore several well-known constructions of
-low-discrepancy sequences, focusing on their mathematical foundations and
-properties.
+Before defining specific low-discrepancy sequences, we first introduce the term of low-discrepancy sequences, which are designed to fill the unit cube $[0,1)^s$
+as uniformly as possible.
+
+\begin{definition}[Low-Discrepancy Sequence] \ \\
+A sequence $\mathcal{S} = (x_n)_{n\in \mathbb{N}}$ in $[0,1)^s$ is called a low-discrepancy sequence if its star discrepancy satisfies
+\begin{equation*}
+    D_N^*(\mathcal{S}) = \mathcal{O}\left( \frac{(\log N)^s}{N} \right)
+\end{equation*}
+for all $N \in \mathbb{N}$. Such sequences are also referred to as
+\emph{quasi-Monte Carlo sequences} or \ac{qmc} sequences.
+\end{definition}
+
+Low discrepancy sequences are constructed to minimize the star
+discrepancy, which is crucial for the convergence of \ac{qmc} methods according to the Koksma-Hlawka inequality introduced in Chapter~\ref{chapter3}.
 
 % ------------------------------------------------------------------------------
 \subsection{The Halton Sequence}
@@ -192,7 +203,11 @@ This illustrates how the Halton sequence fills the unit square in a low-discrepa
 
 
 
-Intuitively, this construction ensures that each component of the sequence explores the unit interval in a structured, non-redundant way. By combining several one-dimensional van der Corput sequences in different coprime bases, the resulting multi-dimensional point set avoids regular grid-like patterns and achieves asymptotic uniformity.
+Intuitively, this construction ensures that each component of the sequence
+explores the unit interval in a structured, non-redundant way. By combining
+several one-dimensional van der Corput sequences in different coprime bases, the
+resulting multi-dimensional point set avoids regular grid-like patterns and
+achieves asymptotic uniformity.
 
 As stated in \cite{pillichshammer2010zahlentheoretische}, the Halton sequence
 has star discrepancy of order
