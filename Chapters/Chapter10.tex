@@ -1,6 +1,6 @@
 %!TEX root = ../main.tex
 \chapter{The Simulation Algorithm}
-\label{Chapter5}
+\label{chapter10}
 
 This chapter presents the algorithm used for X-ray image simulation. It
 incorporates elements of \emph{Forced Detection} as introduced in \cite{fd2001},
@@ -83,7 +83,7 @@ throughout the simulation to account for attenuation and scattering processes.
 Then an algorithm is applied to traverse the photon through the voxel grid until
 it reaches the first material which is not air. This is done with a ray
 traversal algorithm. Once the phantom at a point $A_0$ is reached, the photon
-transport is simulated by the physical laws described in Chapter~\ref{Chapter6}.
+transport is simulated by the physical laws described in Chapter~\ref{chapter6}.
 
 Hereby, as in all other scatter points within the phantom, the free \emph{free
 path length} $t_i$ is sampled from the exponential distribution based on

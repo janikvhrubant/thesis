@@ -3,135 +3,69 @@
 \label{part2}
 
 \chapter{Motivation and Problem Formulation}
-\label{chap:qmc-nn-motivation}
+\label{chapter4}
+The second part of this thesis investigates the application of \acfp{qmc}
+sampling techniques to enhance the training of \acfp{dnn} in \emph{many-query
+problems}, computational tasks where the same expensive model must be evaluated
+repeatedly across a large number of different input parameters.
+Chapter~\ref{chapter4} introduces the conceptual foundations of \acp{dnn}.
+Chapter~\ref{chapter5} presents the theoretical framework for evaluating the
+quality of neural network training, including the notions of generalization and
+training error, along with corresponding bounds. Building on this,
+Chapter~\ref{chapter6} applies these theoretical insights to the training of
+neural networks aimed at approximating three representative problems: a
+multidimensional sum-of-sines function, the trajectory of a projectile from
+classical physics and the pricing of a European call option in computational
+finance.
 
-The use of \acp{dnn} as surrogate models has become increasingly common in
-scientific computing. In many-query scenarios—where the evaluation of a physical
-or biological system must be performed repeatedly for varying inputs --
-\acsp{dnn} offer a powerful tool for approximating the underlying map of
-interest. However, their performance crucially depends on the quality and
-distribution of the training data.
+\textcolor{red}{\textbf{TODO: Last Chapter of Part 2 to be added here.}}
+
+\qquad
+
+\acp{dnn} are machine learning models, designed to approximate complex nonlinear
+relationships in data. Rather than producing exact solutions in a mathematical
+sense, they learn from examples and generate predictions that often serve as
+good approximations. This makes them particularly well suited for approximating
+parameterized functions in scientific and engineering contexts, especially when
+the underlying problems are analytically unsolvable, computationally expensive,
+or only implicitly defined.
+
+In the remainder of this chapter, we provide a mathematical formulation of
+\acp{dnn}, along with a precise definition of the function approximation tasks
+they are designed to address.
 
 % ------------------------------------------------------------------------------
-\section{Many-Query Problems and the Need for Surrogates}
+\section{Function Approximation in Many-Query Problems}
+\label{sec:problem-setting}
 % ------------------------------------------------------------------------------
 
-In computational science and engineering, one is often interested in evaluating
-a parameter-to-observable map
-\begin{equation*}
-    L \colon Y \subset \mathbb{R}^s \to \mathbb{R},
-\end{equation*}
-where each evaluation $L(y)$ requires solving an expensive simulation, such as a
-\ac{pde}. When $L$ must be evaluated for many different parameters $y \in Y$,
-the problem becomes a \emph{many-query problem}. Examples include:
+% -------------------------------
+\subsection{Problem Setting}
+\label{subsec:problem-setting}
+% -------------------------------
 
+Building on the previously introduced notion of many-query problems, we now formalize the underlying function approximation task. The objective is to learn a function \( f \colon \mathcal{X} \rightarrow \mathcal{Y} \) that maps high-dimensional input parameters to corresponding outputs of interest. Typically, \( \mathcal{X} \subseteq \mathbb{R}^d \) is compact and taken to be the unit hypercube, \( \mathcal{X} = [0,1]^d \), while \( \mathcal{Y} \) is a Banach space such as \( \mathbb{R} \) or \( L^p(\Omega) \) for some domain \( \Omega \subseteq \mathbb{R}^n \).
+
+The surrogate model \( \hat{f}_\theta \) is typically chosen from a class of deep neural networks and is trained on a finite dataset \( \{ (x_i, f(x_i)) \}_{i=1}^N \), where \( x_i \in [0,1]^d \). This setting is particularly relevant when evaluating \( f \) is expensive (e.g., solving a PDE or performing a simulation), but sampling inputs is cheap and parallelizable.
+
+\begin{remark}
+The function \( f \) may not admit a closed-form expression or may be computationally infeasible to evaluate for every input configuration. Therefore, a learned approximation \( \hat{f}_\theta \), trained on a representative set of inputs, offers a practical alternative for many-query tasks such as uncertainty quantification, optimization, or inverse problems.
+\end{remark}
+
+% -------------------------------
+\subsection{Target Function Class}
+\label{subsec:function-class}
+% -------------------------------
+
+\begin{definition}[Target Function]
+Let \( d \in \mathbb{N} \), and let \( f \colon [0,1]^d \rightarrow \mathcal{Y} \) be a measurable function, where \( \mathcal{Y} \) is a real Banach space. The goal is to construct a parametric surrogate model \( \hat{f}_\theta \) that approximates \( f \) in a suitable norm, i.e., \( \| f - \hat{f}_\theta \| \ll 1 \).
+\end{definition}
+
+To ensure meaningful approximation guarantees, assumptions on the regularity of \( f \) are often imposed. Common choices include:
 \begin{itemize}
-    \item \textbf{Uncertainty Quantification (UQ):} Estimating expectations
-    $\mathbb{E}_\mu[L(y)]$ over uncertain inputs.
-    \item \textbf{Bayesian Inversion:} Inferring model parameters from observed
-    data.
-    \item \textbf{Optimal Design:} Exploring high-dimensional design spaces for
-    control or optimization.
+  \item \textbf{Lipschitz continuity}, ensuring bounded gradients,
+  \item Membership in \textbf{Sobolev spaces} \( W^{k,p} \), which incorporate smoothness and integrability,
+  \item \textbf{Bounded variation}, relevant for functions with discontinuities.
 \end{itemize}
 
-The high computational cost of these tasks motivates the construction of
-efficient surrogates $\hat{L}$ that approximate $L$ accurately at drastically
-reduced evaluation cost.
-
-% ------------------------------------------------------------------------------
-\section{Limitations of Randomly Sampled Training Data}
-% ------------------------------------------------------------------------------
-
-The dominant paradigm in deep supervised learning is to train the network on randomly sampled input–output pairs $\{(y_i, L(y_i))\}_{i=1}^N$. However, this approach has limitations in the many-query context:
-
-\begin{itemize}
-    \item The convergence of the generalization error $E_G$ scales only as $\mathcal{O}(N^{-1/2})$, due to the central limit theorem.
-    \item The number of required samples to reach a given accuracy can be prohibitively high—especially when each $L(y_i)$ entails solving a PDE.
-    \item Standard error bounds assume independence of training points, which is not guaranteed during SGD training and may degrade convergence in practice.
-\end{itemize}
-
-These drawbacks motivate alternative strategies for sample selection—ideally, ones that provide better coverage of the input domain $Y$ and lead to faster convergence.
-
-% ------------------------------------------------------------------------------
-\section{Supervised Learning Setup}
-% ------------------------------------------------------------------------------
-
-We consider the standard supervised learning setting, where the goal is to train a neural network $L_\theta(y)$ with parameters $\theta \in \Theta$ to approximate the target map $L(y)$. Given a training set $S = \{y_1, \dots, y_N\} \subset Y$, the loss function is defined as
-\[
-J(\theta) = \sum_{i=1}^N \ell\left(L(y_i), L_\theta(y_i)\right),
-\]
-where $\ell$ denotes a suitable pointwise loss, typically $\ell(a, b) = |a - b|^p$.
-
-The network is trained via gradient-based optimization to minimize $J(\theta)$, possibly with regularization. The central quantity of interest is the \emph{generalization error}
-\[
-E_G = \int_Y |L(y) - L_\theta(y)| \, d\mu(y),
-\]
-which measures the performance of the trained surrogate on unseen data.
-
-% ------------------------------------------------------------------------------
-\section{Motivation for Low-Discrepancy Sampling}
-% ------------------------------------------------------------------------------
-
-Instead of choosing training points at random, the key idea explored in this part of the thesis is to sample the training set $S$ using \emph{low-discrepancy sequences}, such as Sobol or Halton sequences. These sequences are known from Quasi-Monte Carlo (QMC) theory to fill the input domain more uniformly, and they satisfy provable bounds on integration error:
-\[
-\left| \frac{1}{N} \sum_{i=1}^N f(y_i) - \int_Y f(y) \, dy \right| \leq D^*_N(S) \cdot V_{\mathrm{HK}}(f),
-\]
-where $D^*_N$ is the star discrepancy and $V_{\mathrm{HK}}$ the Hardy–Krause variation.
-
-This observation suggests that QMC techniques—originally developed for numerical integration—can be leveraged to improve the convergence of supervised learning in settings where:
-
-\begin{itemize}
-    \item The underlying map $L$ is sufficiently regular (e.g., $V_{\mathrm{HK}}(L) < \infty$),
-    \item The training budget (number of samples $N$) is limited,
-    \item Uniform coverage of the domain $Y$ is critical.
-\end{itemize}
-
-The remainder of this part explores the theoretical foundations, algorithmic implementation, and empirical performance of deep learning with low-discrepancy sequences.
-
-
-
-% % Chapter Template
-
-% \chapter{Neural Network Training with QMC in Deterministic Settings} % Main chapter title
-
-% \label{Chapter3} % Change X to a consecutive number; for referencing this chapter elsewhere, use \ref{ChapterX}
-
-% %----------------------------------------------------------------------------------------
-% %	SECTION 1
-% %----------------------------------------------------------------------------------------
-
-% \section{Problem Setup and Input Space Design}
-
-% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam ultricies lacinia euismod. Nam tempus risus in dolor rhoncus in interdum enim tincidunt. Donec vel nunc neque. In condimentum ullamcorper quam non consequat. Fusce sagittis tempor feugiat. Fusce magna erat, molestie eu convallis ut, tempus sed arcu. Quisque molestie, ante a tincidunt ullamcorper, sapien enim dignissim lacus, in semper nibh erat lobortis purus. Integer dapibus ligula ac risus convallis pellentesque.
-
-% %----------------------------------------------------------------------------------------
-% %	SECTION 2
-% %----------------------------------------------------------------------------------------
-
-% \section{Generation of Training Sets via QMC and MC}
-
-% Sed ullamcorper quam eu nisl interdum at interdum enim egestas. Aliquam placerat justo sed lectus lobortis ut porta nisl porttitor. Vestibulum mi dolor, lacinia molestie gravida at, tempus vitae ligula. Donec eget quam sapien, in viverra eros. Donec pellentesque justo a massa fringilla non vestibulum metus vestibulum. Vestibulum in orci quis felis tempor lacinia. Vivamus ornare ultrices facilisis. Ut hendrerit volutpat vulputate. Morbi condimentum venenatis augue, id porta ipsum vulputate in. Curabitur luctus tempus justo. Vestibulum risus lectus, adipiscing nec condimentum quis, condimentum nec nisl. Aliquam dictum sagittis velit sed iaculis. Morbi tristique augue sit amet nulla pulvinar id facilisis ligula mollis. Nam elit libero, tincidunt ut aliquam at, molestie in quam. Aenean rhoncus vehicula hendrerit.
-
-% %----------------------------------------------------------------------------------------
-% %	SECTION 3
-% %----------------------------------------------------------------------------------------
-
-% \section{Network Architecture and Training Protocols}
-
-% Sed ullamcorper quam eu nisl interdum at interdum enim egestas. Aliquam placerat justo sed lectus lobortis ut porta nisl porttitor. Vestibulum mi dolor, lacinia molestie gravida at, tempus vitae ligula. Donec eget quam sapien, in viverra eros. Donec pellentesque justo a massa fringilla non vestibulum metus vestibulum. Vestibulum in orci quis felis tempor lacinia. Vivamus ornare ultrices facilisis. Ut hendrerit volutpat vulputate. Morbi condimentum venenatis augue, id porta ipsum vulputate in. Curabitur luctus tempus justo. Vestibulum risus lectus, adipiscing nec condimentum quis, condimentum nec nisl. Aliquam dictum sagittis velit sed iaculis. Morbi tristique augue sit amet nulla pulvinar id facilisis ligula mollis. Nam elit libero, tincidunt ut aliquam at, molestie in quam. Aenean rhoncus vehicula hendrerit.
-
-% %----------------------------------------------------------------------------------------
-% %	SECTION 4
-% %----------------------------------------------------------------------------------------
-
-% \section{Convergence Evaluation and Error Metrics}
-
-% Sed ullamcorper quam eu nisl interdum at interdum enim egestas. Aliquam placerat justo sed lectus lobortis ut porta nisl porttitor. Vestibulum mi dolor, lacinia molestie gravida at, tempus vitae ligula. Donec eget quam sapien, in viverra eros. Donec pellentesque justo a massa fringilla non vestibulum metus vestibulum. Vestibulum in orci quis felis tempor lacinia. Vivamus ornare ultrices facilisis. Ut hendrerit volutpat vulputate. Morbi condimentum venenatis augue, id porta ipsum vulputate in. Curabitur luctus tempus justo. Vestibulum risus lectus, adipiscing nec condimentum quis, condimentum nec nisl. Aliquam dictum sagittis velit sed iaculis. Morbi tristique augue sit amet nulla pulvinar id facilisis ligula mollis. Nam elit libero, tincidunt ut aliquam at, molestie in quam. Aenean rhoncus vehicula hendrerit.
-
-% %----------------------------------------------------------------------------------------
-% %	SECTION 5
-% %----------------------------------------------------------------------------------------
-
-% \section{Comparative Results}
-
-% Sed ullamcorper quam eu nisl interdum at interdum enim egestas. Aliquam placerat justo sed lectus lobortis ut porta nisl porttitor. Vestibulum mi dolor, lacinia molestie gravida at, tempus vitae ligula. Donec eget quam sapien, in viverra eros. Donec pellentesque justo a massa fringilla non vestibulum metus vestibulum. Vestibulum in orci quis felis tempor lacinia. Vivamus ornare ultrices facilisis. Ut hendrerit volutpat vulputate. Morbi condimentum venenatis augue, id porta ipsum vulputate in. Curabitur luctus tempus justo. Vestibulum risus lectus, adipiscing nec condimentum quis, condimentum nec nisl. Aliquam dictum sagittis velit sed iaculis. Morbi tristique augue sit amet nulla pulvinar id facilisis ligula mollis. Nam elit libero, tincidunt ut aliquam at, molestie in quam. Aenean rhoncus vehicula hendrerit.
+The specific regularity assumption affects both the approximation power of the neural network and the theoretical error bounds discussed in later chapters.
