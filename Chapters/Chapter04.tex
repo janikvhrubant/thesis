@@ -4,206 +4,105 @@
 
 \chapter{Motivation and Problem Formulation}
 \label{chapter4}
+
 The second part of this thesis investigates the application of \acfp{qmc}
 sampling techniques to enhance the training of \acfp{dnn} in \emph{many-query
-problems}, computational tasks where the same expensive model must be evaluated
-repeatedly across a large number of different input parameters.
-Chapter~\ref{chapter4} introduces the conceptual foundations of \acp{dnn}.
-Chapter~\ref{chapter5} presents the theoretical framework for evaluating the
-quality of neural network training, including the notions of generalization and
-training error, along with corresponding bounds. Building on this,
-Chapter~\ref{chapter6} applies these theoretical insights to the training of
-neural networks aimed at approximating three representative problems: a
-multidimensional sum-of-sines function, the trajectory of a projectile from
-classical physics and the pricing of a European call option in computational
-finance.
+problems}—computational tasks in which a parameterized map must be evaluated for
+a large number of inputs, each requiring costly simulations or numerical
+solutions of PDEs. This situation arises frequently in scientific computing,
+e.g., in uncertainty quantification, Bayesian inversion, optimal control, and
+model calibration.
 
-\textcolor{red}{\textbf{TODO: Last Chapter of Part 2 to be added here.}}
+Such problems motivate the use of surrogate models $\hat{f}_\theta$, typically
+based on deep neural networks, which are trained offline on a set of inputs and
+then used for fast evaluation online. However, as established by Mishra and
+Rusch~\cite{mishra2020enhancing}, the standard paradigm of random sampling for
+training data generation may require prohibitively many samples to yield
+accurate generalization. This is due to the $\mathcal{O}(N^{-1/2})$ convergence
+rate rooted in classical statistical learning bounds.
 
-\qquad
+To overcome this limitation, this thesis explores the use of low-discrepancy
+(QMC) sequences as training data. Such sequences fill the input domain more
+uniformly and, under mild regularity assumptions, can significantly reduce the
+generalization error due to improved equidistribution properties.
 
-\acp{dnn} are machine learning models, designed to approximate complex nonlinear
-relationships in data. Rather than producing exact solutions in a mathematical
-sense, they learn from examples and generate predictions that often serve as
-good approximations. This makes them particularly well suited for approximating
-parameterized functions in scientific and engineering contexts, especially when
-the underlying problems are analytically unsolvable, computationally expensive,
-or only implicitly defined.
-
-In the remainder of this chapter, we provide a mathematical formulation of
-\acp{dnn}, along with a precise definition of the function approximation tasks
-they are designed to address.
-
-% ------------------------------------------------------------------------------
-\section{Function Approximation in Many-Query Problems}
-\label{sec:problem-setting}
-% ------------------------------------------------------------------------------
-
-% -------------------------------
-\subsection{Problem Setting}
-\label{subsec:problem-setting}
-% -------------------------------
-
-Building on the previously introduced notion of many-query problems, we now
-formalize the underlying function approximation task. The objective is to learn
-a function $ f \colon \mathcal{X} \rightarrow \mathcal{Y} $ that maps
-high-dimensional input parameters to corresponding outputs of interest.
-
-In this work, we restrict ourselves to functions defined on the unit hypercube,
-i.e., $ \mathcal{X} = [0,1]^s \subset \mathbb{R}^s $, where $ s $ denotes the
-input dimension. This assumption is made to facilitate \acl{qmc} sampling, which
-is naturally defined on the unit cube. Although this setting may appear
-restrictive, it encompasses a broad class of relevant problems: any topological
-space that is compact, a topological manifold with boundary, simply connected
-and free of singularities is homeomorphic to $ [0,1]^s $. Thus, more general
-input domains can in principle be mapped to the unit hypercube without loss of
-generality.
-
-The surrogate model $ \hat{f}_\theta $ is typically chosen from a class of
-\acp{dnn} and is trained on a finite dataset $ \{ (x_i, f(x_i)) \}_{i=1}^N $,
-for some $ x_i \in [0,1]^s $. This setting is particularly relevant when
-evaluating $ f $ is expensive (e.g., solving a \ac{pde} or performing a
-simulation).
-
-\begin{remark}
-The function $ f $ may not admit a closed-form expression or may be
-computationally infeasible to evaluate for every input configuration. Therefore,
-a learned approximation $ \hat{f}_\theta $, trained on a representative set of
-inputs, offers a practical alternative for many-query tasks such as uncertainty
-quantification, optimization, or inverse problems.
-\end{remark}
-
-% -------------------------------
-\subsection{Target Function Class}
-\label{subsec:function-class}
-% -------------------------------
-
-\begin{definition}[Target Function] \ \\
-Let $ s \in \mathbb{N} $ and let $ f \colon [0,1]^s \rightarrow \mathcal{Y} $ be
-a measurable function, where $ \mathcal{Y} $ is a real Banach space. The goal is
-to construct a parametric surrogate model $ \hat{f}_\theta $ that approximates $
-f $ in a suitable norm, i.e. $ \| f - \hat{f}_\theta \| \ll 1 $.
-\end{definition}
-
-To ensure meaningful approximation guarantees, assumptions on the regularity of
-$ f $ are often imposed. Common choices include:
+\section{Many-Query Problems in Scientific Computing}
+Many-query problems refer to scenarios in which a computationally expensive
+model $f(x)$ must be evaluated for many different parameter values $x \in
+\mathcal{X} \subset \mathbb{R}^s$. Typical applications include:
 \begin{itemize}
-  \item \textbf{Lipschitz continuity}, ensuring bounded gradients,
-  \item Membership in \textbf{Sobolev spaces} $ W^{k,p} $, which incorporate
-  smoothness and integrability,
-  \item \textbf{Bounded variation}, relevant for functions with discontinuities.
+  \item \textbf{Uncertainty quantification (UQ)}: Compute statistics of $f(x)$
+  for uncertain $x$.
+  \item \textbf{Optimal design/control}: Evaluate objective functions $f(x)$ for
+  many designs $x$.
+  \item \textbf{Inverse problems}: Repeatedly evaluate $f(x)$ during parameter
+  inference.
 \end{itemize}
 
-The specific regularity assumption affects both the approximation power of the
-neural network and the theoretical error bounds discussed in later chapters.
+The sheer cost of evaluating $f(x)$ (e.g., via numerical PDE solvers) motivates
+the use of surrogate models. Once trained, a surrogate $\hat{f}_\theta$ can
+provide rapid predictions for unseen inputs at a fraction of the computational
+cost.
 
-\begin{remark}
-  In the context of this thesis, we restrict ourselves to approximating target functions from a hypercube domain $ [0,1]^s $ to a real-valued output space $ \mathcal{Y} = \mathbb{R}^m $, where $ m \in \mathbb{N} $. This restriction simplifies the analysis and allows us to focus on the core challenges of training neural networks for function approximation.
+\section{The Role of Function Approximation}
+We formalize the problem as learning a map $f \colon [0,1]^s \to \mathbb{R}^m$
+from data. The assumption of a unit hypercube domain reflects common practice in
+QMC theory and is justified via homeomorphic mappings from more general compact
+input spaces.
 
-  While \acp{dnn} can in principle approximate mappings between infinite-dimensional
-  spaces via projections, this thesis focuses on \acs{qmc}-based training of neural
-  networks in the finite-dimensional setting\cite{kovachki2023neural}.
-\end{remark}
+The surrogate model $\hat{f}_\theta$ is chosen from a class of deep neural
+networks and trained on data $\{(x_i, f(x_i))\}_{i=1}^N$. The aim is to
+approximate $f$ with high accuracy while minimizing the number of required
+evaluations.
 
-
-% ------------------------------------------------------------------------------
-\section{Deep Neural Networks as Function Approximators}
-\label{sec:dnn-definition}
-% ------------------------------------------------------------------------------
-
-% --------------------------------
-\subsection{Architectural Definition}
-\label{subsec:dnn-architecture}
-% --------------------------------
-
-\acfp{dnn} are parametric function models constructed as compositions of affine transformations and nonlinear activation functions. Formally, a \ac{dnn} of depth $L \in \mathbb{N}$ maps an input $x \in \mathbb{R}^s$ to an output $f_\theta(x) \in \mathbb{R}^m$ via a sequence of transformations across $L$ layers.
-
-\begin{definition}[Activation Function] \ \\
-An \emph{activation function} is a measurable function $\sigma : \mathbb{R} \to \mathbb{R}$, typically nonlinear, that is applied componentwise to the output of each layer in a neural network. For a vector $z = (z_1, \dots, z_k)^\top \in \mathbb{R}^k$, the activation is defined as
-\begin{equation*}
-    \sigma(z) := (\sigma(z_1), \dots, \sigma(z_k))^\top.
-\end{equation*}
-\end{definition}
-
-\begin{example}[Common Activation Functions] \ \\
-Two widely used activation functions are:
+\section{Limitations of Random Sampling in Neural Network Training}
+Training data is typically generated by sampling $x_i \sim \mu$ i.i.d. from a
+given probability distribution on $[0,1]^s$. In this case, theoretical results
+in statistical learning theory yield generalization bounds of the form
+\[
+\mathbb{E}[E_G] \leq E_T + \mathcal{O}\left(\frac{1}{\sqrt{N}}\right),
+\]
+where $E_T$ is the empirical training error. However, as argued
+in~\cite{mishra2020enhancing}, this rate is unsatisfactory in many-query
+problems because:
 \begin{itemize}
-    \item \textbf{ReLU (Rectified Linear Unit)}:
-    \begin{equation*}
-        \mathrm{ReLU}(x) := \max\{0, x\}
-    \end{equation*}
-    ReLU is piecewise linear and non-saturating, which makes it computationally
-    efficient and favorable for training deep networks.
-
-    \item \textbf{Sigmoid Function}:
-    \begin{equation*}
-        \sigma(x) := \frac{1}{1 + e^{-x}}
-    \end{equation*}
-    The sigmoid function maps $\mathbb{R}$ to $(0, 1)$ and was historically used
-    in early neural networks. However, it tends to suffer from vanishing
-    gradients in deep architectures.
+  \item A small generalization error requires a large $N$, which is costly due
+  to expensive evaluations of $f(x)$.
+  \item The constant in the bound depends on the variance and correlations in
+  the training process, which are hard to control.
 \end{itemize}
-\end{example}
 
-\begin{definition}[Deep Neural Network] \ \\
-Let $\sigma$ be an activation function. A \ac{dnn} of \emph{depth} $L$ is a
-function $f_\theta: \mathbb{R}^s \to \mathbb{R}^m$ defined as
-\begin{equation*}
-    f_\theta(x) = A_L \circ \sigma \circ A_{L-1} \circ \sigma \circ \dots \circ \sigma \circ A_1(x),
-\end{equation*}
-where each affine transformation $A_\ell: \mathbb{R}^{d_{\ell-1}} \to
-\mathbb{R}^{d_\ell}$ is given by
-\begin{equation*}
-    A_\ell(x) = W_\ell x + b_\ell,
-\end{equation*}
-with weight matrix $W_\ell \in \mathbb{R}^{d_\ell \times d_{\ell-1}}$ and bias
-vector $b_\ell \in \mathbb{R}^{d_\ell}$. The complete set of network parameters
-is denoted by $\theta = \{W_\ell, b_\ell\}_{\ell=1}^L$.
-\end{definition}
+\section{QMC-Based Surrogates: A Promising Alternative}
+Low-discrepancy sequences (Sobol', Halton, etc.) provide a way to sample the
+domain $[0,1]^s$ more uniformly than random sampling. For sufficiently smooth
+functions $f$, Quasi-Monte Carlo theory (e.g., Koksma--Hlawka inequality) gives
+error bounds of the form:
+\[
+|E_G - E_T| \leq V_{\mathrm{HK}}(|f - \hat{f}_\theta|) \cdot D^*_N \leq C \frac{(\log N)^s}{N},
+\]
+where $V_{\mathrm{HK}}$ denotes the Hardy–Krause variation and $D^*_N$ is the
+star-discrepancy of the training points.
 
-The \emph{input dimension} is $d_0 = s$, and the \emph{output dimension} is $d_L
-= m$. The number of layers $L$ determines the \emph{depth} of the network, while
-the dimensions $d_\ell$ determine its \emph{width}.
+This suggests that QMC sampling can lead to significantly smaller generalization
+gaps—especially when $f$ has bounded variation and the activation functions used
+in $\hat{f}_\theta$ are smooth.
 
-\begin{remark}[Uniform Layer Width]
-We assume all hidden layers have the same width, i.e., $d_1 = \dots = d_{L-1} =
-w$ for some fixed $w \in \mathbb{N}$. This simplifies notation and reflects
-common practice, while still capturing the theoretical approximation
-capabilities of deep networks.
-\end{remark}
+\section{Overview of Part~\ref{part2}} The remainder of this part is structured
+as follows:
+\begin{itemize}
+  \item \textbf{Chapter~\ref{chapter5}} introduces the mathematical foundations
+  of deep neural networks and their use in function approximation.
+  \item \textbf{Chapter~\ref{chapter6}} discusses the concepts of training and
+  generalization error, including classical and QMC-based bounds.
+  \item \textbf{Chapter~\ref{chapter7}} presents the theoretical analysis of
+  QMC-based training, including discrepancy, variation, and convergence
+  guarantees.
+  \item \textbf{Chapter~\ref{chapter8}} provides an empirical evaluation
+  comparing QMC and Monte Carlo training strategies across different benchmark
+  tasks.
+\end{itemize}
 
+The ultimate goal of this part is to demonstrate that quasi-random sampling
+provides a viable and theoretically grounded strategy to reduce the cost and
+improve the accuracy of deep neural network training in scientific computing.
 
-% --------------------------------
-\subsection{Mathematical Model of a DNN}
-\label{subsec:dnn-model}
-% --------------------------------
-
-Given its layer-wise structure, a  \ac{dnn} can be viewed as a highly expressive parametric function class. For a fixed architecture (depth and width), we denote the class of all representable functions as
-\begin{equation*}
-    \mathcal{F}_{\mathrm{DNN}} := \{ f_\theta : \mathbb{R}^s \to \mathbb{R}^m \mid \theta \in \Theta \},
-\end{equation*}
-where $\Theta \subset \mathbb{R}^P$ denotes the parameter space and the total number of trainable paramters in the network given by
-
-\begin{equation*}
-  P = \sum_{\ell=1}^L (d_\ell d_{\ell-1} + d_\ell) = L \cdot w \cdot (s + 1) + m \cdot (w + 1).
-\end{equation*}
-
-This formulation makes  \acp{dnn} suitable surrogate models for function approximation. Training then corresponds to selecting $\theta \in \Theta$ to minimize an appropriate loss functional, evaluated over a finite dataset.
-
-% --------------------------------
-\subsection{Expressivity and Universal Approximation}
-\label{subsec:universal-approx}
-% --------------------------------
-
-Deep neural networks are known to be universal approximators: under mild
-conditions on the activation function $\sigma$, any continuous function $f
-\colon [0,1]^s \to \mathbb{R}$ can be approximated arbitrarily well by a neural
-network of sufficient size. This is formalized in the Universal Approximation
-Theorem \cite[Theorem 2]{cybenko1989approximation}.
-
-While shallow networks (depth $L=2$) are theoretically sufficient for
-universality, deeper architectures are typically more efficient in practice.
-Recent results (e.g., \cite{telgarsky2016benefits, yarotsky2017error}) show that
-deep networks can represent certain function classes with exponentially fewer
-parameters than shallow ones, justifying their use in high-dimensional
-approximation tasks.
