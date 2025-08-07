@@ -8,9 +8,8 @@
 computing, particularly for high-dimensional and expensive-to-evaluate
 functions. This chapter introduces the mathematical structure and training
 procedure of \acp{dnn}, with a focus on activation functions, generalization
-theory and gradient-based optimization algorithms. The presentation follows the
-framework established in \cite{mishra2021enhancing} and is adapted to the
-context of surrogate modeling via supervised learning.
+theory and gradient-based optimization algorithms. It follows the framework
+established in \cite{mishra2021enhancing}.
 
 % ------------------------------------------------------------------------------
 \section{Theoretical Foundations of Deep Neural Networks}
@@ -41,13 +40,16 @@ we employ in the experimental evaluations presented in Chapter~\ref{chapter7}.
     \begin{equation*}
         \sigma(z) = \max\{0, z\}
     \end{equation*}
-    ReLU is piecewise linear and unbounded. It is computationally efficient and commonly used in deep architectures.
+    ReLU is piecewise linear and unbounded. It is computationally efficient and
+    commonly used in deep architectures.
     
     \item \textbf{Sigmoid}:
     \begin{equation*}
         \sigma(z) = \frac{1}{1 + e^{-z}}
     \end{equation*}
-    The sigmoid function maps real numbers to $(0,1)$ and is differentiable everywhere. It is often used in theoretical analysis and binary classification tasks.
+    The sigmoid function maps real numbers to $(0,1)$ and is differentiable
+    everywhere. It is often used in theoretical analysis and binary
+    classification tasks.
 \end{itemize}
 \end{example}
 
@@ -58,14 +60,15 @@ we employ in the experimental evaluations presented in Chapter~\ref{chapter7}.
   \label{fig:activation_functions}
 \end{figure}
 
-With an activation function in place, we now define the class of functions that a fully connected feedforward neural network can represent.
+With an activation function in place, we now define the class of functions that
+a fully connected feedforward neural network can represent.
 
 \begin{definition}[Class of Deep Neural Network Functions] \ \\
 Let $L \in \mathbb{N}$ and $\mathbf{d} = (d_0, d_1, \dots, d_L)$ be a sequence
-of positive integers, where $d_0 = s$ is the input dimension and $d_L = 1$ is
-the output dimension. A \acf{dnn} with \emph{depth} $L$ and \emph{layer widths}
-$d_1, \dots, d_{L-1}$ is a function $f_\theta: \mathbb{R}^s
-\to \mathbb{R}$ of the form
+of positive integers, where $d_0 = s$ is the input dimension and $d_L = 1$ the
+output dimension. A \acf{dnn} of \emph{depth} $L$ and \emph{layer widths} $d_1,
+\dots, d_{L-1}$ is a function $f_\theta: \mathbb{R}^s \to \mathbb{R}$ of the
+form
 \begin{equation*}
     f_\theta(y) = A_L \circ \sigma \circ A_{L-1} \circ \cdots \circ \sigma \circ A_1(y),
 \end{equation*}
@@ -78,59 +81,56 @@ with weights $W_l \in \mathbb{R}^{d_l \times d_{l-1}}$ and biases $b_l \in
 \mathbb{R}^{d_l}$. The activation function $\sigma: \mathbb{R} \to \mathbb{R}$
 is applied component-wise.
 
-The family of all such functions for a given architecture and activation
-$\sigma$ is denoted by $\mathcal{F}_{L, \mathbf{d}, \sigma}$.
+The collection of all trainable parameters is denoted by
+\begin{equation*}
+\theta = \{ (W_l, b_l) \}_{l=1}^L,
+\end{equation*}
+and fully determines the function $f_\theta$. The set of all such realizable
+functions for a given architecture and activation $\sigma$ is denoted by
+$\mathcal{F}_{L, \mathbf{d}, \sigma}$.
 
 \vspace{0.5em}
 \noindent The architectural parameters are interpreted as follows:
 \begin{itemize}
-    \item The \emph{depth} $L$ is the number of layers with trainable
-    parameters.
-    \item The \emph{width} $d_l$ refers to the number of neurons in the $l$-th
-    layer.
-    \item The \emph{layer structure} is defined by the tuple $\mathbf{d}$.
+    \item The \emph{depth} $L$ is the number of affine layers.
+    \item The \emph{width} $d_l$ specifies the number of neurons in layer $l$.
+    \item The \emph{layer structure} is encoded in the tuple $\mathbf{d}$.
 \end{itemize}
 \end{definition}
 
+
 In the course of this work, we assume that all hidden layers have the same
 number of neurons, i.e., the network has constant width $m$ for all layers $l =
-1, \dots, L-1$. In Figure~\ref{fig:dnn-architecture}, a fully connected \ac{dnn} with constant width is illustrated.
+1, \dots, L-1$. In Figure~\ref{fig:dnn-architecture}, a fully connected \ac{dnn}
+with constant width is illustrated.
 
 \begin{figure}[H]
 \centering
-\begin{tikzpicture}[scale=.7, align=center,
-  neuron/.style={circle, draw=black, minimum size=.8cm},
-  layer/.style={draw=none, minimum height=1.5cm},
-  every node/.style={font=\small}
-]
+\begin{tikzpicture}[scale=.7, align=center, neuron/.style={circle, draw=black,
+  minimum size=.8cm}, layer/.style={draw=none, minimum height=1.5cm}, every
+  node/.style={font=\small} ]
 
 
 % Layer labels
-\node at (-7.5,.5) {Input Layer\\ };
-\node at (-3.5,.5) {Hidden Layer\\ 1};
-\node at (0,.5) {Hidden Layer\\ 2};
-\node at (3.5,.5) {Hidden Layer\\ 3};
-\node at (7.5,.5) {Output Layer\\ };
+\node at (-7.5,.5) {Input Layer\\ }; \node at (-3.5,.5) {Hidden Layer\\ 1};
+\node at (0,.5) {Hidden Layer\\ 2}; \node at (3.5,.5) {Hidden Layer\\ 3}; \node
+at (7.5,.5) {Output Layer\\ };
 
 % Input layer
-\foreach \i in {1,2} {
-  \node[neuron, fill=green, fill opacity=0.9] (I\i) at (-7.5,-\i*1.5-1) {};
-}
+\foreach \i in {1,2} { \node[neuron, fill=green, fill opacity=0.9] (I\i) at
+  (-7.5,-\i*1.5-1) {}; }
 
 % Hidden layer 1
-\foreach \i in {1,2,3,4} {
-  \node[neuron, fill=blue, fill opacity=0.8] (H1\i) at (-3.5,-\i*1.5+0.5) {};
-}
+\foreach \i in {1,2,3,4} { \node[neuron, fill=blue, fill opacity=0.8] (H1\i) at
+  (-3.5,-\i*1.5+0.5) {}; }
 
 % Hidden layer 2
-\foreach \i in {1,2,3,4} {
-  \node[neuron, fill=blue, fill opacity=0.8] (H2\i) at (0,-\i*1.5+0.5) {};
-}
+\foreach \i in {1,2,3,4} { \node[neuron, fill=blue, fill opacity=0.8] (H2\i) at
+  (0,-\i*1.5+0.5) {}; }
 
 % Hidden layer 3
-\foreach \i in {1,2,3,4} {
-  \node[neuron, fill=blue, fill opacity=0.8] (H3\i) at (3.5,-\i*1.5+0.5) {};
-}
+\foreach \i in {1,2,3,4} { \node[neuron, fill=blue, fill opacity=0.8] (H3\i) at
+  (3.5,-\i*1.5+0.5) {}; }
 
 % Output layer
 
@@ -138,59 +138,52 @@ number of neurons, i.e., the network has constant width $m$ for all layers $l =
 
 
 % Connections input -> hidden 1
-\foreach \i in {1,2}
-  \foreach \j in {1,2,3,4}
-    \draw[-stealth] (I\i) -- (H1\j);
+\foreach \i in {1,2} \foreach \j in {1,2,3,4} \draw[-stealth] (I\i) -- (H1\j);
 
 % hidden 1 -> hidden 2
-\foreach \i in {1,2,3,4}
-  \foreach \j in {1,2,3,4}
-    \draw[-stealth] (H1\i) -- (H2\j);
+\foreach \i in {1,2,3,4} \foreach \j in {1,2,3,4} \draw[-stealth] (H1\i) --
+  (H2\j);
 
 % hidden 2 -> hidden 3
-\foreach \i in {1,2,3,4}
-  \foreach \j in {1,2,3,4}
-    \draw[-stealth] (H2\i) -- (H3\j);
+\foreach \i in {1,2,3,4} \foreach \j in {1,2,3,4} \draw[-stealth] (H2\i) --
+  (H3\j);
 
 % hidden 3 -> output
-\foreach \i in {1,2,3,4}
-  \draw[-stealth] (H3\i) -- (O1);
+\foreach \i in {1,2,3,4} \draw[-stealth] (H3\i) -- (O1);
 
 \end{tikzpicture}
-\caption{Schematic of a fully connected deep neural network with constant width $m=4$ and depth $L=3$ layers.}
+\caption{Schematic of a fully connected \aclp{dnn} with constant width $m=4$ and
+depth $L=3$ layers.}
 \label{fig:dnn-architecture}
 \end{figure}
 
 
 \begin{remark}
-    When $n_l$ denotes the number of neurons in layer $l$ ($n_0 = s$ and $n_L =
-    1$), the total number of trainable parameters (weights and biases) in the
-    network is given by
+    For the layer structure $d=(d_0,...,d_L)$, the total number of trainable
+    parameters (weights and biases) of $theta$ in the network is given by
+    \begin{equation*}
+        N_\theta = \sum_{l=1}^{L} (d_{l-1} \cdot d_l + d_l) = (L-2) \cdot m^2 + (L+s) \cdot m + 1.
+    \end{equation*}
+    
 \end{remark}
-
-
-\begin{equation*}
-    N_\theta = \sum_{l=1}^{L} (n_{l-1} \cdot n_l + n_l) = (L-2) \cdot m^2 + (L+s) \cdot m + 1.
-\end{equation*}
-
 
 % ------------------------------------------------------------------------------
 \section{Training and Generalization Error}
 \label{sec:dnn-error}
 % ------------------------------------------------------------------------------
 
-Supervised training of a DNN requires minimizing the discrepancy between the
-network output $f_\theta(y)$ and a ground truth map $L(y)$ on a given training
-set $\{y_i\}_{i=1}^N$.
+Supervised training of a \ac{dnn} requires minimizing the discrepancy between
+the network output $f_\theta(y)$ and a ground truth map $L(y)$ on a given
+training set $\{y_i\}_{i=1}^N$.
 
-\begin{definition}[Training Error]
+\begin{definition}[Training Error] \ \\
 The empirical risk or training error is defined by
  \begin{equation*}
 \mathcal{E}_\mathrm{T}(\theta) = \frac{1}{N} \sum_{i=1}^N |L(y_i) - f_\theta(y_i)|.
  \end{equation*}
 \end{definition}
 
-\begin{definition}[Generalization Error]
+\begin{definition}[Generalization Error] \ \\
 The generalization error (or population risk) is the expected error under the
 data distribution $\mu$:
  \begin{equation*}
@@ -198,24 +191,14 @@ data distribution $\mu$:
  \end{equation*}
 \end{definition}
 
-\begin{remark}
-In \cite{mishra1}, it is shown that for low-discrepancy training sets and
-bounded Hardy--Krause variation of $|L - f_\theta|$, the generalization gap can
-be bounded via the Koksma--Hlawka inequality:
- \begin{equation*}
-\left| \mathcal{E}_\mathrm{G} - \mathcal{E}_\mathrm{T} \right| \leq C \cdot \frac{(\log N)^d}{N},
- \end{equation*}
-illustrating the advantage of QMC-based training in the low-data regime.
-\end{remark}
-
 
 % ------------------------------------------------------------------------------
 \section{Optimization and Training Procedures}
 \label{sec:dnn-training}
 % ------------------------------------------------------------------------------
 
-Training a DNN corresponds to solving the following regularized minimization
-problem:
+Training a \ac{dnn} corresponds to solving the following regularized
+minimization problem:
 
 \begin{equation}
     \theta^* = \arg\min_{\theta \in \Theta} \left[ \mathcal{E}_\mathrm{T}(\theta) + \lambda \cdot R(\theta) \right],
@@ -225,13 +208,49 @@ problem:
 where $R(\theta)$ is a regularization term (e.g., $\ell^2$ weight penalty) and
 $\lambda > 0$ controls its strength.
 
-\begin{figure}[H]
-    \centering
-    \fbox{\parbox{0.9\textwidth}{\centering \textit{Placeholder: Diagram showing
-    the DNN training pipeline}}}
-    \caption{Overview of the neural network training procedure.}
-    \label{fig:training-pipeline}
+% hier kommt schema
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[
+    node distance=1.8cm and 3.2cm,
+    every node/.style={font=\small},
+    process/.style={rectangle, draw, thick, align=center, minimum width=4.6cm, minimum height=1.1cm, fill=gray!10},
+    io/.style={rectangle, draw, thick, align=center, minimum width=4.6cm, minimum height=1.1cm, fill=blue!10},
+    decision/.style={diamond, draw, thick, aspect=2, align=center, inner sep=0pt, minimum width=3.5cm, fill=orange!15},
+    result/.style={rectangle, draw, thick, align=center, minimum width=4.6cm, minimum height=1.1cm, fill=green!15},
+    arrow/.style={->, thick},
+]
+
+% Nodes
+\node[io] (input) {Input: Map $L$ and\\ low-discrepancy sequence $(y_n)_{n=1}^N$};
+\node[process, below=of input] (step1) {Step 1:\\ Evaluate $L(y_n)$ for all $y_n \in S \subset Y$};
+\node[process, below=of step1] (step2) {Step 2:\\ Initialize NN $L_\theta$,\\ compute loss and gradients};
+\node[process, below=of step2] (step3) {Step 3:\\ Run SGD to minimize loss};
+\node[result, below=of step3] (output) {Output: Trained NN $L^* = L_{\theta^*}$ approximates $L$};
+
+% Arrows
+\draw[arrow] (input) -- (step1);
+\draw[arrow] (step1) -- (step2);
+\draw[arrow] (step2) -- (step3);
+\draw[arrow] (step3) -- (output);
+
+% Optional annotation on side
+\node[align=left, font=\footnotesize, right=3.8cm of step1, text width=4.6cm] (note1) {
+    \textbf{Note:}\\
+    $S = \{y_n\}$ is chosen\\
+    as a low-discrepancy sequence.
+};
+
+\node[align=left, font=\footnotesize, right=3.8cm of step2, text width=4.6cm] (note2) {
+    \textbf{SGD Initialization:}\\
+    Use $\nabla_\theta \mathcal{L}(L_\theta(y_n), L(y_n))$.
+};
+
+\end{tikzpicture}
+\caption{Workflow of Algorithm 2.2: Deep learning of parameters-to-observable map using low-discrepancy sampling and SGD-based training.}
+\label{fig:algo22_dnn_training}
 \end{figure}
+
 
 \subsection{Stochastic Gradient Descent (SGD)}
 

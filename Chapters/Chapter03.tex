@@ -8,7 +8,10 @@
 In \acf{qmc} theory, the variation of a function plays a key role in bounding
 the integration error. While the total variation is sufficient for univariate
 functions, higher dimensions necessitate more refined notions. In this section,
-we follow the definitions of \cite{owen2005multidimensional} and introduce two such notions: the Vitali variation and the variation in the sense of Hardy--Krause. These concepts are crucial for understanding the convergence guarantees provided by the Koksma--Hlawka inequality.
+we follow the definitions of \cite{owen2005multidimensional} and introduce two
+such notions: the Vitali variation and the variation in the sense of
+Hardy--Krause. These concepts are crucial for understanding the convergence
+guarantees provided by the Koksma--Hlawka inequality.
 
 % ------------------------------------------------------------------------------
 \subsection{Mixed Component Selection and Alternating Sums}
@@ -19,7 +22,8 @@ notational conventions.
 
 \begin{definition}[Mixed Component Selection] \ \\
     \label{def:component_merge}
-    Let $\boldsymbol{a}, \boldsymbol{b} \in \mathbb{R}^s$ and let $u \subseteq \{1, \dots, s\}$ be an index set. We define
+    Let $\boldsymbol{a}, \boldsymbol{b} \in \mathbb{R}^s$ and let $u \subseteq
+    \{1, \dots, s\}$ be an index set. We define
     \begin{equation*}
         \boldsymbol{c} := \boldsymbol{a}^u : \boldsymbol{b}^{-u}
         \quad \text{with} \quad
@@ -31,7 +35,8 @@ notational conventions.
     \end{equation*}
 \end{definition}
 
-Here, the term $-u$ denotes the complement of $u$ in $\{1, \dots, s\}$. Using this notation, the \emph{alternating sum} is defined as follows:
+Here, the term $-u$ denotes the complement of $u$ in $\{1, \dots, s\}$. Using
+this notation, the \emph{alternating sum} is defined as follows:
 
 \begin{definition}[Alternating Sum] \ \\
     The \emph{alternating sum} on $s$ dimensions with respect to a function on
@@ -46,32 +51,39 @@ Here, the term $-u$ denotes the complement of $u$ in $\{1, \dots, s\}$. Using th
 \label{sec:vitali-variation}
 % ------------------------------------------------------------------------------
 
-A classical approach to quantify function variation on hyperrectangles is based on the concept of \emph{ladders}:
+A classical approach to quantify function variation on hyperrectangles is based
+on the concept of \emph{ladders}:
 
 \begin{definition}[Ladder] \ \\
-    A \emph{ladder} on the hyperrectangle $[a,b]$ is a set of points $\mathcal{Y} =
-    \{y_1, \dots, y_k\} \subset [a,b]$ such that for each $i < j$, the point
-    $y_i$ is less than or equal to $y_j$ in every coordinate. Formally, this
-    means that for all $i < j$ and for all $l \in \{1, \dots, s\}$, we have
-    $y_i^l \leq y_j^l$.
+    A \emph{ladder} on the hyperrectangle $[a,b]$ is a set of points
+    $\mathcal{Y} = \{y_1, \dots, y_k\} \subset [a,b]$ such that for each $i <
+    j$, the point $y_i$ is less than or equal to $y_j$ in every coordinate.
+    Formally, this means that for all $i < j$ and for all $l \in \{1, \dots,
+    s\}$, we have $y_i^l \leq y_j^l$.
 \end{definition}
 
-Let $\mathbb{Y}$ denote the set of all such ladders on $[a,b]$. The \emph{variation with respect to a ladder} is then defined as:
+Let $\mathbb{Y}$ denote the set of all such ladders on $[a,b]$. The
+\emph{variation with respect to a ladder} is then defined as:
 
 \begin{definition}[Variation with respect to a ladder] \ \\
-    Let $\mathcal{Y} = \prod_{j=1}^s \mathcal{Y}^j$ be a ladder on $[a,b]$. Then the \emph{variation} of a function $f$ with respect to $\mathcal{Y}$ is
+    Let $\mathcal{Y} = \prod\limits_{j=1}^s \mathcal{Y}^j$ be a ladder on
+    $[a,b]$. Then the \emph{variation} of a function $f$ with respect to
+    $\mathcal{Y}$ is
     \begin{equation*}
         V_\mathcal{Y}(f) = \sum_{y \in \mathcal{Y}} \big| \Delta(f; y, y_+) \big|,
     \end{equation*}
-    where $y_+$ is the point obtained by taking the componentwise successor $y^j_+$ in each dimension $j$.
+    where $y_+$ is the point obtained by taking the componentwise successor
+    $y^j_+$ in each dimension $j$.
 \end{definition}
 
-The \emph{Vitali variation} of a function is then the supremum of this ladder-based variation:
+The \emph{Vitali variation} of a function is then the supremum of this
+ladder-based variation:
 
 \begin{definition}[Vitali Variation] \ \\
-    The \emph{Vitali variation} of a function $f$ on the hyperrectangle $[a,b]$ is defined as
+    The \emph{Vitali variation} of a function $f$ on the hyperrectangle $[a,b]$
+    is defined as
     \begin{equation*}
-        V(f) = V(f; a, b) = \sup_{\mathcal{Y} \in \mathbb{Y}} V_\mathcal{Y}(f).
+        V_{[a,b]}(f) = \sup_{\mathcal{Y} \in \mathbb{Y}} V_\mathcal{Y}(f).
     \end{equation*}
 \end{definition}
 
@@ -92,15 +104,19 @@ defined as:
     The \emph{Hardy--Krause variation} of a function $f$ on the hyperrectangle
     $[a,b]$ is defined as
     \begin{equation*}
-        V_{\mathrm{HK}}(f) = V_{\mathrm{HK}}(f; a, b) = \sup_{\mathcal{Y} \in \mathbb{Y}} V_\mathcal{Y}(f),
+        V_{\mathrm{HK}}(f) = \sum_{v\subset \{1,\dots,s\}} V_{[a^{-u},b^{-u}]}\big(f(x^{-u};b^u)\big).
     \end{equation*}
-    where $\mathbb{Y}$ denotes the set of all ladders in $[a,b]$. This definition coincides with the Vitali variation but is typically used when $[a,b] = [0,1]^s$.
+    This definition coincides with the Vitali variation but is typically used
+    when $[a,b] = [0,1]^s$.
 \end{definition}
 
-Note that the Hardy--Krause variation reduces to the total variation in the univariate case. Importantly, $V_{\mathrm{HK}}(f) < \infty$ implies that $f$ has bounded variation in all axis-aligned directions and projections.
+Note that the Hardy--Krause variation reduces to the total variation in the
+univariate case. Importantly, $V_{\mathrm{HK}}(f) < \infty$ implies that $f$ has
+bounded variation in all axis-aligned directions and projections.
 
 \begin{remark}
-The Hardy--Krause variation is a seminorm, vanishing for constant functions. It becomes a norm if the full-dimensional term is included explicitly.
+The Hardy--Krause variation is a seminorm, vanishing for constant functions. It
+becomes a norm if the full-dimensional term is included explicitly.
 \end{remark}
 
 % ------------------------------------------------------------------------------
@@ -108,23 +124,29 @@ The Hardy--Krause variation is a seminorm, vanishing for constant functions. It 
 \label{sec:hk-examples}
 % ------------------------------------------------------------------------------
 
-While direct evaluation of the Hardy--Krause variation is intractable in general, upper bounds can be derived for smooth functions using mixed partial derivatives. For instance, for continuously differentiable functions, one can write:
+While direct evaluation of the Hardy--Krause variation is intractable in
+general, upper bounds can be derived for smooth functions using mixed partial
+derivatives. For instance, for continuously differentiable functions, one can
+write:
 
 \begin{equation*}
     V_{\mathrm{HK}}(f) \leq \int_{[0,1]^d} \left| \frac{\partial^d f}{\partial x_1 \cdots \partial x_d}(x) \right| dx + \sum_{i=1}^d V_{\mathrm{HK}}(f|_{x_i = 1}),
 \end{equation*}
-where the right-hand side can be evaluated recursively and becomes exact if the mixed derivative is integrable and all lower-dimensional restrictions are sufficiently smooth.
+where the right-hand side can be evaluated recursively and becomes exact if the
+mixed derivative is integrable and all lower-dimensional restrictions are
+sufficiently smooth.
 
 \begin{example}
-Let $f(x) = \prod_{i=1}^d x_i$, the $d$-dimensional monomial. Then $f$ is smooth with bounded mixed derivatives and its Hardy--Krause variation is finite.
+Let $f(x) = \prod_{i=1}^d x_i$, the $d$-dimensional monomial. Then $f$ is smooth
+with bounded mixed derivatives and its Hardy--Krause variation is finite.
 \end{example}
 
 \begin{example}
 Consider $f_{d,r}(x) = \left( \max\left\{ \sum_{i=1}^d x_i - \frac{1}{2}, 0
 \right\} \right)^r$. For $d > r + 2$, this function has infinite Vitali and
 hence infinite Hardy--Krause variation. Such examples underline the limitations
-of \ac{qmc} for functions with low smoothness or sharp nonlinearity
-\cite[Prop. 16]{owen2005multidimensional}.
+of \ac{qmc} for functions with low smoothness or sharp nonlinearity \cite[Prop.
+16]{owen2005multidimensional}.
 \end{example}
 
 These examples illustrate the importance of regularity assumptions in applying
@@ -137,43 +159,66 @@ bounds.
 \section{The Koksma--Hlawka Inequality}
 % ------------------------------------------------------------------------------
 
-The Koksma--Hlawka inequality is a central result in \acl{qmc} theory. It provides a deterministic error bound for numerical integration that combines two distinct concepts: the discrepancy of the point set and the variation of the integrand. This inequality formalizes the intuition that more uniformly distributed sample points lead to smaller integration errors—provided the integrand is regular enough.
+The Koksma--Hlawka inequality is a central result in \acl{qmc} theory. It
+provides a deterministic error bound for numerical integration that combines two
+distinct concepts: the discrepancy of the point set and the variation of the
+integrand. This inequality formalizes the intuition that more uniformly
+distributed sample points lead to smaller integration errors—provided the
+integrand is regular enough.
 
 % ------------------------------------------------------------------------------
 \subsection{Formal Theorem and Preconditions}
 % ------------------------------------------------------------------------------
 
-The inequality relates the QMC integration error to the star discrepancy of the point set and the Hardy--Krause variation of the integrand.
+The inequality relates the QMC integration error to the star discrepancy of the
+point set and the Hardy--Krause variation of the integrand.
 
 \begin{theorem}[Koksma--Hlawka Inequality]
 \label{thm:koksma-hlawka}
-Let $f \colon [0,1]^s \to \mathbb{R}$ be a function of bounded variation in the sense of Hardy--Krause and let $P = \{x_1, \dots, x_N\} \subset [0,1]^s$ be a finite point set. Then the integration error satisfies
+Let $f \colon [0,1]^s \to \mathbb{R}$ be a function of bounded variation in the
+sense of Hardy--Krause and let $P = \{x_1, \dots, x_N\} \subset [0,1]^s$ be a
+finite point set. Then the integration error satisfies
 \begin{equation}
     \left| \frac{1}{N} \sum_{n=1}^N f(x_n) - \int_{[0,1]^s} f(x) \, dx \right|
     \leq D_N^{*}(P) \cdot V_{\mathrm{HK}}(f),
 \end{equation}
-where $D_N^{*}(P)$ denotes the star discrepancy of the point set $P$ and $V_{\mathrm{HK}}(f)$ is the Hardy--Krause variation of $f$.
+where $D_N^{*}(P)$ denotes the star discrepancy of the point set $P$ and
+$V_{\mathrm{HK}}(f)$ is the Hardy--Krause variation of $f$.
 \end{theorem}
 
 \begin{remark}
-This bound is deterministic and non-asymptotic. It applies to any dimension $s$ and makes no probabilistic assumptions on the sampling procedure. However, it requires $f$ to have bounded variation in the Hardy--Krause sense, which excludes some classes of discontinuous or highly irregular functions.
+This bound is deterministic and non-asymptotic. It applies to any dimension $s$
+and makes no probabilistic assumptions on the sampling procedure. However, it
+requires $f$ to have bounded variation in the Hardy--Krause sense, which
+excludes some classes of discontinuous or highly irregular functions.
 \end{remark}
 
 % ------------------------------------------------------------------------------
 \subsection{Role of Discrepancy and Function Variation}
 % ------------------------------------------------------------------------------
 
-The two factors on the right-hand side of the inequality—discrepancy and variation—capture complementary aspects of integration error.
+The two factors on the right-hand side of the inequality—discrepancy and
+variation—capture complementary aspects of integration error.
 
 \begin{itemize}
-    \item The \textbf{star discrepancy} $D_N^*(P)$ measures how uniformly the point set $P$ samples the unit cube. It is determined entirely by the geometry of the sample points and vanishes if the empirical distribution matches the uniform distribution.
-    \item The \textbf{Hardy--Krause variation} $V_{\mathrm{HK}}(f)$ reflects the total directional variation of the integrand $f$ along all coordinate axes and lower-dimensional projections. It penalizes irregularity and ensures that the integrand behaves well under uniform sampling.
+    \item The \textbf{star discrepancy} $D_N^*(P)$ measures how uniformly the
+    point set $P$ samples the unit cube. It is determined entirely by the
+    geometry of the sample points and vanishes if the empirical distribution
+    matches the uniform distribution.
+    \item The \textbf{Hardy--Krause variation} $V_{\mathrm{HK}}(f)$ reflects the
+    total directional variation of the integrand $f$ along all coordinate axes
+    and lower-dimensional projections. It penalizes irregularity and ensures
+    that the integrand behaves well under uniform sampling.
 \end{itemize}
 
-Both quantities are required: even a low-discrepancy point set cannot guarantee small error if the function has unbounded variation. Conversely, even a smooth function may incur large error if the points cluster poorly.
+Both quantities are required: even a low-discrepancy point set cannot guarantee
+small error if the function has unbounded variation. Conversely, even a smooth
+function may incur large error if the points cluster poorly.
 
 \begin{remark}
-The Koksma--Hlawka inequality can be seen as a product-type estimate: each component controls a different source of error and their product bounds the total integration error.
+The Koksma--Hlawka inequality can be seen as a product-type estimate: each
+component controls a different source of error and their product bounds the
+total integration error.
 \end{remark}
 
 
@@ -181,22 +226,32 @@ The Koksma--Hlawka inequality can be seen as a product-type estimate: each compo
 \subsection{Interpretation: Bounding the Integration Error}
 % ------------------------------------------------------------------------------
 
-The Koksma--Hlawka inequality provides valuable insight into the behavior of \acl{qmc} estimators:
+The Koksma--Hlawka inequality provides valuable insight into the behavior of
+\acl{qmc} estimators:
 
 \begin{itemize}
-    \item It motivates the use of low-discrepancy sequences such as Halton or Sobol', which minimize $D_N^*(P)$.
-    \item It emphasizes the importance of function regularity—only functions with bounded Hardy--Krause variation are eligible for the bound.
-    \item It establishes a worst-case, deterministic error guarantee, unlike the probabilistic bounds of Monte Carlo integration.
+    \item It motivates the use of low-discrepancy sequences such as Halton or
+    Sobol', which minimize $D_N^*(P)$.
+    \item It emphasizes the importance of function regularity—only functions
+    with bounded Hardy--Krause variation are eligible for the bound.
+    \item It establishes a worst-case, deterministic error guarantee, unlike the
+    probabilistic bounds of Monte Carlo integration.
 \end{itemize}
 
-In practical terms, the inequality implies that for sufficiently smooth integrands and carefully constructed point sets, \ac{qmc} methods can achieve integration errors of order
+In practical terms, the inequality implies that for sufficiently smooth
+integrands and carefully constructed point sets, \ac{qmc} methods can achieve
+integration errors of order
 \[
 \mathcal{O}\left( \frac{(\log N)^s}{N} \right),
 \]
-which significantly improves over the $\mathcal{O}(N^{-1/2})$ rate of standard Monte Carlo methods. This improvement, however, comes at the cost of stronger assumptions and increased sensitivity to dimensionality.
+which significantly improves over the $\mathcal{O}(N^{-1/2})$ rate of standard
+Monte Carlo methods. This improvement, however, comes at the cost of stronger
+assumptions and increased sensitivity to dimensionality.
 
 \begin{remark}
-The deterministic nature of the bound makes it attractive in settings where reliability and reproducibility are crucial—such as scientific simulations or safety-critical computations.
+The deterministic nature of the bound makes it attractive in settings where
+reliability and reproducibility are crucial—such as scientific simulations or
+safety-critical computations.
 \end{remark}
 
 \qquad
@@ -220,7 +275,8 @@ medical imaging.
 
 
 % % ------------------------------------------------------------------------------
-%   \subsection{Comparison to Monte Carlo: $O(N^{-1/2})$ vs. $O\left(\frac{(\log N)^s}{N}\right)$}
+%   \subsection{Comparison to Monte Carlo: $O(N^{-1/2})$ vs. $O\left(\frac{(\log
+%   N)^s}{N}\right)$}
 % % ------------------------------------------------------------------------------
 
 

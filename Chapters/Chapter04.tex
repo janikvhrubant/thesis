@@ -58,11 +58,11 @@ approximate any continuous function on compact sets arbitrarily well
 \cite{cybenko1989approximation}.
 
 \section{Limitations of Random Sampling in Neural Network Training}
-Typically, training data is generated using \acl{mc} sampling, where points $x_i$ are drawn independently and identically distributed (i.i.d.) according to a probability measure $\mu$ on $[0,1]^s$. Under this approach, statistical learning theory provides an estimate for the expected generalization error $\mathbb{E}[E_G]$ as follows:
+Typically, training data is generated using \acl{mc} sampling, where points $x_i$ are drawn independently and identically distributed (i.i.d.) according to a probability measure $\mu$ on $[0,1]^s$. Under this approach, statistical learning theory provides an estimate for the expected generalization error $\mathbb{E}[\mathcal{E}_G]$ as follows:
 \begin{equation*}
-\mathbb{E}[E_G] \leq E_T + \mathcal{O}\left(\frac{1}{\sqrt{N}}\right),
+\mathbb{E}[\mathcal{E}_G] \leq \mathcal{E}_T + \mathcal{O}\left(\frac{1}{\sqrt{N}}\right),
 \end{equation*}
-where $E_T$ is the empirical training error. However, as argued
+where $\mathcal{E}_T$ is the empirical training error. However, as argued
 in~\cite{mishra2021enhancing}, this rate is unsatisfactory in many-query
 problems because:
 \begin{itemize}
@@ -76,7 +76,7 @@ problems because:
 Low-discrepancy sequences (Sobol', Halton, etc.) provide a way to sample the
 domain $[0,1]^s$ more uniformly than random sampling. In \acl{qmc} theory, the Koksma-Hlawka inequality (Theorem~\ref{thm:koksma-hlawka}) gives an error bound of the form
 \begin{equation*}
-|E_G - E_T| \leq V_{\mathrm{HK}}(|f - \hat{f}_\theta|) \cdot D^*_N \leq  V_{\mathrm{HK}}(|f - \hat{f}_\theta|) \cdot C \frac{(\log N)^s}{N},
+|\mathcal{E}_G - \mathcal{E}_T| \leq V_{\mathrm{HK}}(|f - \hat{f}_\theta|) \cdot D^*_N \leq  V_{\mathrm{HK}}(|f - \hat{f}_\theta|) \cdot C \cdot \frac{(\log N)^s}{N},
 \end{equation*}
 where $V_{\mathrm{HK}}$ denotes the Hardy--Krause variation and $D^*_N$ is the
 star-discrepancy of the training points.
@@ -84,23 +84,4 @@ star-discrepancy of the training points.
 This suggests that \ac{qmc} sampling can lead to significantly smaller generalization
 gaps -- especially when $f$ has bounded variation and the activation functions used
 in $\hat{f}_\theta$ are smooth.
-
-\section{Overview of Part~\ref{part2}} The remainder of this part is structured
-as follows:
-\begin{itemize}
-  \item \textbf{Chapter~\ref{chapter5}} introduces the mathematical foundations
-  of deep neural networks and their use in function approximation.
-  \item \textbf{Chapter~\ref{chapter6}} discusses the concepts of training and
-  generalization error, including classical and QMC-based bounds.
-  \item \textbf{Chapter~\ref{chapter7}} presents the theoretical analysis of
-  QMC-based training, including discrepancy, variation, and convergence
-  guarantees.
-  \item \textbf{Chapter~\ref{chapter8}} provides an empirical evaluation
-  comparing QMC and Monte Carlo training strategies across different benchmark
-  tasks.
-\end{itemize}
-
-The ultimate goal of this part is to demonstrate that quasi-random sampling
-provides a viable and theoretically grounded strategy to reduce the cost and
-improve the accuracy of deep neural network training in scientific computing.
 
