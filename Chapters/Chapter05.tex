@@ -10,6 +10,13 @@
     \item Validity conditions and smoothness assumptions
 \end{itemize}
 
+\begin{align*}
+    V_{\mathrm{HK}}(f) = V_{\mathrm{HK}}(f; a, b) &= \sum_{u\subset \{1,\dots,s\}} V_{[a^{-u}, b^{-u}]} f(x^{-u}:b^u) \\
+    &= \sum_{u\subset \{1,\dots,s\}} \sup_{\mathcal{Y} \in \mathbb{Y}} V_\mathcal{Y} \big( f(x^{-u} : b^u) \big) \\
+    &= \sum_{u\subset \{1,\dots,s\}} \sup_{\mathcal{Y} \in \mathbb{Y}} \sum_{y\in\mathcal{Y}} \big| \Delta\big( f(x^{-u} : b^u);, y, y_+ \big) \big| \\
+    &= \sum_{u\subset \{1,\dots,s\}} \sup_{\mathcal{Y} \in \mathbb{Y}} \sum_{y\in\mathcal{Y}} \big| \sum_{v\subseteq \{1,\dots,s\}} (-1)^{|v|} f((y:y_+)^v:b^{-v}) \big| \\
+\end{align*}
+
 % % Chapter Template
 
 % \chapter{Neural Network Training for Stochastic Functions} % Main chapter title
