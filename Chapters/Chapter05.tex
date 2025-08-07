@@ -1,4 +1,308 @@
 %!TEX root = ../main.tex
+% ------------------------------------------------------------------------------
+\chapter{Theoretical Foundations of Deep Neural Networks}
+\label{chapter:dnn-theory}
+% ------------------------------------------------------------------------------
+
+\acfp{dnn} have become a powerful class of surrogate models in scientific
+computing, particularly for high-dimensional and expensive-to-evaluate
+functions. This chapter introduces the mathematical structure and training
+procedure of \acp{dnn}, with a focus on activation functions, generalization
+theory and gradient-based optimization algorithms. The presentation follows the
+framework established in \cite{mishra2021enhancing} and is adapted to the
+context of surrogate modeling via supervised learning.
+
+% ------------------------------------------------------------------------------
+\section{Theoretical Foundations of Deep Neural Networks}
+\label{sec:dnn-definition}
+% ------------------------------------------------------------------------------
+
+The key feature enabling neural networks to approximate nonlinear functions is
+the application of scalar activation functions. We begin by introducing these
+components before defining the class of functions represented by \aclp{dnn}.
+
+\begin{definition}[Activation Function] \ \\
+An \emph{activation function} is a measurable function $\sigma : \mathbb{R} \to
+\mathbb{R}$, typically nonlinear, that is applied componentwise to the output of
+each layer in a neural network. For a vector $z = (z_1, \dots, z_k)^\top \in
+\mathbb{R}^k$, the activation is defined as
+\begin{equation*}
+    \sigma(z) := (\sigma(z_1), \dots, \sigma(z_k))^\top.
+\end{equation*}
+\end{definition}
+
+\begin{example}[Common Activation Functions] \ \\
+Two widely used activation functions are illustrated in
+Figure~\ref{fig:activation_functions}. These are also the activation functions
+we employ in the experimental evaluations presented in Chapter~\ref{chapter7}.
+
+\begin{itemize}
+    \item \textbf{ReLU (Rectified Linear Unit)}:
+    \begin{equation*}
+        \sigma(z) = \max\{0, z\}
+    \end{equation*}
+    ReLU is piecewise linear and unbounded. It is computationally efficient and commonly used in deep architectures.
+    
+    \item \textbf{Sigmoid}:
+    \begin{equation*}
+        \sigma(z) = \frac{1}{1 + e^{-z}}
+    \end{equation*}
+    The sigmoid function maps real numbers to $(0,1)$ and is differentiable everywhere. It is often used in theoretical analysis and binary classification tasks.
+\end{itemize}
+\end{example}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.95\textwidth]{Figures/activations_functions.png}
+  \caption{Comparison of ReLU and Sigmoid activation functions.}
+  \label{fig:activation_functions}
+\end{figure}
+
+With an activation function in place, we now define the class of functions that a fully connected feedforward neural network can represent.
+
+\begin{definition}[Class of Deep Neural Network Functions] \ \\
+Let $L \in \mathbb{N}$ and $\mathbf{d} = (d_0, d_1, \dots, d_L)$ be a sequence
+of positive integers, where $d_0 = s$ is the input dimension and $d_L = 1$ is
+the output dimension. A \acf{dnn} with \emph{depth} $L$ and \emph{layer widths}
+$d_1, \dots, d_{L-1}$ is a function $f_\theta: \mathbb{R}^s
+\to \mathbb{R}$ of the form
+\begin{equation*}
+    f_\theta(y) = A_L \circ \sigma \circ A_{L-1} \circ \cdots \circ \sigma \circ A_1(y),
+\end{equation*}
+where each \emph{layer map} $A_l: \mathbb{R}^{d_{l-1}} \to \mathbb{R}^{d_l}$ is
+an affine transformation
+\begin{equation*}
+    A_l(z) = W_l z + b_l,
+\end{equation*}
+with weights $W_l \in \mathbb{R}^{d_l \times d_{l-1}}$ and biases $b_l \in
+\mathbb{R}^{d_l}$. The activation function $\sigma: \mathbb{R} \to \mathbb{R}$
+is applied component-wise.
+
+The family of all such functions for a given architecture and activation
+$\sigma$ is denoted by $\mathcal{F}_{L, \mathbf{d}, \sigma}$.
+
+\vspace{0.5em}
+\noindent The architectural parameters are interpreted as follows:
+\begin{itemize}
+    \item The \emph{depth} $L$ is the number of layers with trainable
+    parameters.
+    \item The \emph{width} $d_l$ refers to the number of neurons in the $l$-th
+    layer.
+    \item The \emph{layer structure} is defined by the tuple $\mathbf{d}$.
+\end{itemize}
+\end{definition}
+
+In the course of this work, we assume that all hidden layers have the same
+number of neurons, i.e., the network has constant width $m$ for all layers $l =
+1, \dots, L-1$. In Figure~\ref{fig:dnn-architecture}, a fully connected \ac{dnn} with constant width is illustrated.
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[scale=.7, align=center,
+  neuron/.style={circle, draw=black, minimum size=.8cm},
+  layer/.style={draw=none, minimum height=1.5cm},
+  every node/.style={font=\small}
+]
+
+
+% Layer labels
+\node at (-7.5,.5) {Input Layer\\ };
+\node at (-3.5,.5) {Hidden Layer\\ 1};
+\node at (0,.5) {Hidden Layer\\ 2};
+\node at (3.5,.5) {Hidden Layer\\ 3};
+\node at (7.5,.5) {Output Layer\\ };
+
+% Input layer
+\foreach \i in {1,2} {
+  \node[neuron, fill=green, fill opacity=0.9] (I\i) at (-7.5,-\i*1.5-1) {};
+}
+
+% Hidden layer 1
+\foreach \i in {1,2,3,4} {
+  \node[neuron, fill=blue, fill opacity=0.8] (H1\i) at (-3.5,-\i*1.5+0.5) {};
+}
+
+% Hidden layer 2
+\foreach \i in {1,2,3,4} {
+  \node[neuron, fill=blue, fill opacity=0.8] (H2\i) at (0,-\i*1.5+0.5) {};
+}
+
+% Hidden layer 3
+\foreach \i in {1,2,3,4} {
+  \node[neuron, fill=blue, fill opacity=0.8] (H3\i) at (3.5,-\i*1.5+0.5) {};
+}
+
+% Output layer
+
+\node[neuron, fill=orange, fill opacity=0.9] (O1) at (7.5,-3.25) {};
+
+
+% Connections input -> hidden 1
+\foreach \i in {1,2}
+  \foreach \j in {1,2,3,4}
+    \draw[-stealth] (I\i) -- (H1\j);
+
+% hidden 1 -> hidden 2
+\foreach \i in {1,2,3,4}
+  \foreach \j in {1,2,3,4}
+    \draw[-stealth] (H1\i) -- (H2\j);
+
+% hidden 2 -> hidden 3
+\foreach \i in {1,2,3,4}
+  \foreach \j in {1,2,3,4}
+    \draw[-stealth] (H2\i) -- (H3\j);
+
+% hidden 3 -> output
+\foreach \i in {1,2,3,4}
+  \draw[-stealth] (H3\i) -- (O1);
+
+\end{tikzpicture}
+\caption{Schematic of a fully connected deep neural network with constant width $m=4$ and depth $L=3$ layers.}
+\label{fig:dnn-architecture}
+\end{figure}
+
+
+\begin{remark}
+    When $n_l$ denotes the number of neurons in layer $l$ ($n_0 = s$ and $n_L =
+    1$), the total number of trainable parameters (weights and biases) in the
+    network is given by
+\end{remark}
+
+
+\begin{equation*}
+    N_\theta = \sum_{l=1}^{L} (n_{l-1} \cdot n_l + n_l) = (L-2) \cdot m^2 + (L+s) \cdot m + 1.
+\end{equation*}
+
+
+% ------------------------------------------------------------------------------
+\section{Training and Generalization Error}
+\label{sec:dnn-error}
+% ------------------------------------------------------------------------------
+
+Supervised training of a DNN requires minimizing the discrepancy between the
+network output $f_\theta(y)$ and a ground truth map $L(y)$ on a given training
+set $\{y_i\}_{i=1}^N$.
+
+\begin{definition}[Training Error]
+The empirical risk or training error is defined by
+ \begin{equation*}
+\mathcal{E}_\mathrm{T}(\theta) = \frac{1}{N} \sum_{i=1}^N |L(y_i) - f_\theta(y_i)|.
+ \end{equation*}
+\end{definition}
+
+\begin{definition}[Generalization Error]
+The generalization error (or population risk) is the expected error under the
+data distribution $\mu$:
+ \begin{equation*}
+\mathcal{E}_\mathrm{G}(\theta) = \int_{\mathcal{Y}} |L(y) - f_\theta(y)| \, \mathrm{d}\mu(y).
+ \end{equation*}
+\end{definition}
+
+\begin{remark}
+In \cite{mishra1}, it is shown that for low-discrepancy training sets and
+bounded Hardy--Krause variation of $|L - f_\theta|$, the generalization gap can
+be bounded via the Koksma--Hlawka inequality:
+ \begin{equation*}
+\left| \mathcal{E}_\mathrm{G} - \mathcal{E}_\mathrm{T} \right| \leq C \cdot \frac{(\log N)^d}{N},
+ \end{equation*}
+illustrating the advantage of QMC-based training in the low-data regime.
+\end{remark}
+
+
+% ------------------------------------------------------------------------------
+\section{Optimization and Training Procedures}
+\label{sec:dnn-training}
+% ------------------------------------------------------------------------------
+
+Training a DNN corresponds to solving the following regularized minimization
+problem:
+
+\begin{equation}
+    \theta^* = \arg\min_{\theta \in \Theta} \left[ \mathcal{E}_\mathrm{T}(\theta) + \lambda \cdot R(\theta) \right],
+    \label{eq:regularized-objective}
+\end{equation}
+
+where $R(\theta)$ is a regularization term (e.g., $\ell^2$ weight penalty) and
+$\lambda > 0$ controls its strength.
+
+\begin{figure}[H]
+    \centering
+    \fbox{\parbox{0.9\textwidth}{\centering \textit{Placeholder: Diagram showing
+    the DNN training pipeline}}}
+    \caption{Overview of the neural network training procedure.}
+    \label{fig:training-pipeline}
+\end{figure}
+
+\subsection{Stochastic Gradient Descent (SGD)}
+
+In practice, \eqref{eq:regularized-objective} is minimized via stochastic
+gradient descent:
+
+ \begin{equation*}
+\theta_{t+1} = \theta_t - \eta \cdot \nabla_\theta \mathcal{E}_\mathrm{T}^{(B)}(\theta_t),
+ \end{equation*}
+
+where $\eta$ is the learning rate and $\mathcal{E}_\mathrm{T}^{(B)}$ is the
+mini-batch loss.
+
+\subsection{Adam Optimizer}
+
+The Adam algorithm improves on SGD by incorporating adaptive learning rates and
+momentum:
+
+\begin{algorithm}[H]
+\caption{Adam Optimizer (simplified)}
+\begin{algorithmic}[1]
+\State Initialize $\theta_0$, $m_0 = 0$, $v_0 = 0$ \For{$t = 1$ to $T$} \State
+$g_t \gets \nabla_\theta \mathcal{E}_T(\theta_{t-1})$ \State $m_t \gets \beta_1
+m_{t-1} + (1 - \beta_1) g_t$ \State $v_t \gets \beta_2 v_{t-1} + (1 - \beta_2)
+g_t^2$ \State $\hat{m}_t \gets m_t / (1 - \beta_1^t)$ \State $\hat{v}_t \gets
+v_t / (1 - \beta_2^t)$ \State $\theta_t \gets \theta_{t-1} - \eta \cdot
+\hat{m}_t / (\sqrt{\hat{v}_t} + \epsilon)$ \EndFor
+\end{algorithmic}
+\end{algorithm}
+
+\begin{remark}
+The Adam optimizer is particularly effective in early training and in
+high-dimensional, noisy settings. Its convergence properties, however, require
+careful tuning of $\beta_1$, $\beta_2$ and $\epsilon$.
+\end{remark}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 \chapter{Theoretical Foundations of QMC-Based Learning}
 \label{chapter5}
 
@@ -22,7 +326,8 @@ start by introducing the mixed power notation:
 
 \begin{definition}[Mixed Component Selection] \ \\
     \label{def:component_merge}
-    Let $\boldsymbol{a}, \boldsymbol{b} \in \mathbb{R}^s$ and let $u \subseteq \{1, \dots, s\}$ be an index set. We define
+    Let $\boldsymbol{a}, \boldsymbol{b} \in \mathbb{R}^s$ and let $u \subseteq
+    \{1, \dots, s\}$ be an index set. We define
     \begin{equation*}
         \boldsymbol{c} := \boldsymbol{a}^u : \boldsymbol{b}^{-u}
         \quad \text{with} \quad
@@ -34,7 +339,8 @@ start by introducing the mixed power notation:
     \end{equation*}
 \end{definition}
 
-Hereby the term $-u$ denotes the complement of $u$ in $\{1, \dots, s\}$. Further the alternating sum is defined.
+Hereby the term $-u$ denotes the complement of $u$ in $\{1, \dots, s\}$. Further
+the alternating sum is defined.
 
 \begin{definition}[Alternating sum] \ \\
     The \emph{alternating sum} on $s$ dimensions with respect to a function on
@@ -73,14 +379,17 @@ Accordingly the Variation by Vitali is defined as the supremum of the variation
 over all ladders $\mathcal{Y} \in \mathbb{Y}$.
 
 \begin{definition}[Vitali Variation] \ \\
-    The \emph{Vitali variation} of a function $f$ on the hyperrectangle $[a,b]$ is defined as
+    The \emph{Vitali variation} of a function $f$ on the hyperrectangle $[a,b]$
+    is defined as
     \begin{equation*}
         V(f) = V(f; a, b) = \sup_{\mathcal{Y} \in \mathbb{Y}} V_\mathcal{Y}(f).
     \end{equation*}
-    Here $\mathbb{Y}$ denotes the set of all ladders on the hyperrectangle $[a,b]$.
+    Here $\mathbb{Y}$ denotes the set of all ladders on the hyperrectangle
+    $[a,b]$.
 \end{definition}
 
-The Hardy--Krause variation is a specific case of the Vitali variation, where the supremum is taken over all ladders in the unit hypercube $[0,1]^s$.
+The Hardy--Krause variation is a specific case of the Vitali variation, where
+the supremum is taken over all ladders in the unit hypercube $[0,1]^s$.
 
 \begin{definition}[Hardy--Krause Variation] \ \\
     The \emph{Hardy--Krause variation} of a function $f$ on the hyperrectangle
@@ -96,46 +405,98 @@ The Hardy--Krause variation is a specific case of the Vitali variation, where th
 
 % % Chapter Template
 
-% \chapter{Neural Network Training for Stochastic Functions} % Main chapter title
+% \chapter{Neural Network Training for Stochastic Functions} % Main chapter
+% title
 
-% \label{Chapter4} % Change X to a consecutive number; for referencing this chapter elsewhere, use \ref{ChapterX}
+% \label{Chapter4} % Change X to a consecutive number; for referencing this
+% chapter elsewhere, use \ref{ChapterX}
 
 % %----------------------------------------------------------------------------------------
-% %	SECTION 1
+% % SECTION 1
 % %----------------------------------------------------------------------------------------
 
 % \section{Modeling Randomness in Physical Simulations}
 
-% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam ultricies lacinia euismod. Nam tempus risus in dolor rhoncus in interdum enim tincidunt. Donec vel nunc neque. In condimentum ullamcorper quam non consequat. Fusce sagittis tempor feugiat. Fusce magna erat, molestie eu convallis ut, tempus sed arcu. Quisque molestie, ante a tincidunt ullamcorper, sapien enim dignissim lacus, in semper nibh erat lobortis purus. Integer dapibus ligula ac risus convallis pellentesque.
+% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam ultricies
+% lacinia euismod. Nam tempus risus in dolor rhoncus in interdum enim tincidunt.
+% Donec vel nunc neque. In condimentum ullamcorper quam non consequat. Fusce
+% sagittis tempor feugiat. Fusce magna erat, molestie eu convallis ut, tempus
+% sed arcu. Quisque molestie, ante a tincidunt ullamcorper, sapien enim
+% dignissim lacus, in semper nibh erat lobortis purus. Integer dapibus ligula ac
+% risus convallis pellentesque.
 
 % %----------------------------------------------------------------------------------------
-% %	SECTION 2
+% % SECTION 2
 % %----------------------------------------------------------------------------------------
 
 % \section{Sampling Stochastic Variables with QMC and MC}
 
-% Sed ullamcorper quam eu nisl interdum at interdum enim egestas. Aliquam placerat justo sed lectus lobortis ut porta nisl porttitor. Vestibulum mi dolor, lacinia molestie gravida at, tempus vitae ligula. Donec eget quam sapien, in viverra eros. Donec pellentesque justo a massa fringilla non vestibulum metus vestibulum. Vestibulum in orci quis felis tempor lacinia. Vivamus ornare ultrices facilisis. Ut hendrerit volutpat vulputate. Morbi condimentum venenatis augue, id porta ipsum vulputate in. Curabitur luctus tempus justo. Vestibulum risus lectus, adipiscing nec condimentum quis, condimentum nec nisl. Aliquam dictum sagittis velit sed iaculis. Morbi tristique augue sit amet nulla pulvinar id facilisis ligula mollis. Nam elit libero, tincidunt ut aliquam at, molestie in quam. Aenean rhoncus vehicula hendrerit.
+% Sed ullamcorper quam eu nisl interdum at interdum enim egestas. Aliquam
+% placerat justo sed lectus lobortis ut porta nisl porttitor. Vestibulum mi
+% dolor, lacinia molestie gravida at, tempus vitae ligula. Donec eget quam
+% sapien, in viverra eros. Donec pellentesque justo a massa fringilla non
+% vestibulum metus vestibulum. Vestibulum in orci quis felis tempor lacinia.
+% Vivamus ornare ultrices facilisis. Ut hendrerit volutpat vulputate. Morbi
+% condimentum venenatis augue, id porta ipsum vulputate in. Curabitur luctus
+% tempus justo. Vestibulum risus lectus, adipiscing nec condimentum quis,
+% condimentum nec nisl. Aliquam dictum sagittis velit sed iaculis. Morbi
+% tristique augue sit amet nulla pulvinar id facilisis ligula mollis. Nam elit
+% libero, tincidunt ut aliquam at, molestie in quam. Aenean rhoncus vehicula
+% hendrerit.
 
 % %----------------------------------------------------------------------------------------
-% %	SECTION 3
+% % SECTION 3
 % %----------------------------------------------------------------------------------------
 
 % \section{Data Generation: Simulating Photon Scatter}
 
-% Sed ullamcorper quam eu nisl interdum at interdum enim egestas. Aliquam placerat justo sed lectus lobortis ut porta nisl porttitor. Vestibulum mi dolor, lacinia molestie gravida at, tempus vitae ligula. Donec eget quam sapien, in viverra eros. Donec pellentesque justo a massa fringilla non vestibulum metus vestibulum. Vestibulum in orci quis felis tempor lacinia. Vivamus ornare ultrices facilisis. Ut hendrerit volutpat vulputate. Morbi condimentum venenatis augue, id porta ipsum vulputate in. Curabitur luctus tempus justo. Vestibulum risus lectus, adipiscing nec condimentum quis, condimentum nec nisl. Aliquam dictum sagittis velit sed iaculis. Morbi tristique augue sit amet nulla pulvinar id facilisis ligula mollis. Nam elit libero, tincidunt ut aliquam at, molestie in quam. Aenean rhoncus vehicula hendrerit.
+% Sed ullamcorper quam eu nisl interdum at interdum enim egestas. Aliquam
+% placerat justo sed lectus lobortis ut porta nisl porttitor. Vestibulum mi
+% dolor, lacinia molestie gravida at, tempus vitae ligula. Donec eget quam
+% sapien, in viverra eros. Donec pellentesque justo a massa fringilla non
+% vestibulum metus vestibulum. Vestibulum in orci quis felis tempor lacinia.
+% Vivamus ornare ultrices facilisis. Ut hendrerit volutpat vulputate. Morbi
+% condimentum venenatis augue, id porta ipsum vulputate in. Curabitur luctus
+% tempus justo. Vestibulum risus lectus, adipiscing nec condimentum quis,
+% condimentum nec nisl. Aliquam dictum sagittis velit sed iaculis. Morbi
+% tristique augue sit amet nulla pulvinar id facilisis ligula mollis. Nam elit
+% libero, tincidunt ut aliquam at, molestie in quam. Aenean rhoncus vehicula
+% hendrerit.
 
 % %----------------------------------------------------------------------------------------
-% %	SECTION 4
+% % SECTION 4
 % %----------------------------------------------------------------------------------------
 
 % \section{Learning Setup and Experimental Design}
 
-% Sed ullamcorper quam eu nisl interdum at interdum enim egestas. Aliquam placerat justo sed lectus lobortis ut porta nisl porttitor. Vestibulum mi dolor, lacinia molestie gravida at, tempus vitae ligula. Donec eget quam sapien, in viverra eros. Donec pellentesque justo a massa fringilla non vestibulum metus vestibulum. Vestibulum in orci quis felis tempor lacinia. Vivamus ornare ultrices facilisis. Ut hendrerit volutpat vulputate. Morbi condimentum venenatis augue, id porta ipsum vulputate in. Curabitur luctus tempus justo. Vestibulum risus lectus, adipiscing nec condimentum quis, condimentum nec nisl. Aliquam dictum sagittis velit sed iaculis. Morbi tristique augue sit amet nulla pulvinar id facilisis ligula mollis. Nam elit libero, tincidunt ut aliquam at, molestie in quam. Aenean rhoncus vehicula hendrerit.
+% Sed ullamcorper quam eu nisl interdum at interdum enim egestas. Aliquam
+% placerat justo sed lectus lobortis ut porta nisl porttitor. Vestibulum mi
+% dolor, lacinia molestie gravida at, tempus vitae ligula. Donec eget quam
+% sapien, in viverra eros. Donec pellentesque justo a massa fringilla non
+% vestibulum metus vestibulum. Vestibulum in orci quis felis tempor lacinia.
+% Vivamus ornare ultrices facilisis. Ut hendrerit volutpat vulputate. Morbi
+% condimentum venenatis augue, id porta ipsum vulputate in. Curabitur luctus
+% tempus justo. Vestibulum risus lectus, adipiscing nec condimentum quis,
+% condimentum nec nisl. Aliquam dictum sagittis velit sed iaculis. Morbi
+% tristique augue sit amet nulla pulvinar id facilisis ligula mollis. Nam elit
+% libero, tincidunt ut aliquam at, molestie in quam. Aenean rhoncus vehicula
+% hendrerit.
 
 % %----------------------------------------------------------------------------------------
-% %	SECTION 5
+% % SECTION 5
 % %----------------------------------------------------------------------------------------
 
 % \section{Convergence and Performance Comparison}
 
-% Sed ullamcorper quam eu nisl interdum at interdum enim egestas. Aliquam placerat justo sed lectus lobortis ut porta nisl porttitor. Vestibulum mi dolor, lacinia molestie gravida at, tempus vitae ligula. Donec eget quam sapien, in viverra eros. Donec pellentesque justo a massa fringilla non vestibulum metus vestibulum. Vestibulum in orci quis felis tempor lacinia. Vivamus ornare ultrices facilisis. Ut hendrerit volutpat vulputate. Morbi condimentum venenatis augue, id porta ipsum vulputate in. Curabitur luctus tempus justo. Vestibulum risus lectus, adipiscing nec condimentum quis, condimentum nec nisl. Aliquam dictum sagittis velit sed iaculis. Morbi tristique augue sit amet nulla pulvinar id facilisis ligula mollis. Nam elit libero, tincidunt ut aliquam at, molestie in quam. Aenean rhoncus vehicula hendrerit.
+% Sed ullamcorper quam eu nisl interdum at interdum enim egestas. Aliquam
+% placerat justo sed lectus lobortis ut porta nisl porttitor. Vestibulum mi
+% dolor, lacinia molestie gravida at, tempus vitae ligula. Donec eget quam
+% sapien, in viverra eros. Donec pellentesque justo a massa fringilla non
+% vestibulum metus vestibulum. Vestibulum in orci quis felis tempor lacinia.
+% Vivamus ornare ultrices facilisis. Ut hendrerit volutpat vulputate. Morbi
+% condimentum venenatis augue, id porta ipsum vulputate in. Curabitur luctus
+% tempus justo. Vestibulum risus lectus, adipiscing nec condimentum quis,
+% condimentum nec nisl. Aliquam dictum sagittis velit sed iaculis. Morbi
+% tristique augue sit amet nulla pulvinar id facilisis ligula mollis. Nam elit
+% libero, tincidunt ut aliquam at, molestie in quam. Aenean rhoncus vehicula
+% hendrerit.

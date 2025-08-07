@@ -113,10 +113,10 @@ While direct evaluation of the Hardy--Krause variation is intractable in general
 \begin{equation*}
     V_{\mathrm{HK}}(f) \leq \int_{[0,1]^d} \left| \frac{\partial^d f}{\partial x_1 \cdots \partial x_d}(x) \right| dx + \sum_{i=1}^d V_{\mathrm{HK}}(f|_{x_i = 1}),
 \end{equation*}
-where the right-hand side can be evaluated recursively, and becomes exact if the mixed derivative is integrable and all lower-dimensional restrictions are sufficiently smooth.
+where the right-hand side can be evaluated recursively and becomes exact if the mixed derivative is integrable and all lower-dimensional restrictions are sufficiently smooth.
 
 \begin{example}
-Let $f(x) = \prod_{i=1}^d x_i$, the $d$-dimensional monomial. Then $f$ is smooth with bounded mixed derivatives, and its Hardy--Krause variation is finite.
+Let $f(x) = \prod_{i=1}^d x_i$, the $d$-dimensional monomial. Then $f$ is smooth with bounded mixed derivatives and its Hardy--Krause variation is finite.
 \end{example}
 
 \begin{example}
@@ -124,7 +124,7 @@ Consider $f_{d,r}(x) = \left( \max\left\{ \sum_{i=1}^d x_i - \frac{1}{2}, 0
 \right\} \right)^r$. For $d > r + 2$, this function has infinite Vitali and
 hence infinite Hardy--Krause variation. Such examples underline the limitations
 of \ac{qmc} for functions with low smoothness or sharp nonlinearity
-\cite{owen2005multidimensional}.
+\cite[Prop. 16]{owen2005multidimensional}.
 \end{example}
 
 These examples illustrate the importance of regularity assumptions in applying
@@ -146,6 +146,7 @@ The Koksma--Hlawka inequality is a central result in \acl{qmc} theory. It provid
 The inequality relates the QMC integration error to the star discrepancy of the point set and the Hardy--Krause variation of the integrand.
 
 \begin{theorem}[Koksma--Hlawka Inequality]
+\label{thm:koksma-hlawka}
 Let $f \colon [0,1]^s \to \mathbb{R}$ be a function of bounded variation in the sense of Hardy--Krause and let $P = \{x_1, \dots, x_N\} \subset [0,1]^s$ be a finite point set. Then the integration error satisfies
 \begin{equation}
     \left| \frac{1}{N} \sum_{n=1}^N f(x_n) - \int_{[0,1]^s} f(x) \, dx \right|
