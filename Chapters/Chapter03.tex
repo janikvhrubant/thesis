@@ -1,7 +1,6 @@
 %!TEX root = ../main.tex
 \chapter{Function Variation and Error Bounds in QMC}
 \label{chapter3}
-
 % ------------------------------------------------------------------------------
 \section{Function Variation in Multiple Dimensions}
 % ------------------------------------------------------------------------------
@@ -9,115 +8,123 @@
 In \acf{qmc} theory, the variation of a function plays a key role in bounding
 the integration error. While the total variation is sufficient for univariate
 functions, higher dimensions necessitate more refined notions. In this section,
-we introduce two such notions: the Vitali variation and the variation in the
-sense of Hardy--Krause. These concepts are crucial for understanding the
-convergence guarantees provided by the Koksma-Hlawka inequality.
+we follow the definitions of \cite{owen2005multidimensional} and introduce two such notions: the Vitali variation and the variation in the sense of Hardy--Krause. These concepts are crucial for understanding the convergence guarantees provided by the Koksma--Hlawka inequality.
 
+% ------------------------------------------------------------------------------
+\subsection{Mixed Component Selection and Alternating Sums}
+% ------------------------------------------------------------------------------
+
+To express multidimensional variation concisely, we begin with the following
+notational conventions.
+
+\begin{definition}[Mixed Component Selection] \ \\
+    \label{def:component_merge}
+    Let $\boldsymbol{a}, \boldsymbol{b} \in \mathbb{R}^s$ and let $u \subseteq \{1, \dots, s\}$ be an index set. We define
+    \begin{equation*}
+        \boldsymbol{c} := \boldsymbol{a}^u : \boldsymbol{b}^{-u}
+        \quad \text{with} \quad
+        c_j := 
+        \begin{cases}
+            a_j, & \text{if } j \in u, \\
+            b_j, & \text{if } j \notin u.
+        \end{cases}
+    \end{equation*}
+\end{definition}
+
+Here, the term $-u$ denotes the complement of $u$ in $\{1, \dots, s\}$. Using this notation, the \emph{alternating sum} is defined as follows:
+
+\begin{definition}[Alternating Sum] \ \\
+    The \emph{alternating sum} on $s$ dimensions with respect to a function on
+    the hyperrectangle $[a,b]$ is defined as
+    \begin{equation*}
+        \Delta(f; a, b) = \sum_{v \subseteq \{1,\dots,s\}} (-1)^{|v|} f(a^v:b^{-v}).
+    \end{equation*}
+\end{definition}
 
 % ------------------------------------------------------------------------------
 \subsection{Variation in the Sense of Vitali}
 \label{sec:vitali-variation}
 % ------------------------------------------------------------------------------
 
-Let $f \colon [a,b] \subset \mathbb{R}^s \to \mathbb{R}$ be a bounded function
-defined on a $s$-dimensional hyperrectangle. A classical approach to quantify
-the variation of $f$ is based on a ladder construction, where each axis is
-discretized into finite sets of points.
+A classical approach to quantify function variation on hyperrectangles is based on the concept of \emph{ladders}:
 
-A ladder on a hyperrectangle $[a,b] \subset \mathbb{R}^s$ is a Cartesian product
-of finite sets, defined as $\mathcal{Y} = \prod_{j=1}^s \mathcal{Y}^j$, where
-each $\mathcal{Y}^j$ is a finite set in $(a_j, b_j)$. The set of all ladders on
-the hyperrectangle $[a,b]$ is then denoted by $\mathbb{Y}$.
+\begin{definition}[Ladder] \ \\
+    A \emph{ladder} on the hyperrectangle $[a,b]$ is a set of points $\mathcal{Y} =
+    \{y_1, \dots, y_k\} \subset [a,b]$ such that for each $i < j$, the point
+    $y_i$ is less than or equal to $y_j$ in every coordinate. Formally, this
+    means that for all $i < j$ and for all $l \in \{1, \dots, s\}$, we have
+    $y_i^l \leq y_j^l$.
+\end{definition}
 
-For each $y^j \in \mathcal{Y}^j$, let $y^j_+$ denote its componentwise
-successor, which is the smallest element in $(y^j,\infty)\cap (\mathcal{Y}^j
-\cup \{b_j\})$
-\begin{equation*}
-    y^j_+ = \min\limits_y\{(y^j,\infty)\cap (\mathcal{Y}^j
-\cup \{b_j\})\}.
-\end{equation*}
-Hence, for each $\mathbf{y} \in \mathcal{Y}$, the successor vector is defined by
-\begin{equation*}
-    \mathbf{y}_+ = (y^1_+, y^2_+, \ldots, y^s_+).
-\end{equation*}
+Let $\mathbb{Y}$ denote the set of all such ladders on $[a,b]$. The \emph{variation with respect to a ladder} is then defined as:
 
-The Vitali variation of a function $f$ on the hyperrectangle $[a,b]$ is then
-given by the following definition:
+\begin{definition}[Variation with respect to a ladder] \ \\
+    Let $\mathcal{Y} = \prod_{j=1}^s \mathcal{Y}^j$ be a ladder on $[a,b]$. Then the \emph{variation} of a function $f$ with respect to $\mathcal{Y}$ is
+    \begin{equation*}
+        V_\mathcal{Y}(f) = \sum_{y \in \mathcal{Y}} \big| \Delta(f; y, y_+) \big|,
+    \end{equation*}
+    where $y_+$ is the point obtained by taking the componentwise successor $y^j_+$ in each dimension $j$.
+\end{definition}
+
+The \emph{Vitali variation} of a function is then the supremum of this ladder-based variation:
 
 \begin{definition}[Vitali Variation] \ \\
-Let $[a,b] \subset \mathbb{R}^s$ be a hyperrectangle and $f \colon [a,b] \to \mathbb{R}$ be a bounded function. The Vitali variation of $f$ on $[a,b]$ is then defined as
-
-\begin{equation*}
-    V_{[a,b]}(f) := \sup\limits_{\mathcal{Y} \in \mathbb{Y}} \sum_{\mathbf{y} \in \mathcal{Y}}\, \sum_{v \subset \{1,\dots,s\}} (-1)^{|v|} f(\mathbf{y}^v : \mathbf{y}^{-v}_+),
-\end{equation*}
-
-with
-\begin{equation*}
-  (\mathbf{y}^v : \mathbf{y}^{-v}_+)_i = \begin{cases}
-    y_i & \text{if } i \in v, \\
-    (y_+)^i & \text{if } i \notin v.
-  \end{cases}
-\end{equation*}
-
+    The \emph{Vitali variation} of a function $f$ on the hyperrectangle $[a,b]$ is defined as
+    \begin{equation*}
+        V(f) = V(f; a, b) = \sup_{\mathcal{Y} \in \mathbb{Y}} V_\mathcal{Y}(f).
+    \end{equation*}
 \end{definition}
-
-Hereby, the notation $\mathbf{y}^{-v}$ denotes the complement with respect to
-the set $\{1,\dots,s\}$ such that
-$\mathbf{y}=(\mathbf{y}^{-v}\colon\mathbf{y}^{v})$.
 
 This variation captures the total fluctuation of $f$ over axis-aligned
-rectangular subregions. It generalizes the concept of finite differences and
-forms the foundation for defining Hardy--Krause variation.
-
+rectangular subregions. It generalizes finite differences and serves as a
+foundation for defining the Hardy--Krause variation.
 
 % ------------------------------------------------------------------------------
-  \subsection{Definition of the Hardy--Krause Variation}
-  \label{sec:hk-variation}
+\subsection{Definition of the Hardy--Krause Variation}
+\label{sec:hk-variation}
 % ------------------------------------------------------------------------------
 
-While the Vitali variation quantifies joint fluctuations, it does not fully capture mixed directional variation. For this purpose, the Hardy--Krause variation refines the analysis by summing over variations of all axis-aligned projections.
+The Hardy--Krause variation refines the Vitali variation by summing variations
+over all lower-dimensional axis-aligned faces of the unit hypercube. It is
+defined as:
 
 \begin{definition}[Hardy--Krause Variation] \ \\
-\label{def:hk-variation}
-Let $f \colon [a,b] \to \mathbb{R}$ be a function and $u \subseteq \{1,\dots,s\}$.
-
-The Hardy--Krause variation of $f$ is then defined by
-\begin{equation*}
-  V_{\mathrm{HK}}(f) := \sum_{\substack{u \subset \{1,\dots,s\}\\ u \neq \emptyset}} V_
-  {[a^{-u}, b^{-u}]}(f(x^{-u}: b^u)),
-\end{equation*}
-where the variation $V_{[a^{-u}, b^{-u}]}$ is taken with respect to the function
-argument $x^{-u}$.
+    The \emph{Hardy--Krause variation} of a function $f$ on the hyperrectangle
+    $[a,b]$ is defined as
+    \begin{equation*}
+        V_{\mathrm{HK}}(f) = V_{\mathrm{HK}}(f; a, b) = \sup_{\mathcal{Y} \in \mathbb{Y}} V_\mathcal{Y}(f),
+    \end{equation*}
+    where $\mathbb{Y}$ denotes the set of all ladders in $[a,b]$. This definition coincides with the Vitali variation but is typically used when $[a,b] = [0,1]^s$.
 \end{definition}
 
-Note that the Hardy--Krause variation reduces to the total variation in the univariate case. Importantly, $V_{\mathrm{HK}}(f) < \infty$ implies that $f$ has bounded variation in all axis-aligned directions, including all lower-dimensional projections.
+Note that the Hardy--Krause variation reduces to the total variation in the univariate case. Importantly, $V_{\mathrm{HK}}(f) < \infty$ implies that $f$ has bounded variation in all axis-aligned directions and projections.
 
 \begin{remark}
-The Hardy--Krause variation is a seminorm, vanishing for constant functions. It becomes a norm if the sum includes $u = \{1,\dots,d\}$.
+The Hardy--Krause variation is a seminorm, vanishing for constant functions. It becomes a norm if the full-dimensional term is included explicitly.
 \end{remark}
 
 % ------------------------------------------------------------------------------
-  \subsection{Examples and Interpretation of Hardy--Krause Variation}
-  \label{sec:hk-examples}
+\subsection{Examples and Interpretation of Hardy--Krause Variation}
+\label{sec:hk-examples}
 % ------------------------------------------------------------------------------
 
-Computing the Hardy--Krause variation directly from its definition is impractical for most functions. However, for smooth functions, upper bounds can be derived using mixed partial derivatives:
+While direct evaluation of the Hardy--Krause variation is intractable in general, upper bounds can be derived for smooth functions using mixed partial derivatives. For instance, for continuously differentiable functions, one can write:
 
 \begin{equation*}
     V_{\mathrm{HK}}(f) \leq \int_{[0,1]^d} \left| \frac{\partial^d f}{\partial x_1 \cdots \partial x_d}(x) \right| dx + \sum_{i=1}^d V_{\mathrm{HK}}(f|_{x_i = 1}),
 \end{equation*}
-where the right-hand side can be evaluated recursively. For continuously differentiable functions, this becomes an equality.
+where the right-hand side can be evaluated recursively, and becomes exact if the mixed derivative is integrable and all lower-dimensional restrictions are sufficiently smooth.
 
 \begin{example}
-Let $f(x) = \prod_{i=1}^d x_i$, the $d$-dimensional monomial. Then $f$ is smooth with bounded mixed derivatives and its Hardy--Krause variation is finite.
+Let $f(x) = \prod_{i=1}^d x_i$, the $d$-dimensional monomial. Then $f$ is smooth with bounded mixed derivatives, and its Hardy--Krause variation is finite.
 \end{example}
 
 \begin{example}
 Consider $f_{d,r}(x) = \left( \max\left\{ \sum_{i=1}^d x_i - \frac{1}{2}, 0
 \right\} \right)^r$. For $d > r + 2$, this function has infinite Vitali and
 hence infinite Hardy--Krause variation. Such examples underline the limitations
-of \ac{qmc} for functions with low smoothness or sharp
-nonlinearity\cite{owen2004multidimensional}.
+of \ac{qmc} for functions with low smoothness or sharp nonlinearity
+\cite{owen2005multidimensional}.
 \end{example}
 
 These examples illustrate the importance of regularity assumptions in applying

@@ -14,8 +14,85 @@
     V_{\mathrm{HK}}(f) = V_{\mathrm{HK}}(f; a, b) &= \sum_{u\subset \{1,\dots,s\}} V_{[a^{-u}, b^{-u}]} f(x^{-u}:b^u) \\
     &= \sum_{u\subset \{1,\dots,s\}} \sup_{\mathcal{Y} \in \mathbb{Y}} V_\mathcal{Y} \big( f(x^{-u} : b^u) \big) \\
     &= \sum_{u\subset \{1,\dots,s\}} \sup_{\mathcal{Y} \in \mathbb{Y}} \sum_{y\in\mathcal{Y}} \big| \Delta\big( f(x^{-u} : b^u); y, y_+ \big) \big| \\
-    &= \sum_{u\subset \{1,\dots,s\}} \sup_{\mathcal{Y} \in \mathbb{Y}} \sum_{y\in\mathcal{Y}} \big| \sum_{v\subseteq \{1,\dots,s\}} (-1)^{|v|} f((y^v:y_+^{-v})^u:b^{-u}) \big| \\
+    &= \sum_{u\subset \{1,\dots,s\}} \sup_{\mathcal{Y} \in \mathbb{Y}} \sum_{y\in\mathcal{Y}} \big| \sum_{v\subseteq \{1,\dots,s\}} (-1)^{|v|} f((y^v:y_+^{-v})^{-u}:b^{u}) \big| \\
 \end{align*}
+
+For the definitions of Variation we follow \cite{owen2005multidimensional} and
+start by introducing the mixed power notation:
+
+\begin{definition}[Mixed Component Selection] \ \\
+    \label{def:component_merge}
+    Let $\boldsymbol{a}, \boldsymbol{b} \in \mathbb{R}^s$ and let $u \subseteq \{1, \dots, s\}$ be an index set. We define
+    \begin{equation*}
+        \boldsymbol{c} := \boldsymbol{a}^u : \boldsymbol{b}^{-u}
+        \quad \text{with} \quad
+        c_j := 
+        \begin{cases}
+            a_j, & \text{if } j \in u, \\
+            b_j, & \text{if } j \notin u.
+        \end{cases}
+    \end{equation*}
+\end{definition}
+
+Hereby the term $-u$ denotes the complement of $u$ in $\{1, \dots, s\}$. Further the alternating sum is defined.
+
+\begin{definition}[Alternating sum] \ \\
+    The \emph{alternating sum} on $s$ dimensions with respect to a function on
+    the hyperrectangle $[a,b]$ is defined as
+    \begin{equation*}
+        \Delta(f; a, b) = \sum_{v \subseteq \{1,\dots,s\}} (-1)^{|v|} f(a^v:b^{-v}).
+    \end{equation*}
+\end{definition}
+
+An essential concept in this context is the notion of a \emph{ladder} which we
+define on a certain hypercube $[a,b]$.
+
+\begin{definition}[Ladder] \ \\
+    A \emph{ladder} on the hypercube $[a,b]$ is a set of points $\mathcal{Y} =
+    \{y_1, \dots, y_k\} \subset [a,b]$ such that for each $i < j$, the point
+    $y_i$ is less than or equal to $y_j$ in every coordinate. Formally, this
+    means that for all $i < j$ and for all $l \in \{1, \dots, s\}$, we have
+    $y_i^l \leq y_j^l$.
+\end{definition}
+
+The space of all such ladders on the hypercube is denoted by $\mathbb{Y}$. Next,
+the \emph{variation with respect to a ladder} is defined.
+
+\begin{definition}[Variation with respect to a ladder] \ \\
+    The \emph{variation} of a function $f$ on the hyperrectangle $[a,b]$
+    \emph{with respect to a ladder}
+    $\mathcal{Y} = \prod\limits_{j=1}^s \mathcal{Y}^j$ is defined as
+    \begin{equation*}
+        V_\mathcal{Y}(f) = \sum_{y \in \mathcal{Y}} \big| \Delta(f; y, y_+) \big|,
+    \end{equation*}
+    where $y_+$ is the point obtained by incrementing each coordinate of $y$
+    with $y^j_+$ to be the successor of $y_j$ in $\mathcal{Y}^j$.
+\end{definition}
+
+Accordingly the Variation by Vitali is defined as the supremum of the variation
+over all ladders $\mathcal{Y} \in \mathbb{Y}$.
+
+\begin{definition}[Vitali Variation] \ \\
+    The \emph{Vitali variation} of a function $f$ on the hyperrectangle $[a,b]$ is defined as
+    \begin{equation*}
+        V(f) = V(f; a, b) = \sup_{\mathcal{Y} \in \mathbb{Y}} V_\mathcal{Y}(f).
+    \end{equation*}
+    Here $\mathbb{Y}$ denotes the set of all ladders on the hyperrectangle $[a,b]$.
+\end{definition}
+
+The Hardy--Krause variation is a specific case of the Vitali variation, where the supremum is taken over all ladders in the unit hypercube $[0,1]^s$.
+
+\begin{definition}[Hardy--Krause Variation] \ \\
+    The \emph{Hardy--Krause variation} of a function $f$ on the hyperrectangle
+    $[a,b]$ is defined as
+    \begin{equation*}
+        V_{\mathrm{HK}}(f) = V_{\mathrm{HK}}(f; 0, 1) = \sup_{\mathcal{Y} \in 
+        \mathbb{Y}} V_\mathcal{Y}(f).
+    \end{equation*}
+\end{definition}
+
+
+
 
 % % Chapter Template
 
