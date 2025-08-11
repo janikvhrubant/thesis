@@ -250,7 +250,7 @@ Bei uns gilt: $d=1$ und $n=1$, ausserdem notieren wir statt:
 Damit folgt dann für uns $v= (v_1,\ldots,v_m) \in \{0,1\}^s$
 
 \begin{align*}
-    \partial^v (\sigma\circ L) &= \sum_{\substack{\lambda \in \mathbb{N}_0 \\ 1\leq \lambda \leq |v|}} \sigma^{(\lambda)} \,\sum_{z=1}^{|v|} \,\,\, \sum_{l_r \in \widetilde{\mathrm{KL}}(z,v,\lambda)} \,\,\, \prod_{r=1}^s \partial^{l_r} L
+    \partial^v (\sigma\circ L) &= \sum_{\substack{\lambda \in \mathbb{N}_0 \\ 1\leq \lambda \leq |v|}} (\sigma^{(\lambda)}\circ L) \,\sum_{z=1}^{|v|} \,\,\, \sum_{l_r \in \widetilde{\mathrm{KL}}(z,v,\lambda)} \,\,\, \prod_{r=1}^s \partial^{l_r} L
 \end{align*}
 Wobei
 \begin{align*}
