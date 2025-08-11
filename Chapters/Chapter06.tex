@@ -207,7 +207,7 @@ A proof of the Multivariate Faà di Bruno formula can be found in
 This yields the following result for the upper bound on the Hardy--Krause
 variation of compositions of functions.
 
-\begin{remark}\ \\
+\begin{remark}\label{label:compositions} \ \\
 Recalling Corollary~\ref{cor:variation-approximation} for the composition of two
 function $L\in C^1([0,1]^s, \mathcal{X})$ and $\eta \in
 C^s(\mathcal{X})$ given by $\eta \circ L$ leads to
@@ -240,6 +240,12 @@ Now we can prove the theorem.
         \mathcal{E}_G^\delta &:= \int_X \eta(L(x) - L^*(x)) \\
         \mathcal{E}_T^\delta &:= \frac{1}{N} \sum_{n=1}^N \eta(L(x_n) - L^*(x_n)).
     \end{align*}
+
+    Next, it is shown, that the mollified generalization gap $\eta(L(x)-L^*(x))$
+    has bounded Hardy--Krause variation. Therefore we first apply the results from Remark~\ref{label:compositions} to the composition of the mollifier $\eta\in C^s$ and the function $L-L^* \in C^1([0,1]^s, \mathbb{R})$. One can see, that it suffices to show that for all paritions $\pi$ of the set $\{1,\ldots,s\}$ the following holds:
+    \begin{equation*}
+        \int\limits_{[0,1]^s} \left| \prod_{B\in\pi} \frac{\partial^{|B|}}{\prod_{j\in B}\partial x_j} (L-L^*)(x) \right| \, dx < \infty.
+    \end{equation*}
 
 \end{proof}
 
