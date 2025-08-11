@@ -41,8 +41,9 @@ Thus, the statement holds for $s=1$.
 Assume the statement holds for dimension $s-1$.
 
 \textbf{Induction step ($s-1 \to s$).}\\
-Write $x = (x',x_s)$ with $x' \in [a',b'] := \prod_{j=1}^{s-1} [a_j,b_j]$. 
-First, apply the one-dimensional fundamental theorem of calculus in the last coordinate:
+Write $x = (x',x_s)$ with $x' \in [a',b'] := \prod_{j=1}^{s-1} [a_j,b_j]$.
+First, apply the one-dimensional fundamental theorem of calculus in the last
+coordinate:
 \begin{equation*}
 \int\limits_{a_s}^{b_s} 
 \frac{\partial^s f(x',t)}{\partial x_1 \cdots \partial x_s} \, dt
@@ -56,7 +57,7 @@ Now integrate over $x'$ and use Fubini’s theorem:
 = \int\limits_{[a',b']} \frac{\partial^{s-1} f(x',b_s)}{\partial x_1 \cdots \partial x_{s-1}} \, dx'
  - \int\limits_{[a',b']} \frac{\partial^{s-1} f(x',a_s)}{\partial x_1 \cdots \partial x_{s-1}} \, dx'.
 \end{equation*}
-We now apply the induction hypothesis to both integrals (for the functions 
+We now apply the induction hypothesis to both integrals (for the functions
 $g_1(x') := f(x',b_s)$ and $g_2(x') := f(x',a_s)$):
 \begin{equation*}
 \int\limits_{[a',b']} \frac{\partial^{s-1} f(x',b_s)}{\partial x_1 \cdots \partial x_{s-1}} \, dx'
@@ -73,8 +74,8 @@ Thus,
 = \Delta\big(f(\cdot,b_s);a',b'\big)
  - \Delta\big(f(\cdot,a_s);a',b'\big).
 \end{equation*}
-This is exactly the recursive definition of the corner difference in $s$ dimensions.
-Hence, the statement holds for $s$.
+This is exactly the recursive definition of the corner difference in $s$
+dimensions. Hence, the statement holds for $s$.
 \end{proof}
 
 This yields another result for the variation in the sense of Vitali on functions
@@ -92,7 +93,9 @@ with existing and integrable derrivative.
 
 \begin{proof}
     
-    Recalling the definition of variation with respect to a ladder from Definition~\ref{def:variation_ladder} and applying Proposition~\ref{prop:variation-approximation} yields
+    Recalling the definition of variation with respect to a ladder from
+    Definition~\ref{def:variation_ladder} and applying
+    Proposition~\ref{prop:variation-approximation} yields
 
     \begin{equation*}
         V_{\mathcal{Y}}(f) =  \sum_{y \in \mathcal{Y}} \big| \Delta(f; y, y_+) \big| = \sum_{y \in \mathcal{Y}} \bigg| \int\limits_{[y,y_+]}\frac{\partial^s}{\partial x_1 \cdots \partial x_s} f(x) \, dx \bigg|.
@@ -106,7 +109,9 @@ with existing and integrable derrivative.
     
     \textcolor{red}{TODO: Beispiel hinzufügen}
 
-    As for a ladder $\mathcal{Y}$ of a hyperrectangle $[a,b]$ equality $\bigcup_{\mathcal{Y}\in\mathbb{Y}}[y,y_+] = [a,b]$ holds, the sum builds the integral over the whole hyperrectangle $[a,b]$:
+    As for a ladder $\mathcal{Y}$ of a hyperrectangle $[a,b]$ equality
+    $\bigcup_{\mathcal{Y}\in\mathbb{Y}}[y,y_+] = [a,b]$ holds, the sum builds
+    the integral over the whole hyperrectangle $[a,b]$:
 
     \begin{equation*}
         \sum_{y \in \mathcal{Y}} \int\limits_{[y,y_+]}\bigg|\frac{\partial^s}{\partial x_1 \cdots \partial x_s} f(x)\bigg| \, dx = \int\limits_{[a,b]}\bigg|\frac{\partial^s}{\partial x_1 \cdots \partial x_s} f(x)\bigg| \, dx.
@@ -132,7 +137,8 @@ with existing and integrable derrivative.
     \end{equation}
 
     Here, $f^{(i)}$ denotes the restriction of $f$ to the boundary $y_i=b_i$. In
-    the first place this is a restriction to the $s-1$ dimensional case. In the last recursive step, the univariate case is reached with
+    the first place this is a restriction to the $s-1$ dimensional case. In the
+    last recursive step, the univariate case is reached with
 
     \begin{equation*}
         \widehat{V}_{\mathrm{HK}}(f_{s-1}^v) = \int\limits_{[a,b]} 
@@ -146,16 +152,20 @@ with existing and integrable derrivative.
 \section{QMC-Based Analysis of the Function Approximation Problem}
 \textcolor{red}{TODO: Titel anpassen}
 
-Given the computable training error $\mathcal{E}_T$ depending on the training data, one wants to estimate the generalization error. Therefore the \emph{generalization gap} is an important 
+Given the computable training error $\mathcal{E}_T$ depending on the training
+data, one wants to estimate the generalization error. Therefore the
+\emph{generalization gap} is an important 
 
 \begin{theorem}
     For the surrogate models $L^*$ obtained by \ac{dnn} training of a mapping
     $L$ on the hyperrectangle $[0,1]^s$ with a low-discrepancy sequence
-    $\mathcal{S}=\{x_n\}_{n=1}^N\subset [0,1]^s$ yields a generalization gap estimated by
+    $\mathcal{S}=\{x_n\}_{n=1}^N\subset [0,1]^s$ yields a generalization gap
+    estimated by
     \begin{equation*}
         \mathcal{E}_G - \mathcal{E}_T \leq C \cdot \frac{V_{\mathrm{HK}}(|L-L^*|)(\log N)^s}{N},
     \end{equation*}
-    where $C$ is a constant and $V_{\mathrm{HK}}(|L-L^*|)$ is the Hardy--Krause variation from Definition~\ref{def:variation_hardy_krause}.
+    where $C$ is a constant and $V_{\mathrm{HK}}(|L-L^*|)$ is the Hardy--Krause
+    variation from Definition~\ref{def:variation_hardy_krause}.
 \end{theorem}
 
 \begin{proof}
@@ -176,8 +186,8 @@ Given the computable training error $\mathcal{E}_T$ depending on the training da
 Let $L : [0,1]^s \to \mathbb{R}$ be a map with finite Hardy--Krause variation,
 i.e. $\widehat{V}_{HK}(L) < \infty$. Then for \ac{dnn} $L^*$ trained on a
 low-discrepancy sequence $\mathcal{S}=\{x_n\}_{n=1}^N\subset [0,1]^s$ with the
-activation function $\eta_\delta$ satisfying $\eta_\delta \in C^d(\mathbb{R})$ and the
-generalization gap of $L^*$ satisfying
+activation function $\eta_\delta$ satisfying $\eta_\delta \in C^d(\mathbb{R})$
+and the generalization gap of $L^*$ satisfying
 \begin{equation*}
     |\mathcal{E}_G - \mathcal{E}_T| \leq \delta,
 \end{equation*}
@@ -194,12 +204,14 @@ multivariate version of the Faà di Bruno formula from
 
 \label{prop:multivariate_faa_di_bruno}
 \begin{prop}[Multivariate Faà di Bruno formula] \ \\
-Let $L \in C(\mathbb{R}^s)$ and $\eta_\delta \in C^s(\mathbb{R})$ be two functions.
-Then the following derivative of the composition $\eta_\delta \circ L$ follows:
+Let $L \in C(\mathbb{R}^s)$ and $\eta_\delta \in C^s(\mathbb{R})$ be two
+functions. Then the following derivative of the composition $\eta_\delta \circ
+L$ follows:
 \begin{equation*}
     \frac{\partial^s}{\partial x_1 \cdots \partial x_s} (\eta_\delta \circ f)(x) = \sum_{\pi} \eta_\delta^{(|\pi|)}\circ L(x) \cdot \prod_{B\in\pi} \frac{\partial^{|B|}}{\prod_{j\in B}\partial x_j}L(x)
 \end{equation*}
-Hereby the sum is taken over all partitions $\pi$ of the set $\{1,\ldots,s\}$ and $B$ are the stes within the partition $\pi$.
+Hereby the sum is taken over all partitions $\pi$ of the set $\{1,\ldots,s\}$
+and $B$ are the stes within the partition $\pi$.
 \end{prop}
 A proof of the Multivariate Faà di Bruno formula can be found in
 \cite[Proposition 1]{hardy2006combinatorics}.
@@ -209,20 +221,24 @@ variation of compositions of functions.
 
 \begin{remark}\label{rem:compositions} \ \\
 Recalling Corollary~\ref{cor:variation-approximation} for the composition of two
-function $L\in C^1([0,1]^s, \mathcal{X})$ and $\eta_\delta \in
-C^s(\mathcal{X})$ given by $\eta_\delta \circ L$ leads to
+function $L\in C^1([0,1]^s, \mathcal{X})$ and $\eta_\delta \in C^s(\mathcal{X})$
+given by $\eta_\delta \circ L$ leads to
 \begin{equation*}
     V_{[0,1]^s}(\eta_\delta \circ L) \leq \int\limits_{[0,1]^s} \left| \frac{\partial^s}{\partial x_1 \cdots \partial x_s} (\eta_\delta \circ L)(x) \right| \, dx.
 \end{equation*}
-Applying the multivariate Faà di Bruno formula from Proposition~\ref{prop:multivariate_faa_di_bruno} yields
+Applying the multivariate Faà di Bruno formula from
+Proposition~\ref{prop:multivariate_faa_di_bruno} yields
 \begin{equation*}
     V_{[0,1]^s}(\eta_\delta \circ L) \leq \int\limits_{[0,1]^s} \left| \sum_{\pi} \eta_\delta^{(|\pi|)}\circ L(x) \cdot \prod_{B\in\pi} \frac{\partial^{|B|}}{\prod_{j\in B}\partial x_j}L(x) \right| \, dx.
 \end{equation*}
-As for a fixed dimension $s$ the number of partitions $\pi$, denoted by Bell number $B_s$, is finite, the variation in the sense of Vitali is bounded, if for each partition $\pi$ the following holds:
+As for a fixed dimension $s$ the number of partitions $\pi$, denoted by Bell
+number $B_s$, is finite, the variation in the sense of Vitali is bounded, if for
+each partition $\pi$ the following holds:
 \begin{equation*}
     \int\limits_{[0,1]^s} \left| \eta_\delta^{(|\pi|)}\circ L(x) \cdot \prod_{B\in\pi} \frac{\partial^{|B|}}{\prod_{j\in B}\partial x_j}L(x) \right| \, dx < \infty.
 \end{equation*}
-As $\eta_\delta \in C^s(\mathcal{X})$ is continuous, the composition $\eta_\delta \circ L$ is also continuous. Therefore, it suffices to show that
+As $\eta_\delta \in C^s(\mathcal{X})$ is continuous, the composition
+$\eta_\delta \circ L$ is also continuous. Therefore, it suffices to show that
 \begin{equation*}
     \int\limits_{[0,1]^s} \left| \prod_{B\in\pi} \frac{\partial^{|B|}}{\prod_{j\in B}\partial x_j}L(x) \right| \, dx < \infty.
 \end{equation*}
@@ -230,19 +246,27 @@ As $\eta_\delta \in C^s(\mathcal{X})$ is continuous, the composition $\eta_\delt
 
 Now we can prove the theorem.
 \begin{proof}[Proof (Multivariate Faà di Bruno formula)] \ \\
-    First, we define a mollifer function $\eta_\delta \in C^s(\mathbb{R}, \mathbb{R}_+)$ fullfilling
+    First, we define a mollifer function $\eta_\delta \in C^s(\mathbb{R},
+    \mathbb{R}_+)$ fullfilling
     \begin{equation*}
         \max \big\{\big\| |a| - \eta_\delta(a) \big\|_\infty\big\} \leq \delta.
     \end{equation*}
 
-    By further defining approximating the the generalization error $\mathcal{E}_G$ and the training error $\mathcal{E}_T$ by using the differentiable mollifier $\eta_\delta$ instead of the norm $\|\cdot\|_\infty$ we obtain
+    By further defining approximating the the generalization error
+    $\mathcal{E}_G$ and the training error $\mathcal{E}_T$ by using the
+    differentiable mollifier $\eta_\delta$ instead of the norm
+    $\|\cdot\|_\infty$ we obtain
     \begin{align*}
         \mathcal{E}_G^\delta &:= \int_X \eta_\delta(L(x) - L^*(x)) \\
         \mathcal{E}_T^\delta &:= \frac{1}{N} \sum_{n=1}^N \eta_\delta(L(x_n) - L^*(x_n)).
     \end{align*}
 
-    Next, it is shown, that the mollified generalization gap $\eta_\delta(L(x)-L^*(x))$
-    has bounded Hardy--Krause variation. Therefore we first apply the results from Remark~\ref{rem:compositions} to the composition of the mollifier $\eta_\delta\in C^s$ and the function $L-L^* \in C^1([0,1]^s, \mathbb{R})$. One can see, that it suffices to show that for all paritions $\pi$ of the set $\{1,\ldots,s\}$ the following holds:
+    Next, it is shown, that the mollified generalization gap
+    $\eta_\delta(L(x)-L^*(x))$ has bounded Hardy--Krause variation. Therefore we
+    first apply the results from Remark~\ref{rem:compositions} to the
+    composition of the mollifier $\eta_\delta\in C^s$ and the function $L-L^*
+    \in C^1([0,1]^s, \mathbb{R})$. One can see, that it suffices to show that
+    for all paritions $\pi$ of the set $\{1,\ldots,s\}$ the following holds:
     \begin{equation} \label{eq:variation_requirement}
         \int\limits_{[0,1]^s} \big| \prod_{B\in\pi} \frac{\partial^{|B|}}{\prod_{j\in B}\partial x_j} (L-L^*)(x) \big| \, dx < \infty.
     \end{equation}
@@ -255,26 +279,38 @@ Now we can prove the theorem.
         \eta_\delta(L(x) - L^*(x)) \leq C < \infty \qquad \text{for all } x \in [0,1]^s.
     \end{equation}
 
-    The constant $C$ depends on both the dimension $s$ and the tolerance $\delta$ associated with the mollifier. Since it has been established that the mollified difference $\eta_\delta(L(x) - L^*(x))$ is bounded, Remark~\ref{rem:compositions} implies that its Hardy--Krause variation is also bounded.
+    The constant $C$ depends on both the dimension $s$ and the tolerance
+    $\delta$ associated with the mollifier. Since it has been established that
+    the mollified difference $\eta_\delta(L(x) - L^*(x))$ is bounded,
+    Remark~\ref{rem:compositions} implies that its Hardy--Krause variation is
+    also bounded.
 
 
-    Now we can apply the Koksma-Hlawka inequality (Theorem~\ref{thm:koksma-hlawka}) to the mollified generalization gap yielding:
+    Therefore, we can now apply the Koksma-Hlawka inequality
+    (Theorem~\ref{thm:koksma-hlawka})
     \begin{equation}
         \label{eq:hk_generalization_gap}
         |\mathcal{E}_G^\delta - \mathcal{E}_T^\delta| \leq C \cdot \frac{V_{\mathrm{HK}}(\eta_\delta(L-L^*))(\log N)^s}{N}.
     \end{equation}
 
-    Applying \eqref{eq:bounded_mollified_generalization_gap} onto the Koksma--Hlawka inequality in \eqref{eq:hk_generalization_gap} yields
+    Applying \eqref{eq:bounded_mollified_generalization_gap} onto the
+    Koksma--Hlawka inequality in \eqref{eq:hk_generalization_gap} yields
 
     \begin{equation}
-        |\mathcal{E}_G^\delta - \mathcal{E}_T^\delta| \leq C \cdot \frac{(\log N)^s}{N}.
+        |\mathcal{E}_G^\delta - \mathcal{E}_T^\delta | \leq C \cdot \frac{(\log N)^s}{N}.
     \end{equation}
 
-    As by construction of $\eta_\delta$, the following holds:
+    By construction of $\eta_\delta$ it holds that
     \begin{equation}
-        \max \big\{\big| \mathcal{E}_G - \mathcal{E}_G^\delta \big|, \big| \mathcal{E}_T - \mathcal{E}_T^\delta \big|\big\} \leq \delta,
+        \big| \mathcal{E}_G - \mathcal{E}_G^\delta \big|\leq \delta \qquad \text{and} \qquad \big| \mathcal{E}_T - \mathcal{E}_T^\delta \big| \leq \delta.
     \end{equation}
-    we can estimate the generalization error $\mathcal{E}_G$ by
+    Applying by applying triangle inequality to the initial generalization gap, it follows that
+    \begin{align*}
+        |\mathcal{E}_G - \mathcal{E}_T| &\leq \underbrace{|\mathcal{E}_G - \mathcal{E}_G^\delta|}_{\leq \delta} + \underbrace{|\mathcal{E}_T^\delta - \mathcal{E}_T|}_{\leq \delta} + |\mathcal{E}_G^\delta - \mathcal{E}_T^\delta| \\
+        &\leq 2\delta + |\mathcal{E}_G^\delta - \mathcal{E}_T^\delta| \\
+        &\leq 2\delta + C \cdot \frac{(\log N)^s}{N}.
+    \end{align*}
+    It follows the bound on the generalization error as stated in the theorem:
     \begin{equation}
         \mathcal{E}_G \leq \mathcal{E}_T + C \cdot \frac{(\log N)^s}{N} + 2\delta.
     \end{equation}
