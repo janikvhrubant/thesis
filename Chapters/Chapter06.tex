@@ -207,7 +207,7 @@ A proof of the Multivariate Faà di Bruno formula can be found in
 This yields the following result for the upper bound on the Hardy--Krause
 variation of compositions of functions.
 
-\begin{remark}\label{label:compositions} \ \\
+\begin{remark}\label{rem:compositions} \ \\
 Recalling Corollary~\ref{cor:variation-approximation} for the composition of two
 function $L\in C^1([0,1]^s, \mathcal{X})$ and $\eta \in
 C^s(\mathcal{X})$ given by $\eta \circ L$ leads to
@@ -242,10 +242,47 @@ Now we can prove the theorem.
     \end{align*}
 
     Next, it is shown, that the mollified generalization gap $\eta(L(x)-L^*(x))$
-    has bounded Hardy--Krause variation. Therefore we first apply the results from Remark~\ref{label:compositions} to the composition of the mollifier $\eta\in C^s$ and the function $L-L^* \in C^1([0,1]^s, \mathbb{R})$. One can see, that it suffices to show that for all paritions $\pi$ of the set $\{1,\ldots,s\}$ the following holds:
-    \begin{equation*}
+    has bounded Hardy--Krause variation. Therefore we first apply the results from Remark~\ref{rem:compositions} to the composition of the mollifier $\eta\in C^s$ and the function $L-L^* \in C^1([0,1]^s, \mathbb{R})$. One can see, that it suffices to show that for all paritions $\pi$ of the set $\{1,\ldots,s\}$ the following holds:
+    \begin{equation} \label{eq:variation_requirement}
         \int\limits_{[0,1]^s} \left| \prod_{B\in\pi} \frac{\partial^{|B|}}{\prod_{j\in B}\partial x_j} (L-L^*)(x) \right| \, dx < \infty.
-    \end{equation*}
+    \end{equation}
+    As $L$ has bounded Hardy--Krause variation by assumption and the surrogate
+    model $L^*$ is a composition of affine $C^\infty$ and sufficiently smooth
+    activation functions $\sigma$, \eqref{eq:variation_requirement} holds for
+    all partitions $\pi$ of the set $\{1,\ldots,s\}$:
+    \begin{equation}
+        \label{eq:bounded_mollified_generalization_gap}
+        \eta(L(x) - L^*(x)) \leq C < \infty \qquad \text{for all } x \in [0,1]^s.
+    \end{equation}
+
+    Therefore, the mollified generalization gap $\eta(L(x)-L^*(x))$ has bounded
+    Hardy--Krause variation as of Remark~\ref{rem:compositions}.
+
+    Now we can apply the Koksma-Hlawka inequality (Theorem~\ref{thm:koksma-hlawka}) to the mollified generalization gap yielding:
+    \begin{equation}
+        \label{eq:hk_generalization_gap}
+        |\mathcal{E}_G^\delta - \mathcal{E}_T^\delta| \leq C \cdot \frac{V_{\mathrm{HK}}(\eta(L-L^*))(\log N)^s}{N}.
+    \end{equation}
+
+    Applying \eqref{eq:bounded_mollified_generalization_gap} onto the Koksma--Hlawka inequality in \eqref{eq:hk_generalization_gap} yields
+
+    \begin{equation}
+        |\mathcal{E}_G^\delta - \mathcal{E}_T^\delta| \leq C \cdot \frac{(\log N)^s}{N}.
+    \end{equation}
+
+    As by construction of $\eta$, the following holds:
+    \begin{equation}
+        \max \big\{\big| \mathcal{E}_G - \mathcal{E}_G^\delta \big|, \big| \mathcal{E}_T - \mathcal{E}_T^\delta \big|\big\} \leq \delta,
+    \end{equation}
+    we can estimate the generalization error $\mathcal{E}_G$ by
+    \begin{equation}
+        \mathcal{E}_G \leq \mathcal{E}_T + C \cdot \frac{(\log N)^s}{N} + 2\delta.
+    \end{equation}
+    
+
+
+
+
 
 \end{proof}
 
