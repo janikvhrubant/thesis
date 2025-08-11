@@ -23,12 +23,12 @@ components before defining the class of functions represented by \aclp{dnn}.
 \begin{definition}[Activation Function] \ \\
 An \emph{activation function} is a measurable function $\sigma : \mathbb{R} \to
 \mathbb{R}$, typically nonlinear, that is applied componentwise to the output of
-each layer in a neural network. For a vector $z = (z_1, \dots, z_k)^\top \in
-\mathbb{R}^k$, the activation is defined as
-\begin{equation*}
-    \sigma(z) := (\sigma(z_1), \dots, \sigma(z_k))^\top.
-\end{equation*}
+each layer in a neural network.
 \end{definition}
+
+\begin{remark}
+    In general the activation function $\sigma$ is only 1-dimensional, i.e. $\sigma: \mathbb{R} \to \mathbb{R}$. However, it is common to apply it componentwise to vectors, to extend the definition to $\sigma: \mathbb{R}^k \to \mathbb{R}^k$ with $\sigma(z) = (\sigma(z_1), \dots, \sigma(z_k))^\top$.
+\end{remark}
 
 \begin{example}[Common Activation Functions] \ \\
 Two widely used activation functions are illustrated in
@@ -104,6 +104,8 @@ number of neurons, i.e., the network has constant width $m$ for all layers $l =
 1, \dots, L-1$. In Figure~\ref{fig:dnn-architecture}, a fully connected \ac{dnn}
 with constant width is illustrated.
 
+\textcolor{red}{TODO: Begründung warum konstantes m}
+
 \begin{figure}[H]
 \centering
 \begin{tikzpicture}[scale=.7, align=center, neuron/.style={circle, draw=black,
@@ -160,7 +162,7 @@ depth $L=3$ layers.}
 
 \begin{remark}
     For the layer structure $d=(d_0,...,d_L)$, the total number of trainable
-    parameters (weights and biases) of $theta$ in the network is given by
+    parameters (weights and biases) of $\theta$ in the network is given by
     \begin{equation*}
         N_\theta = \sum_{l=1}^{L} (d_{l-1} \cdot d_l + d_l) = (L-2) \cdot m^2 + (L+s) \cdot m + 1.
     \end{equation*}
@@ -172,7 +174,7 @@ depth $L=3$ layers.}
 \label{sec:dnn-error}
 % ------------------------------------------------------------------------------
 
-Supervised training of a \ac{dnn} requires minimizing the discrepancy between
+Supervised training of a \ac{dnn}requires minimizing the discrepancy between
 the network output $f_\theta(y)$ and a ground truth map $L(y)$ on a given
 training set $\{y_i\}_{i=1}^N$.
 
@@ -197,7 +199,8 @@ data distribution $\mu$:
 \label{sec:dnn-training}
 % ------------------------------------------------------------------------------
 
-Training a \ac{dnn} corresponds to solving the following regularized
+The training of a \ac{dnn} involves \emph{training data}, 
+Training a \ac{dnn} generally corresponds to solving the following regularized
 minimization problem:
 
 \begin{equation}
@@ -208,49 +211,93 @@ minimization problem:
 where $R(\theta)$ is a regularization term (e.g., $\ell^2$ weight penalty) and
 $\lambda > 0$ controls its strength.
 
-% hier kommt schema
-\begin{figure}[htbp]
+In Figure~\ref{fig:dnn_learning_minimal}, a generic training workflow for deep
+neural networks is illustrated. Starting from a dataset of input--output pairs,
+the number of epochs~$E$, the mini-batch size~$B$, and initial
+parameters~$\theta_0$, the process begins by selecting an
+optimizer~$\mathrm{Opt}$ (e.g., SGD or Adam). For each epoch, the training data
+are shuffled and split into mini-batches of size~$B$. Each
+mini-batch~$\mathcal{B}$ is processed in three steps: (i) perform a forward pass
+to compute the loss~$\mathcal{L}$ and its gradients~$\nabla_\theta \mathcal{L}$,
+(ii) update the parameters using the optimizer, and (iii) proceed to the next
+mini-batch until all have been processed. This procedure is repeated for all~$E$
+epochs, yielding the trained network~$L^* = L_\theta$.
+
+\begin{figure}[H]
 \centering
 \begin{tikzpicture}[
-    node distance=1.8cm and 3.2cm,
-    every node/.style={font=\small},
-    process/.style={rectangle, draw, thick, align=center, minimum width=4.6cm, minimum height=1.1cm, fill=gray!10},
-    io/.style={rectangle, draw, thick, align=center, minimum width=4.6cm, minimum height=1.1cm, fill=blue!10},
-    decision/.style={diamond, draw, thick, aspect=2, align=center, inner sep=0pt, minimum width=3.5cm, fill=orange!15},
-    result/.style={rectangle, draw, thick, align=center, minimum width=4.6cm, minimum height=1.1cm, fill=green!15},
-    arrow/.style={->, thick},
+    block/.style={draw, rounded corners=2pt, line width=.8pt, align=center, fill=gray!10, text width=7cm},
+    output/.style={draw, rounded corners=2pt, line width=.8pt, align=center, fill=green!10, text width=7cm},
+    io/.style={draw, rounded corners=2pt, line width=.8pt, align=center, fill=blue!10, text width=7cm},
+    out/.style={draw, rounded corners=2pt, line width=.8pt, align=center, fill=orange!20, text width=7cm}
 ]
 
-% Nodes
-\node[io] (input) {Input: Map $L$ and\\ low-discrepancy sequence $(y_n)_{n=1}^N$};
-\node[process, below=of input] (step1) {Step 1:\\ Evaluate $L(y_n)$ for all $y_n \in S \subset Y$};
-\node[process, below=of step1] (step2) {Step 2:\\ Initialize NN $L_\theta$,\\ compute loss and gradients};
-\node[process, below=of step2] (step3) {Step 3:\\ Run SGD to minimize loss};
-\node[result, below=of step3] (output) {Output: Trained NN $L^* = L_{\theta^*}$ approximates $L$};
+% % ---------- Input ----------
+\node[io] (input) {Dataset $\{(x_n,L(x_n))\}_{n=1}^N$, epochs $E$, \\ batch 
+    size $B$, initial parameters $\theta_0$};
 
-% Arrows
-\draw[arrow] (input) -- (step1);
-\draw[arrow] (step1) -- (step2);
-\draw[arrow] (step2) -- (step3);
-\draw[arrow] (step3) -- (output);
+\node[anchor=center, font=\bfseries] at ($(input.west)+(-1.2cm,0)$) {Input:};
 
-% Optional annotation on side
-\node[align=left, font=\footnotesize, right=3.8cm of step1, text width=4.6cm] (note1) {
-    \textbf{Note:}\\
-    $S = \{y_n\}$ is chosen\\
-    as a low-discrepancy sequence.
-};
+% ---------- Init ----------
+\node[io, below=9mm of input] (init) {Choose optimizer $\mathrm{Opt}$ (e.g.\
+    SGD/Adam), number of epochs $E$, batch training data with size $B$.};
 
-\node[align=left, font=\footnotesize, right=3.8cm of step2, text width=4.6cm] (note2) {
-    \textbf{SGD Initialization:}\\
-    Use $\nabla_\theta \mathcal{L}(L_\theta(y_n), L(y_n))$.
-};
+\draw[-{Latex[length=3mm]}, line width=1.1pt] (input) -- (init);
+
+\node[anchor=center, font=\bfseries] at ($(init.west)+(-1.2cm,0)$) {Init:};
+
+% ---------- Mini-batch steps (within epoch) ----------
+\node[block, below=6mm of init] (batch) {\centering \mbox{Sample a mini-batch 
+    $\mathcal{B} \subset \text{Train}$} \mbox{with $|\mathcal{B}| = B$ (shuffle 
+    each epoch).}};
+
+\node[block, below=4mm of batch] (forward) {Forward pass on $\mathcal{B}$; \\ 
+    compute loss $\mathcal{L}$ and gradients $\nabla_\theta \mathcal{L}$.};
+
+\node[block, below=4mm of forward] (update) {\centering \mbox{\textbf{Update 
+    parameters}:\quad $\theta \leftarrow \mathrm{Opt}\!\big(\theta,
+    \nabla_\theta \mathcal{L}\big)$.}};
+
+\draw[-{Latex[length=3mm]}, line width=1.1pt] (init) -- (batch);
+
+\draw[-{Latex[length=3mm]}, line width=1.1pt] (batch) -- (forward);
+
+\draw[-{Latex[length=3mm]}, line width=1.1pt] (forward) -- (update);
+
+% loop within epoch
+\draw[dotted, line width=1.0pt] (update.east) -- ++(1.0,0);
+
+\node[anchor=west, align=left] at ($(update.east)+(1.1,1.0)$)
+    {\textbf{Repeat} until all\\[-1pt] mini-batches processed \\[-1pt] \textbf
+    {Repeat for all $E$ epochs}};
+
+% brace for "one epoch"
+\draw[decorate, decoration={brace, amplitude=5pt, mirror}, thick]
+    ($(batch.west)+(-.35, .35)$) -- ($(update.west)+(-.35, -.35)$)
+    node[midway, xshift=-8mm, rotate=90, font=\bfseries] {Epoch};
+
+% ---------- Next epoch ----------
+\node[block, below=7mm of update] (nextepoch) 
+    {\centering \mbox{Proceed to next epoch}};
+
+\draw[-{Latex[length=3mm]}, line width=1.1pt] (update) -- (nextepoch);
+
+% epoch loop (no explicit counter shown)
+\draw[dotted, -{Latex[length=3mm]}, line width=1.0pt] 
+    (nextepoch.east) -- ++(1.0,0) |- (batch.east);
+
+% ---------- Output ----------
+\node[output, below=10mm of nextepoch] (output) 
+    {\centering \resizebox{!}{9pt}{Trained network $L^*=L_\theta$}};
+    
+\draw[-{Latex[length=3mm]}, line width=1.1pt] (nextepoch) -- (output);
+
+\node[anchor=center, font=\bfseries] at ($(output.west)+(-1.2cm,0)$) {Output:};
 
 \end{tikzpicture}
-\caption{Workflow of Algorithm 2.2: Deep learning of parameters-to-observable map using low-discrepancy sampling and SGD-based training.}
-\label{fig:algo22_dnn_training}
+\caption{Generic DNN training: for each of $E$ epochs, iterate over mini-batches of size $B$, compute loss/gradients and update parameters using optimizer $\mathrm{Opt}$.}
+\label{fig:dnn_learning_minimal}
 \end{figure}
-
 
 \subsection{Stochastic Gradient Descent (SGD)}
 

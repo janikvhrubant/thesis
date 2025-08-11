@@ -8,3 +8,252 @@
     \item Discussion of smooth vs. non-smooth activations (e.g. ReLU vs. tanh)
     \item Practical considerations: dimensionality, optimal choices
 \end{itemize}
+
+\section{Preliminaries}
+
+For the sake of completeness, we start with some results on approximations of
+variations defined in Section~\ref{sec:variation}. First we recall an important
+identity for the alternating sum.
+
+\begin{prop}
+\label{prop:variation-approximation}
+    Let $f$ be a function defined on the hypercube $[a,b]^s$ with existing and
+    integrable derrivative $\frac{\partial^s}{\partial x_1 \cdots \partial x_s}
+    f$. Then, the following holds for the alternating sum:
+    \begin{equation}
+        \int\limits_{[a,b]} \frac{\partial^s}{\partial x_1 \cdots \partial x_s} 
+        f(x) \, dx = \Delta(f;a,b)
+    \end{equation}
+    where $\Delta(f;a,b)$ is the alternating sum from
+    Definition~\ref{def:alternating_sum}.
+\end{prop}
+
+\begin{proof} We prove this by induction on the dimension $s$.
+
+\textbf{Base case ($s=1$).}
+\begin{equation*}
+    \int\limits_{a}^{b} \frac{\partial f(x)}{\partial x} \, dx
+    = f(b) - f(a) = \Delta(f;a,b).
+\end{equation*}
+Thus, the statement holds for $s=1$.
+
+\textbf{Induction hypothesis.}\\
+Assume the statement holds for dimension $s-1$.
+
+\textbf{Induction step ($s-1 \to s$).}\\
+Write $x = (x',x_s)$ with $x' \in [a',b'] := \prod_{j=1}^{s-1} [a_j,b_j]$. 
+First, apply the one-dimensional fundamental theorem of calculus in the last coordinate:
+\begin{equation*}
+\int\limits_{a_s}^{b_s} 
+\frac{\partial^s f(x',t)}{\partial x_1 \cdots \partial x_s} \, dt
+= \frac{\partial^{s-1} f(x',b_s)}{\partial x_1 \cdots \partial x_{s-1}}
+ - \frac{\partial^{s-1} f(x',a_s)}{\partial x_1 \cdots \partial x_{s-1}}.
+\end{equation*}
+Now integrate over $x'$ and use Fubini’s theorem:
+\begin{equation*}
+\int\limits_{[a,b]} 
+\frac{\partial^s f(x)}{\partial x_1 \cdots \partial x_s} \, dx
+= \int\limits_{[a',b']} \frac{\partial^{s-1} f(x',b_s)}{\partial x_1 \cdots \partial x_{s-1}} \, dx'
+ - \int\limits_{[a',b']} \frac{\partial^{s-1} f(x',a_s)}{\partial x_1 \cdots \partial x_{s-1}} \, dx'.
+\end{equation*}
+We now apply the induction hypothesis to both integrals (for the functions 
+$g_1(x') := f(x',b_s)$ and $g_2(x') := f(x',a_s)$):
+\begin{equation*}
+\int\limits_{[a',b']} \frac{\partial^{s-1} f(x',b_s)}{\partial x_1 \cdots \partial x_{s-1}} \, dx'
+= \Delta\big(f(\cdot,b_s);a',b'\big),
+\end{equation*}
+\begin{equation*}
+\int\limits_{[a',b']} \frac{\partial^{s-1} f(x',a_s)}{\partial x_1 \cdots \partial x_{s-1}} \, dx'
+= \Delta\big(f(\cdot,a_s);a',b'\big).
+\end{equation*}
+Thus,
+\begin{equation*}
+\int\limits_{[a,b]} 
+\frac{\partial^s f(x)}{\partial x_1 \cdots \partial x_s} \, dx
+= \Delta\big(f(\cdot,b_s);a',b'\big)
+ - \Delta\big(f(\cdot,a_s);a',b'\big).
+\end{equation*}
+This is exactly the recursive definition of the corner difference in $s$ dimensions.
+Hence, the statement holds for $s$.
+\end{proof}
+
+This yields another result for the variation in the sense of Vitali on functions
+with existing and integrable derrivative.
+
+\begin{cor}
+\label{cor:variation-approximation}
+    Let $f$ be a function defined on the hypercube $[a,b]^s$ with existing and
+    integrable derrivative $\frac{\partial^s}{\partial x_1 \cdots \partial x_s}
+    f$. Then, the following holds for the variation:
+    \begin{equation}
+        V_{[a,b]}(f) \leq \int\limits_{[a,b]} \left| \frac{\partial^s}{\partial x_1 \cdots \partial x_s} f(x) \right| \, dx.
+    \end{equation}
+\end{cor}
+
+\begin{proof}
+    
+    Recalling the definition of variation with respect to a ladder from Definition~\ref{def:variation_ladder} and applying Proposition~\ref{prop:variation-approximation} yields
+
+    \begin{equation*}
+        V_{\mathcal{Y}}(f) =  \sum_{y \in \mathcal{Y}} \big| \Delta(f; y, y_+) \big| = \sum_{y \in \mathcal{Y}} \bigg| \int\limits_{[y,y_+]}\frac{\partial^s}{\partial x_1 \cdots \partial x_s} f(x) \, dx \bigg|.
+    \end{equation*}
+
+    Applying the triangle inequality then leads to
+
+    \begin{equation*}
+        \sum_{y \in \mathcal{Y}} \bigg| \int\limits_{[y,y_+]}\frac{\partial^s}{\partial x_1 \cdots \partial x_s} f(x) \, dx \bigg| \leq \sum_{y \in \mathcal{Y}} \int\limits_{[y,y_+]}\bigg|\frac{\partial^s}{\partial x_1 \cdots \partial x_s} f(x)\bigg| \, dx
+    \end{equation*}
+    
+    \textcolor{red}{TODO: Beispiel hinzufügen}
+
+    As for a ladder $\mathcal{Y}$ of a hyperrectangle $[a,b]$ equality $\bigcup_{\mathcal{Y}\in\mathbb{Y}}[y,y_+] = [a,b]$ holds, the sum builds the integral over the whole hyperrectangle $[a,b]$:
+
+    \begin{equation*}
+        \sum_{y \in \mathcal{Y}} \int\limits_{[y,y_+]}\bigg|\frac{\partial^s}{\partial x_1 \cdots \partial x_s} f(x)\bigg| \, dx = \int\limits_{[a,b]}\bigg|\frac{\partial^s}{\partial x_1 \cdots \partial x_s} f(x)\bigg| \, dx.
+    \end{equation*}
+
+    Therefore
+
+    \begin{equation*}
+        V_{[a,b]}(f) = \sup_{\mathcal{Y}\in\mathbb{Y}} V_{\mathcal{Y}}(f) \leq \int\limits_{[a,b]} \left| \frac{\partial^s}{\partial x_1 \cdots \partial x_s} f(x) \right| \, dx.
+    \end{equation*}
+\end{proof}
+
+\begin{remark}
+    Because computing the Hardy--Krause variation is not tractable, the
+    following recursively defined upper bound follows immediately from the
+    preceding results by Corollary~\ref{cor:variation-approximation}:
+
+    \begin{equation}
+        \label{eq:variation_hardy_krause_bound}
+        V_{\mathrm{HK}}(f) \leq \widehat{V}_{\mathrm{HK}}(f) := \int\limits_{[a,b]} 
+        \left| \frac{\partial^s}{\partial x_1 \cdots \partial x_s} f(x) \right| \, 
+        dx + \sum\limits_{i=1}^s \widehat{V}_{\mathrm{HK}}(f^{(i)}_1).
+    \end{equation}
+
+    Here, $f^{(i)}$ denotes the restriction of $f$ to the boundary $y_i=b_i$. In
+    the first place this is a restriction to the $s-1$ dimensional case. In the last recursive step, the univariate case is reached with
+
+    \begin{equation*}
+        \widehat{V}_{\mathrm{HK}}(f_{s-1}^v) = \int\limits_{[a,b]} 
+        \left| \frac{\partial f_{s-1}^v(x)}{\partial x} \right| \, dx.
+    \end{equation*}
+    Hereby,  $f_{s-1}^v$ is the restriction of $f$ to the boundary for $(s-1)$
+    dimensions in the tuple $v\subset\{1,\ldots,s\}$.
+\end{remark}
+
+
+\section{QMC-Based Analysis of the Function Approximation Problem}
+\textcolor{red}{TODO: Titel anpassen}
+
+Given the computable training error $\mathcal{E}_T$ depending on the training data, one wants to estimate the generalization error. Therefore the \emph{generalization gap} is an important 
+
+\begin{theorem}
+    For the surrogate models $L^*$ obtained by \ac{dnn} training of a mapping
+    $L$ on the hyperrectangle $[0,1]^s$ with a low-discrepancy sequence
+    $\mathcal{S}=\{x_n\}_{n=1}^N\subset [0,1]^s$ yields a generalization gap estimated by
+    \begin{equation*}
+        \mathcal{E}_G - \mathcal{E}_T \leq C \cdot \frac{V_{\mathrm{HK}}(|L-L^*|)(\log N)^s}{N},
+    \end{equation*}
+    where $C$ is a constant and $V_{\mathrm{HK}}(|L-L^*|)$ is the Hardy--Krause variation from Definition~\ref{def:variation_hardy_krause}.
+\end{theorem}
+
+\begin{proof}
+    This simply follows from the Koksma-Hlawka inequality
+    (Theorem~\ref{thm:koksma-hlawka}) applied to the surrogate model $L^*$ and
+    the training error $\mathcal{E}_T$ as follows:
+    \begin{align*}
+        |\mathcal{E}_G - \mathcal{E}_T| &= \bigg| \int\limits_{[0,1]^s} L(x) \, d\mu(x) - \frac{1}{N} \sum_{n=1}^N L(x_n) \bigg| \\
+        &\leq V_{\mathrm{HK}}(|L-L^*|) \cdot D^*_N \\
+        &\leq C \cdot \frac{V_{\mathrm{HK}}(|L-L^*|)(\log N)^s}{N}
+    \end{align*}
+    Here, $D^*_N$ is the star-discrepancy of the low-discrepancy sequence
+    $\mathcal{S}$ and $C$ is a constant depending on the discrepancy of the
+    sequence.
+\end{proof}
+
+\begin{theorem} \ \\
+Let $L : [0,1]^s \to \mathbb{R}$ be a map with finite Hardy--Krause variation,
+i.e. $\widehat{V}_{HK}(L) < \infty$. Then for \ac{dnn} $L^*$ trained on a
+low-discrepancy sequence $\mathcal{S}=\{x_n\}_{n=1}^N\subset [0,1]^s$ with the
+activation function $\sigma$ satisfying $\sigma \in C^d(\mathbb{R})$ and the
+generalization gap of $L^*$ satisfying
+\begin{equation*}
+    |\mathcal{E}_G - \mathcal{E}_T| \leq \delta,
+\end{equation*}
+for any tolerance $\delta > 0$, the following holds:
+\begin{equation*}
+    \mathcal{E}_G \leq \mathcal{E}_T + C \cdot \frac{(\log N)^s}{N} + 2\delta
+\end{equation*}
+
+\end{theorem}
+
+To proof this theorem, we will use the following proposition stating a
+multivariate version of the Faà di Bruno formula from
+\cite{hardy2006combinatorics}.
+
+\label{prop:multivariate_faa_di_bruno}
+\begin{prop}[Multivariate Faà di Bruno formula] \ \\
+Let $f \in C^d(\mathbb{R}^s)$ and $\sigma \in C^d(\mathbb{R})$ be two functions
+with $d \geq 1$. Then the $s$-th derivative of the composition $\sigma \circ f$
+is given by
+\begin{equation*}
+    \frac{\partial^s}{\partial x_1 \cdots \partial x_s} (\sigma \circ f)(x) = \sum_{\pi} \sigma^{(|\pi|)}\circ f(x) \cdot \prod_{B\in\pi} \frac{\partial^{|B|}}{\prod_{j\in B}\partial x_j}
+\end{equation*}
+where $f^{(m)}$ denotes the $m$-th derivative of $f$.
+\end{prop}
+A proof of the Multivariate Faà di Bruno formula can be found in
+\cite{hardy2006combinatorics}.
+
+This yields the following result for the upper bound on the Hardy--Krause
+variation of compositions of functions.
+
+\begin{cor} \label{cor:variation_hardy_krause_composition}\ \\
+Let $f \in C^1([0,1]^s, \mathcal{A})$ and $g \in C^s(\mathcal{A},
+\mathbb{R})$ be two functions and further assume
+\begin{equation*}
+    \int\limits_{[0,1]^s} \prod_{j=1}^s \left| hello \right|
+\end{equation*}
+with $d \geq 1$. Then the Hardy--Krause variation of the composition $\sigma$
+\end{cor}
+
+\newpage
+Bitte nachvollziehen:
+
+\begin{align*}
+    \partial^v (f\circ \tau) &= \sum_{\substack{\lambda \in \mathbb{N}_0^d \\ 1\leq \lambda \leq |v|}} f_\lambda \,\sum_{s=1}^{|v|} \,\,\, \sum_{l_r,k_r \in \widetilde{\mathrm{KL}}(s,v,\lambda)} \,\,\, \prod_{r=1}^s \partial^{l_r} \tau_{k_r}
+\end{align*}
+Wobei gilt:
+\begin{align*}
+    \widetilde{\mathrm{KL}}(s,v,\lambda) &= \{(l_r,k_r), \, r=1\dots,s \, | &&l_r \subseteq 1:m, \, k_r\in 1:d, \, \bigcup_{r=1}^s l_r=v \\
+    & && \, l_r \cap l_{r^\prime} = \emptyset \, \text{ for } r\neq r^\prime \, \text{and} |\{ j\in 1:s\,|\,k_j=i \} \,|\, =\lambda_i \} \\
+\end{align*}
+$$v= (v_1,\ldots,v_m) \in \{0,1\}^m$$
+\begin{align*}
+    \tau: &\mathbb{R}^m \to \mathbb{R}^d \\
+    f: &\mathbb{R}^d \to \mathbb{R}^n \\
+    f\circ \tau: &\mathbb{R}^d \to \mathbb{R}^n
+\end{align*}
+
+\noindent\rule{\textwidth}{0.4pt}
+
+Bei uns gilt: $d=1$ und $n=1$, ausserdem notieren wir statt:
+\begin{align*}
+    & s \to z \\
+    & m \to s \\
+    & f \to \sigma \\
+    & \tau \to L
+\end{align*}
+
+\noindent\rule{\textwidth}{0.4pt}
+
+Damit folgt dann für uns $v= (v_1,\ldots,v_m) \in \{0,1\}^s$
+
+\begin{align*}
+    \partial^v (\sigma\circ L) &= \sum_{\substack{\lambda \in \mathbb{N}_0 \\ 1\leq \lambda \leq |v|}} \sigma^{(\lambda)} \,\sum_{z=1}^{|v|} \,\,\, \sum_{l_r \in \widetilde{\mathrm{KL}}(z,v,\lambda)} \,\,\, \prod_{r=1}^s \partial^{l_r} L
+\end{align*}
+Wobei
+\begin{align*}
+    \widetilde{\mathrm{KL}}(z,v,\lambda) &= \{l_r, \, r=1\dots,z \, | &&l_r \subseteq 1:m, \, \bigcup_{r=1}^z l_r=v \\
+    & && \, l_r \cap l_{r^\prime} = \emptyset \, \text{ for } r\neq r^\prime \, \text{and} |\{ j\in 1:z \}|\, =\lambda_i \} \\
+\end{align*}

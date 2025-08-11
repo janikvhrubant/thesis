@@ -3,6 +3,7 @@
 \label{chapter3}
 % ------------------------------------------------------------------------------
 \section{Function Variation in Multiple Dimensions}
+\label{sec:variation}
 % ------------------------------------------------------------------------------
 
 In \acf{qmc} theory, the variation of a function plays a key role in bounding
@@ -39,6 +40,7 @@ Here, the term $-u$ denotes the complement of $u$ in $\{1, \dots, s\}$. Using
 this notation, the \emph{alternating sum} is defined as follows:
 
 \begin{definition}[Alternating Sum] \ \\
+    \label{def:alternating_sum}
     The \emph{alternating sum} on $s$ dimensions with respect to a function on
     the hyperrectangle $[a,b]$ is defined as
     \begin{equation*}
@@ -55,25 +57,43 @@ A classical approach to quantify function variation on hyperrectangles is based
 on the concept of \emph{ladders}:
 
 \begin{definition}[Ladder] \ \\
-    A \emph{ladder} on the hyperrectangle $[a,b]$ is a set of points
-    $\mathcal{Y} = \{y_1, \dots, y_k\} \subset [a,b]$ such that for each $i <
-    j$, the point $y_i$ is less than or equal to $y_j$ in every coordinate.
-    Formally, this means that for all $i < j$ and for all $l \in \{1, \dots,
-    s\}$, we have $y_i^l \leq y_j^l$.
+    A \emph{ladder} on the hyperrectangle $[a,b]$ is of the form $\mathcal{Y} =
+    \prod\limits_{j=1}^s \mathcal{Y}^j$, where each $\mathcal{Y}^j$ is a finite
+    subset of $[a_j, b_j]$ for $j = 1, \dots, s$ where $\mathcal{Y}^j = \{y_1^j,
+    \dots, y_k^j\}$ is ordered such that $a_j = y_1^j < y_2^j < \dots < y_k^j$.
+    The ladder could consist of different number of points in each dimension.
+
+    The \emph{successor} of a point $y \in \mathcal{Y}$ in the ladder is defined
+    componentwise as
+    \begin{equation*}
+        y_+^j = \min \bigg\{ (y^j, b_j] \cup \big( \mathcal{Y}^j \cap \{b_j\} \big) \bigg\}
+    \end{equation*}
+    with $y_+ = (y_+^1, \dots, y_+^s)$.
 \end{definition}
 
-Let $\mathbb{Y}$ denote the set of all such ladders on $[a,b]$. The
-\emph{variation with respect to a ladder} is then defined as:
+\begin{remark}
+    For a ladder $\mathcal{Y}$ on the hypercube $[a,b]$ the following equation holds:
+    \begin{equation*}
+        \bigcup_{\mathcal{Y}\in\mathbb{Y}}[y,y_+] = [a,b]
+    \end{equation*}
+    This is due to the ladder splitting the hypercube $[a,b]$ into axis-aligned
+    rectangular subregions by the points $[y,y_+]$ for each $y \in \mathcal{Y}$.
+    Thus, the union of all such subregions is a disjoint cover of the hypercube.
+
+    Further $\mathbb{Y}$ denotes the set of all such ladders on $[a,b]$.
+\end{remark}
+\qquad
+
+The \emph{variation with respect to a ladder} is then defined as:
 
 \begin{definition}[Variation with respect to a ladder] \ \\
+    \label{def:variation_ladder}
     Let $\mathcal{Y} = \prod\limits_{j=1}^s \mathcal{Y}^j$ be a ladder on
     $[a,b]$. Then the \emph{variation} of a function $f$ with respect to
     $\mathcal{Y}$ is
     \begin{equation*}
-        V_\mathcal{Y}(f) = \sum_{y \in \mathcal{Y}} \big| \Delta(f; y, y_+) \big|,
+        V_\mathcal{Y}(f) = \sum_{y \in \mathcal{Y}} \big| \Delta(f; y, y_+) \big|.
     \end{equation*}
-    where $y_+$ is the point obtained by taking the componentwise successor
-    $y^j_+$ in each dimension $j$.
 \end{definition}
 
 The \emph{Vitali variation} of a function is then the supremum of this
@@ -101,6 +121,7 @@ over all lower-dimensional axis-aligned faces of the unit hypercube. It is
 defined as:
 
 \begin{definition}[Hardy--Krause Variation] \ \\
+    \label{def:variation_hardy_krause}
     The \emph{Hardy--Krause variation} of a function $f$ on the hyperrectangle
     $[a,b]$ is defined as
     \begin{equation*}
