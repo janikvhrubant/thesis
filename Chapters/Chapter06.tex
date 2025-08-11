@@ -84,10 +84,10 @@ with existing and integrable derrivative.
 \label{cor:variation-approximation}
     Let $f$ be a function defined on the hypercube $[a,b]^s$ with existing and
     integrable derrivative $\frac{\partial^s}{\partial x_1 \cdots \partial x_s}
-    f$. Then, the following holds for the variation:
-    \begin{equation}
+    f$. Then, the following holds for the variation in the sense of Vitali:
+    \begin{equation*}
         V_{[a,b]}(f) \leq \int\limits_{[a,b]} \left| \frac{\partial^s}{\partial x_1 \cdots \partial x_s} f(x) \right| \, dx.
-    \end{equation}
+    \end{equation*}
 \end{cor}
 
 \begin{proof}
@@ -176,7 +176,7 @@ Given the computable training error $\mathcal{E}_T$ depending on the training da
 Let $L : [0,1]^s \to \mathbb{R}$ be a map with finite Hardy--Krause variation,
 i.e. $\widehat{V}_{HK}(L) < \infty$. Then for \ac{dnn} $L^*$ trained on a
 low-discrepancy sequence $\mathcal{S}=\{x_n\}_{n=1}^N\subset [0,1]^s$ with the
-activation function $\sigma$ satisfying $\sigma \in C^d(\mathbb{R})$ and the
+activation function $\eta$ satisfying $\eta \in C^d(\mathbb{R})$ and the
 generalization gap of $L^*$ satisfying
 \begin{equation*}
     |\mathcal{E}_G - \mathcal{E}_T| \leq \delta,
@@ -194,28 +194,73 @@ multivariate version of the Faà di Bruno formula from
 
 \label{prop:multivariate_faa_di_bruno}
 \begin{prop}[Multivariate Faà di Bruno formula] \ \\
-Let $f \in C^d(\mathbb{R}^s)$ and $\sigma \in C^d(\mathbb{R})$ be two functions
-with $d \geq 1$. Then the $s$-th derivative of the composition $\sigma \circ f$
-is given by
+Let $L \in C(\mathbb{R}^s)$ and $\eta \in C^s(\mathbb{R})$ be two functions.
+Then the following derivative of the composition $\eta \circ L$ follows:
 \begin{equation*}
-    \frac{\partial^s}{\partial x_1 \cdots \partial x_s} (\sigma \circ f)(x) = \sum_{\pi} \sigma^{(|\pi|)}\circ f(x) \cdot \prod_{B\in\pi} \frac{\partial^{|B|}}{\prod_{j\in B}\partial x_j}
+    \frac{\partial^s}{\partial x_1 \cdots \partial x_s} (\eta \circ f)(x) = \sum_{\pi} \eta^{(|\pi|)}\circ L(x) \cdot \prod_{B\in\pi} \frac{\partial^{|B|}}{\prod_{j\in B}\partial x_j}L(x)
 \end{equation*}
-where $f^{(m)}$ denotes the $m$-th derivative of $f$.
+Hereby the sum is taken over all partitions $\pi$ of the set $\{1,\ldots,s\}$ and $B$ are the stes within the partition $\pi$.
 \end{prop}
 A proof of the Multivariate Faà di Bruno formula can be found in
-\cite{hardy2006combinatorics}.
+\cite[Proposition 1]{hardy2006combinatorics}.
 
 This yields the following result for the upper bound on the Hardy--Krause
 variation of compositions of functions.
 
-\begin{cor} \label{cor:variation_hardy_krause_composition}\ \\
-Let $f \in C^1([0,1]^s, \mathcal{A})$ and $g \in C^s(\mathcal{A},
-\mathbb{R})$ be two functions and further assume
+\begin{remark}\ \\
+Recalling Corollary~\ref{cor:variation-approximation} for the composition of two
+function $L\in C^1([0,1]^s, \mathcal{X})$ and $\eta \in
+C^s(\mathcal{X})$ given by $\eta \circ L$ leads to
 \begin{equation*}
-    \int\limits_{[0,1]^s} \prod_{j=1}^s \left| hello \right|
+    V_{[0,1]^s}(\eta \circ L) \leq \int\limits_{[0,1]^s} \left| \frac{\partial^s}{\partial x_1 \cdots \partial x_s} (\eta \circ L)(x) \right| \, dx.
 \end{equation*}
-with $d \geq 1$. Then the Hardy--Krause variation of the composition $\sigma$
-\end{cor}
+Applying the multivariate Faà di Bruno formula from Proposition~\ref{prop:multivariate_faa_di_bruno} yields
+\begin{equation*}
+    V_{[0,1]^s}(\eta \circ L) \leq \int\limits_{[0,1]^s} \left| \sum_{\pi} \eta^{(|\pi|)}\circ L(x) \cdot \prod_{B\in\pi} \frac{\partial^{|B|}}{\prod_{j\in B}\partial x_j}L(x) \right| \, dx.
+\end{equation*}
+As for a fixed dimension $s$ the number of partitions $\pi$, denoted by Bell number $B_s$, is finite, the variation in the sense of Vitali is bounded, if for each partition $\pi$ the following holds:
+\begin{equation*}
+    \int\limits_{[0,1]^s} \left| \eta^{(|\pi|)}\circ L(x) \cdot \prod_{B\in\pi} \frac{\partial^{|B|}}{\prod_{j\in B}\partial x_j}L(x) \right| \, dx < \infty.
+\end{equation*}
+As $\eta \in C^s(\mathcal{X})$ is continuous, the composition $\eta \circ L$ is also continuous. Therefore, it suffices to show that
+\begin{equation*}
+    \int\limits_{[0,1]^s} \left| \prod_{B\in\pi} \frac{\partial^{|B|}}{\prod_{j\in B}\partial x_j}L(x) \right| \, dx < \infty.
+\end{equation*}
+\end{remark}
+
+Now we can prove the theorem.
+\begin{proof}[Proof (Multivariate Faà di Bruno formula)] \ \\
+    First, we define a mollifer function $\eta \in C^s(\mathbb{R}, \mathbb{R}_+)$ fullfilling
+    \begin{equation*}
+        \max \big\{\big\| |a| - \eta(a) \big\|_\infty\big\} \leq \delta.
+    \end{equation*}
+
+    By further defining approximating the the generalization error $\mathcal{E}_G$ and the training error $\mathcal{E}_T$ by using the differentiable mollifier $\eta$ instead of the norm $\|\cdot\|_\infty$ we obtain
+    \begin{align*}
+        \mathcal{E}_G^\delta &:= \int_X \eta(L(x) - L^*(x)) \\
+        \mathcal{E}_T^\delta &:= \frac{1}{N} \sum_{n=1}^N \eta(L(x_n) - L^*(x_n)).
+    \end{align*}
+
+\end{proof}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 \newpage
 Bitte nachvollziehen:
@@ -241,7 +286,7 @@ Bei uns gilt: $d=1$ und $n=1$, ausserdem notieren wir statt:
 \begin{align*}
     & s \to z \\
     & m \to s \\
-    & f \to \sigma \\
+    & f \to \eta \\
     & \tau \to L
 \end{align*}
 
@@ -250,7 +295,7 @@ Bei uns gilt: $d=1$ und $n=1$, ausserdem notieren wir statt:
 Damit folgt dann für uns $v= (v_1,\ldots,v_m) \in \{0,1\}^s$
 
 \begin{align*}
-    \partial^v (\sigma\circ L) &= \sum_{\substack{\lambda \in \mathbb{N}_0 \\ 1\leq \lambda \leq |v|}} (\sigma^{(\lambda)}\circ L) \,\sum_{z=1}^{|v|} \,\,\, \sum_{l_r \in \widetilde{\mathrm{KL}}(z,v,\lambda)} \,\,\, \prod_{r=1}^s \partial^{l_r} L
+    \partial^v (\eta\circ L) &= \sum_{\substack{\lambda \in \mathbb{N}_0 \\ 1\leq \lambda \leq |v|}} (\eta^{(\lambda)}\circ L) \,\sum_{z=1}^{|v|} \,\,\, \sum_{l_r \in \widetilde{\mathrm{KL}}(z,v,\lambda)} \,\,\, \prod_{r=1}^s \partial^{l_r} L
 \end{align*}
 Wobei
 \begin{align*}
