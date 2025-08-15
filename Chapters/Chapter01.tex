@@ -6,9 +6,7 @@
 \label{chapter1}
 
 % ------------------------------------------------------------------------------
-% ------------------------------------------------------------------------------
 \section{Motivation and Problem Setting}
-% ------------------------------------------------------------------------------
 % ------------------------------------------------------------------------------
 The numerical evaluation of high-dimensional integrals is a fundamental task in
 modern applied mathematics and scientific computing. Applications range from
@@ -33,7 +31,12 @@ However, its asymptotic error rate of $\mathcal{O}(N^{-1/2})$ limits its
 efficiency -- especially when high precision is required or function evaluations
 are computationally expensive.
 
-\ac{qmc} methods offer an alternative paradigm: instead of random samples, they employ deterministic sequences -- so-called low-discrepancy sequences—that aim to fill the integration domain more uniformly. This structured sampling allows for faster convergence under certain smoothness conditions and forms the basis for many state-of-the-art techniques in high-dimensional numerical integration.
+\ac{qmc} methods offer an alternative paradigm: instead of random samples, they
+employ deterministic sequences -- so-called low-discrepancy sequences -- that
+aim to fill the integration domain more uniformly. This structured sampling
+allows for faster convergence under certain smoothness conditions and forms the
+basis for many state-of-the-art techniques in high-dimensional numerical
+integration.
 
 The goal of this part is to develop a rigorous mathematical foundation for
 \ac{qmc} methods and to understand how they improve upon classical \ac{mc}
@@ -41,15 +44,18 @@ integration. The key concepts introduced here -- particularly discrepancy theory
 and low-discrepancy sequences -- serve as theoretical tools that will be
 revisited in later parts of this thesis. Chapter~\ref{chapter2} will delve into
 the measurement of uniformity via star discrepancy and provide concrete
-constructions of low-discrepancy sequences such as Sobol' and Halton, which are
-central to the numerical methods applied in Part~\ref{part2} and
-Part~\ref{part3}, dedicated to neural network training and CT-based photon
-transport simulation.
+constructions of low-discrepancy sequences such as Sobol' and Halton. Together
+with the concepts of variation end error bounds introduced in
+Chapter~\ref{chapter3}, these form the theoretical backbone for the applications
+of \ac{qmc} methods in the subsequent parts of this thesis: Part~\ref{part2}
+focuses on the training of neural networks using \ac{qmc} methods, while
+Part~\ref{part3} applies these techniques to photon transport simulation in
+\acf{ct}.
 
 
-% ------------------------------------------------------------------------------
+% ------------------------------
 \subsection{High-Dimensional Integration in Applications}
-% ------------------------------------------------------------------------------
+% ------------------------------
 High-dimensional integration problems arise naturally in a wide range of
 scientific and engineering disciplines. Whenever expectations with respect to
 multivariate distributions must be computed numerically, they are typically
@@ -58,17 +64,22 @@ integral in Equation~\eqref{eq:integration_problem}.
 
 Prominent examples include:
 \begin{itemize}
-    \item \textbf{Bayesian statistics}: Computing posterior expectations, marginal likelihoods, or predictive distributions.
-    \item \textbf{Financial mathematics}: Pricing complex financial derivatives and evaluating risk measures under stochastic models.
-    \item \textbf{Machine learning}: Estimating expectations in variational inference, training neural networks using randomized optimization techniques, or evaluating generalization bounds.
-    \item \textbf{Medical imaging}: Simulating photon transport and estimating physical quantities based on noisy measurements, especially in \ac{ct} and magnetic resonance imaging (MRI).
+    \item \textbf{Bayesian statistics}: Computing posterior expectations,
+    marginal likelihoods, or predictive distributions.
+    \item \textbf{Financial mathematics}: Pricing complex financial derivatives
+    and evaluating risk measures under stochastic models.
+    \item \textbf{Computational imaging}: Solving high-dimensional integrals in
+    light transport for computer graphics, atmospheric radiative transfer in
+    remote sensing and, more recently, photon transport simulation in medical
+    imaging.
+     
 \end{itemize}
 
 In all these cases, the dimensionality $s$ can be moderate to very high --
 sometimes even exceeding hundreds or thousands of variables. This introduces
 significant challenges for numerical integration methods, which must balance
-accuracy, computational cost, and robustness with respect to the structure of
-the integrand.
+accuracy, computational cost and robustness with respect to the structure of the
+integrand.
 
 The remainder of this chapter explores how \ac{mc} and \ac{qmc} methods address
 these challenges. Before doing so, we briefly review the \ac{mc} method and
@@ -76,30 +87,36 @@ its fundamental convergence properties in the next section.
 
 
 % ------------------------------------------------------------------------------
-\subsection{Monte Carlo Integration: Principle and Convergence}
+\section{Monte Carlo Integration: Principle and Convergence}
 % ------------------------------------------------------------------------------
 The classical \ac{mc} method is a probabilistic approach to numerical
-integration that relies on random sampling. It is particularly suited for
-high-dimensional settings, as its convergence rate does not deteriorate with
-increasing dimension.
+integration based on averaging function evaluations at randomly sampled points.
+Its convergence rate of $O(N^{-N/2})$ is independent of the dimension,
+making it particularly attractive for high-dimensional problems.
 
 \begin{definition}[Monte Carlo Estimator] \ \\
-Let $f \in L^2([0,1]^s)$ and let $X_0, \dots, X_{N-1} \sim
-\mathcal{U}([0,1]^s)$ be independent and identically distributed random samples.
-The Monte Carlo estimator of the integral \( I \) is given by
+Let $f \in L^2([0,1]^s)$ and let $X_0, \dots, X_{N-1}
+\stackrel{\mathrm{i.i.d.}}{\sim} \mathcal{U}([0,1]^s)$ be independent and
+identically distributed drawn random samples. Then Monte Carlo estimator of the
+integral $I$ from \eqref{eq:integration_problem} is given by
 \begin{equation}
+    \label{eq:mc-estimator}
     I_N^{\mathrm{MC}}(f) := \frac{1}{N} \sum_{n=0}^{N-1} f(X_n)\,.
 \end{equation}
 \end{definition}
 
 
-This estimator is unbiased and converges almost surely to the true integral as $N \to \infty$, as established by the Strong Law of Large Numbers:
+This estimator is unbiased and converges almost surely to the exact value of the
+integral, as established by the Strong Law of Large Numbers:
 
 \begin{theorem}[Strong Law of Large Numbers] \ \\
-Let $f \in L^2([0,1]^s)$. Then
+Let $f \in L^1([0,1]^s)$. Then, the Monte Carlo Estimator from \eqref{eq:mc-estimator} converges almost surely to the integral $I(f)$ from \eqref{eq:integration_problem} as the number of samples $N$ tends to infinity:
 \begin{equation}
-\mathbb{P}\left[ \lim_{N \to \infty} I_N^{\mathrm{MC}}(f) = \int_{[0,1]^s} f(x)\, dx \right] = 1.
+    \mathbb{P}\!\left( \lim_{N \to \infty} I_N^{\mathrm{MC}}(f) = 
+    \int_{[0,1]^s} f(\mathbf{x})\, \mathrm{d}\mathbf{x} \right) = 1,
 \end{equation}
+i.e., $I_N^{\mathrm{MC}}(f) \xrightarrow{\mathrm{a.s.}} \int_{[0,1]^s}
+f(\mathbf{x})\, \mathrm{d}\mathbf{x}$.
 \end{theorem}
 
 Beyond this almost sure convergence, the expected integration error of the Monte
