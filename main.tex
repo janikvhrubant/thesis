@@ -58,7 +58,7 @@ headsepline, % Uncomment to get a line under the header
 \tcolorboxenvironment{definition}{
   enhanced,
   colback=red!5,            % light red background
-  boxrule=0pt,            % border thickness
+  boxrule=0pt,              % border thickness
   arc=0mm,                  % no rounded corners
   sharp corners,            % enforce sharp edges
   top=0mm,
@@ -110,7 +110,7 @@ headsepline, % Uncomment to get a line under the header
 
 \theoremstyle{definition}
 \newtheorem{definition}{Definition}[section]
-\theoremstyle{plain}
+\theoremstyle{definition}
 \newtheorem{theorem}[definition]{Theorem}
 \makeatletter
 \patchcmd{\@begintheorem}{\ignorespaces}{\vspace{1em}\ignorespaces}{}{}
