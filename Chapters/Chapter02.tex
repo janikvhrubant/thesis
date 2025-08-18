@@ -49,11 +49,11 @@ set. Then the star discrepancy $D_N^*$ is defined as
 \end{equation*}
 \end{definition}
 
-This form is used in the Koksma--Hlawka inequality and serves as a central
+This form is used in the Koksma--Hlawka \ref{thm:koksma-hlawka} inequality and serves as a central
 measure in \ac{qmc} analysis. Note that both discrepancy definitions are
 deterministic and depend solely on the point configuration.
 
-\begin{remark}
+\begin{remark} \ \\
 A low star discrepancy implies that the empirical distribution of the points
 approximates the uniform distribution well over all axis-aligned subrectangles
 anchored at the origin.
@@ -85,13 +85,14 @@ regions.
 \label{fig:discrepancy-1d}
 \end{figure}
 
-\begin{example}
-Let $x_n = \frac{n}{N}$ for $n = 0, \dots, N-1$. Then $F_N(t)$ is a
-piecewise constant staircase function, and the discrepancy can be shown to be
-$\mathcal{O}(1/N)$. This is an optimal rate in 1D.
+\begin{example} \ \\
+\label{ex:grid-discrepancy}
+Let $x_n = \frac{n}{N}$ for $n = 0, \dots, N-1$. Then $F_N(t)$ is a piecewise
+constant staircase function and the discrepancy can be shown to be
+$\mathcal{O}(1/N)$. This is an optimal rate in 1D \cite[Section~2.3]{leobacher2014introduction}.
 \end{example}
 
-\begin{remark}
+\begin{remark} \ \\
 Discrepancy provides a worst-case error metric over all subintervals. Thus, even
 a point set that appears visually well-distributed may have large discrepancy
 due to subtle gaps or clustering in certain regions.
@@ -104,7 +105,8 @@ due to subtle gaps or clustering in certain regions.
 Discrepancy is not just a theoretical construct -- its practical relevance
 becomes evident when comparing the behavior of \ac{qmc} sequences with \ac{mc}
 samples. In particular, structured point sets like Halton and Sobol' sequences
-achieve much lower discrepancy than random samples of the same size.
+as introduced in the next section, achieve much lower discrepancy than random
+samples of the same size.
 
 \begin{figure}[H]
 \centering
@@ -115,7 +117,7 @@ slower discrepancy growth.}
 \label{fig:qmc-discrepancy-comparison}
 \end{figure}
 
-\begin{remark}
+\begin{remark}\ \\
 The expected star discrepancy of i.i.d. Monte Carlo samples decreases at the
 rate $\mathcal{O}(N^{-1/2})$, whereas for low-discrepancy sequences, provable
 upper bounds of order $\mathcal{O}((\log N)^s / N)$ exist.
@@ -127,11 +129,11 @@ sequences and analyze their dimensional performance and implementation details.
 
 
 % ------------------------------------------------------------------------------
-\section{Construction of Low-Discrepancy Sequences}
+\section{Low-Discrepancy Sequences}
 % ------------------------------------------------------------------------------
 
-Before defining specific low-discrepancy sequences, we first introduce the term of low-discrepancy sequences, which are designed to fill the unit cube $[0,1)^s$
-as uniformly as possible.
+We start by defining the term of low-discrepancy sequences, which are designed
+to fill the unit cube $[0,1)^s$ as uniformly as possible.
 
 \begin{definition}[Low-Discrepancy Sequence] \ \\
 A sequence $\mathcal{S} = (x_n)_{n\in \mathbb{N}}$ in $[0,1)^s$ is called a low-discrepancy sequence if its star discrepancy satisfies
@@ -142,8 +144,40 @@ for all $N \in \mathbb{N}$. Such sequences are also referred to as
 \emph{quasi-Monte Carlo sequences} or \ac{qmc} sequences.
 \end{definition}
 
-Low discrepancy sequences are constructed to minimize the star
-discrepancy, which is crucial for the convergence of \ac{qmc} methods according to the Koksma-Hlawka inequality introduced in Chapter~\ref{chapter3}.
+Throughout this thesis, the terms low-discrepancy sequence and \ac{qmc} sequence are used interchangeably, as is common in the literature.
+
+Low discrepancy sequences are constructed to minimize the star discrepancy,
+which is crucial for the convergence of \ac{qmc} methods according to the
+Koksma-Hlawka inequality introduced in Chapter~\ref{chapter3}.
+
+With the definition of a low-discrepancy sequence in place, we now get back to
+the \ac{mc} estimator from \ref{def:mc-estimator} and define its equivalent
+\ac{qmc} estimator:
+
+\begin{definition}[Quasi-Monte Carlo Estimator] \ \\
+Let $f \colon [0,1]^s \to \mathbb{R}$ be a measurable function and let
+$\{\boldsymbol{x}_n\}_{n=1}^{N} \subset [0,1]^s$ be a \ac{qmc} point set.
+Then the \emph{quasi-Monte Carlo estimator} for the integral
+\begin{equation*}
+    I(f) = \int_{[0,1]^s} f(\boldsymbol{x}) \, d\boldsymbol{x}
+\end{equation*}
+is defined as
+\begin{equation}
+I_N^{\mathrm{QMC}}(f) := \frac{1}{N} \sum_{n=1}^{N} f(\boldsymbol{x}_n).
+\end{equation}
+\end{definition}
+
+\begin{remark} \ \\
+Even though grid points as in Example~\ref{ex:grid-discrepancy} can achieve
+optimal discrepancy in 1D, they are not considered low-discrepancy sequences in
+the sense of the above definition, since they do not satisfy the asymptotic
+bound for all $N$. Furthermore, grids are not easily extensible -- adding new
+points requires global recomputation and destroys nesting.
+\end{remark}
+
+Now that we have established the definitions of low-discrepancy sequences we
+will introduce two examples of low-discrepancy sequences that are widely used in
+practice: the Halton sequence and the Sobol' sequence.
 
 % ------------------------------------------------------------------------------
 \subsection{The Halton Sequence}
@@ -153,34 +187,34 @@ discrepancy, which is crucial for the convergence of \ac{qmc} methods according 
 The Halton sequence is one of the earliest and most widely used constructions of
 low-discrepancy sequences in arbitrary dimensions. 
 
-For the construction of the Halton sequence, we utilize the radical-inverse
-functin $\phi_b(n)$. The radical-inverse function $\phi_b(n)$ maps an integer
-$n$ to a real number in $[0,1)$ by reflecting its base-$b$ representation about
-the decimal point:
+The construction of the Halton sequence is based on the one-dimensional
+\emph{Van der Corput sequence}, introduced by Johannes van der Corput in 1935. Therefore, we utilize the radical-inverse function $\phi_b(n)$, which maps an integer $n$ to a real number in $[0,1)$ by reflecting its base-$b$ representation about the decimal point. This function is defined as follows:
+
 \begin{equation*}
-    \phi_b(n) = \sum_{k=0}^\infty d_k b^{-k-1}, \quad \text{where } n = \sum_
-    {k=0}^\infty d_k b^k.
+    \phi_b(n) = \sum_{k=0}^\infty d_k b^{-k-1}, \quad \text{ where } n = \sum_
+    {k=0}^\infty d_k b^k \quad \text{ and } d_k \in \{0, 1, \dots, b-1\}.
 \end{equation*}
 
 \begin{definition}[Van der Corput Sequence] \ \\
 \label{def:van-der-corput-sequence}
-The one-dimensional van der Corput sequence in base $b$ is defined as
+The one-dimensional Van der Corput sequence in base $b$ is defined as
 \begin{equation*}
     \mathcal{S}_b = \left( \phi_b(n) \right)_{n\in \mathbb{N}}.
 \end{equation*}
 \end{definition}
 
-The Halton sequence generalizes the one-dimensional van der Corput sequence to
-multiple dimensions by using mutually prime bases.
+John Halton generalized this idea to higher dimensions by combining
+multiple Van der Corput sequences in different bases in 1960 \cite{halton1960efficiency}.
 
 \begin{definition}[Halton Sequence] \ \\
+\label{def:halton}
 Let $b_1, \dots, b_s$ be pairwise coprime integers greater than $1$, typically
 chosen as the first $s$ prime numbers. The $n$-th point $\boldsymbol{x}_n \in
 [0,1)^s$ of the $s$-dimensional Halton sequence is defined componentwise by
 \begin{equation*}
     \boldsymbol{x}_n = \left( \phi_{b_1}(n), \dots, \phi_{b_s}(n) \right),
 \end{equation*}
-where $\phi_b(n)$ denotes the van der Corput radical-inverse function in base
+where $\phi_b(n)$ denotes the Van der Corput radical-inverse function in base
 $b$. The Halton sequence is then given by $\mathcal{S}_{b_1, \dots, b_s} = (x_n)_{n\in \mathbb{N}}$.
 \end{definition}
 
@@ -196,20 +230,13 @@ Consider the two-dimensional Halton sequence based on the first two prime bases 
 This illustrates how the Halton sequence fills the unit square in a low-discrepancy manner even for small $n$.
 \end{example}
 
-
-
-
-
-
-
-
 Intuitively, this construction ensures that each component of the sequence
 explores the unit interval in a structured, non-redundant way. By combining
-several one-dimensional van der Corput sequences in different coprime bases, the
+several one-dimensional Van der Corput sequences in different coprime bases, the
 resulting multi-dimensional point set avoids regular grid-like patterns and
 achieves asymptotic uniformity.
 
-As stated in \cite{pillichshammer2010zahlentheoretische}, the Halton sequence
+As stated in \cite[Section 2.4]{leobacher2014introduction}, the Halton sequence
 has star discrepancy of order
 \begin{equation*}
     D_N^*(\{\boldsymbol{x}_0, \dots, \boldsymbol{x}_{N-1}\}) = \mathcal{O}\left( \frac{(\log N)^s}{N} \right),
@@ -219,11 +246,11 @@ larger dimensions, correlation effects between the different base components can
 lead to degraded uniformity and higher discrepancy. Variants such as scrambling
 or leaping are commonly employed to mitigate this issue.
 
-\begin{remark}
+\begin{remark} \ \\
 The Halton sequence is extensible in $N$ and $s$, making it suitable for
 applications that require growing or adaptive point sets. However, its
-performance in high dimensions is often inferior to more modern constructions
-like the Sobol' sequence.
+distribution properties in higher dimensions tend to be inferior compared to
+constructions such as the Sobol' sequence.
 \end{remark}
 
 
@@ -237,7 +264,10 @@ Constructed to fill the $s$-dimensional unit cube $[0,1)^s$ as uniformly as
 possible, Sobol' sequences are based on a recursive structure that allows for
 efficient generation and high-dimensional performance.
 
-\begin{definition}[Sobol' Sequence Construction]
+Therefore functions from the \emph{ring of polynomials} $\mathbb{F}_2[x] = \{ a_0 + a_1 x + a_2 x^2 + \dots + a_n x^n \mid n \in \mathbb{N},\; a_i \in \mathbb{F}_2 \}$ with coefficients in the finite field $\mathbb{F}_2$ are necessary.
+
+\begin{definition}[Sobol' Sequence Construction] \ \\
+\label{def:sobol}
 Let $p_1, \dots, p_s \in \mathbb{F}_2[x]$ be primitive polynomials ordered by non-decreasing degree. Each polynomial $p_j$ for dimension $j$ is of the form
 \begin{equation*}
     p_j(x) = x^{e_j} + a_{1,j}x^{e_j - 1} + \dots + a_{e_j - 1,j}x + 1,
@@ -245,9 +275,10 @@ Let $p_1, \dots, p_s \in \mathbb{F}_2[x]$ be primitive polynomials ordered by no
 where $e_j \in \mathbb{N}$ and the coefficients $a_{k,j} \in \{0,1\}$.
 
 Choose initial values $m_{1,j}, \dots, m_{e_j,j}$ such that each $m_{k,j}$ is an odd integer and $1 \leq m_{k,j} < 2^k$ for $1 \leq k \leq e_j$. For $k > e_j$, the values $m_{k,j}$ are computed recursively as:
-\begin{equation*}
-    m_{k,j} = a_{1,j} \cdot 2 m_{k-1,j} \oplus a_{2,j} \cdot 2^2 m_{k-2,j} \oplus \dots \oplus a_{e_j-1,j} \cdot 2^{e_j-1} m_{k-e_j+1,j} \oplus 2^{e_j} m_{k-e_j,j} \oplus m_{k-e_j,j},
-\end{equation*}
+\begin{align*}
+    m_{k,j} =& 2 a_{1,j} \cdot m_{k-1,j} \oplus 2^2 a_{2,j} \cdot m_{k-2,j} \oplus \dots \\
+    &\oplus 2^{e_j-1} a_{e_j-1,j} \cdot m_{k-(e_j-1),j} \oplus 2^{e_j} m_{k-e_j,j} \oplus m_{k-e_j,j},
+\end{align*}
 where $\oplus$ denotes bitwise exclusive-or (XOR).
 
 The corresponding direction numbers are defined by
@@ -269,10 +300,40 @@ The $s$-dimensional Sobol' point is
 \end{equation*}
 \end{definition}
 
-\begin{remark}
-In dimension $j = 1$, the polynomial is typically chosen as $p_1(x) = x$, which
-leads to a construction equivalent to the van der Corput sequence in base $2$
-from Definition~\ref{def:van-der-corput-sequence}.
+\begin{example}[First Elements of the Sobol' Sequence in 2D]
+\ \\
+We fix $s=2$ with primitive polynomials ordered by degree
+
+\begin{equation*}
+    p_1(x)=x+1 \ (e_1=1,\ a_{1,1}=1),\qquad
+    p_2(x)=x^2+x+1 \ (e_2=2,\ a_{1,2}=a_{2,2}=1),
+\end{equation*}
+
+and choose admissible initials
+
+\begin{equation*}
+    m_{1,1}=1,\qquad m_{1,2}=1,\quad m_{2,2}=1.
+\end{equation*}
+
+Thus the first direction numbers are
+
+\begin{equation*}
+    v_{1,1}=\tfrac12,\qquad v_{1,2}=\tfrac12,\qquad v_{2,1}=\tfrac34,\qquad v_{2,2}=\tfrac14.
+\end{equation*}
+
+With $n=n_0+2n_1+\cdots$ and $x_{n,j}=n_0 v_{1,j}\oplus n_1 v_{2,j}\oplus\cdots$, the first three points are
+
+\begin{align*}
+n=0:\ & (n_0,n_1)=(0,0)\ \Rightarrow\ \boldsymbol{x}_0=(0,0).\\
+n=1:\ & (1,0)\ \Rightarrow\ \boldsymbol{x}_1=\bigl(\tfrac12,\tfrac12\bigr).\\
+n=2:\ & (0,1)\ \Rightarrow\ \boldsymbol{x}_2=\bigl(\tfrac34,\tfrac14\bigr).
+\end{align*}
+
+\end{example}
+
+\begin{remark} \ \\
+Different valid choices of $p_j$ and $m_{k,j}$ produce different -- but
+equivalent -- Sobol' sequences.
 \end{remark}
 
 The bitwise structure of the Sobol' sequence makes it particularly efficient to
@@ -321,29 +382,11 @@ demonstrating lower star discrepancy than the Halton sequence.}
 \label{fig:dimensional-comparison}
 \end{figure}
 
-\begin{remark}
-In high-dimensional problems, particularly those arising in computational
-finance or scientific simulations, Sobol' sequences with proper scrambling
-consistently outperform Halton sequences in terms of integration accuracy and
-numerical stability.
+\begin{remark} \ \\
+In the experiments of Part~\ref{part2} and Part~\ref{part3}, the Sobol' and
+Halton sequences are not implemented manually according to their constructions
+in Definition~\ref{def:sobol} and Definition~\ref{def:halton}. Instead, I use
+the implementation available in the Python package \texttt{SciPy}
+(version~1.16.0) through the module \texttt{scipy.stats.qmc}
+\cite{virtanen2020scipy, scipy-qmc}.
 \end{remark}
-
-\paragraph{Summary Table.}
-The following table summarizes the key characteristics of both sequences:
-
-\begin{table}[H]
-\centering
-\begin{tabular}{lcc}
-\toprule
-\textbf{Property} & \textbf{Halton} & \textbf{Sobol'} \\
-\midrule
-Extensible in $N$          & Yes  & Yes \\
-Extensible in $s$          & Yes  & Yes \\
-Asymptotic Star Discrepancy & $\mathcal{O}\big(\frac{(\log N)^s}{N}\big)$ & $\mathcal{O}\big(\frac{(\log N)^s}{N}\big)$ \\
-High-Dimensional Performance & Limited & Excellent \\
-Implementation Cost         & Low & Moderate \\
-\bottomrule
-\end{tabular}
-\caption{Qualitative comparison of Halton and Sobol' sequences.}
-\label{tab:halton-sobol-comparison}
-\end{table}

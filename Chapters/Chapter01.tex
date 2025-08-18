@@ -85,6 +85,7 @@ approximate this integral by averaging function evaluations at randomly sampled
 points in the integration domain $[0,1]^s$.
 
 \begin{definition}[Monte Carlo Estimator] \ \\
+\label{def:mc-estimator}
 Let $f \in L^2([0,1]^s)$ and let $X_0, \dots, X_{N-1}
 \stackrel{\mathrm{i.i.d.}}{\sim} \mathcal{U}([0,1]^s)$ be independent and
 identically distributed drawn random samples. Then the Monte Carlo estimator of
@@ -171,18 +172,7 @@ notions of uniformity and discrepancy in the next section.
 % $[0,1]^s$ and a \ac{qmc} point set $\{\boldsymbol{x}_n\}_{n=1}^{N}
 % \subset [0,1]^s$.
 
-% \begin{definition}[Quasi-Monte Carlo Estimator] \ \\
-% Let $f \colon [0,1]^s \to \mathbb{R}$ be a measurable function and let
-% $\{\boldsymbol{x}_n\}_{n=1}^{N} \subset [0,1]^s$ be a \ac{qmc} point set.
-% Then the \emph{quasi-Monte Carlo estimator} for the integral
-% \begin{equation*}
-%     I(f) = \int_{[0,1]^s} f(\boldsymbol{x}) \, d\boldsymbol{x}
-% \end{equation*}
-% is defined as
-% \begin{equation}
-% I_N^{\mathrm{QMC}}(f) := \frac{1}{N} \sum_{n=1}^{N} f(\boldsymbol{x}_n).
-% \end{equation}
-% \end{definition}
+
 
 % The integration (approximation) functions $I$, $I_N^{\mathrm{MC}}$ and
 % $I_N^{\mathrm{QMC}}$ will be further used without explicit reference to the
