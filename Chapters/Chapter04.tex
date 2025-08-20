@@ -5,22 +5,22 @@
 \chapter{Motivation and Problem Formulation}
 \label{chapter4}
 
-The second part of this thesis investigates the application of \acfp{qmc}
+The second part of this thesis investigates the application of \acf{qmc}
 sampling techniques to enhance the training of \acfp{dnn} in \emph{many-query
-problems} -- computational tasks in which a parameterized map must be evaluated for
-a large number of inputs, each requiring costly simulations or numerical
+problems} -- computational tasks in which a parameterized map must be evaluated
+for a large number of inputs, each requiring costly simulations or numerical
 solutions of PDEs. This situation arises frequently in scientific computing,
 e.g. in uncertainty quantification, Bayesian inversion, optimal control and
 model calibration.
 
-Such problems motivate the use of surrogate models $\hat{f}_\theta$, typically
-based on deep neural networks, which are trained offline on a set of inputs and
-then used for fast evaluation online. However, using random sampling for
-generating training data yields to star discrepancy $\mathcal{O}(N^{-1/2})$ as
-introduced in Part~\ref{part1}.
+Such problems motivate the use of surrogate models, typically based on deep
+neural networks, which are trained offline on a set of inputs and then used for
+fast evaluation online. However, using \acf{mc} sampling for generating training
+data may yield to slow convergence as introduced in Part~\ref{part1}.
 
-To overcome this limitation, this thesis explores the use of low-discrepancy sequences as training data which fill the input domain more
-uniformly. Under mild regularity assumptions, they can significantly reduce the
+To overcome this limitation, this thesis explores the use of low-discrepancy
+sequences to generate training data which fills the input domain more uniformly.
+Under mild regularity assumptions, they can significantly reduce the
 generalization error due to improved equidistribution properties.
 
 \section{Many-Query Problems in Scientific Computing}
@@ -37,9 +37,8 @@ model $f(x)$ must be evaluated for many different parameter values $x \in
 \end{itemize}
 
 The sheer cost of evaluating $f(x)$ (e.g., via numerical PDE solvers) motivates
-the use of surrogate models. Once trained, a surrogate $\hat{f}_\theta$ can
-provide rapid predictions for unseen inputs at a fraction of the computational
-cost.
+the use of surrogate models. Once trained, a surrogate $\hat{f}$ can provide
+rapid predictions for unseen inputs at a fraction of the computational cost.
 
 \section{The Role of Function Approximation}
 We formalize the problem as learning a map $f \colon [0,1]^s \to \mathbb{R}^m$
@@ -47,9 +46,9 @@ from data. The assumption of a unit hypercube domain reflects common practice in
 \ac{qmc} theory and is justified via homeomorphic mappings from more general
 compact and simply connected input spaces.
 
-The surrogate model $\hat{f}_\theta$ can be chosen from the class of deep neural
-networks and trained on data $\{(x_i, f(x_i))\}_{i=1}^N$. The aim is to
-approximate $f$ with high accuracy while minimizing the number of required
+In this thesis, the surrogate model $\hat{f}$ will be chosen from the class of
+deep neural networks and is trained on data $\{(x_i, f(x_i))\}_{i=1}^N$. The aim
+is to approximate $f$ with high accuracy while minimizing the number of required
 evaluations.
 
 \aclp{dnn} are known to be universal approximators. Under mild conditions on the
@@ -57,14 +56,15 @@ later introduced \emph{activation functions} they proved to be able to
 approximate any continuous function on compact sets arbitrarily well
 \cite{cybenko1989approximation}.
 
-\section{Limitations of Random Sampling in Neural Network Training}
+\section{The Choice of Training Data}
 Typically, training data is generated using \acl{mc} sampling, where points $x_i$ are drawn independently and identically distributed (i.i.d.) according to a probability measure $\mu$ on $[0,1]^s$. Under this approach, statistical learning theory provides an estimate for the expected generalization error $\mathbb{E}[\mathcal{E}_G]$ as follows:
 \begin{equation*}
 \mathbb{E}[\mathcal{E}_G] \leq \mathcal{E}_T + \mathcal{O}\left(\frac{1}{\sqrt{N}}\right),
 \end{equation*}
-where $\mathcal{E}_T$ is the empirical training error. However, as argued
-in~\cite{mishra2021enhancing}, this rate is unsatisfactory in many-query
-problems because:
+where $\mathcal{E}_T$ is the empirical training error. Both, the generalization
+and training error will be formally introduced in Section~\ref{sec:dnn-error}.
+However, as argued in~\cite{mishra2021enhancing}, this rate is unsatisfactory in
+many-query problems because:
 \begin{itemize}
   \item A small generalization error requires a large $N$, which is costly due
   to expensive evaluations of $f(x)$.
@@ -72,16 +72,16 @@ problems because:
   the training process, which are hard to control.
 \end{itemize}
 
-\section{QMC-Based Surrogates: A Promising Alternative}
+A promising alternative to random sampling is to use \acf{qmc} sampling.
 Low-discrepancy sequences (Sobol', Halton, etc.) provide a way to sample the
 domain $[0,1]^s$ more uniformly than random sampling. In \acl{qmc} theory, the Koksma-Hlawka inequality (Theorem~\ref{thm:koksma-hlawka}) gives an error bound of the form
 \begin{equation*}
-|\mathcal{E}_G - \mathcal{E}_T| \leq V_{\mathrm{HK}}(|f - \hat{f}_\theta|) \cdot D^*_N \leq  V_{\mathrm{HK}}(|f - \hat{f}_\theta|) \cdot C \cdot \frac{(\log N)^s}{N},
+|\mathcal{E}_G - \mathcal{E}_T| \leq V_{\mathrm{HK}}(|f - \hat{f}|) \cdot D^*_N \leq  V_{\mathrm{HK}}(|f - \hat{f}|) \cdot C \cdot \frac{(\log N)^s}{N},
 \end{equation*}
 where $V_{\mathrm{HK}}$ denotes the Hardy--Krause variation and $D^*_N$ is the
 star-discrepancy of the training points.
 
 This suggests that \ac{qmc} sampling can lead to significantly smaller generalization
 gaps -- especially when $f$ has bounded variation and the activation functions used
-in $\hat{f}_\theta$ are smooth.
+in $\hat{f}$ are smooth.
 

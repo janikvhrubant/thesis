@@ -15,7 +15,8 @@ Hardy--Krause. These concepts are crucial for understanding the convergence
 guarantees provided by the Koksma--Hlawka inequality.
 
 % ------------------------------------------------------------------------------
-\subsection{Mixed Component Selection and Alternating Sums}
+\subsection{Variation in the Sense of Vitali}
+\label{sec:vitali-variation}
 % ------------------------------------------------------------------------------
 
 To express multidimensional variation concisely, we begin with the following
@@ -48,11 +49,6 @@ this notation, the \emph{alternating sum} is defined as follows:
     \end{equation*}
 \end{definition}
 
-% ------------------------------------------------------------------------------
-\subsection{Variation in the Sense of Vitali}
-\label{sec:vitali-variation}
-% ------------------------------------------------------------------------------
-
 A classical approach to quantify function variation on hyperrectangles is based
 on the concept of \emph{ladders}:
 
@@ -61,17 +57,24 @@ on the concept of \emph{ladders}:
     \prod\limits_{j=1}^s \mathcal{Y}^j$, where each $\mathcal{Y}^j$ is a finite
     subset of $[a_j, b_j]$ for $j = 1, \dots, s$ where $\mathcal{Y}^j = \{y_1^j,
     \dots, y_k^j\}$ is ordered such that $a_j = y_1^j < y_2^j < \dots < y_k^j$.
-    The ladder could consist of different number of points in each dimension.
+    The ladder could consist of a different number of points in each dimension.
 
     The \emph{successor} of a point $y \in \mathcal{Y}$ in the ladder is defined
     componentwise as
     \begin{equation*}
-        y_+^j = \min \bigg\{ (y^j, b_j] \cup \big( \mathcal{Y}^j \cap \{b_j\} \big) \bigg\}
+        % y_+^j = \begin{cases}
+        %     \min \big\{(y^j,\infty) \cap \mathcal{Y}^j\big\}, & \text{if } (y^j,\infty) \cap  \mathcal{Y}^j \neq \emptyset, \\
+        %     b_j, & \text{else.}
+        % \end{cases}
+        y_+^j = \min \big\{(y^j,\infty) \cap (\mathcal{Y}^j \cup \{b_j\}) 
+        \big\}.
     \end{equation*}
     with $y_+ = (y_+^1, \dots, y_+^s)$.
 \end{definition}
 
-\begin{remark}
+$\mathbb{Y}$ denotes the set of all such ladders on $[a,b]$.
+
+\begin{remark} \ \\
     For a ladder $\mathcal{Y}$ on the hypercube $[a,b]$ the following equation holds:
     \begin{equation*}
         \bigcup_{\mathcal{Y}\in\mathbb{Y}}[y,y_+] = [a,b]
@@ -79,8 +82,6 @@ on the concept of \emph{ladders}:
     This is due to the ladder splitting the hypercube $[a,b]$ into axis-aligned
     rectangular subregions by the points $[y,y_+]$ for each $y \in \mathcal{Y}$.
     Thus, the union of all such subregions is a disjoint cover of the hypercube.
-
-    Further $\mathbb{Y}$ denotes the set of all such ladders on $[a,b]$.
 \end{remark}
 \qquad
 
@@ -96,8 +97,8 @@ The \emph{variation with respect to a ladder} is then defined as:
     \end{equation*}
 \end{definition}
 
-The \emph{Vitali variation} of a function is then the supremum of this
-ladder-based variation:
+The \emph{Vitali variation} of a function is then the supremum of these
+ladder-based variations:
 
 \begin{definition}[Vitali Variation] \ \\
     The \emph{Vitali variation} of a function $f$ on the hyperrectangle $[a,b]$
@@ -112,20 +113,20 @@ rectangular subregions. It generalizes finite differences and serves as a
 foundation for defining the Hardy--Krause variation.
 
 % ------------------------------------------------------------------------------
-\subsection{Definition of the Hardy--Krause Variation}
+\subsection{Hardy--Krause Variation}
 \label{sec:hk-variation}
 % ------------------------------------------------------------------------------
 
-The Hardy--Krause variation refines the Vitali variation by summing variations
-over all lower-dimensional axis-aligned faces of the unit hypercube. It is
-defined as:
+The \emph{Hardy--Krause variation } refines the Vitali variation by summing
+variations over all lower-dimensional axis-aligned faces of the unit hypercube.
+It is defined as:
 
 \begin{definition}[Hardy--Krause Variation] \ \\
     \label{def:variation_hardy_krause}
     The \emph{Hardy--Krause variation} of a function $f$ on the hyperrectangle
     $[a,b]$ is defined as
     \begin{equation*}
-        V_{\mathrm{HK}}(f) = \sum_{v\subset \{1,\dots,s\}} V_{[a^{-u},b^{-u}]}\big(f(x^{-u};b^u)\big).
+        V_{\mathrm{HK}}(f) = \sum_{u\subset \{1,\dots,s\}} V_{[a^{-u},b^{-u}]}\big(f(x^{-u};b^u)\big).
     \end{equation*}
     This definition coincides with the Vitali variation but is typically used
     when $[a,b] = [0,1]^s$.
@@ -135,34 +136,17 @@ Note that the Hardy--Krause variation reduces to the total variation in the
 univariate case. Importantly, $V_{\mathrm{HK}}(f) < \infty$ implies that $f$ has
 bounded variation in all axis-aligned directions and projections.
 
-\begin{remark}
+\begin{remark} \ \\
 The Hardy--Krause variation is a seminorm, vanishing for constant functions. It
 becomes a norm if the full-dimensional term is included explicitly.
 \end{remark}
 
-% ------------------------------------------------------------------------------
-\subsection{Examples and Interpretation of Hardy--Krause Variation}
-\label{sec:hk-examples}
-% ------------------------------------------------------------------------------
-
-While direct evaluation of the Hardy--Krause variation is intractable in
-general, upper bounds can be derived for smooth functions using mixed partial
-derivatives. For instance, for continuously differentiable functions, one can
-write:
-
-\begin{equation*}
-    V_{\mathrm{HK}}(f) \leq \int_{[0,1]^d} \left| \frac{\partial^d f}{\partial x_1 \cdots \partial x_d}(x) \right| dx + \sum_{i=1}^d V_{\mathrm{HK}}(f|_{x_i = 1}),
-\end{equation*}
-where the right-hand side can be evaluated recursively and becomes exact if the
-mixed derivative is integrable and all lower-dimensional restrictions are
-sufficiently smooth.
-
-\begin{example}
+\begin{example} \ \\
 Let $f(x) = \prod_{i=1}^d x_i$, the $d$-dimensional monomial. Then $f$ is smooth
 with bounded mixed derivatives and its Hardy--Krause variation is finite.
 \end{example}
 
-\begin{example}
+\begin{example} \ \\
 Consider $f_{d,r}(x) = \left( \max\left\{ \sum_{i=1}^d x_i - \frac{1}{2}, 0
 \right\} \right)^r$. For $d > r + 2$, this function has infinite Vitali and
 hence infinite Hardy--Krause variation. Such examples underline the limitations
@@ -171,10 +155,10 @@ of \ac{qmc} for functions with low smoothness or sharp nonlinearity \cite[Prop.
 \end{example}
 
 These examples illustrate the importance of regularity assumptions in applying
-the Koksma--Hlawka inequality. In practice, many physically motivated maps—such
-as solutions to elliptic or parabolic PDEs—do exhibit sufficient smoothness to
-ensure bounded Hardy--Krause variation, justifying the use of \ac{qmc} error
-bounds.
+the Koksma--Hlawka inequality. In practice, many physically motivated maps --
+such as solutions to elliptic or parabolic PDEs -- do exhibit sufficient
+smoothness to ensure bounded Hardy--Krause variation, justifying the use of
+\ac{qmc} error bounds.
 
 % ------------------------------------------------------------------------------
 \section{The Koksma--Hlawka Inequality}
@@ -187,12 +171,9 @@ integrand. This inequality formalizes the intuition that more uniformly
 distributed sample points lead to smaller integration errors—provided the
 integrand is regular enough.
 
-% ------------------------------------------------------------------------------
-\subsection{Formal Theorem and Preconditions}
-% ------------------------------------------------------------------------------
-
-The inequality relates the QMC integration error to the star discrepancy of the
-point set and the Hardy--Krause variation of the integrand.
+The inequality relates the \ac{qmc} integration error to the star discrepancy of
+the point set and the Hardy--Krause variation of the integrand
+\cite{caflisch1998monte}.
 
 \begin{theorem}[Koksma--Hlawka Inequality]
 \label{thm:koksma-hlawka}
@@ -207,19 +188,15 @@ where $D_N^{*}(P)$ denotes the star discrepancy of the point set $P$ and
 $V_{\mathrm{HK}}(f)$ is the Hardy--Krause variation of $f$.
 \end{theorem}
 
-\begin{remark}
+\begin{remark} \ \\
 This bound is deterministic and non-asymptotic. It applies to any dimension $s$
 and makes no probabilistic assumptions on the sampling procedure. However, it
 requires $f$ to have bounded variation in the Hardy--Krause sense, which
-excludes some classes of discontinuous or highly irregular functions.
+excludes some classes of highly irregular or discontinuous functions.
 \end{remark}
 
-% ------------------------------------------------------------------------------
-\subsection{Role of Discrepancy and Function Variation}
-% ------------------------------------------------------------------------------
-
-The two factors on the right-hand side of the inequality—discrepancy and
-variation—capture complementary aspects of integration error.
+The two factors on the right-hand side of the inequality -- discrepancy and
+variation -- capture complementary aspects of integration error.
 
 \begin{itemize}
     \item The \textbf{star discrepancy} $D_N^*(P)$ measures how uniformly the
@@ -236,16 +213,11 @@ Both quantities are required: even a low-discrepancy point set cannot guarantee
 small error if the function has unbounded variation. Conversely, even a smooth
 function may incur large error if the points cluster poorly.
 
-\begin{remark}
+\begin{remark} \ \\
 The Koksma--Hlawka inequality can be seen as a product-type estimate: each
 component controls a different source of error and their product bounds the
 total integration error.
 \end{remark}
-
-
-% ------------------------------------------------------------------------------
-\subsection{Interpretation: Bounding the Integration Error}
-% ------------------------------------------------------------------------------
 
 The Koksma--Hlawka inequality provides valuable insight into the behavior of
 \acl{qmc} estimators:
@@ -259,21 +231,17 @@ The Koksma--Hlawka inequality provides valuable insight into the behavior of
     probabilistic bounds of Monte Carlo integration.
 \end{itemize}
 
-In practical terms, the inequality implies that for sufficiently smooth
-integrands and carefully constructed point sets, \ac{qmc} methods can achieve
-integration errors of order
-\[
-\mathcal{O}\left( \frac{(\log N)^s}{N} \right),
-\]
+In practical terms, the Koksma-Hlawka inequality implies that for sufficiently
+smooth integrands with bounded Hardy--Krause variation and point sets obtsined
+by low-discrepancy sequences, with star discprepancy of order
+\eqref{def:low-discrepancy-sequence} by definition, one can achieve integration
+errors fulfilling 
+\begin{equation*}
+    \left| \frac{1}{N} \sum_{n=1}^N f(x_n) - \int_{[0,1]^s} f(x) \, dx \right|\leq \mathcal{O}\left( \frac{(\log N)^s}{N} \right),
+\end{equation*}
 which significantly improves over the $\mathcal{O}(N^{-1/2})$ rate of standard
 Monte Carlo methods. This improvement, however, comes at the cost of stronger
 assumptions and increased sensitivity to dimensionality.
-
-\begin{remark}
-The deterministic nature of the bound makes it attractive in settings where
-reliability and reproducibility are crucial—such as scientific simulations or
-safety-critical computations.
-\end{remark}
 
 \qquad
 

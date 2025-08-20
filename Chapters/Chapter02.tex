@@ -137,9 +137,10 @@ to fill the unit cube $[0,1)^s$ as uniformly as possible.
 
 \begin{definition}[Low-Discrepancy Sequence] \ \\
 A sequence $\mathcal{S} = (x_n)_{n\in \mathbb{N}}$ in $[0,1)^s$ is called a low-discrepancy sequence if its star discrepancy satisfies
-\begin{equation*}
+\begin{equation}
+\label{def:low-discrepancy-sequence}
     D_N^*(\mathcal{S}) = \mathcal{O}\left( \frac{(\log N)^s}{N} \right)
-\end{equation*}
+\end{equation}
 for all $N \in \mathbb{N}$. Such sequences are also referred to as
 \emph{quasi-Monte Carlo sequences} or \ac{qmc} sequences.
 \end{definition}
