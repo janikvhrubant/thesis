@@ -155,29 +155,28 @@ with existing and integrable derrivative.
 \section{Error estimation of DNN surrogates obtained by \\ low-discrepancy training data}
 
 Given the computable training error $\mathcal{E}_T$ depending on the training
-data, one wants to estimate the generalization error. Therefore the
-\emph{generalization gap} is an important 
+data, we now seek to estimate the generalization error $\mathcal{E}_G$. To get there, we will use an estimate of the generalization gap.
 
 \begin{theorem} \ \\
-    For the surrogate models $L^*$ obtained by \ac{dnn} training of a mapping
-    $L$ on the hyperrectangle $[0,1]^s$ with a low-discrepancy sequence
+    For the surrogate models $\hat{f}$ obtained by \ac{dnn} training of a
+    mapping $f$ on the hyperrectangle $[0,1]^s$ with a low-discrepancy sequence
     $\mathcal{S}=\{x_n\}_{n=1}^N\subset [0,1]^s$ yields a generalization gap
     estimated by
     \begin{equation*}
-        \mathcal{E}_G - \mathcal{E}_T \leq C \cdot \frac{V_{\mathrm{HK}}(|L-L^*|)(\log N)^s}{N},
+        \mathcal{E}_G - \mathcal{E}_T \leq C \cdot \frac{V_{\mathrm{HK}}(|f-\hat{f}|)(\log N)^s}{N},
     \end{equation*}
-    where $C$ is a constant and $V_{\mathrm{HK}}(|L-L^*|)$ is the Hardy--Krause
-    variation from Definition~\ref{def:variation_hardy_krause}.
+    where $C$ is a constant and $V_{\mathrm{HK}}(|f-\hat{f}|)$ is the
+    Hardy--Krause variation from Definition~\ref{def:variation_hardy_krause}.
 \end{theorem}
 
 \begin{proof} \ \\
     This simply follows from the Koksma-Hlawka inequality
-    (Theorem~\ref{thm:koksma-hlawka}) applied to the surrogate model $L^*$ and
+    (Theorem~\ref{thm:koksma-hlawka}) applied to the surrogate model $\hat{f}$ and
     the training error $\mathcal{E}_T$ as follows:
     \begin{align*}
-        |\mathcal{E}_G - \mathcal{E}_T| &= \bigg| \int\limits_{[0,1]^s} L(x) \, d\mu(x) - \frac{1}{N} \sum_{n=1}^N L(x_n) \bigg| \\
-        &\leq V_{\mathrm{HK}}(|L-L^*|) \cdot D^*_N \\
-        &\leq C \cdot \frac{V_{\mathrm{HK}}(|L-L^*|)(\log N)^s}{N}
+        |\mathcal{E}_G - \mathcal{E}_T| &= \bigg| \int\limits_{[0,1]^s} f(x) - \hat{f}(x) \, dx - \frac{1}{N} \sum_{n=1}^N f(x_n) - \hat{f}(x_n) \bigg| \\
+        &\leq V_{\mathrm{HK}}(|f-\hat{f}|) \cdot D^*_N \\
+        &\leq C \cdot \frac{V_{\mathrm{HK}}(|f-\hat{f}|)(\log N)^s}{N}
     \end{align*}
     Here, $D^*_N$ is the star-discrepancy of the low-discrepancy sequence
     $\mathcal{S}$ and $C$ is a constant depending on the discrepancy of the
@@ -185,11 +184,11 @@ data, one wants to estimate the generalization error. Therefore the
 \end{proof}
 
 \begin{theorem} \ \\
-Let $L : [0,1]^s \to \mathbb{R}$ be a map with finite Hardy--Krause variation,
-i.e. $\widehat{V}_{HK}(L) < \infty$. Then for \ac{dnn} $L^*$ trained on a
+Let $f : [0,1]^s \to \mathbb{R}$ be a map with finite Hardy--Krause variation,
+i.e. $\widehat{V}_{HK}(f) < \infty$. Then for \ac{dnn} $\hat{f}$ trained on a
 low-discrepancy sequence $\mathcal{S}=\{x_n\}_{n=1}^N\subset [0,1]^s$ with the
 activation function $\eta_\delta$ satisfying $\eta_\delta \in C^d(\mathbb{R})$
-and the generalization gap of $L^*$ satisfying
+and the generalization gap of $\hat{f}$ satisfying
 \begin{equation*}
     |\mathcal{E}_G - \mathcal{E}_T| \leq \delta,
 \end{equation*}
@@ -206,14 +205,14 @@ multivariate version of the Faà di Bruno formula from
 
 \label{prop:multivariate_faa_di_bruno}
 \begin{prop}[Multivariate Faà di Bruno formula] \ \\
-Let $L \in C(\mathbb{R}^s)$ and $\eta_\delta \in C^s(\mathbb{R})$ be two
+Let $f \in C(\mathbb{R}^s)$ and $\eta_\delta \in C^s(\mathbb{R})$ be two
 functions. Then the following derivative of the composition $\eta_\delta \circ
-L$ follows:
+f$ follows:
 \begin{equation*}
-    \frac{\partial^s}{\partial x_1 \cdots \partial x_s} (\eta_\delta \circ f)(x) = \sum_{\pi} \eta_\delta^{(|\pi|)}\circ L(x) \cdot \prod_{B\in\pi} \frac{\partial^{|B|}}{\prod_{j\in B}\partial x_j}L(x)
+    \frac{\partial^s}{\partial x_1 \cdots \partial x_s} (\eta_\delta \circ f)(x) = \sum_{\pi} \eta_\delta^{(|\pi|)}\circ f(x) \cdot \prod_{B\in\pi} \frac{\partial^{|B|}}{\prod_{j\in B}\partial x_j}f(x)
 \end{equation*}
 Hereby the sum is taken over all partitions $\pi$ of the set $\{1,\ldots,s\}$
-and $B$ are the stes within the partition $\pi$.
+and $B$ are the sets within the partition $\pi$.
 \end{prop}
 A proof of the Multivariate Faà di Bruno formula can be found in
 \cite[Proposition 1]{hardy2006combinatorics}.
@@ -223,26 +222,26 @@ variation of compositions of functions.
 
 \begin{remark}\label{rem:compositions} \ \\
 Recalling Corollary~\ref{cor:variation-approximation} for the composition of two
-function $L\in C^1([0,1]^s, \mathcal{X})$ and $\eta_\delta \in C^s(\mathcal{X})$
-given by $\eta_\delta \circ L$ leads to
+functions $f\in C^1([0,1]^s, \mathcal{X})$ and $\eta_\delta \in C^s(\mathcal{X})$
+given by $\eta_\delta \circ f$ leads to
 \begin{equation*}
-    V_{[0,1]^s}(\eta_\delta \circ L) \leq \int\limits_{[0,1]^s} \left| \frac{\partial^s}{\partial x_1 \cdots \partial x_s} (\eta_\delta \circ L)(x) \right| \, dx.
+    V_{[0,1]^s}(\eta_\delta \circ f) \leq \int\limits_{[0,1]^s} \left| \frac{\partial^s}{\partial x_1 \cdots \partial x_s} (\eta_\delta \circ f)(x) \right| \, dx.
 \end{equation*}
 Applying the multivariate Faà di Bruno formula from
 Proposition~\ref{prop:multivariate_faa_di_bruno} yields
 \begin{equation*}
-    V_{[0,1]^s}(\eta_\delta \circ L) \leq \int\limits_{[0,1]^s} \left| \sum_{\pi} \eta_\delta^{(|\pi|)}\circ L(x) \cdot \prod_{B\in\pi} \frac{\partial^{|B|}}{\prod_{j\in B}\partial x_j}L(x) \right| \, dx.
+    V_{[0,1]^s}(\eta_\delta \circ f) \leq \int\limits_{[0,1]^s} \left| \sum_{\pi} \eta_\delta^{(|\pi|)}\circ f(x) \cdot \prod_{B\in\pi} \frac{\partial^{|B|}}{\prod_{j\in B}\partial x_j}f(x) \right| \, dx.
 \end{equation*}
 As for a fixed dimension $s$ the number of partitions $\pi$, denoted by Bell
 number $B_s$, is finite, the variation in the sense of Vitali is bounded, if for
 each partition $\pi$ the following holds:
 \begin{equation*}
-    \int\limits_{[0,1]^s} \left| \eta_\delta^{(|\pi|)}\circ L(x) \cdot \prod_{B\in\pi} \frac{\partial^{|B|}}{\prod_{j\in B}\partial x_j}L(x) \right| \, dx < \infty.
+    \int\limits_{[0,1]^s} \left| \eta_\delta^{(|\pi|)}\circ f(x) \cdot \prod_{B\in\pi} \frac{\partial^{|B|}}{\prod_{j\in B}\partial x_j}f(x) \right| \, dx < \infty.
 \end{equation*}
 As $\eta_\delta \in C^s(\mathcal{X})$ is continuous, the composition
-$\eta_\delta \circ L$ is also continuous. Therefore, it suffices to show that
+$\eta_\delta \circ f$ is also continuous. Therefore, it suffices to show that
 \begin{equation*}
-    \int\limits_{[0,1]^s} \left| \prod_{B\in\pi} \frac{\partial^{|B|}}{\prod_{j\in B}\partial x_j}L(x) \right| \, dx < \infty.
+    \int\limits_{[0,1]^s} \left| \prod_{B\in\pi} \frac{\partial^{|B|}}{\prod_{j\in B}\partial x_j}f(x) \right| \, dx < \infty.
 \end{equation*}
 \end{remark}
 
@@ -259,31 +258,32 @@ Now we can prove the theorem.
     differentiable mollifier $\eta_\delta$ instead of the norm
     $\|\cdot\|_\infty$ we obtain
     \begin{align*}
-        \mathcal{E}_G^\delta &:= \int_X \eta_\delta(L(x) - L^*(x)) \\
-        \mathcal{E}_T^\delta &:= \frac{1}{N} \sum_{n=1}^N \eta_\delta(L(x_n) - L^*(x_n)).
+        \mathcal{E}_G^\delta &:= \int_X \eta_\delta(f(x) - \hat{f}(x)) \\
+        \mathcal{E}_T^\delta &:= \frac{1}{N} \sum_{n=1}^N \eta_\delta(f(x_n) - \hat{f}(x_n)).
     \end{align*}
 
     Next, it is shown, that the mollified generalization gap
-    $\eta_\delta(L(x)-L^*(x))$ has bounded Hardy--Krause variation. Therefore we
-    first apply the results from Remark~\ref{rem:compositions} to the
-    composition of the mollifier $\eta_\delta\in C^s$ and the function $L-L^*
-    \in C^1([0,1]^s, \mathbb{R})$. One can see, that it suffices to show that
-    for all paritions $\pi$ of the set $\{1,\ldots,s\}$ the following holds:
+    $\eta_\delta(f(x)-\hat{f}(x))$ has bounded Hardy--Krause variation.
+    Therefore we first apply the results from Remark~\ref{rem:compositions} to
+    the composition of the mollifier $\eta_\delta\in C^s$ and the function
+    $f-\hat{f} \in C^1([0,1]^s, \mathbb{R})$. One can see, that it suffices to
+    show that for all paritions $\pi$ of the set $\{1,\ldots,s\}$ the following
+    holds:
     \begin{equation} \label{eq:variation_requirement}
-        \int\limits_{[0,1]^s} \big| \prod_{B\in\pi} \frac{\partial^{|B|}}{\prod_{j\in B}\partial x_j} (L-L^*)(x) \big| \, dx < \infty.
+        \int\limits_{[0,1]^s} \big| \prod_{B\in\pi} \frac{\partial^{|B|}}{\prod_{j\in B}\partial x_j} (f-\hat{f})(x) \big| \, dx < \infty.
     \end{equation}
-    As $L$ has bounded Hardy--Krause variation by assumption and the surrogate
-    model $L^*$ is a composition of affine $C^\infty$ and sufficiently smooth
-    activation functions $\sigma$, \eqref{eq:variation_requirement} holds for
-    all partitions $\pi$ of the set $\{1,\ldots,s\}$:
+    As $fL$ has bounded Hardy--Krause variation by assumption and the surrogate
+    model $\hat{f}$ is a composition of affine $C^\infty$ and sufficiently
+    smooth activation functions $\sigma$, \eqref{eq:variation_requirement} holds
+    for all partitions $\pi$ of the set $\{1,\ldots,s\}$:
     \begin{equation}
         \label{eq:bounded_mollified_generalization_gap}
-        \eta_\delta(L(x) - L^*(x)) \leq C < \infty \qquad \text{for all } x \in [0,1]^s.
+        \eta_\delta(f(x) - \hat{f}(x)) \leq C < \infty \qquad \text{for all } x \in [0,1]^s.
     \end{equation}
 
     The constant $C$ depends on both the dimension $s$ and the tolerance
     $\delta$ associated with the mollifier. Since it has been established that
-    the mollified difference $\eta_\delta(L(x) - L^*(x))$ is bounded,
+    the mollified difference $\eta_\delta(f(x) - \hat{f}(x))$ is bounded,
     Remark~\ref{rem:compositions} implies that its Hardy--Krause variation is
     also bounded.
 
@@ -292,7 +292,7 @@ Now we can prove the theorem.
     (Theorem~\ref{thm:koksma-hlawka})
     \begin{equation}
         \label{eq:hk_generalization_gap}
-        |\mathcal{E}_G^\delta - \mathcal{E}_T^\delta| \leq C \cdot \frac{V_{\mathrm{HK}}(\eta_\delta(L-L^*))(\log N)^s}{N}.
+        |\mathcal{E}_G^\delta - \mathcal{E}_T^\delta| \leq C \cdot \frac{V_{\mathrm{HK}}(\eta_\delta(f-\hat{f}))(\log N)^s}{N}.
     \end{equation}
 
     Applying \eqref{eq:bounded_mollified_generalization_gap} onto the
