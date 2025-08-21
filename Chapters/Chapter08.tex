@@ -11,36 +11,22 @@
 \section{Computed Tomography Imaging}
 %-------------------------------------------------------------------------------
 
-\ac{ct} imaging is a powerful medical imaging technique that provides detailed
-cross-sectional images of the body by combining multiple X-ray projections taken
-from different angles. This technique is widely used for diagnostic purposes,
-allowing clinicians to visualize internal structures with high spatial
-resolution.
+\acf{ct} imaging is a widely used diagnostic technique that generates detailed
+cross-sectional images by combining multiple X-ray projections acquired from
+different angles. An X-ray source rotates around the patient while a detector
+array records the transmitted radiation. Each projection reflects the cumulative
+attenuation of X-rays as they traverse tissues of varying density and
+composition.
 
-The process involves rotating an X-ray source around the patient while
-simultaneously capturing X-ray projections on a detector array. Each projection
-represents the cumulative attenuation of X-rays as they pass through various
-tissues, influenced by the density and composition of the materials they
-encounter.
+Reconstruction algorithms, such as filtered backprojection or iterative methods,
+convert these projections into volumetric images, which can be further processed
+to enhance contrast and reduce noise. A key challenge is scattered radiation
+(Compton and Rayleigh scattering), which introduces artifacts and degrades image
+quality.
 
-The collected data is then reconstructed into a three-dimensional volume
-using advanced algorithms, such as filtered backprojection or iterative
-reconstruction methods. These algorithms convert the raw projection data into
-cross-sectional images, which can be further processed to enhance contrast,
-reduce noise, and improve overall image quality.
-
-To achieve accurate reconstructions, it is crucial to acquire high-quality X-ray
-projection images. However, one of the most significant challenges in CT imaging
-is the presence of scattered radiation - such as Comton and Rayleigh scattering
-- which can lead to artifacts and distortions in the reconstructed images.
-
-Throughout this thesis, the term \textit{scatter reduction in \ac{ct}} refers to
-the mitigation of scatter-induced artifacts in the two-dimensional X-ray
-projection images acquired by the detector array during a CT scan. These
-projections serve as the input for reconstructing the final three-dimensional
-volume. Given the complexity of the full reconstruction process, the focus of
-this work is limited to analyzing and correcting scatter effects at the level of
-the two-dimensional projection data.
+The goal of \textit{scatter reduction in \ac{ct}} is therefore to suppress
+scatter contributions in the acquired two-dimensional projection data, thereby
+improving the accuracy of the reconstructed three-dimensional volume.
 
 
 %-------------------------------------------------------------------------------

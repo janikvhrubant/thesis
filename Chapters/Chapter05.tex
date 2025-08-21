@@ -69,9 +69,10 @@ of positive integers, where $d_0 = s$ is the input dimension and $d_L = 1$ the
 output dimension. A \acf{dnn} of \emph{depth} $L$ and \emph{layer widths} $d_1,
 \dots, d_{L-1}$ is a function $\hat{f}_\theta: \mathbb{R}^s \to \mathbb{R}$ of the
 form
-\begin{equation*}
+\begin{equation}
+    \label{eq:dnn-definition}
     \hat{f}_\theta(y) = A_L \circ \sigma \circ A_{L-1} \circ \cdots \circ \sigma \circ A_1(y),
-\end{equation*}
+\end{equation}
 where each \emph{layer map} $A_l: \mathbb{R}^{d_{l-1}} \to \mathbb{R}^{d_l}$ is
 an affine transformation
 \begin{equation*}

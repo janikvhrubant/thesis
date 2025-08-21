@@ -153,7 +153,7 @@ with existing and integrable derivative.
 \section{Error estimation of DNN surrogates obtained by \\ low-discrepancy training data}
 
 Given the computable training error $\mathcal{E}_T$ depending on the training
-data, we now seek to estimate the generalization error $\mathcal{E}_G$. To get there, we will use an estimate of the generalization gap.
+data, we now seek to estimate the generalization error $\mathcal{E}_G$. To get there, we will use an estimate of the generalization gap as in \cite{mishra2021enhancing}.
 
 \begin{theorem} \ \\
     For the surrogate models $\hat{f}$ obtained by \ac{dnn} training of a
@@ -161,7 +161,7 @@ data, we now seek to estimate the generalization error $\mathcal{E}_G$. To get t
     $\mathcal{S}=\{x_n\}_{n=1}^N\subset [0,1]^s$ yields a generalization gap
     estimated by
     \begin{equation*}
-        \mathcal{E}_G - \mathcal{E}_T \leq C \cdot \frac{V_{\mathrm{HK}}(|f-\hat{f}|)(\log N)^s}{N},
+        |\mathcal{E}_G - \mathcal{E}_T| \leq C \cdot \frac{V_{\mathrm{HK}}(|f-\hat{f}|)(\log N)^s}{N},
     \end{equation*}
     where $C$ is a constant and $V_{\mathrm{HK}}(|f-\hat{f}|)$ is the
     Hardy--Krause variation from Definition~\ref{def:variation_hardy_krause}.
@@ -169,8 +169,7 @@ data, we now seek to estimate the generalization error $\mathcal{E}_G$. To get t
 
 \begin{proof} \ \\
     This simply follows from the Koksma-Hlawka inequality
-    (Theorem~\ref{thm:koksma-hlawka}) applied to the surrogate model $\hat{f}$ and
-    the training error $\mathcal{E}_T$ as follows:
+    (Theorem~\ref{thm:koksma-hlawka}) applied to the difference $f-\hat{f}$:
     \begin{align*}
         |\mathcal{E}_G - \mathcal{E}_T| &= \bigg| \int\limits_{[0,1]^s} f(x) - \hat{f}(x) \, dx - \frac{1}{N} \sum_{n=1}^N f(x_n) - \hat{f}(x_n) \bigg| \\
         &\leq V_{\mathrm{HK}}(|f-\hat{f}|) \cdot D^*_N \\
@@ -182,19 +181,17 @@ data, we now seek to estimate the generalization error $\mathcal{E}_G$. To get t
 \end{proof}
 
 \begin{theorem} \ \\
-Let $f : [0,1]^s \to \mathbb{R}$ be a map with finite Hardy--Krause variation,
-i.e. $\widehat{V}_{HK}(f) < \infty$. Then for \ac{dnn} $\hat{f}$ trained on a
-low-discrepancy sequence $\mathcal{S}=\{x_n\}_{n=1}^N\subset [0,1]^s$ with the
-activation function $\eta_\delta$ satisfying $\eta_\delta \in C^d(\mathbb{R})$
-and the generalization gap of $\hat{f}$ satisfying
+\label{thm:main-theorem}
+Let $f : [0,1]^s \to \mathbb{R}$ with $f\in C^s$ be a map with finite
+Hardy--Krause variation, i.e. $\widehat{V}_{HK}(f) < \infty$. Further let
+$\hat{f}$ be the \ac{dnn} surrogate with an activation function $\sigma \in C^s$
+trained on a low-discrepancy sequence $\mathcal{S}=\{x_n\}_{n=1}^N\subset
+[0,1]^s$. Then for a given tolerance $\delta > 0$ the following holds:
 \begin{equation*}
-    |\mathcal{E}_G - \mathcal{E}_T| \leq \delta,
+    \mathcal{E}_G \leq \mathcal{E}_T + C \cdot \frac{(\log N)^s}{N} + 2\delta.
 \end{equation*}
-for any tolerance $\delta > 0$, the following holds:
-\begin{equation*}
-    \mathcal{E}_G \leq \mathcal{E}_T + C \cdot \frac{(\log N)^s}{N} + 2\delta
-\end{equation*}
-
+The constant $C$ depends on the learing algorithm and the tolerance $\delta$
+associated with the mollifier introduced in the proof.
 \end{theorem}
 
 To proof this theorem, we will use the following proposition stating a
@@ -219,32 +216,53 @@ This yields the following result for the upper bound on the Hardy--Krause
 variation of compositions of functions.
 
 \begin{remark}\label{rem:compositions} \ \\
-Recalling Corollary~\ref{cor:variation-approximation} for the composition of two
-functions $f\in C^1([0,1]^s, \mathcal{X})$ and $\eta_\delta \in C^s(\mathcal{X})$
-given by $\eta_\delta \circ f$ leads to
+To check in what cases the variation in the sense of Vitali is bounded for the
+composition of two functions, we first apply
+Corollary~\ref{cor:variation-approximation} on the composition of two functions
+$f\in C^s([0,1]^s, \mathcal{X})$ and $\eta \in C^s(\mathcal{X})$. For $\eta
+\circ f$ this yields
 \begin{equation*}
-    V_{[0,1]^s}(\eta_\delta \circ f) \leq \int\limits_{[0,1]^s} \left| \frac{\partial^s}{\partial x_1 \cdots \partial x_s} (\eta_\delta \circ f)(x) \right| \, dx.
+    V_{[0,1]^s}(\eta \circ f) \leq \int\limits_{[0,1]^s} \bigg| \frac{\partial^s}{\partial x_1 \cdots \partial x_s} (\eta \circ f)(x) \bigg| \, dx.
 \end{equation*}
-Applying the multivariate Faà di Bruno formula from
-Proposition~\ref{prop:multivariate_faa_di_bruno} yields
+By applying the multivariate Faà di Bruno formula from
+Proposition~\ref{prop:multivariate_faa_di_bruno} it follows that
 \begin{equation*}
-    V_{[0,1]^s}(\eta_\delta \circ f) \leq \int\limits_{[0,1]^s} \left| \sum_{\pi} \eta_\delta^{(|\pi|)}\circ f(x) \cdot \prod_{B\in\pi} \frac{\partial^{|B|}}{\prod_{j\in B}\partial x_j}f(x) \right| \, dx.
+    V_{[0,1]^s}(\eta \circ f) \leq \int\limits_{[0,1]^s} \bigg| \sum_{\pi} \eta^{(|\pi|)}\circ f(x) \cdot \prod_{B\in\pi} \frac{\partial^{|B|}}{\prod_{j\in B}\partial x_j}f(x) \bigg| \, dx.
 \end{equation*}
-As for a fixed dimension $s$ the number of partitions $\pi$, denoted by Bell
-number $B_s$, is finite, the variation in the sense of Vitali is bounded, if for
-each partition $\pi$ the following holds:
+As for a finite dimension $s$ the number of partitions $\pi$ is finite, the
+variation in the sense of Vitali is bounded, if for each partition $\pi$ of
+$\{1,\dots,s\}$ the following holds:
 \begin{equation*}
-    \int\limits_{[0,1]^s} \left| \eta_\delta^{(|\pi|)}\circ f(x) \cdot \prod_{B\in\pi} \frac{\partial^{|B|}}{\prod_{j\in B}\partial x_j}f(x) \right| \, dx < \infty.
+    \int\limits_{[0,1]^s} \bigg| \eta^{(|\pi|)}\circ f(x) \cdot \prod_{B\in\pi} \frac{\partial^{|B|}}{\prod_{j\in B}\partial x_j}f(x) \bigg| \, dx < \infty.
 \end{equation*}
-As $\eta_\delta \in C^s(\mathcal{X})$ is continuous, the composition
-$\eta_\delta \circ f$ is also continuous. Therefore, it suffices to show that
+As $\eta \in C^s(\mathcal{X})$ is continuous, the composition
+$\eta \circ f$ is also continuous. Therefore, to show that the variation in the sense of Vitali is bounded, it sufficies to show the following for all partitions $\pi$ of the set $\{1,\ldots,s\}$:
 \begin{equation*}
-    \int\limits_{[0,1]^s} \left| \prod_{B\in\pi} \frac{\partial^{|B|}}{\prod_{j\in B}\partial x_j}f(x) \right| \, dx < \infty.
+    \int\limits_{[0,1]^s} \prod_{B\in\pi} \bigg| \frac{\partial^{|B|}}{\prod_{j\in B}\partial x_j}f(x) \bigg| \, dx < \infty.
 \end{equation*}
 \end{remark}
 
+As the Variation in the sense of Hardy--Krause is defined by a finite sum over
+variations in the sense of Vitali, the following Corollary follows immediately
+for finite dimensions $s$.
+
+\begin{cor} \ \\
+\label{cor:bounded_composition}
+    Let $f \in C^s([0,1]^s, \mathcal{X})$ for $\mathcal{X}\subset \mathbb{R}^d$
+    and $s$ finite. If
+    \begin{equation*}
+        \int\limits_{[0,1]^{|v|}} \prod_{B\in\pi} \bigg| \frac{\partial^{|B|}}{\prod_{j\in B} \partial x_j}f(x) \bigg| \, dx < \infty
+    \end{equation*}
+    holds for all partitions $\pi$ of the set $\{1,\ldots,s\}$, then the
+    Hardy--Krause variation of the composition $\eta \circ f$ is bounded for all
+    $\eta \in C^s(\mathcal{X})$:
+    \begin{equation*}
+        V_{\mathrm{HK}}(\eta \circ f) < \infty.
+    \end{equation*}
+\end{cor}
+
 Now we can prove the theorem.
-\begin{proof}[Proof (Multivariate Faà di Bruno formula)] \ \\
+\begin{proof}[Proof (Theorem~\ref{thm:main-theorem})] \ \\
     First, we define a mollifer function $\eta_\delta \in C^s(\mathbb{R},
     \mathbb{R}_+)$ fullfilling
     \begin{equation*}
@@ -262,16 +280,24 @@ Now we can prove the theorem.
 
     Next, it is shown, that the mollified generalization gap
     $\eta_\delta(f(x)-\hat{f}(x))$ has bounded Hardy--Krause variation.
-    Therefore we first apply the results from Remark~\ref{rem:compositions} to
-    the composition of the mollifier $\eta_\delta\in C^s$ and the function
-    $f-\hat{f} \in C^1([0,1]^s, \mathbb{R})$. One can see, that it suffices to
-    show that for all paritions $\pi$ of the set $\{1,\ldots,s\}$ the following
-    holds:
+    Therefore, we apply Corollary~\ref{cor:bounded_composition} and need to
+    therefore to show, that $f-\hat{f} \in C^s([0,1]^s, \mathbb{R})$.
+
+    The ground truthh function $f$ fullfils this by assumptions. As the
+    composition $\hat{f}$ from \eqref{eq:dnn-definition} is a composition of
+    affine and activation functions fullfilling $C^s$ by assumption, it follows
+    that $\hat{f} \in C^s([0,1]^s, \mathbb{R})$.
+
+    Furthermore, to apply Corollary~\ref{cor:bounded_composition} we need to show that
+
     \begin{equation} \label{eq:variation_requirement}
         \int\limits_{[0,1]^s} \big| \prod_{B\in\pi} \frac{\partial^{|B|}}{\prod_{j\in B}\partial x_j} (f-\hat{f})(x) \big| \, dx < \infty.
     \end{equation}
-    As $fL$ has bounded Hardy--Krause variation by assumption and the surrogate
-    model $\hat{f}$ is a composition of affine $C^\infty$ and sufficiently
+
+    holds for all partitions $\pi$ of the set $\{1,\ldots,s\}$.
+
+    As $f$ has bounded Hardy--Krause variation by assumption and the surrogate
+    model $\hat{f}$ is a composition of affine (hence $C^s$) and sufficiently
     smooth activation functions $\sigma$, \eqref{eq:variation_requirement} holds
     for all partitions $\pi$ of the set $\{1,\ldots,s\}$:
     \begin{equation}
