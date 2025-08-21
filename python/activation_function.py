@@ -19,7 +19,7 @@ sigmoid = 1 / (1 + np.exp(-x))
 fig, axs = plt.subplots(1, 2, figsize=(6.5, 2.8))  # Side-by-side
 
 # ReLU
-axs[0].plot(x, relu, label=r'$\mathrm{ReLU}(x)$')
+axs[0].plot(x, relu, label=r'$\sigma(x)$')
 axs[0].set_title("ReLU Activation")
 axs[0].axhline(0, color='gray', lw=0.5)
 axs[0].axvline(0, color='gray', lw=0.5)
@@ -36,7 +36,7 @@ axs[1].grid(True, linestyle='--', linewidth=0.5, alpha=0.7)
 axs[0].set_ylim([-0.5, 6])
 axs[0].set_xlim([-6, 6])
 axs[0].set_xlabel(r'$x$')
-axs[0].set_ylabel(r'$ReLu(x)$')
+axs[0].set_ylabel(r'$\sigma(x)$')
 
 axs[1].set_ylim([-0.5, 6])
 axs[1].set_xlim([-6, 6])

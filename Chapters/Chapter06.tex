@@ -1,13 +1,12 @@
 %!TEX root = ../main.tex
 \chapter{QMC-Based Deep Learning Algorithm}
 \label{chapter6}
-\begin{itemize}
-    \item Algorithm description (based on Mishra \& Rusch Algirthm 2.2)
-    \item Network Architecture, activation functions and regularization
-    \item QMC vs. MC sampling: sample complexity and efficiency
-    \item Discussion of smooth vs. non-smooth activations (e.g. ReLU vs. tanh)
-    \item Practical considerations: dimensionality, optimal choices
-\end{itemize}
+
+The goal of this chapter is to mathematically analyze the function approximation
+problem and find bounds on the generalization gap of \ac{dnn} surrogate models
+obtained by low-discrepancy training data. The analysis is based on the
+Hardy--Krause variation and the Koksma-Hlawka inequality introduced in
+Chapter~\ref{chapter3}.
 
 \section{Preliminaries}
 
@@ -15,7 +14,10 @@ For the sake of completeness, we start with some results on approximations of
 variations defined in Section~\ref{sec:variation}. First we recall an important
 identity for the alternating sum.
 
-\begin{prop}
+The following results come from \cite[Section 9]{owen2005multidimensional}. For
+completeness, the conceptual proofs are given here in full.
+
+\begin{prop} \ \\
 \label{prop:variation-approximation}
     Let $f$ be a function defined on the hypercube $[a,b]^s$ with existing and
     integrable derrivative $\frac{\partial^s}{\partial x_1 \cdots \partial x_s}
@@ -28,7 +30,8 @@ identity for the alternating sum.
     Definition~\ref{def:alternating_sum}.
 \end{prop}
 
-\begin{proof} We prove this by induction on the dimension $s$.
+\begin{proof} \ \\
+The proof follows by induction on the dimension $s$.
 
 \textbf{Base case ($s=1$).}
 \begin{equation*}
@@ -81,7 +84,7 @@ dimensions. Hence, the statement holds for $s$.
 This yields another result for the variation in the sense of Vitali on functions
 with existing and integrable derrivative.
 
-\begin{cor}
+\begin{cor} \ \\
 \label{cor:variation-approximation}
     Let $f$ be a function defined on the hypercube $[a,b]^s$ with existing and
     integrable derrivative $\frac{\partial^s}{\partial x_1 \cdots \partial x_s}
@@ -91,7 +94,7 @@ with existing and integrable derrivative.
     \end{equation*}
 \end{cor}
 
-\begin{proof}
+\begin{proof} \ \\
     
     Recalling the definition of variation with respect to a ladder from
     Definition~\ref{def:variation_ladder} and applying
@@ -124,7 +127,7 @@ with existing and integrable derrivative.
     \end{equation*}
 \end{proof}
 
-\begin{remark}
+\begin{remark} \ \\
     Because computing the Hardy--Krause variation is not tractable, the
     following recursively defined upper bound follows immediately from the
     preceding results by Corollary~\ref{cor:variation-approximation}:
@@ -133,30 +136,29 @@ with existing and integrable derrivative.
         \label{eq:variation_hardy_krause_bound}
         V_{\mathrm{HK}}(f) \leq \widehat{V}_{\mathrm{HK}}(f) := \int\limits_{[a,b]} 
         \left| \frac{\partial^s}{\partial x_1 \cdots \partial x_s} f(x) \right| \, 
-        dx + \sum\limits_{i=1}^s \widehat{V}_{\mathrm{HK}}(f^{(i)}_1).
+        dx + \sum\limits_{i=1}^s \widehat{V}_{\mathrm{HK}}(f|_{x_i=b_i}).
     \end{equation}
 
-    Here, $f^{(i)}$ denotes the restriction of $f$ to the boundary $y_i=b_i$. In
-    the first place this is a restriction to the $s-1$ dimensional case. In the
-    last recursive step, the univariate case is reached with
+    Here, $f|_{x_i=b_i}$ denotes the restriction of $f$ to the boundary with
+    $x_i=b_i$. In the first place this is a restriction to the $s-1$ dimensional
+    case. In the last recursive step, the univariate case is reached with
 
     \begin{equation*}
-        \widehat{V}_{\mathrm{HK}}(f_{s-1}^v) = \int\limits_{[a,b]} 
-        \left| \frac{\partial f_{s-1}^v(x)}{\partial x} \right| \, dx.
+        \widehat{V}_{\mathrm{HK}}(f\big|_{x_i=b_i, \forall i \neq j}) = \int\limits_{[a_j,b_j]} 
+        \left| \frac{\partial f\big|_{x_i=b_i, \forall i\neq j}(x_j)}{\partial x_j} \right| \, dx.
     \end{equation*}
-    Hereby,  $f_{s-1}^v$ is the restriction of $f$ to the boundary for $(s-1)$
-    dimensions in the tuple $v\subset\{1,\ldots,s\}$.
+    Hereby,  the restricted function $f\big|_{x_i=b_i, \forall i \neq j}$ is
+    limited to the one remaining dimension $j$.
 \end{remark}
 
 
-\section{QMC-Based Analysis of the Function Approximation Problem}
-\textcolor{red}{TODO: Titel anpassen}
+\section{Error estimation of DNN surrogates obtained by \\ low-discrepancy training data}
 
 Given the computable training error $\mathcal{E}_T$ depending on the training
 data, one wants to estimate the generalization error. Therefore the
 \emph{generalization gap} is an important 
 
-\begin{theorem}
+\begin{theorem} \ \\
     For the surrogate models $L^*$ obtained by \ac{dnn} training of a mapping
     $L$ on the hyperrectangle $[0,1]^s$ with a low-discrepancy sequence
     $\mathcal{S}=\{x_n\}_{n=1}^N\subset [0,1]^s$ yields a generalization gap
@@ -168,7 +170,7 @@ data, one wants to estimate the generalization error. Therefore the
     variation from Definition~\ref{def:variation_hardy_krause}.
 \end{theorem}
 
-\begin{proof}
+\begin{proof} \ \\
     This simply follows from the Koksma-Hlawka inequality
     (Theorem~\ref{thm:koksma-hlawka}) applied to the surrogate model $L^*$ and
     the training error $\mathcal{E}_T$ as follows:

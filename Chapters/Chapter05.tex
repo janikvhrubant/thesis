@@ -26,8 +26,8 @@ An \emph{activation function} is a measurable function $\sigma : \mathbb{R} \to
 each layer in a neural network.
 \end{definition}
 
-\begin{remark}
-    In general the activation function $\sigma$ is only 1-dimensional, i.e. $\sigma: \mathbb{R} \to \mathbb{R}$. However, it is common to apply it componentwise to vectors, to extend the definition to $\sigma: \mathbb{R}^k \to \mathbb{R}^k$ with $\sigma(z) = (\sigma(z_1), \dots, \sigma(z_k))^\top$.
+\begin{remark} \ \\
+    In general the activation function $\sigma$ is 1-dimensional, i.e. $\sigma: \mathbb{R} \to \mathbb{R}$. However, it is common to apply it componentwise to vectors and extend the definition to $\sigma: \mathbb{R}^k \to \mathbb{R}^k$ with $\sigma(z) = (\sigma(z_1), \dots, \sigma(z_k))^\top$.
 \end{remark}
 
 \begin{example}[Common Activation Functions] \ \\
@@ -67,10 +67,10 @@ a fully connected feedforward neural network can represent.
 Let $L \in \mathbb{N}$ and $\mathbf{d} = (d_0, d_1, \dots, d_L)$ be a sequence
 of positive integers, where $d_0 = s$ is the input dimension and $d_L = 1$ the
 output dimension. A \acf{dnn} of \emph{depth} $L$ and \emph{layer widths} $d_1,
-\dots, d_{L-1}$ is a function $f_\theta: \mathbb{R}^s \to \mathbb{R}$ of the
+\dots, d_{L-1}$ is a function $\hat{f}_\theta: \mathbb{R}^s \to \mathbb{R}$ of the
 form
 \begin{equation*}
-    f_\theta(y) = A_L \circ \sigma \circ A_{L-1} \circ \cdots \circ \sigma \circ A_1(y),
+    \hat{f}_\theta(y) = A_L \circ \sigma \circ A_{L-1} \circ \cdots \circ \sigma \circ A_1(y),
 \end{equation*}
 where each \emph{layer map} $A_l: \mathbb{R}^{d_{l-1}} \to \mathbb{R}^{d_l}$ is
 an affine transformation
@@ -85,9 +85,10 @@ The collection of all trainable parameters is denoted by
 \begin{equation*}
 \theta = \{ (W_l, b_l) \}_{l=1}^L,
 \end{equation*}
-and fully determines the function $f_\theta$. The set of all such realizable
-functions for a given architecture and activation $\sigma$ is denoted by
-$\mathcal{F}_{L, \mathbf{d}, \sigma}$.
+and fully determines the function $\hat{f}_\theta$ for a placed activation
+function $\sigma$. The set of all such realizable functions for a given
+architecture $\mathbf{d}$ and activation $\sigma$ is denoted by
+$\mathcal{F}_{\mathbf{d}, \sigma}$.
 
 \vspace{0.5em}
 \noindent The architectural parameters are interpreted as follows:
@@ -98,13 +99,8 @@ $\mathcal{F}_{L, \mathbf{d}, \sigma}$.
 \end{itemize}
 \end{definition}
 
-
-In the course of this work, we assume that all hidden layers have the same
-number of neurons, i.e., the network has constant width $m$ for all layers $l =
-1, \dots, L-1$. In Figure~\ref{fig:dnn-architecture}, a fully connected \ac{dnn}
+In Figure~\ref{fig:dnn-architecture}, a fully connected \ac{dnn}
 with constant width is illustrated.
-
-\textcolor{red}{TODO: Begründung warum konstantes m}
 
 \begin{figure}[H]
 \centering
@@ -160,9 +156,11 @@ depth $L=3$ layers.}
 \end{figure}
 
 
-\begin{remark}
-    For the layer structure $d=(d_0,...,d_L)$, the total number of trainable
-    parameters (weights and biases) of $\theta$ in the network is given by
+\begin{remark} \ \\
+    For common \ac{dnn} architectures with a constant number $m$ of neurons in
+    each layer $d=(d_0,...,d_L)$, with $d_0=s$ input paramters and $d_L=1$
+    output parameters, the total number of trainable parameters (weights and
+    biases) of $\theta$ in the network is given by
     \begin{equation*}
         N_\theta = \sum_{l=1}^{L} (d_{l-1} \cdot d_l + d_l) = (L-2) \cdot m^2 + (L+s) \cdot m + 1.
     \end{equation*}
@@ -170,58 +168,127 @@ depth $L=3$ layers.}
 \end{remark}
 
 % ------------------------------------------------------------------------------
-\section{Training and Generalization Error}
+\section{DNN Evaluation}
 \label{sec:dnn-error}
 % ------------------------------------------------------------------------------
 
-Supervised training of a \ac{dnn}requires minimizing the discrepancy between
-the network output $f_\theta(y)$ and a ground truth map $L(y)$ on a given
-training set $\{y_i\}_{i=1}^N$.
+The training of a \ac{dnn} involves supervised learning, where the goal is to
+minimize the difference between the surrogate model $\hat{f}$ and the ground
+truth function $f$. Supervised training of a \ac{dnn} therefore requires
+minimizing the discrepancy between the network output $\hat{f}_\theta(y)$ and a
+ground truth function $f(y)$ on a given training set $\{y_i\}_{i=1}^N$.
+
+We start by defining the loss function which is used to measure this discrepancy during the training:
+
+\begin{definition}[Loss Function] \ \\
+Let $f:\mathcal{Y}\to\mathbb{R}$ be a ground truth function and $\hat{f}_\theta$
+a respective surrogate with network architecture $\mathbf{d}$, according
+parameters $\theta$ and activation function $\boldsymbol{\sigma}$. Then, given
+the surrogate and a respective point set $\mathcal{P}$, the \emph{loss function}
+is defined as
+\begin{equation*}
+\mathcal{L}(\theta) := \sum\limits_{y \in \mathcal{P}} |f(y) - \hat{f}_\theta(y)|^p \, \mathrm{d}y,
+\end{equation*}
+for some $1\leq p < \infty$.
+\end{definition}
+
+The point set $\mathcal{P}$ in the loss function is usually given by the training set. By defining the discrepancy on the training data, the \emph{training error} $\mathcal{E}_T$ is defined:
 
 \begin{definition}[Training Error] \ \\
-The empirical risk or training error is defined by
+Let $f$ be a ground truth function and $\hat{f}_\theta$ a respective surrogate
+model with architecture $\mathbf{d}$, according parameters $\theta$ and
+activation function $\boldsymbol{\sigma}$. Then, given the matching training set
+$\{(y_i, f(y_i))\}_{i=1}^N$ of the surrogate model, the \emph{training error} is
+defined as
  \begin{equation*}
-\mathcal{E}_\mathrm{T}(\theta) = \frac{1}{N} \sum_{i=1}^N |L(y_i) - f_\theta(y_i)|.
+\mathcal{E}_\mathrm{T}(\theta) := \frac{1}{N} \sum_{i=1}^N |f(y_i) - \hat{f}_\theta(y_i)|.
  \end{equation*}
 \end{definition}
 
+The \emph{generalization error} $\mathcal{E}_\mathrm{G}$ is evaluating the
+discrepancy between the surrogate model $\hat{f}_\theta$ and the ground truth
+function $f$ on the entire domain $\mathcal{Y}$.
+
 \begin{definition}[Generalization Error] \ \\
-The generalization error (or population risk) is the expected error under the
-data distribution $\mu$:
- \begin{equation*}
-\mathcal{E}_\mathrm{G}(\theta) = \int_{\mathcal{Y}} |L(y) - f_\theta(y)| \, \mathrm{d}\mu(y).
- \end{equation*}
+Let $f:\mathcal{Y}\to\mathbb{R}$ be a ground truth function and $\hat{f}_\theta$
+a respective surrogate with nework architecture $\mathbf{d}$, according
+parameters $\theta$ and activation function $\boldsymbol{\sigma}$. Then, given
+the surrogate, the \emph{generalization error} is defined as:
+\begin{equation*}
+\mathcal{E}_\mathrm{G}(\theta) := \int\limits_{\mathcal{Y}} |f(y) - \hat{f}_\theta(y)| \, \mathrm{d}y.
+\end{equation*}
+\end{definition}
+
+\begin{remark} \ \\
+    Whereas the training error $\mathcal{E}_\mathrm{T}$ is numberically
+    straightforward to compute, the generalization error
+    $\mathcal{E}_\mathrm{G}$ is often not directly computable, as the ground
+    truth function $f$ is not known besides the training data.
+\end{remark}
+
+\begin{definition}[Generalization Gap] \ \\
+    The \emph{generalization gap} for a given \ac{dnn} architecture $\mathbf{d}$
+    and activation function $\boldsymbol{\sigma}$ is the difference between the
+    generalization and training error:
+    \begin{equation*}
+        |\mathcal{E}_\mathrm{G}(\theta) - \mathcal{E}_\mathrm{T}(\theta)|.
+    \end{equation*}
 \end{definition}
 
 
 % ------------------------------------------------------------------------------
-\section{Optimization and Training Procedures}
+\section{Optimization and Training Procedure}
 \label{sec:dnn-training}
 % ------------------------------------------------------------------------------
 
-The training of a \ac{dnn} involves \emph{training data}, 
-Training a \ac{dnn} generally corresponds to solving the following regularized
-minimization problem:
+In practice, an initial surrogate \ac{dnn} $\hat{f}_\theta$ is generated for
+initial parameters $\theta$. In supervised learning, the goal is to minimize the
+training error $\mathcal{E}_\mathrm{T}(\theta)$ with respect to the parameters
+$\theta$.
+
+The training of a \ac{dnn} involves given \emph{training data} to optimize the weights of a neural network during the training process
+
+The training of a \ac{dnn} involves iterations over the given \emph{training
+data}. Training a \ac{dnn} generally corresponds to solving the following
+regularized minimization problem
 
 \begin{equation}
     \theta^* = \arg\min_{\theta \in \Theta} \left[ \mathcal{E}_\mathrm{T}(\theta) + \lambda \cdot R(\theta) \right],
     \label{eq:regularized-objective}
 \end{equation}
 
-where $R(\theta)$ is a regularization term (e.g., $\ell^2$ weight penalty) and
+where $R(\theta)$ is a regularization term (e.g. $L2$ weight penalty) and
 $\lambda > 0$ controls its strength.
 
-In Figure~\ref{fig:dnn_learning_minimal}, a generic training workflow for deep
-neural networks is illustrated. Starting from a dataset of input--output pairs,
-the number of epochs~$E$, the mini-batch size~$B$, and initial
-parameters~$\theta_0$, the process begins by selecting an
-optimizer~$\mathrm{Opt}$ (e.g., SGD or Adam). For each epoch, the training data
-are shuffled and split into mini-batches of size~$B$. Each
-mini-batch~$\mathcal{B}$ is processed in three steps: (i) perform a forward pass
-to compute the loss~$\mathcal{L}$ and its gradients~$\nabla_\theta \mathcal{L}$,
-(ii) update the parameters using the optimizer, and (iii) proceed to the next
-mini-batch until all have been processed. This procedure is repeated for all~$E$
-epochs, yielding the trained network~$L^* = L_\theta$.
+In Figure~\ref{fig:dnn_learning_minimal}, a generic training workflow for the
+training of deep neural networks is illustrated. 
+
+The algorithm begins with the choice of a training dataset of input--output
+pairs $\{(x_n, f(x_n))\}_{n=1}^N$, a number of epochs $E \in \mathbb{N}$, a
+batch size $B \in \mathbb{N}$, initial parameters $\theta_0$ and an optimizer
+$\mathrm{Opt}$ (e.g. SGD or Adam) as input values. In an initialization step the
+algorithm then generates the initial surrogate model $\hat{f}_{\theta_0}$.
+
+At the beginning of each epoch $e \in \{1, \dots, E\}$ in step (i), the dataset
+is shuffled and partitioned into mini-batches
+
+\begin{equation*}
+    (\mathcal{B}^e_k)_{k=1}^{K}, \quad \text{with } 
+    K = \left\lceil \tfrac{N}{B} \right\rceil,
+\end{equation*}
+
+each of size $B$. The union of all mini-batches in an epoch equals the full
+training dataset.
+
+Then for every mini-batch $\mathcal{B}^e_k$ the algorithm loops over step (ii)
+and (iii): In step (ii), the loss $\mathcal{L}$ is computed by forward passing
+the mini-batch through the network and computing the loss accordingly.
+Furthermore, the gradient of the loss $\nabla_\theta \mathcal{L}$ is computed by
+backpropagation. In step (iii), the parameters $\theta$ are updated using the
+Optimizer $\mathrm{Opt}$ and update the parameters $\theta$ accordingly.
+
+This procedure is repeated for all epochs $e \in \{1, \dots, E\}$, yielding the 
+trained network $\hat{f}_{\theta^*} = \hat{f}_{\theta_E}$.
 
 \begin{figure}[H]
 \centering
@@ -233,30 +300,32 @@ epochs, yielding the trained network~$L^* = L_\theta$.
 ]
 
 % % ---------- Input ----------
-\node[io] (input) {Dataset $\{(x_n,L(x_n))\}_{n=1}^N$, epochs $E$, \\ batch 
-    size $B$, initial parameters $\theta_0$};
+\node[io] (input) {Dataset $\{(x_n,L(x_n))\}_{n=1}^N$, number of epochs $E$,
+batch size $B$, initial parameters $\theta_0$, Optimizer $\mathrm{Opt}$};
 
 \node[anchor=center, font=\bfseries] at ($(input.west)+(-1.2cm,0)$) {Input:};
 
 % ---------- Init ----------
-\node[io, below=9mm of input] (init) {Choose optimizer $\mathrm{Opt}$ (e.g.\
-    SGD/Adam), number of epochs $E$, batch training data with size $B$.};
+\node[io, below=9mm of input] (init) {generate initial DNN
+$\hat{f}_{\theta_0}$, };
 
 \draw[-{Latex[length=3mm]}, line width=1.1pt] (input) -- (init);
 
 \node[anchor=center, font=\bfseries] at ($(init.west)+(-1.2cm,0)$) {Init:};
 
 % ---------- Mini-batch steps (within epoch) ----------
-\node[block, below=6mm of init] (batch) {\centering \mbox{Sample a mini-batch 
-    $\mathcal{B} \subset \text{Train}$} \mbox{with $|\mathcal{B}| = B$ (shuffle 
-    each epoch).}};
+\node[block, below=6mm of init] (batch) {Shuffle and distribute training data
+into mini-batches $(\mathcal{B}^e_k)_{k=1}^{K}$};
 
-\node[block, below=4mm of batch] (forward) {Forward pass on $\mathcal{B}$; \\ 
-    compute loss $\mathcal{L}$ and gradients $\nabla_\theta \mathcal{L}$.};
+\node[block, below=4mm of batch] (forward) {Compute loss
+$\mathcal{L}(\theta_{k-1})$ and gradient $\nabla_\theta
+\mathcal{L}(\theta_{k-1})$ on the mini-batch $\mathcal{B}^e_k$};
 
-\node[block, below=4mm of forward] (update) {\centering \mbox{\textbf{Update 
-    parameters}:\quad $\theta \leftarrow \mathrm{Opt}\!\big(\theta,
-    \nabla_\theta \mathcal{L}\big)$.}};
+\node[block, below=4mm of forward] (update) {\centering \mbox{Update
+Parameters:} \mbox{$\theta_k \leftarrow \mathrm{Opt}\,\big(\theta_{k-1},
+\nabla_\theta \mathcal{L}(\theta_{k-1})\big)$.}};
+
+
 
 \draw[-{Latex[length=3mm]}, line width=1.1pt] (init) -- (batch);
 
@@ -265,15 +334,18 @@ epochs, yielding the trained network~$L^* = L_\theta$.
 \draw[-{Latex[length=3mm]}, line width=1.1pt] (forward) -- (update);
 
 % loop within epoch
-\draw[dotted, line width=1.0pt] (update.east) -- ++(1.0,0);
+\draw[dotted, line width=1.0pt, -{Latex[length=3mm]}] (update.east) -- ++(.5,0)
+|- (batch.east);
 
-\node[anchor=west, align=left] at ($(update.east)+(1.1,1.0)$)
-    {\textbf{Repeat} until all\\[-1pt] mini-batches processed \\[-1pt] \textbf
-    {Repeat for all $E$ epochs}};
+\node[anchor=west, align=left] at ($(update.east)+(.6,1.5)$) {\textbf{Repeat}
+    for all\\[-1pt] mini-batches};
+
+    %  \\[-1pt] \textbf
+    % {Repeat for all $E$ epochs
 
 % brace for "one epoch"
 \draw[decorate, decoration={brace, amplitude=5pt, mirror}, thick]
-    ($(batch.west)+(-.35, .35)$) -- ($(update.west)+(-.35, -.35)$)
+    ($(batch.west)+(-.35, .5)$) -- ($(update.west)+(-.35, -.6)$)
     node[midway, xshift=-8mm, rotate=90, font=\bfseries] {Epoch};
 
 % ---------- Next epoch ----------
@@ -284,7 +356,8 @@ epochs, yielding the trained network~$L^* = L_\theta$.
 
 % epoch loop (no explicit counter shown)
 \draw[dotted, -{Latex[length=3mm]}, line width=1.0pt] 
-    (nextepoch.east) -- ++(1.0,0) |- (batch.east);
+    (nextepoch.east) -- ++(4.0,0) |- (batch.east);
+\node[anchor=north, align=left, above] at ($(nextepoch.east)+(2.2,.05)$) {\textbf{Repeat} for \\ all epochs};
 
 % ---------- Output ----------
 \node[output, below=10mm of nextepoch] (output) 
@@ -299,17 +372,21 @@ epochs, yielding the trained network~$L^* = L_\theta$.
 \label{fig:dnn_learning_minimal}
 \end{figure}
 
+In the following two subsections, two commonly used optimization algorithms in
+\ac{dnn} training are shortly introduced: \acf{sgd} and \acf{adam}
+
 \subsection{Stochastic Gradient Descent (SGD)}
 
-In practice, \eqref{eq:regularized-objective} is minimized via stochastic
-gradient descent:
+The very generic \ac{sgd} algorithm is a first-order optimization method that updates the parameters $\theta$ of the \ac{dnn} by computing
 
  \begin{equation*}
 \theta_{t+1} = \theta_t - \eta \cdot \nabla_\theta \mathcal{E}_\mathrm{T}^{(B)}(\theta_t),
  \end{equation*}
 
-where $\eta$ is the learning rate and $\mathcal{E}_\mathrm{T}^{(B)}$ is the
-mini-batch loss.
+where $\eta>0$ is the fixed learning rate and $\mathcal{E}_\mathrm{T}^{(B_t)}$
+is the loss evaluated on the mini-batch. There also exist varaiants of the
+\ac{sgd} optimization algorithm, which adaptively change the learning rate
+$\eta$ during the training process.
 
 \subsection{Adam Optimizer}
 
@@ -328,7 +405,7 @@ v_t / (1 - \beta_2^t)$ \State $\theta_t \gets \theta_{t-1} - \eta \cdot
 \end{algorithmic}
 \end{algorithm}
 
-\begin{remark}
+\begin{remark} \ \\
 The Adam optimizer is particularly effective in early training and in
 high-dimensional, noisy settings. Its convergence properties, however, require
 careful tuning of $\beta_1$, $\beta_2$ and $\epsilon$.
