@@ -393,28 +393,63 @@ is the loss evaluated on the mini-batch. There also exist varaiants of the
 \ac{sgd} optimization algorithm, which adaptively change the learning rate
 $\eta$ during the training process.
 
+
 \subsection{Adam Optimizer}
 
-The Adam algorithm improves on SGD by incorporating adaptive learning rates and
-momentum:
+The \acf{adam} algorithm \cite{goodfellow2016deep}
+is one of the most widely used stochastic optimization methods for training deep
+neural networks. Its central idea is to combine the benefits of momentum with
+coordinate-wise adaptive learning rates.
+
+At each iteration $t$, given the stochastic gradient
+\[
+g_t = \nabla_\theta \mathcal{E}_T(\theta_{t-1}),
+\]
+Adam maintains two exponential moving averages:
+the first-order moment (mean) $m_t$ and the second-order moment (uncentered variance) $v_t$:
+\begin{align}
+m_t &= \beta_1 m_{t-1} + (1-\beta_1) g_t, \\
+v_t &= \beta_2 v_{t-1} + (1-\beta_2) g_t^2,
+\end{align}
+where $\beta_1,\beta_2 \in [0,1)$ are decay parameters. The choice $\beta_1 \approx 0.9$, $\beta_2 \approx 0.999$ is common in practice.
+
+Since both $m_t$ and $v_t$ are initialized at zero, they are biased towards zero, especially in the early stages of training. To correct for this, Adam introduces bias-corrected estimates
+\begin{align}
+\hat{m}_t &= \frac{m_t}{1-\beta_1^t}, \\
+\hat{v}_t &= \frac{v_t}{1-\beta_2^t}.
+\end{align}
+These corrections ensure that the moving averages are unbiased estimators of the true first and second moments of the gradients.
+
+Finally, the parameters are updated using the element-wise adaptive learning rate:
+\[
+\theta_t = \theta_{t-1} - \eta \, \frac{\hat{m}_t}{\sqrt{\hat{v}_t} + \epsilon},
+\]
+where $\eta$ is the global learning rate and $\epsilon$ is a small constant (e.g.\ $10^{-8}$) included for numerical stability.
+
+\begin{remark} \ \\
+The numerator $\hat{m}_t$ acts like a momentum term, smoothing the stochastic
+gradient, while the denominator $\sqrt{\hat{v}_t}$ normalizes by the magnitude
+of recent gradients, effectively assigning each parameter its own adaptive step
+size. This combination allows Adam to perform well in high-dimensional and noisy
+optimization landscapes. However, convergence guarantees depend sensitively on
+the choice of hyperparameters $\beta_1$, $\beta_2$, $\eta$, and $\epsilon$.
+\end{remark}
 
 \begin{algorithm}[H]
-\caption{Adam Optimizer (simplified)}
+\caption{Adam Optimizer}
 \begin{algorithmic}[1]
-\State Initialize $\theta_0$, $m_0 = 0$, $v_0 = 0$ \For{$t = 1$ to $T$} \State
-$g_t \gets \nabla_\theta \mathcal{E}_T(\theta_{t-1})$ \State $m_t \gets \beta_1
-m_{t-1} + (1 - \beta_1) g_t$ \State $v_t \gets \beta_2 v_{t-1} + (1 - \beta_2)
-g_t^2$ \State $\hat{m}_t \gets m_t / (1 - \beta_1^t)$ \State $\hat{v}_t \gets
-v_t / (1 - \beta_2^t)$ \State $\theta_t \gets \theta_{t-1} - \eta \cdot
-\hat{m}_t / (\sqrt{\hat{v}_t} + \epsilon)$ \EndFor
+\State Initialize $\theta_0$, $m_0 = 0$, $v_0 = 0$
+\For{$t = 1$ to $T$}
+    \State $g_t \gets \nabla_\theta \mathcal{E}_T(\theta_{t-1})$
+    \State $m_t \gets \beta_1 m_{t-1} + (1 - \beta_1) g_t$
+    \State $v_t \gets \beta_2 v_{t-1} + (1 - \beta_2) g_t^2$
+    \State $\hat{m}_t \gets m_t / (1 - \beta_1^t)$
+    \State $\hat{v}_t \gets v_t / (1 - \beta_2^t)$
+    \State $\theta_t \gets \theta_{t-1} - \eta \cdot \hat{m}_t / (\sqrt{\hat{v}_t} + \epsilon)$
+\EndFor
 \end{algorithmic}
 \end{algorithm}
 
-\begin{remark} \ \\
-The Adam optimizer is particularly effective in early training and in
-high-dimensional, noisy settings. Its convergence properties, however, require
-careful tuning of $\beta_1$, $\beta_2$ and $\epsilon$.
-\end{remark}
 
 
 

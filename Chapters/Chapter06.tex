@@ -19,9 +19,9 @@ completeness, the conceptual proofs are given here in full.
 
 \begin{prop} \ \\
 \label{prop:variation-approximation}
-    Let $f$ be a function defined on the hypercube $[a,b]^s$ with existing and
-    integrable derrivative $\frac{\partial^s}{\partial x_1 \cdots \partial x_s}
-    f$. Then, the following holds for the alternating sum:
+    Let $f$ be a function defined on the hypercube $[a,b]\subset \mathbb{R}^s$
+    with existing and integrable derivative $\frac{\partial^s}{\partial x_1
+    \cdots \partial x_s} f$. Then, the following holds for the alternating sum:
     \begin{equation}
         \int\limits_{[a,b]} \frac{\partial^s}{\partial x_1 \cdots \partial x_s} 
         f(x) \, dx = \Delta(f;a,b)
@@ -82,12 +82,12 @@ dimensions. Hence, the statement holds for $s$.
 \end{proof}
 
 This yields another result for the variation in the sense of Vitali on functions
-with existing and integrable derrivative.
+with existing and integrable derivative.
 
 \begin{cor} \ \\
 \label{cor:variation-approximation}
-    Let $f$ be a function defined on the hypercube $[a,b]^s$ with existing and
-    integrable derrivative $\frac{\partial^s}{\partial x_1 \cdots \partial x_s}
+    Let $f$ be a function defined on the hypercube $[a,b]\subset \mathbb{R}^s$ with existing and
+    integrable derivative $\frac{\partial^s}{\partial x_1 \cdots \partial x_s}
     f$. Then, the following holds for the variation in the sense of Vitali:
     \begin{equation*}
         V_{[a,b]}(f) \leq \int\limits_{[a,b]} \left| \frac{\partial^s}{\partial x_1 \cdots \partial x_s} f(x) \right| \, dx.
@@ -110,9 +110,7 @@ with existing and integrable derrivative.
         \sum_{y \in \mathcal{Y}} \bigg| \int\limits_{[y,y_+]}\frac{\partial^s}{\partial x_1 \cdots \partial x_s} f(x) \, dx \bigg| \leq \sum_{y \in \mathcal{Y}} \int\limits_{[y,y_+]}\bigg|\frac{\partial^s}{\partial x_1 \cdots \partial x_s} f(x)\bigg| \, dx
     \end{equation*}
     
-    \textcolor{red}{TODO: Beispiel hinzufügen}
-
-    As for a ladder $\mathcal{Y}$ of a hyperrectangle $[a,b]$ equality
+    Since for a ladder $\mathcal{Y}$ of a hyperrectangle $[a,b]$ the equality
     $\bigcup_{\mathcal{Y}\in\mathbb{Y}}[y,y_+] = [a,b]$ holds, the sum builds
     the integral over the whole hyperrectangle $[a,b]$:
 
@@ -128,7 +126,7 @@ with existing and integrable derrivative.
 \end{proof}
 
 \begin{remark} \ \\
-    Because computing the Hardy--Krause variation is not tractable, the
+    As computing the Hardy--Krause variation is not tractable, the
     following recursively defined upper bound follows immediately from the
     preceding results by Corollary~\ref{cor:variation-approximation}:
 
@@ -316,13 +314,6 @@ Now we can prove the theorem.
     \begin{equation}
         \mathcal{E}_G \leq \mathcal{E}_T + C \cdot \frac{(\log N)^s}{N} + 2\delta.
     \end{equation}
-
-    
-    
-
-
-
-
 
 \end{proof}
 
