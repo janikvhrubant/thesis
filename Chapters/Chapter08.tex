@@ -35,10 +35,8 @@ improving the accuracy of the reconstructed three-dimensional volume.
 %-------------------------------------------------------------------------------
 
 X-ray \ac{ct} relies on measuring the attenuation of X-rays along straight-line
-paths through a phantom. Here, the X-ray beam is further abstracted as
-individual photons with defined initial energies and directions. The photon
-trajectories typically extend from an X-ray source $\mathcal{S}$ to a detector
-element $\mathcal{D}$, forming the path:
+paths through a phantom. The photon trajectories typically extend from an X-ray
+source $\mathcal{S}$ to a detector element $\mathcal{D}$, forming the path:
 
 $$l = \overrightarrow{\mathcal{S}\mathcal{D}}$$
 
@@ -53,40 +51,67 @@ as the beam interacts with the material. As stated in
 \end{equation}
 
 Here, $I_0(E)$ denotes the incident intensity of X-rays with initial energy $E$
-at the source $\mathcal{S}$, and $\mu(x,E)$ represents the linear attenuation
+at the source $\mathcal{S}$. $\mu(x,E)$ represents the linear attenuation
 coefficient at spatial location $x$ along the path $l$, for energy $E$. The
-resulting intensity $I$ is measured at the detector element $\mathcal{D}$.
+attenuation coefficient is representing the attenuation per unit length and has
+usually the unit $\frac{1}{cm}$. The resulting intensity $I$ is measured at the
+detector element $\mathcal{D}$.
 
 Although exponential attenuation along straight-line paths such as
 $\overrightarrow{\mathcal{S}\mathcal{D}}$ is the idealized model for X-ray
 imaging, this assumption is systematically violated in practice. As X-rays
-traverse the scanned phantom, many photons undergo scattering interactions -
-such as Compton or Rayleigh scattering - that alter their trajectories. Despite
-deviating from the primary path, these scattered photons may still reach the
-detector, adding unintended signal components. As a result, the measured
+traverse the scanned phantom, they undergo scattering interactions - such as
+Compton or Rayleigh scattering - that alter their trajectories. Despite
+deviating from the primary path, these scattered X-rays may still reach the
+detector, adding unintended signals at the detector. As a result, the measured
 intensities no longer represent pure line integrals of the attenuation map. This
 discrepancy introduces nonlinear errors and visible artifacts in the
 reconstructed image, ultimately degrading both visual quality and quantitative
 accuracy.
 
-Scattered radiation is a major source of image artifacts - such as cupping and
-streaks - and reduces both spatial and contrast resolution. These effects not
+Scattered radiation is a major source of image artifacts --- such as cupping and
+streaks --- and reduces both spatial and contrast resolution. These effects not
 only degrade visual image quality but also compromise the accuracy of
-quantitative measurements, such as Hounsfield units $\mu_*$, which are used for
-clinical interpretation, such as tissue characterization
-\cite[Chap.~8]{medicalImagingSystemsIntro2019:}. Hounsfield units represent a
-normalized attenuation relative to the attenuation of water:
+quantitative measurements. But precise CT-images are important for various
+clinical applications, such as treatment planning in radiation therapy.
+Generating accurate three-dimensional models of the phantom is crucial for more
+precise dose calculations, strong enough to be effective but sufficiently weak
+to minimize unintended tissue damage.
 
+In clinical practice, such three-dimensional patient models are represented in
+Hounsfield units, which encode tissue-specific attenuation properties and serve
+as the basis for accurate dose calculation in radiation therapy
+\cite[Chapter~8]{medicalImagingSystemsIntro2019:}.
+
+In \ac{ct}, the reconstruction algorithm produces a volumetric map of effective
+attenuation coefficients, from which each voxel value is normalized according to
+the Hounsfield definition. The resulting HU values form the basis of the
+displayed grayscale intensities in the \ac{ct} image.
+
+Hounsfield units provide a dimensionless measure of X-ray attenuation. They are
+defined by normalizing the reconstructed attenuation coefficient~$\mu$ with
+respect to water and air:
 \begin{equation}
-    \mu_* = \left(\frac{\mu}{\mu_{\text{water}}} -1\right) \cdot 1000
+    \mathrm{HU} = 1000 \cdot \frac{\mu - \mu_\text{water}}{\mu_\text{water} - \mu_\text{air}}
+    \approx 1000 \cdot \frac{\mu - \mu_\text{water}}{\mu_\text{water}},
 \end{equation}
+where $\mu_\text{water}$ and $\mu_\text{air}$ denote the attenuation
+coefficients of water and air, respectively. By convention, water is assigned
+$0$~HU and air $-1000$~HU, while dense bone can exceed $+1000$~HU. Although HU
+reduce scanner- and protocol-dependent variability, they still depend on factors
+such as tube voltage and reconstruction settings. They are therefore best
+understood as a standardized but not absolute measure of tissue attenuation in
+clinical \ac{ct} imaging.
 
-The impact of scatter becomes especially pronounced in modern CT systems using
-high-energy X-rays or large-area flat-panel detectors, where scatter may
-dominate the measured signal. As such, accurate modeling and correction of
-scatter are essential for achieving high-fidelity CT images, particularly in
+The impact of scatter becomes especially pronounced in modern \ac{ct} systems
+using high-energy X-rays or large-area flat-panel detectors, where scatter may
+dominate the measured signal. Accurate modeling and correction of scatter are
+thus essential for achieving high-fidelity \ac{ct} images, particularly in
 clinical applications where precision and reliability are paramount
 \citep{medicalImagingSystemsIntro2019:}.
+
+For precise estimation of the models and HU values respectively, it is therefore
+important to correct for scatter effects in the acquired projection data.
 
 
 %-------------------------------------------------------------------------------

@@ -26,12 +26,18 @@ thesis, we will limit our discussion on functions of the type $f: \mathbb{R}^s
 \to \mathbb{R}$.
 
 One of the most widely used approaches to compute such integrals is the
-classical \ac{mc} method, which estimates the expectation based on averages over
-randomly sampled points. The primary appeal of \ac{mc} integration lies in its
-dimension-independent convergence rate and minimal assumptions on the integrand.
-However, its asymptotic error rate of $\mathcal{O}(N^{-1/2})$ limits its
-efficiency -- especially when high precision is required or function evaluations
-are computationally expensive.
+classical \ac{mc} method, which estimates the integral based on averages over
+randomly sampled points $\{X_n\}_{n=0}^{N-1}$
+
+\begin{equation*}
+    \frac1N \sum_{n=0}^{N-1} f(X_n) \approx \int_{[0,1]^s} f(x)\,dx\,.
+\end{equation*}
+
+The primary appeal of \ac{mc} integration lies in its dimension-independent
+convergence rate and minimal assumptions on the integrand. However, its
+asymptotic error rate of $\mathcal{O}(N^{-1/2})$
+\cite{leobacher2014introduction} limits its efficiency -- especially when high
+precision is required or function evaluations are computationally expensive.
 
 \ac{qmc} methods offer an alternative paradigm: instead of random samples, they
 employ deterministic sequences -- so-called low-discrepancy sequences -- that
@@ -40,8 +46,16 @@ allows for faster convergence under certain smoothness conditions and forms the
 basis for many state-of-the-art techniques in high-dimensional numerical
 integration.
 
-The first part of this thesis is structured into three chapters. Chapter~\ref{chapter1} introduces the consepts of \ac{mc} and \ac{qmc} methods to estimate the integral from \eqref{eq:integration_problem}. Chapter~\ref{chapter2} provides a formal introduction to discrepancy theory and some constructions of low-discrepancy sequences. In Chapter~\ref{chapter3}, the concepts of variation and error bounds as the \emph{Koksma-Hlawka inequality} are introduced. The subsequent Part~\ref{part2} of this thesis
-focuses on the application of \ac{qmc} methods for training of neural networks, while Part~\ref{part3} applies \ac{qmc} techniques to photon transport simulation in \acl{ct}.
+The first part of this thesis is structured into three chapters.
+Chapter~\ref{chapter1} introduces the concepts of \ac{mc} and \ac{qmc} methods
+to estimate the integral from \eqref{eq:integration_problem}.
+Chapter~\ref{chapter2} provides a formal introduction to discrepancy theory and
+some constructions of low-discrepancy sequences. In Chapter~\ref{chapter3}, the
+concepts of variation and error bounds such as the \emph{Koksma-Hlawka
+inequality} are introduced. The subsequent Part~\ref{part2} of this thesis
+focuses on the application of \ac{qmc} methods for training of neural networks,
+while Part~\ref{part3} applies \ac{qmc} techniques to photon transport
+simulation in \acl{ct}.
 
 % \paragraph{High-Dimensional Integration in Applications}\ \\
 % High-dimensional integration problems arise naturally in a wide range of
@@ -123,14 +137,20 @@ where $\sigma[f] := \sqrt{\mathrm{Var}[f]}$.
 \end{theorem}
 
 \begin{proof}[Sketch of Proof] \ \\
-Using independence and linearity of expectation, the variance of
-$I_N^{\mathrm{MC}}(f)$ is
-\begin{equation}
-    \mathrm{Var}[I_N^{\mathrm{MC}}(f)] = \frac{\mathrm{Var}[f]}{N}.
-\end{equation}
-Applying Jensen's inequality yields the stated bound on the expected absolute
-error.
+By independence, 
+\begin{equation*}
+\mathrm{Var}\!\left(I_N^{\mathrm{MC}}(f)\right) = \frac{\mathrm{Var}[f]}{N}.
+\end{equation*}
+With $X = I_N^{\mathrm{MC}}(f)-I(f)$, Jensen's inequality for the concave 
+$\phi(t)=\sqrt{t}$ gives
+\begin{equation*}
+\mathbb{E}[|X|] = \mathbb{E}[\phi(X^2)]
+\le \phi(\mathbb{E}[X^2])
+= \sqrt{\mathrm{Var}(X)}.
+\end{equation*}
+This yields the stated $O(N^{-1/2})$ bound.
 \end{proof}
+
 
 Despite its robustness and simplicity, MC integration has several well-known limitations:
 \begin{itemize}
@@ -308,11 +328,12 @@ converges to its Lebesgue measure:
     \lim_{N \to \infty} \frac{1}{N} \sum_{n=0}^{N-1} \chi_{[\boldsymbol{a}, \boldsymbol{b})}(\boldsymbol{x}_n)
     = \lambda_s([\boldsymbol{a}, \boldsymbol{b})) \,,
 \end{equation*}
-where $\chi_A$ is the indicator function of the set $A$ and $\lambda_s$ denotes
-the $s$-dimensional Lebesgue measure.
+where $\chi_{[\boldsymbol{a}, \boldsymbol{b})}$ is the indicator function of the
+set $[\boldsymbol{a}, \boldsymbol{b})$ and $\lambda_s$ denotes the
+$s$-dimensional Lebesgue measure.
 \end{definition}
 
-Hereby $[\boldsymbol{a},\boldsymbol{b})$ denotes the half-open interval in
+Hereby $[\boldsymbol{a},\boldsymbol{b})$ denotes the half-open hypercube in
 $\mathbb{R}^s$ defined by
 \begin{equation*}
     [\boldsymbol{a}, \boldsymbol{b}) = \{ \boldsymbol{x} \in \mathbb{R}^s \mid a_i \leq x_i < b_i \text{ for } i = 1, \dots, s \}.

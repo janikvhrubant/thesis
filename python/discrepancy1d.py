@@ -20,7 +20,9 @@ max_index = np.argmax(discrepancies)
 
 # Plotting
 plt.figure(figsize=(8, 4))
-plt.step(points_sorted, empirical_cdf, where='post', label='Empirical CDF $F_N(t)$')
+empirical_cdf_x = np.concatenate(([0], points_sorted, [1]))
+empirical_cdf_y = np.concatenate(([0], empirical_cdf, [1]))
+plt.step(empirical_cdf_x, empirical_cdf_y, where='post', label='Empirical CDF $F_N(t)$')
 plt.plot([0, 1], [0, 1], 'k--', label='Ideal CDF $F(t) = t$')
 
 # Highlight max discrepancy

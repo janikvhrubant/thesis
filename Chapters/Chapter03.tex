@@ -125,9 +125,10 @@ It is defined as:
     \label{def:variation_hardy_krause}
     The \emph{Hardy--Krause variation} of a function $f$ on the hyperrectangle
     $[a,b]$ is defined as
-    \begin{equation*}
+    \begin{equation}
+        \label{eq:hardy-krause-variation}
         V_{\mathrm{HK}}(f) = \sum_{u\subset \{1,\dots,s\}} V_{[a^{-u},b^{-u}]}\big(f(x^{-u};b^u)\big).
-    \end{equation*}
+    \end{equation}
     This definition coincides with the Vitali variation but is typically used
     when $[a,b] = [0,1]^s$.
 \end{definition}
@@ -175,7 +176,7 @@ The inequality relates the \ac{qmc} integration error to the star discrepancy of
 the point set and the Hardy--Krause variation of the integrand
 \cite{caflisch1998monte}.
 
-\begin{theorem}[Koksma--Hlawka Inequality]
+\begin{theorem}[Koksma--Hlawka Inequality] \ \\
 \label{thm:koksma-hlawka}
 Let $f \colon [0,1]^s \to \mathbb{R}$ be a function of bounded variation in the
 sense of Hardy--Krause and let $P = \{x_1, \dots, x_N\} \subset [0,1]^s$ be a

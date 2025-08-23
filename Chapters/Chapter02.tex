@@ -26,12 +26,12 @@ performance.
 First, we define the more general \emph{extreme discrepancy}:
 
 \begin{definition}[Extreme Discrepancy] \ \\
-Let $\mathcal{P}\subset [0,1)^s$, with $|\mathcal{P}| = N$, being a finite point
+Let $\mathcal{P}\subset [0,1)^s$ with $|\mathcal{P}| = N$ be a finite point
 set. Then the extreme discrepancy $D_N(\mathcal{P})$ is defined as
 \begin{equation*}
-    D_N(\mathcal{P}) = \sup\limits_{\substack{\boldsymbol{a,b} \in [0,1]^s \\ \boldsymbol{a} \leq \boldsymbol{b}}} \bigg| \frac{A([\boldsymbol{a},\boldsymbol{b}) , \mathcal{P}, N)}{N} - \lambda_s([\boldsymbol{a},\boldsymbol{b})] \bigg|.
+    D_N(\mathcal{P}) = \sup\limits_{\substack{\boldsymbol{a,b} \in [0,1]^s \\ \boldsymbol{a} \leq \boldsymbol{b}}} \bigg| \frac{A([\boldsymbol{a},\boldsymbol{b}) , \mathcal{P})}{N} - \lambda_s([\boldsymbol{a},\boldsymbol{b})] \bigg|.
 \end{equation*}
-Hereby $A([\boldsymbol{a},\boldsymbol{b}), \mathcal{P}, N)$ denotes the number
+Hereby $A([\boldsymbol{a},\boldsymbol{b}), \mathcal{P})$ denotes the number
 of points in $\mathcal{P}$ that fall into the box
 $[\boldsymbol{a},\boldsymbol{b})$, and
 $\lambda_s([\boldsymbol{a},\boldsymbol{b})]$ is the Lebesgue measure of that
@@ -42,16 +42,17 @@ In practice, a common and slightly more tractable variant is the \emph{star
 discrepancy}, which restricts the test boxes to be anchored at the origin.
 
 \begin{definition}[Star Discrepancy] \ \\
-Let $\mathcal{P}\subset [0,1)^s$, with $|\mathcal{P}| = N$, being a finite point
+Let $\mathcal{P}\subset [0,1)^s$ with $|\mathcal{P}| = N$ be a finite point
 set. Then the star discrepancy $D_N^*$ is defined as
 \begin{equation*}
     D_N^*(\mathcal{P}) = \sup\limits_{\boldsymbol{t} \in [0,1]^s} \bigg| \frac{A([\boldsymbol{0},\boldsymbol{t}), \mathcal{P}, N)}{N} - \lambda_s([\boldsymbol{0},\boldsymbol{t})] \bigg|.
 \end{equation*}
 \end{definition}
 
-This form is used in the Koksma--Hlawka \ref{thm:koksma-hlawka} inequality and serves as a central
-measure in \ac{qmc} analysis. Note that both discrepancy definitions are
-deterministic and depend solely on the point configuration.
+This form is used in the Koksma--Hlawka inequality
+(Theorem~\ref{thm:koksma-hlawka}) and serves as a central measure in \ac{qmc}
+analysis. Note that both discrepancy definitions are deterministic and depend
+solely on the point configuration.
 
 \begin{remark} \ \\
 A low star discrepancy implies that the empirical distribution of the points
