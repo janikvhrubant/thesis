@@ -185,250 +185,6 @@ energy is transformed into heat and only a small fraction becomes useful
 radiation. The following Figure~\ref{fig:xray_tube} illustrates the basic
 construction of an X-ray tube as in \cite{poludniowski2022calculating}
 
-\begin{figure}[htbp]
-    \centering
-    \begin{tikzpicture}[scale=1.1, every node/.style={font=\small}]
-        % Glass envelope
-        \draw[line width=2mm, rounded corners=10pt] (.5,-1.5) -- (-3,-1.5) -- (-3,1.5) -- (3,1.5) -- (3,-1.5) -- (2,-1.5);
-        % Optional: dashed or lighter line to indicate the open section
-        \draw (0.5,-1.415) rectangle (2,-1.585);
-        \node[above] at (0,1.5) {Evacuated Glass Envelope};
-        
-        % Focusing Cup
-        \draw[rounded corners=10pt, fill=red!40, draw=none] (-2.4,1) rectangle (-1.6,-1);
-        \draw (-2,1) -- (-2,1.3) -- (-3.5,1.3) node [left] {Focusing Cup};
-
-        % Filament (cathode)
-        \draw[thick] (-4,.7) -- (-2,.7);
-        \draw[thick, fill=black] (-4,.7) circle [radius=0.1];
-        \draw[thick] (-4,-.7) -- (-2,-.7);
-        \draw[thick] (-2,-2) -- (-4,-2) -- (-4,-.7);
-        \draw[thick, fill=white] (-4,-.7) circle [radius=0.1];
-        \draw[thick, decorate, decoration={zigzag, segment length=4pt, 
-        amplitude=5pt}] (-2,.7) -- (-2,-.7);
-        \draw (-2.8,0) -- (-4,0) node[left, align=center, text width=2cm] {Filament\\Cathode};
-
-        % Anode Target
-        \draw[fill=blue!40, draw=none] (.5,1) -- (2.5,1) -- (2.5,-1) -- (2,-1) -- cycle;
-        \draw (2.6,.5) -- (4,.5) node[right, align=center, text width=2cm] {Anode\\Target};
-
-        % Anode Voltage
-        \draw[thick] (2.5,0) -- (3.5,0) -- (3.5,-2) -- (-1,-2);
-        \draw[thick, fill=black] (-1,-2) circle [radius=0.1];
-        \draw[thick, fill=white] (-2,-2) circle [radius=0.1];
-        \node[below, align=center, text height=.5cm] at (-1.25,-2) {Tube Voltage (kVp)};
-
-        % Electrons
-        \draw[thick,->] (-1.3,-.5) -- (-.5,-.5);
-        \draw[thick, fill=yellow] (-1.3,-.5) circle [radius=0.2] node[font=\small] {$e^{\text{-}}$};
-        \draw[thick,->] (-.7,.5) -- (.1,.5);
-        \draw[thick, fill=yellow] (-.7,.5) circle [radius=0.2] node[font=\small] {$e^{\text{-}}$};
-
-        % Photon Beam
-        \draw[orange!90!yellow] (.6,-3) -- (1.25,0);
-        \draw[orange!90!yellow] (.8,-3) -- (1.25,0);
-        \draw[orange!90!yellow] (1,-3) -- (1.25,0);
-        \draw[orange!90!yellow] (1.2,-3) -- (1.25,0);
-        \draw[orange!90!yellow] (1.4,-3) -- (1.25,0);
-        \draw[orange!90!yellow] (1.6,-3) -- (1.25,0);
-        \draw[orange!90!yellow] (1.8,-3) -- (1.25,0);
-        \node[right, below, align=center, text height=.5cm] at (2.7,-2) {X-ray Beam};
-    \end{tikzpicture}
-    \caption{Schematic of an X-ray tube.}
-    \label{fig:xray_tube}
-\end{figure}
-
-
-\subsection{Photon Generation}
-
-To capture this randomness, Monte Carlo methods
-are employed. In such simulations, random numbers—typically sampled uniformly
-from the interval $[0,1]$ are transformed into physically meaningful
-quantities according to the relevant probability distributions. This
-probabilistic modeling enables realistic simulation of photon transport and
-forms the basis for the analyses presented in this thesis.
-
-
-
-The key components are:
-
-\begin{itemize}
-    \item \textbf{Filament (Cathode):} A tungsten wire filament serves as the
-    electron source through thermionic emission. When a current of approximately
-    3-6\,A passes through it, the filament reaches incandescence, releasing
-    electrons from its surface. These free electrons form a cloud near the
-    cathode until they are accelerated toward the anode by the applied high
-    voltage.
-
-    \item \textbf{Focusing Cup:} The filament is embedded in a negatively
-    charged, nickel-made focusing cup. Its function is to electrostatically
-    shape and direct the electron stream toward the anode’s focal spot, thereby
-    influencing the resolution and size of the resulting X-ray beam.
-
-    \item \textbf{Anode Target:} The anode consists of a tungsten target, often
-    embedded in a copper support. Tungsten is used for its high atomic number
-    and melting point, enhancing X-ray production and durability. The copper
-    base improves heat dissipation. Typically, less than 1\% of the electron
-    energy is converted into X-rays, with the remainder generating heat that
-    must be effectively managed.
-
-    \item \textbf{Evacuated Glass Envelope:} All components are sealed within a
-    borosilicate glass or metal-ceramic housing evacuated to a low pressure
-    (typically $10^{-5}$ to $10^{-7}$\,hPa). The vacuum allows unimpeded
-    electron flow and prevents arcing. The housing is usually immersed in
-    insulating oil to provide thermal and electrical isolation.
-\end{itemize}
-
-When high-energy electrons strike the tungsten target, X-ray photons are
-produced through two primary mechanisms:
-
-\begin{itemize}
-    \item \textbf{Bremsstrahlung (Braking Radiation):} This accounts for
-    approximately 80\% of X-ray production. When electrons pass close to
-    tungsten nuclei, they are decelerated by the electrostatic attraction,
-    causing them to lose kinetic energy that is emitted as X-ray photons. This
-    process produces a continuous spectrum of X-ray energies from near zero up
-    to the maximum electron energy.
-
-    \item \textbf{Characteristic Radiation:} This occurs when high-energy
-    electrons knock inner shell electrons from tungsten atoms. When outer shell
-    electrons drop down to fill these vacancies, they emit X-rays with discrete,
-    characteristic energies specific to tungsten. Therefore peaks are occuring
-    at the difference of the binding energies of the electron shells. For
-    reference, the atomic model of tungsten is given in
-    Figure~\ref{fig:tungsten_atomic_model} and the approximate binding energies
-    of the electron shells in Table~\ref{tab:tungsten_binding_energies}.
-
-    \begin{table}[!h]
-        \centering
-        \begin{tabular}{cc}
-            \toprule
-            \textbf{Shell / Subshell} & \textbf{Binding Energy (keV)} \\
-            \midrule
-            K        & 69.5 \\
-            L$_1$    & 12.1 \\
-            L$_2$    & 11.5 \\
-            L$_3$    & 10.2 \\
-            M$_1$    & 2.82 \\
-            M$_2$    & 2.30 \\
-            M$_3$    & 2.15 \\
-            N$_1$    & 0.43 \\
-            N$_2$    & 0.32 \\
-            N$_3$    & 0.22 \\
-            \bottomrule
-        \end{tabular}
-        \caption{Approximate Electron Binding Energies of Tungsten (W, Z = 74)}
-        \label{tab:tungsten_binding_energies}
-    \end{table}
-
-    % TODO: W und Z sollten als Abkürzungen in \ac{acronym} definiert werden
-
-    \begin{figure}
-        \centering
-        \begin{tikzpicture}[scale=1]
-            % Kern
-            \fill[black] (0,0) circle (0.3);
-            \node at (0,0) [white] {\textbf{W}};
-
-            % Elektronen (vereinfacht verteilt)
-            % K-Schale: 2
-            \foreach \angle in {90, 270} {
-                \fill[color=red] (0,0) ++(\angle:1) circle (3pt);
-            }
-
-            % L-Schale: 8
-            \foreach \angle in {0, 45, 90, 135, 180, 225, 270, 315} {
-                \fill[color=red] (0,0) ++(\angle:1.5) circle (3pt);
-            }
-
-            % M-Schale: 18
-            \foreach \angle in {0, 20, 40, 60, 80, 100, 120, 140, 160, 180, 200, 220, 240, 260, 280, 300, 320, 340} {
-                \fill[color=red] (0,0) ++(\angle:2cm) circle (3pt);
-            }
-
-            % N-Schale: 32
-            \foreach \angle in {0,11.25,...,348.75} {
-                \fill[color=red] (0,0) ++(\angle:2.5cm) circle (3pt);
-            }
-
-            % O-Schale: 12
-            \foreach \angle in {0,30,...,330} {
-                \fill[color=red] (0,0) ++(\angle:3cm) circle (3pt);
-            }
-
-            % P-Schale: 2
-            \foreach \angle in {90, 270} {
-                \fill[color=red] (0,0) ++(\angle:3.5cm) circle (3pt);
-            }
-            
-            % Schalen
-            \foreach \radius/\label in {
-                1/K,
-                1.5/L,
-                2/M,
-                2.5/N,
-                3/O,
-                3.5/P
-            } {
-                \draw[thick] (0,0) circle (\radius);
-                \node[above, fill=white, inner sep=1pt, rounded corners=1pt] at (\radius, 0.1) {\label};
-            }
-        \end{tikzpicture}
-        \caption{Bohr model of the tungsten atom (W, Z = 74) with electron shells and subshells.}
-        \label{fig:tungsten_atomic_model}
-    \end{figure}
-
-    In Table~\ref{tab:tungsten_binding_energies} only binding energies of the K,
-    L and M shells are given, since these are the most relevant for X-ray
-    production. The binding energies of the N shell and higher shells are
-    negligible in this context due to their low binding energies.   
-    
-\end{itemize}
-
-Although it is not necessary to understand every technical detail of the X-ray
-apparatus for the purposes of simulation, I found it important to briefly
-present the fundamental working principles of the X-ray tube. This background
-allows one to appreciate how key simulation parameters for photon generation -
-specifically the tube voltage and the cathode material - influence the resulting
-X-ray spectrum and photon behavior.
-
-Figure~\ref{fig:spectrum100kvp} below shows an resulting energy spectrum for an
-X-ray tube with a tungsten cathode operated at 100 kVp. It illustrates the
-resulting distribution of photon energies, which is shaped by both the material
-and the applied voltage. The intensity of the different photon energies is
-measured in \emph{spectral fluence} in
-\si{\per\square\centi\meter\per\kilo\electronvolt}, which describes the number
-of X-ray photons per unit area per unit energy interval. It certainly shows the
-two components of the X-ray spectrum: the continuous bremsstrahlung spectrum and
-the characteristic radiation peaks:
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.8\textwidth]{Figures/spectrum_without_filter.png}
-    \caption{X-ray spectrum for a tungsten cathode at 100 kVp showing the
-    continuous bremsstrahlung spectrum and characteristic peaks. Build with
-    \emph{SpekPy} \cite{spekpy}}
-    \label{fig:spectrum100kvp}
-\end{figure}
-
-
-\subsection{Filter}
-\label{sec:filter}
-
-Low energy X-ray photons contribute little to image formation but significantly
-increase patient dose. Therefore, X-ray tubes are often equipped with filters to
-selectively attenuate these low-energy photons while allowing higher-energy
-photons to pass through. This process, known as beam hardening, improves image
-quality by reducing scatter and enhancing contrast. Common filter materials
-include aluminum, copper and molybdenum, which are chosen based on their atomic
-number and thickness to effectively absorb low-energy photons while minimizing
-the impact on higher-energy photons \cite{poludniowski2022calculating}.
-
-As can be seen in Figure~\ref{fig:xray_tube_with_filter}, the filter is placed
-at the X-ray tube margin such that the photons hit the filter after the anode
-target and before leaving the X-ray tube. Followingly X-rays pass through the
-filter before reaching the patient.
-
 \begin{figure}[H]
     \centering
     \begin{tikzpicture}[scale=1.1, every node/.style={font=\small}]
@@ -480,14 +236,214 @@ filter before reaching the patient.
         \draw (1.8,-1.5) -- (4,-2.5) node[right, align=center, text height=.5cm] {Filter};
     \end{tikzpicture}
     \caption{Schematic of an X-ray tube with Filter.}
-    \label{fig:xray_tube_with_filter}
+    \label{fig:xray_tube}
 \end{figure}
+
+
+\subsection{Photon Generation}
+
+To capture this randomness, Monte Carlo methods
+are employed. In such simulations, random numbers—typically sampled uniformly
+from the interval $[0,1]$ are transformed into physically meaningful
+quantities according to the relevant probability distributions. This
+probabilistic modeling enables realistic simulation of photon transport and
+forms the basis for the analyses presented in this thesis.
+
+
+
+The key components are:
+
+\begin{itemize}
+    \item \textbf{Filament (Cathode):} A tungsten wire filament serves as the
+    electron source through thermionic emission. When a current of approximately
+    3-6\,A passes through it, the filament reaches incandescence, releasing
+    electrons from its surface. These free electrons form a cloud near the
+    cathode until they are accelerated toward the anode by the applied high
+    voltage.
+
+    \item \textbf{Focusing Cup:} The filament is embedded in a negatively
+    charged, nickel-made focusing cup. Its function is to electrostatically
+    shape and direct the electron stream toward the anode’s focal spot, thereby
+    influencing the resolution and size of the resulting X-ray beam.
+
+    \item \textbf{Anode Target:} The anode consists of a tungsten target, often
+    embedded in a copper support. Tungsten is used for its high atomic number
+    and melting point, enhancing X-ray production and durability. The copper
+    base improves heat dissipation. Typically, less than 1\% of the electron
+    energy is converted into X-rays, with the remainder generating heat that
+    must be effectively managed.
+
+    \item \textbf{Evacuated Glass Envelope:} All components are sealed within a
+    borosilicate glass or metal-ceramic housing evacuated to a low pressure
+    (typically $10^{-5}$ to $10^{-7}$\,hPa). The vacuum allows unimpeded
+    electron flow and prevents arcing. The housing is usually immersed in
+    insulating oil to provide thermal and electrical isolation.
+
+    \item \textbf{Filter (Filtration):} A filter is positioned at the tube exit,
+    between the anode target and the patient, to selectively absorb low-energy
+    photons. These photons contribute little to image formation but
+    significantly increase patient dose. Their removal (beam hardening) improves
+    image quality by reducing scatter and enhancing contrast. Common filter
+    materials are aluminum, copper, and molybdenum; in this thesis, a clinical
+    setup with $0.4$\,mm tin (Sn) and $0.1$\,mm copper (Cu) is used
+    \cite{poludniowski2022calculating,steidel2022dose}.
+\end{itemize}
+
+When high-energy electrons strike the tungsten target, X-ray photons are
+produced through two primary mechanisms:
+
+\begin{itemize}
+    \item \textbf{Bremsstrahlung (Braking Radiation):} This accounts for
+    approximately 80\% of X-ray production. When electrons pass close to
+    tungsten nuclei, they are decelerated by the electrostatic attraction,
+    causing them to lose kinetic energy that is emitted as X-ray photons. This
+    process produces a continuous spectrum of X-ray energies from near zero up
+    to the maximum electron energy.
+
+    \item \textbf{Characteristic Radiation:} This occurs when high-energy
+    electrons knock inner shell electrons from tungsten atoms. When outer shell
+    electrons drop down to fill these vacancies, they emit X-rays with discrete,
+    characteristic energies specific to tungsten. Therefore peaks are occuring
+    at the difference of the binding energies of the electron shells. For
+    reference, the atomic model of tungsten is given in
+    Figure~\ref{fig:tungsten_atomic_model} and the approximate binding energies
+    of the electron shells in Table~\ref{tab:tungsten_binding_energies}.
+
+    In Table~\ref{tab:tungsten_binding_energies} only binding energies of the K,
+    L and M shells are given, since these are the most relevant for X-ray
+    production. The binding energies of the N shell and higher shells are
+    negligible in this context due to their low binding energies.   
+    
+\end{itemize}
+
+\begin{figure}[!h]
+    \centering
+    % --- (a) TikZ on the LEFT ---
+    \begin{subfigure}[c]{0.45\linewidth}   % <- align bottom
+        \centering
+        \begin{adjustbox}{max width=\linewidth}
+        \begin{tikzpicture}[scale=.7]
+            % Nucleus
+            \fill[black] (0,0) circle (0.3);
+            \node at (0,0) [white] {\textbf{W}};
+
+            % K-shell
+            \foreach \angle in {90,270} {
+                \fill[color=red] (0,0) ++(\angle:1) circle (3pt);
+            }
+            % L-shell
+            \foreach \angle in {0,45,...,315} {
+                \fill[color=red] (0,0) ++(\angle:1.5) circle (3pt);
+            }
+            % M-shell
+            \foreach \angle in {0,20,...,340} {
+                \fill[color=red] (0,0) ++(\angle:2) circle (3pt);
+            }
+            % N-shell
+            \foreach \angle in {0,11.25,...,348.75} {
+                \fill[color=red] (0,0) ++(\angle:2.5) circle (3pt);
+            }
+            % O-shell
+            \foreach \angle in {0,30,...,330} {
+                \fill[color=red] (0,0) ++(\angle:3) circle (3pt);
+            }
+            % P-shell
+            \foreach \angle in {90,270} {
+                \fill[color=red] (0,0) ++(\angle:3.5) circle (3pt);
+            }
+
+            % Shell circles + labels
+            \foreach \radius/\label in {1/K, 1.5/L, 2/M, 2.5/N, 3/O, 3.5/P} {
+                \draw[thick] (0,0) circle (\radius);
+                \node[above, fill=white, inner sep=1pt, rounded corners=1pt] at (\radius, 0.1) {\label};
+            }
+        \end{tikzpicture}
+        \end{adjustbox}
+        \caption{Bohr model of tungsten (W, Z=74) with electron shells.}
+        \label{fig:tungsten_atomic_model}
+    \end{subfigure}%
+    \hfill
+    % --- (b) Table on the RIGHT ---
+    \begin{subfigure}[c]{0.45\linewidth}   % <- align bottom
+        \centering
+        \begin{adjustbox}{max width=\linewidth}
+        \begin{tabular}{cc}
+            \toprule
+            \textbf{Shell / Subshell} & \textbf{Binding Energy (keV)} \\
+            \midrule
+            K     & 69.5 \\
+            L$_1$ & 12.1 \\
+            L$_2$ & 11.5 \\
+            L$_3$ & 10.2 \\
+            M$_1$ & 2.82 \\
+            M$_2$ & 2.30 \\
+            M$_3$ & 2.15 \\
+            N$_1$ & 0.43 \\
+            N$_2$ & 0.32 \\
+            N$_3$ & 0.22 \\
+            \bottomrule
+        \end{tabular}
+        \end{adjustbox}
+        \caption{Approximate binding energies of tungsten shells/subshells.}
+        \label{tab:tungsten_binding_energies}
+    \end{subfigure}
+
+    \caption{(a) Tungsten atom schematic and (b) corresponding binding energies.}
+    \label{fig:tungsten_combined}
+\end{figure}
+
+
+Although it is not necessary to understand every technical detail of the X-ray
+apparatus for the purposes of simulation, I found it important to briefly
+present the fundamental working principles of the X-ray tube. This background
+allows one to appreciate how key simulation parameters for photon generation -
+specifically the tube voltage and the cathode material - influence the resulting
+X-ray spectrum and photon behavior.
+
+Figure~\ref{fig:spectrum100kvp} below shows an resulting energy spectrum for an
+X-ray tube with a tungsten cathode operated at 100 kVp. It illustrates the
+resulting distribution of photon energies, which is shaped by both the material
+and the applied voltage. The intensity of the different photon energies is
+measured in \emph{spectral fluence} in
+\si{\per\square\centi\meter\per\kilo\electronvolt}, which describes the number
+of X-ray photons per unit area per unit energy interval. It certainly shows the
+two components of the X-ray spectrum: the continuous bremsstrahlung spectrum and
+the characteristic radiation peaks:
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.8\textwidth]{Figures/spectrum_without_filter.png}
+    \caption{X-ray spectrum for a tungsten cathode at 100 kVp showing the
+    continuous bremsstrahlung spectrum and characteristic peaks. Build with
+    \emph{SpekPy} \cite{spekpy}}
+    \label{fig:spectrum100kvp}
+\end{figure}
+
+
+\subsection{Filter}
+\label{sec:filter}
+
+Low energy X-ray photons contribute little to image formation but significantly
+increase patient dose. Therefore, X-ray tubes are often equipped with filters to
+selectively attenuate these low-energy photons while allowing higher-energy
+photons to pass through. This process, known as beam hardening, improves image
+quality by reducing scatter and enhancing contrast. Common filter materials
+include aluminum, copper and molybdenum, which are chosen based on their atomic
+number and thickness to effectively absorb low-energy photons while minimizing
+the impact on higher-energy photons \cite{poludniowski2022calculating}.
+
+As can be seen in Figure~\ref{fig:xray_tube_with_filter}, the filter is placed
+at the X-ray tube margin such that the photons hit the filter after the anode
+target and before leaving the X-ray tube. Followingly X-rays pass through the
+filter before reaching the patient.
 
 Throughout this thesis, a filter consisting of $0.4$ \si{\milli\meter} Tin (Sn)
 and $0.1$ \si{\milli\meter} Copper (Cu) is used for the simulations. This filter
 is chosen to represent a realistic X-ray tube filter that is commonly used in
 clinical practice \cite{steidel2022dose}. The resulting spectrum is shown in
 Figure~\ref{fig:spectrum100kvp_with_filter}.
+
+
 
 \begin{figure}[H]
     \centering

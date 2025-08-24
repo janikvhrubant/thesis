@@ -87,10 +87,11 @@ regions.
 \end{figure}
 
 \begin{example} \ \\
-\label{ex:grid-discrepancy}
 Let $x_n = \frac{n}{N}$ for $n = 0, \dots, N-1$. Then $F_N(t)$ is a piecewise
 constant staircase function and the discrepancy can be shown to be
-$\mathcal{O}(1/N)$. This is an optimal rate in 1D \cite[Section~2.3]{leobacher2014introduction}.
+$\mathcal{O}(1/N)$. This is an optimal rate in 1D
+\cite[Section~2.3]{leobacher2014introduction}.
+\label{ex:grid-discrepancy}
 \end{example}
 
 \begin{remark} \ \\
@@ -120,21 +121,19 @@ slower discrepancy growth.}
 
 \begin{remark}\ \\
 The expected star discrepancy of i.i.d. Monte Carlo samples decreases at the
-rate $\mathcal{O}(N^{-1/2})$, whereas for low-discrepancy sequences, provable
+rate $\mathcal{O}(N^{-1/2})$, whereas for low-discrepancy sequences provable
 upper bounds of order $\mathcal{O}((\log N)^s / N)$ exist.
 \cite[Section~2.2]{leobacher2014introduction}
 \end{remark}
-
-The next section will introduce specific constructions of low-discrepancy
-sequences and analyze their dimensional performance and implementation details.
 
 
 % ------------------------------------------------------------------------------
 \section{Low-Discrepancy Sequences}
 % ------------------------------------------------------------------------------
-
-We start by defining the term of low-discrepancy sequences, which are designed
-to fill the unit cube $[0,1)^s$ as uniformly as possible.
+Now we will introduce the concept of low-discrepancy sequences and analyse their
+dimensional performance properties. We start by defining the term of
+low-discrepancy sequences, which are designed to fill the unit cube $[0,1)^s$ as
+uniformly as possible.
 
 \begin{definition}[Low-Discrepancy Sequence] \ \\
 A sequence $\mathcal{S} = (x_n)_{n\in \mathbb{N}}$ in $[0,1)^s$ is called a low-discrepancy sequence if its star discrepancy satisfies
@@ -143,10 +142,10 @@ A sequence $\mathcal{S} = (x_n)_{n\in \mathbb{N}}$ in $[0,1)^s$ is called a low-
     D_N^*(\mathcal{S}) = \mathcal{O}\left( \frac{(\log N)^s}{N} \right)
 \end{equation}
 for all $N \in \mathbb{N}$. Such sequences are also referred to as
-\emph{quasi-Monte Carlo sequences} or \ac{qmc} sequences.
+\emph{Quasi-Monte Carlo sequences} or \ac{qmc} sequences.
 \end{definition}
 
-Throughout this thesis, the terms low-discrepancy sequence and \ac{qmc} sequence are used interchangeably, as is common in the literature.
+Throughout this thesis, the terms low-discrepancy sequence and \ac{qmc} sequence are used interchangeably, as is common in literature.
 
 Low discrepancy sequences are constructed to minimize the star discrepancy,
 which is crucial for the convergence of \ac{qmc} methods according to the
@@ -159,7 +158,7 @@ the \ac{mc} estimator from \ref{def:mc-estimator} and define its equivalent
 \begin{definition}[Quasi-Monte Carlo Estimator] \ \\
 Let $f \colon [0,1]^s \to \mathbb{R}$ be a measurable function and let
 $\{\boldsymbol{x}_n\}_{n=1}^{N} \subset [0,1]^s$ be a \ac{qmc} point set.
-Then the \emph{quasi-Monte Carlo estimator} for the integral
+Then the \emph{Quasi-Monte Carlo estimator} for the integral
 \begin{equation*}
     I(f) = \int_{[0,1]^s} f(\boldsymbol{x}) \, d\boldsymbol{x}
 \end{equation*}
@@ -302,6 +301,9 @@ The $s$-dimensional Sobol' point is
 \end{equation*}
 \end{definition}
 
+As stated in \cite[Chapter 5]{leobacher2014introduction}, the Sobol' sequence is
+a low-discrepancy sequence.
+
 \begin{example}[First Elements of the Sobol' Sequence in 2D]
 \ \\
 We fix $s=2$ with primitive polynomials ordered by degree
@@ -349,8 +351,8 @@ generate and it enables streaming or online sampling in high dimensions.
 The practical performance of low-discrepancy sequences is strongly influenced by
 the dimension $s$ of the integration domain. Although both Halton and Sobol'
 sequences achieve the asymptotic star discrepancy bound of order
-$\mathcal{O}((\log N)^s / N)$ (as will be shown in Chapter~\ref{chapter3}),
-their behavior in higher dimensions differs significantly in practice.
+$\mathcal{O}((\log N)^s / N)$, their behavior in higher dimensions differs
+significantly in practice.
 
 \paragraph{Halton Sequence.}
 While the Halton sequence performs well in low-dimensional settings, its
@@ -386,9 +388,9 @@ demonstrating lower star discrepancy than the Halton sequence.}
 
 \begin{remark} \ \\
 In the experiments of Part~\ref{part2} and Part~\ref{part3}, the Sobol' and
-Halton sequences are not implemented manually according to their constructions
-in Definition~\ref{def:sobol} and Definition~\ref{def:halton}. Instead, I use
-the implementation available in the Python package \texttt{SciPy}
-(version~1.16.0) through the module \texttt{scipy.stats.qmc}
-\cite{virtanen2020scipy, scipy-qmc}.
+Halton sequences are not implemented manually. Instead, the implementation
+available in the Python package \texttt{SciPy} (version~1.16.0) through the
+module \texttt{scipy.stats.qmc} \cite{virtanen2020scipy, scipy-qmc} were used.
+The sobol and halton sequences from this package though follow
+Definition~\ref{def:sobol} and Definition~\ref{def:halton}. 
 \end{remark}
