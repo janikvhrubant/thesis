@@ -3,7 +3,8 @@ import matplotlib.pyplot as plt
 
 # Create the spectrum with 80 kVp and 0.4 mm Sn filter
 spek = Spek(kvp=100, targ="W")
-spek = spek.filter("Sn", 0.4)
+spek = spek.filter("Al", 1)
+spek = spek.filter("Cu", 0.2)
 
 # Get energies separately
 energies, intensities = spek.get_spectrum()

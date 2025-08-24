@@ -2,12 +2,27 @@
 \chapter{Function Variation and Error Bounds in QMC}
 \label{chapter3}
 % ------------------------------------------------------------------------------
-\section{Function Variation in Multiple Dimensions}
+\section{Function Variation}
 \label{sec:variation}
 % ------------------------------------------------------------------------------
 
 In \acf{qmc} theory, the variation of a function plays a key role in bounding
-the integration error. While the total variation is sufficient for univariate
+the integration error. Intuitively, variation quantifies how much a function
+oscillates or changes over its domain. This can be observed particularly well in
+the univariate total variation:
+\begin{definition}[Total Variation] \ \\
+Let $f:[a,b] \to \mathbb{R}$ be a real-valued univariate function.  
+The \emph{total variation} of $f$ on the interval $[a,b]\subset \mathbb{R}$ is defined as
+\begin{equation*}
+    V_{a}^{b}(f) := \sup_{\mathcal{P}} \sum_{i=1}^{n} 
+    \bigl| f(x_i) - f(x_{i-1}) \bigr|,
+\end{equation*}
+where the supremum is taken over all partitions
+$$\mathcal{P}=\{a=x_0 < x_1 < \dots < x_n = b\}\,,$$
+of $[a,b]$.
+\end{definition}
+
+While the total variation is sufficient for univariate
 functions, higher dimensions necessitate more refined notions. In this section,
 we follow the definitions of \cite{owen2005multidimensional} and introduce two
 such notions: the Vitali variation and the variation in the sense of
@@ -42,10 +57,10 @@ this notation, the \emph{alternating sum} is defined as follows:
 
 \begin{definition}[Alternating Sum] \ \\
     \label{def:alternating_sum}
-    The \emph{alternating sum} on $s$ dimensions with respect to a function on
-    the hyperrectangle $[a,b]$ is defined as
+    The \emph{alternating sum} on $s$ dimensions with respect to a function $f:[\boldsymbol{a},\boldsymbol{b}] \to \mathbb{R}$ on
+    the hyperrectangle $[\boldsymbol{a},\boldsymbol{b}]$ is defined as
     \begin{equation*}
-        \Delta(f; a, b) = \sum_{v \subseteq \{1,\dots,s\}} (-1)^{|v|} f(a^v:b^{-v}).
+        \Delta(f; \boldsymbol{a}, \boldsymbol{b}) = \sum_{v \subseteq \{1,\dots,s\}} (-1)^{|v|} f(\boldsymbol{a}^v:\boldsymbol{b}^{-v}).
     \end{equation*}
 \end{definition}
 
@@ -53,35 +68,35 @@ A classical approach to quantify function variation on hyperrectangles is based
 on the concept of \emph{ladders}:
 
 \begin{definition}[Ladder] \ \\
-    A \emph{ladder} on the hyperrectangle $[a,b]$ is of the form $\mathcal{Y} =
+    A \emph{ladder} on the hyperrectangle $[\boldsymbol{a},\boldsymbol{b}]$ is of the form $\mathcal{Y} =
     \prod\limits_{j=1}^s \mathcal{Y}^j$, where each $\mathcal{Y}^j$ is a finite
     subset of $[a_j, b_j]$ for $j = 1, \dots, s$ where $\mathcal{Y}^j = \{y_1^j,
     \dots, y_k^j\}$ is ordered such that $a_j = y_1^j < y_2^j < \dots < y_k^j$.
     The ladder could consist of a different number of points in each dimension.
 
-    The \emph{successor} of a point $y \in \mathcal{Y}$ in the ladder is defined
+    The \emph{successor} of a point $\boldsymbol{y} \in \mathcal{Y}$ in the ladder is defined
     componentwise as
     \begin{equation*}
-        % y_+^j = \begin{cases}
-        %     \min \big\{(y^j,\infty) \cap \mathcal{Y}^j\big\}, & \text{if } (y^j,\infty) \cap  \mathcal{Y}^j \neq \emptyset, \\
-        %     b_j, & \text{else.}
-        % \end{cases}
         y_+^j = \min \big\{(y^j,\infty) \cap (\mathcal{Y}^j \cup \{b_j\}) 
         \big\}.
     \end{equation*}
-    with $y_+ = (y_+^1, \dots, y_+^s)$.
+    with $\boldsymbol{y}_+ = (y_+^1, \dots, y_+^s)$.
 \end{definition}
 
-$\mathbb{Y}$ denotes the set of all such ladders on $[a,b]$.
+$\mathbb{Y}$ denotes the set of all such ladders on
+$[\boldsymbol{a},\boldsymbol{b}]$.
 
 \begin{remark} \ \\
-    For a ladder $\mathcal{Y}$ on the hypercube $[a,b]$ the following equation holds:
+    For a ladder $\mathcal{Y}$ on the hypercube
+    $[\boldsymbol{a},\boldsymbol{b}]$ the following equation holds:
     \begin{equation*}
-        \bigcup_{\mathcal{Y}\in\mathbb{Y}}[y,y_+] = [a,b]
+        \bigcup_{\boldsymbol{y}\in\mathcal{Y}}[\boldsymbol{y},\boldsymbol{y}_+] = [\boldsymbol{a},\boldsymbol{b}]
     \end{equation*}
-    This is due to the ladder splitting the hypercube $[a,b]$ into axis-aligned
-    rectangular subregions by the points $[y,y_+]$ for each $y \in \mathcal{Y}$.
-    Thus, the union of all such subregions is a disjoint cover of the hypercube.
+    This is due to the ladder splitting the hypercube
+    $[\boldsymbol{a},\boldsymbol{b}]$ into axis-aligned rectangular subregions
+    by the points $[\boldsymbol{y},\boldsymbol{y}_+]$ for each $\boldsymbol{y}
+    \in \mathcal{Y}$. Thus, the union of all such subregions is a disjoint cover
+    of the hypercube.
 \end{remark}
 \qquad
 
@@ -90,10 +105,10 @@ The \emph{variation with respect to a ladder} is then defined as:
 \begin{definition}[Variation with respect to a ladder] \ \\
     \label{def:variation_ladder}
     Let $\mathcal{Y} = \prod\limits_{j=1}^s \mathcal{Y}^j$ be a ladder on
-    $[a,b]$. Then the \emph{variation} of a function $f$ with respect to
+    $[\boldsymbol{a},\boldsymbol{b}]$. Then the \emph{variation} of a function $f$ with respect to
     $\mathcal{Y}$ is
     \begin{equation*}
-        V_\mathcal{Y}(f) = \sum_{y \in \mathcal{Y}} \big| \Delta(f; y, y_+) \big|.
+        V_\mathcal{Y}(f) = \sum_{\boldsymbol{y} \in \mathcal{Y}} \big| \Delta(f; \boldsymbol{y}, \boldsymbol{y}_+) \big|.
     \end{equation*}
 \end{definition}
 
@@ -101,10 +116,10 @@ The \emph{Vitali variation} of a function is then the supremum of these
 ladder-based variations:
 
 \begin{definition}[Vitali Variation] \ \\
-    The \emph{Vitali variation} of a function $f$ on the hyperrectangle $[a,b]$
-    is defined as
+    The \emph{Vitali variation} of a function $f$ on the hyperrectangle
+    $[\boldsymbol{a},\boldsymbol{b}]$ is defined as
     \begin{equation*}
-        V_{[a,b]}(f) = \sup_{\mathcal{Y} \in \mathbb{Y}} V_\mathcal{Y}(f).
+        V_{[\boldsymbol{a},\boldsymbol{b}]}(f) = \sup_{\mathcal{Y} \in \mathbb{Y}} V_\mathcal{Y}(f).
     \end{equation*}
 \end{definition}
 
@@ -124,13 +139,13 @@ It is defined as:
 \begin{definition}[Hardy--Krause Variation] \ \\
     \label{def:variation_hardy_krause}
     The \emph{Hardy--Krause variation} of a function $f$ on the hyperrectangle
-    $[a,b]$ is defined as
+    $[\boldsymbol{a},\boldsymbol{b}]$ is defined as
     \begin{equation}
         \label{eq:hardy-krause-variation}
-        V_{\mathrm{HK}}(f) = \sum_{u\subset \{1,\dots,s\}} V_{[a^{-u},b^{-u}]}\big(f(x^{-u};b^u)\big).
+        V_{\mathrm{HK}}(f) = \sum_{u\subset \{1,\dots,s\}} V_{[\boldsymbol{a}^{-u},\boldsymbol{b}^{-u}]}\big(f(x^{-u};\boldsymbol{b}^u)\big).
     \end{equation}
     This definition coincides with the Vitali variation but is typically used
-    when $[a,b] = [0,1]^s$.
+    when $[\boldsymbol{a},\boldsymbol{b}] = [0,1]^s$.
 \end{definition}
 
 Note that the Hardy--Krause variation reduces to the total variation in the
