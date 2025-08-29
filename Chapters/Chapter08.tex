@@ -79,8 +79,8 @@ precise dose calculations, strong enough to be effective but sufficiently weak
 to minimize unintended tissue damage.
 
 In clinical practice, such three-dimensional patient models are represented in
-Hounsfield units, which encode tissue-specific attenuation properties and serve
-as the basis for accurate dose calculation in radiation therapy
+\acfp{hu}, which encode tissue-specific attenuation properties and serve as the
+basis for accurate dose calculation in radiation therapy
 \cite[Chapter~8]{medicalImagingSystemsIntro2019:}.
 
 In \ac{ct}, the reconstruction algorithm produces a volumetric map of effective
@@ -88,9 +88,9 @@ attenuation coefficients, from which each voxel value is normalized according to
 the Hounsfield definition. The resulting HU values form the basis of the
 displayed grayscale intensities in the \ac{ct} image.
 
-Hounsfield units provide a dimensionless measure of X-ray attenuation. They are
-defined by normalizing the reconstructed attenuation coefficient~$\mu$ with
-respect to water and air:
+\acs{hu} provide a dimensionless measure of X-ray attenuation. They are defined
+by normalizing the reconstructed attenuation coefficient~$\mu$ with respect to
+water and air:
 \begin{equation}
     \mathrm{HU} = 1000 \cdot \frac{\mu - \mu_\text{water}}{\mu_\text{water} - \mu_\text{air}}
     \approx 1000 \cdot \frac{\mu - \mu_\text{water}}{\mu_\text{water}},

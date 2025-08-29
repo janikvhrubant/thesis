@@ -17,13 +17,13 @@ of the form
 
 \begin{equation}
     \label{eq:integration_problem}
-    I(f) = \int_{[0,1]^s} f(x)\,dx\,,
+    I(f) = \int\limits_{[0,1]^s} f(x)\,dx\,,
 \end{equation}
 
-where $s$ denotes the dimensionality of the problem and $f$ is a function that
-may be expensive or impractical to evaluate analytically. Throughout this
-thesis, we will limit our discussion on functions of the type $f: \mathbb{R}^s
-\to \mathbb{R}$.
+where $s$ denotes the dimensionality of the problem and $f$ is a function, where
+the integral is expensive or impractical to evaluate analytically. Throughout
+this thesis, we will limit our discussion on functions of the type $f:
+\mathbb{R}^s \to \mathbb{R}$.
 
 One of the most widely used approaches to compute such integrals is the
 classical \ac{mc} method, which estimates the integral based on averages over
@@ -36,11 +36,11 @@ randomly sampled points $\{X_n\}_{n=0}^{N-1}$
 The primary appeal of \ac{mc} integration lies in its dimension-independent
 convergence rate and minimal assumptions on the integrand. However, its
 asymptotic error rate of $\mathcal{O}(N^{-1/2})$
-\cite{leobacher2014introduction} limits its efficiency -- especially when high
+\cite{leobacher2014introduction} limits its efficiency --- especially when high
 precision is required or function evaluations are computationally expensive.
 
 \ac{qmc} methods offer an alternative paradigm: instead of random samples, they
-employ deterministic sequences -- so-called low-discrepancy sequences -- that
+employ deterministic sequences --- so-called low-discrepancy sequences --- that
 aim to fill the integration domain more uniformly. This structured sampling
 allows for faster convergence under certain smoothness conditions and forms the
 basis for many state-of-the-art techniques in high-dimensional numerical
@@ -56,38 +56,6 @@ inequality} are introduced. The subsequent Part~\ref{part2} of this thesis
 focuses on the application of \ac{qmc} methods for training of neural networks,
 while Part~\ref{part3} applies \ac{qmc} techniques to photon transport
 simulation in \acl{ct}.
-
-% \paragraph{High-Dimensional Integration in Applications}\ \\
-% High-dimensional integration problems arise naturally in a wide range of
-% scientific and engineering disciplines. Whenever expectations with respect to
-% multivariate distributions must be computed numerically, they are typically
-% formulated as integrals over the $s$-dimensional unit cube -- such as the
-% integral in Equation~\eqref{eq:integration_problem}.
-
-% Prominent examples include:
-% \begin{itemize}
-%     \item \textbf{Bayesian statistics}: Computing posterior expectations,
-%     marginal likelihoods, or predictive distributions.
-%     \item \textbf{Financial mathematics}: Pricing complex financial derivatives
-%     and evaluating risk measures under stochastic models.
-%     \item \textbf{Computational imaging}: Solving high-dimensional integrals in
-%     light transport for computer graphics, atmospheric radiative transfer in
-%     remote sensing and, more recently, photon transport simulation in medical
-%     imaging.
-     
-% \end{itemize}
-
-% In all these cases, the dimensionality $s$ can be moderate to very high --
-% sometimes even exceeding hundreds or thousands of variables. This introduces
-% significant challenges for numerical integration methods, which must balance
-% accuracy, computational cost and robustness with respect to the structure of
-% the integrand.
-
-% The remainder of this chapter explores how \ac{mc} and \ac{qmc} methods
-% address these challenges. 
-
-% Before getting into \acl{qmc}, we briefly review the \acl{mc} method and its
-% fundamental convergence properties in the next section.
 
 
 % ------------------------------------------------------------------------------
@@ -151,7 +119,6 @@ $\phi(t)=\sqrt{t}$ gives
 This yields the stated $O(N^{-1/2})$ bound.
 \end{proof}
 
-
 Despite its robustness and simplicity, MC integration has several well-known limitations:
 \begin{itemize}
     \item The convergence rate is relatively slow, especially for smooth integrands.
@@ -164,139 +131,6 @@ in the hypercube $[0,1]^s$, a phenomenon that motivates the introduction of the
 notions of uniformity and discrepancy in the next section.
 
 
-% % ------------------------------------------------------------------------------
-% % ------------------------------------------------------------------------------
-% \section{Quasi-Monte Carlo Methods}
-% % ------------------------------------------------------------------------------
-% % ------------------------------------------------------------------------------
-
-% Whereas classical \ac{mc} methods approximate integrals using randomly sampled
-% points, \ac{qmc} methods replace stochasticity with a deterministic strategy,
-% aiming to cover the integration domain in a more uniform and structured way.
-% This shift allows \ac{qmc} methods to achieve faster convergence rates under
-% certain conditions, particularly for smooth functions or problems with low
-% effective dimension.
-
-% Without a rigorous definition of construction of \ac{qmc} point sets this
-% section is meant to underline the key differences between \ac{mc} and \ac{qmc}
-% methods to motivate the use of deterministic sampling strategies. The formal
-% definition of \ac{qmc} point sets and their properties will be introduced in
-% Chapter~\ref{chapter2}.
-
-% % ------------------------------------------------------------------------------
-% \subsection{Deterministic Sampling and Intuition}
-% % ------------------------------------------------------------------------------
-
-% To motivate the use of deterministic \ac{qmc} methods, we first define the
-% \emph{quasi-Monte Carlo estimator} for an integrand $f$ over the unit cube
-% $[0,1]^s$ and a \ac{qmc} point set $\{\boldsymbol{x}_n\}_{n=1}^{N}
-% \subset [0,1]^s$.
-
-
-
-% The integration (approximation) functions $I$, $I_N^{\mathrm{MC}}$ and
-% $I_N^{\mathrm{QMC}}$ will be further used without explicit reference to the
-% integrand $f$ when the context is clear.
-
-% Unlike the randomly sampled points in \acl{mc} methods, the deterministically
-% constructed points in \acl{qmc} methods are typically drawn to fill the
-% integration domain more evenly and avoid clustering. This often leads to lower
-% integration errors, especially for smooth functions or problems.
-% Figure~\ref{fig:mc-vs-qmc} illustrates this contrast by comparing $300$ randomly
-% sampled points to $300$ \ac{qmc} points from the Sobol' sequence in two
-% dimensions.
-
-% \begin{figure}[H]
-%   \centering
-%   \includegraphics[width=0.8\textwidth]{Figures/mc_vs_qmc.png}
-%   \caption{Comparison of $300$ sample points in $[0,1]^2$ using (left) standard
-%   \ac{mc} and (right) a Sobol' sequence. \ac{qmc} points avoid clustering and
-%   fill the domain more evenly.}
-%   \label{fig:mc-vs-qmc}
-% \end{figure}
-
-% A straight forward alternative to achieve more uniform distribution as in
-% \ac{mc} sampling is the use of regular tensor-product grids. However, these
-% grids suffer from the \emph{curse of dimensionality}: placing $m$ points per
-% dimension leads to a total of $N = m^s$ points, which becomes infeasible even
-% for moderate $s$. Furthermore, grids are not easily extensible -- adding new
-% points requires global recomputation and destroys nesting.
-
-
-% \begin{example} \ \\
-% Let $f \in C^1([0,1]^s)$ be a Lipschitz-continuous function. A uniform grid with
-% $N = m^s$ points has a worst-case error of $\mathcal{O}(N^{-1/s})$. In high
-% dimensions, this becomes prohibitively inefficient, while MC integration retains
-% the dimension-agnostic rate $\mathcal{O}(N^{-1/2})$ \cite[Section
-% 1.1]{leobacher2014introduction}.
-% \end{example}
-
-% By contrast, many \ac{qmc} sequences, such as the Sobol' and Halton Sequences as
-% introduced in Chapter~\ref{chapter2}, are designed to be \emph{incremental}:
-% each new point can be added without changing the existing ones. This makes
-% \ac{qmc} particularly suitable for adaptive algorithms, especially for anytime
-% algorithms that might increment the number of samples needed over time. This is
-% often applied by extending the training set of a neural network with new samples
-% or by adding more photons in \ac{ct} simulations. In these cases, the point set
-% can grow dynamically without requiring a complete recomputation of the existing
-% points. However, not all \ac{qmc} constructions share this property such as
-% lattice rules and some optimized designs are fixed-size by nature.
-
-% This shift from probabilistic sampling to deterministic \ac{qmc} sequences also
-% changes the way we analyze errors: instead of using statistical bounds, we rely
-% on \emph{discrepancy measures}, which quantify the uniformity of the point set.
-% These concepts, along with the notion of function variation, will be introduced
-% in the following chapters.
-
-% \begin{remark} \ \\
-% \ac{qmc} estimators retain the same algebraic structure as their \ac{mc}
-% counterparts, but their convergence behavior is governed by entirely different
-% theoretical tools -- namely discrepancy theory and function variation.
-% \end{remark}
-
-
-% % ------------------------------------------------------------------------------
-% \subsection{Monte Carlo vs. Quasi-Monte Carlo}
-% \label{subsec:mc-vs-qmc}
-% % ------------------------------------------------------------------------------
-
-% \ac{mc} and \ac{qmc} methods can be applied to the same high-level goal:
-% estimating an integral by averaging function evaluations at selected sample
-% points. The difference lies in the sampling strategy -- stochastic versus
-% deterministic -- and the consequences this has for accuracy, convergence and
-% theoretical guarantees.
-
-% Table~\ref{tab:mc-vs-qmc} summarizes key conceptual distinctions between the two paradigms.
-
-% \begin{table}[H]
-% \centering
-% \resizebox{0.95\textwidth}{!}{
-% \renewcommand{\arraystretch}{1.4}
-% \begin{tabular}{l|c|c}
-% \textbf{Aspect} & \textbf{Monte Carlo (MC)} & \textbf{Quasi-Monte Carlo (QMC)} \\
-% \hline
-% Sampling & Independent random points & Deterministic low-discrepancy points \\
-% Error bounds & Probabilistic (in expectation) & Deterministic (worst-case) \\
-% Regularity assumptions on $f$ & Square integrability ($L^2$) & Bounded variation (HK) \\
-% Theoretical convergence & $\mathcal{O}(N^{-1/2})$ & Up to $\mathcal{O}(N^{-1})$ (heuristic) \\
-% Point extensibility & Trivial & Often supported (e.g., Sobol) \\
-% Robustness to noise & High & Low \\
-% \end{tabular}}
-% \caption{Conceptual comparison of \ac{mc} and \ac{qmc} integration methods.}
-% \label{tab:mc-vs-qmc}
-% \end{table}
-
-% While \ac{mc} estimators are unbiased and robust even under minimal assumptions,
-% their convergence is slow and does not improve when the integrand is smooth.
-% \ac{qmc} methods, on the other hand, exploit structure in the integrand -- such
-% as smoothness or low effective dimension and can yield significantly lower
-% integration errors.
-
-% However, \ac{qmc} methods lack probabilistic guarantees and depend more strongly
-% on the careful construction of the point set. Their performance can degrade if
-% the integrand exhibits high variability along many input dimensions or if the
-% chosen sequence is not well matched to the function.
-
 % ------------------------------------------------------------------------------
 \section{Uniformity Concepts}
 \label{sec:uniformity-concepts}
@@ -305,8 +139,8 @@ notions of uniformity and discrepancy in the next section.
 The efficiency of \ac{qmc} methods hinges on how well the employed point sets
 "fill" the integration domain $[0,1]^s$. This motivates the need for a precise
 mathematical understanding of \emph{uniformity}. The present section introduces
-two key concepts in this regard -- \emph{uniform distribution modulo one} and
-\emph{equidistribution} -- and clarifies their relevance to numerical
+two key concepts in this regard --- \emph{uniform distribution modulo one} and
+\emph{equidistribution} --- and clarifies their relevance to numerical
 integration.
 
 % ------------------------------------------------------------------------------
@@ -375,7 +209,9 @@ The following result, known as Weyl's criterion, provides a necessary and
 sufficient condition for uniform distribution in terms of exponential sums.
 
 \begin{theorem}[Weyl's Criterion] \ \\
-A sequence $(\boldsymbol{x}_n)_{n \geq 0} \subset [0,1)^s$ is uniformly distributed modulo one if and only if, for all nonzero $\boldsymbol{h} \in \mathbb{Z}^s \setminus \{\boldsymbol{0}\}$, we have
+A sequence $(\boldsymbol{x}_n)_{n \geq 0} \subset [0,1)^s$ is uniformly
+distributed modulo one if and only if, for all nonzero $\boldsymbol{h} \in
+\mathbb{Z}^s \setminus \{\boldsymbol{0}\}$, we have
 \begin{equation*}
     \lim_{N \to \infty} \frac{1}{N} \sum_{n=0}^{N-1} \exp(2\pi i\, \boldsymbol{h} \cdot \boldsymbol{x}_n) = 0.
 \end{equation*}
@@ -384,53 +220,8 @@ A sequence $(\boldsymbol{x}_n)_{n \geq 0} \subset [0,1)^s$ is uniformly distribu
 A proof can be found in \cite[Section 2.1]{leobacher2014introduction}.
 
 \begin{example} \ \\
-Let $\alpha \in \mathbb{R}$ be irrational. Then the Kronecker sequence $(n \alpha \bmod 1)_{n \geq 0}$ is uniformly distributed in $[0,1]$. This is a consequence of Weyl's criterion and illustrates the existence of simple, deterministic sequences with excellent uniformity properties.
+Let $\alpha \in \mathbb{R}$ be irrational. Then the Kronecker sequence $(n
+\alpha \bmod 1)_{n \geq 0}$ is uniformly distributed in $[0,1]$. This is a
+consequence of Weyl's criterion and illustrates the existence of simple,
+deterministic sequences with excellent uniformity properties.
 \end{example}
-
-% % ------------------------------------------------------------------------------
-% \subsection{Why Uniformity Matters in Numerical Integration}
-% % ------------------------------------------------------------------------------
-
-% In \ac{qmc} integration, the objective is to approximate the integral defined in
-% Equation~\eqref{eq:integration_problem} by a finite average over a deterministic
-% point set $\{\boldsymbol{x}_0, \dots, \boldsymbol{x}_{N-1}\} \subset [0,1]^s$.
-% The accuracy of this approximation depends crucially on how uniformly the point
-% set samples the domain.
-
-% Unlike \ac{mc} methods, which rely on probabilistic guarantees and
-% variance-based error estimates, \ac{qmc} methods exploit deterministic
-% structure: the integration error is directly influenced by how well the point
-% set fills the domain. This insight gives rise to one of the most fundamental
-% theoretical tools in \ac{qmc} analysis: the \emph{Koksma--Hlawka inequality}.
-
-% \begin{remark}
-% The Koksma--Hlawka inequality bounds the integration error of a QMC estimator by
-% the product of two quantities: the \emph{star discrepancy} of the point set and
-% the \emph{variation} of the integrand in the sense of Hardy-Krause. In
-% short,
-% \begin{equation*}
-%     \left| \frac{1}{N} \sum_{n=0}^{N-1} f(\boldsymbol{x}_n) - I \right| 
-%     \leq D_N^*(\{\boldsymbol{x}_n\}) \cdot V_{\mathrm{HK}}(f).
-% \end{equation*}
-% A rigorous statement and detailed discussion of this inequality will follow in
-% Chapter~\ref{chapter3}.
-% \end{remark}
-
-% This inequality highlights why uniformity is essential: if the integrand has
-% bounded variation, then smaller discrepancy directly implies smaller integration
-% error. In this sense, discrepancy theory becomes a cornerstone of effective
-% \ac{qmc} integration.
-
-% \begin{remark}
-% The star discrepancy quantifies the maximal deviation between the empirical
-% distribution of the point set and the uniform distribution over $[0,1]^s$. It
-% vanishes asymptotically for uniformly distributed sequences and governs the
-% convergence behavior of \ac{qmc} estimators.
-% \end{remark}
-
-% The upcoming Chapter~\ref{chapter2} provides a formal introduction to
-% discrepancy theory. We will define extreme and star discrepancy, study their
-% geometric interpretation, and analyze the behavior of structured low-discrepancy
-% sequences such as Halton and Sobol'. These sequences, due to their uniform
-% space-filling properties, play a central role in modern high-dimensional
-% numerical integration.

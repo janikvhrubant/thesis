@@ -65,7 +65,7 @@ between $100$ and $2000$ and the two different optimizers introduced in
 Chapter~\ref{chapter6}: Adam~\cite{goodfellow2016deep} and
 Lion~\cite{chen2023symbolic}.
 
-For the other training hyperparamters, a systematic study was conducted using
+For the other training hyperparameters, a systematic study was conducted using
 \emph{Optuna} \cite{akiba2019optuna}. Hereby the architecture of the \acp{dnn}
 was varied in terms of the number of hidden layers, the number of neurons per
 layer and the activation function. Further different batch sizes were examined.
@@ -118,7 +118,7 @@ $[0,1]^s$.
 
 
 The Deep Learning algorithm is applied with the following configurations
-obtained by hyperparamter optimization as described in
+obtained by hyperparameter optimization as described in
 Section~\ref{sec:impl_details_dnn}:
 \begin{table}[H]
 \begin{tabular}{lc}
@@ -170,70 +170,219 @@ with state
 x(t)\in\mathbb{R} \quad (\text{horizontal position}),\qquad
 h(t)\in\mathbb{R} \quad (\text{vertical position}),
 \end{equation*}
-and velocities $u(t)=\dot{x}(t)$, $w(t)=\dot{h}(t)$. The motion is terminated at the first impact time
+and velocities $u(t)=\dot{x}(t)$, $w(t)=\dot{h}(t)$, according to the system
+parameters $\theta$ (defined below), including the launch angle $\alpha$. The
+motion is terminated at the first impact time
 \begin{equation*}
 t_\star \;=\; \inf\{\, t>0 \;:\; h(t)=0 \,\},
 \end{equation*}
-and the traveled range is $R := x(t_\star)$.
+and the traveled range is 
+\begin{equation}
+\label{eq:proj_range}
+R(\theta) \;=\; x(t_\star).
+\end{equation}
 
-\textcolor{red}{TODO: Bild einfügen}
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[scale=0.5,>=Latex]
+
+\draw[blue,thick,domain=0:17.12,samples=200]
+plot (\x,{(-0.049*(\x-5)^2)+7.2});
+
+\draw[->] (-.5,0) -- (23,0) node[right] {$x$};
+\draw[->] (0,-.5) -- (0,8) node[above] {$h$};
+
+\draw[green, ->] (0,6) -- (3,8) node[above right] {$\vec{v}_0$};
+\draw[thin] (0,6) -- (3,6);
+
+\draw (1.7,6) arc[start angle=0, end angle=33.7, radius=1.7];
+\node at (1.2,6.3) {$\alpha$};
+\fill[blue] (0,6) circle (0.3) node[left=2pt] {$h_0$};
+
+\fill[red] (17.12,0) circle (0.3) node[above=2pt] {$R$};
+
+\end{tikzpicture}
+\caption{Projectile motion setup with projectile launched from height $h_0$ and initial velocity $\vec{v}_0$ at angle $\alpha$ to the horizontal. The final range $R$ is achieved at impact time $t_\star$.}
+\label{fig:projectile_motion_setup}
+\end{figure}
+
 
 \paragraph{Parameters and modeling assumptions}
 \begin{enumerate}
     \item The moving object is modeled as a spherical projectile with mass $m$
-    in the range $0.3\,\frac{\mathrm{kg}}{\mathrm{m}^3}$ and radius
-    $r$ in range $0.0213 - 0.124 \,\mathrm{m}$. The extreme values correspond to a golf ball of gold and a basketball, respectively.
+    in the range $0.3 - 0.78\,\mathrm{kg}$ and radius $r$ in range $0.0213 -
+    0.124 \,\mathrm{m}$. The extreme values correspond to a golf ball of gold
+    and a basketball, respectively.
     \item Gravitational acceleration is constant, $g=9.81\,\mathrm{m/s^2}$.
-    \item Air density is $\rho$ in a range of $0.269 - 1.225\,\mathrm{kg/m^3}$
-    and the drag
-    coefficient is $C_d=0.10$.
-    \item The cross-sectional area is $A=\pi r^2$ and the drag constant is
-    \begin{equation*}
-        k \;=\; \frac{\rho\,C_d\,A}{2m}\,.
-    \end{equation*}
-    \item Initial conditions are prescribed by the launch speed $v_0>0$,
-    launch angle $\alpha\in[0^\circ,90^\circ]$, and initial height $h_0\ge
-    0$:
-    \begin{equation*}
-        x(0)=0,\quad h(0)=h_0,\quad
-        u(0)=v_0\cos\alpha,\quad w(0)=v_0\sin\alpha.
-    \end{equation*}
+    \item Air density $\rho$ is varying in the range of $0.269 -
+    1.225\,\frac{\mathrm{kg}}{\mathrm{m}^3}$ which corresponds to the air
+    density at the Mount Everest summit and at sea level, respectively.
+    \item The drag coefficient $c_d$ of the projectile is constant in the range
+    $0.25 - 0.7$.
+    \item The initial hight $h_0$ of the projectile is in the range $1 -
+    100\,\mathrm{m}$.
+    \item The initial speed $v_0$ of the projectile is in the range $1-50
+    \mathrm{m/s}$.
+    \item The launch angle $\alpha$ of the projectile is in the range $0 -
+    90^\circ$.
 \end{enumerate}
 
-\paragraph{Quadratic-drag model (standard)} \ \\
-Let $\mathbf{v}(t)=(u(t),w(t))^\top$ and $\|\mathbf{v}\|=\sqrt{u^2+w^2}$.
-With drag proportional to dynamic pressure and opposing the velocity vector, the
-equations read
-\begin{equation}
-\label{eq:proj_full_drag}
-\begin{aligned}
-\dot{x} &= u, &\qquad \dot{h} &= w,\\
-\dot{u} &= -\,k\,\|\mathbf{v}\|\,u, &\qquad
-\dot{w} &= -\,g \;-\; k\,\|\mathbf{v}\|\,w.
-\end{aligned}
-\end{equation}
-System~\eqref{eq:proj_full_drag} is locally Lipschitz and admits a unique
-solution up to impact time $t_\star$.
+\paragraph{Quadratic-drag model}\ \\
+Let $\mathbf{z}(t) = (x(t),h(t),u(t),w(t))^\top$ with horizontal/vertical
+positions $(x,h)$ and velocities $(u,w)=(\dot x,\dot h)$. Denote $\mathbf
+v=(u,w)$ and $\|\mathbf v\|=\sqrt{u^2+w^2}$. For a spherical body of radius $r$
+and mass $m$ in air of density $\rho$ with constant drag coefficient $c_d$, the
+cross-sectional area is $A=\pi r^2$ and the drag-specific constant is
 
-\paragraph{Simplified model used in the experiments} \ \\
-To align with the implementation used for the numerical study, we employ a
-reduced model in which drag acts only on the horizontal component while vertical
-dynamics are driven solely by gravity:
-\begin{equation}
-\label{eq:proj_simplified}
-\begin{aligned}
-\dot{x} &= u, &\qquad \dot{h} &= w,\\
-\dot{u} &= -\,k\,\|\mathbf{v}\|\,u, &\qquad
-\dot{w} &= -\,g.
-\end{aligned}
-\end{equation}
-This preserves the correct horizontal deceleration due to aerodynamic resistance
-while keeping the vertical equation linear. All parameters are as specified
-above, and the simulation is terminated at $h(t_\star)=0$, yielding the range
-$R=x(t_\star)$.
+\begin{equation*}
+k \;=\; \frac{\rho\,c_d\,A}{2m}\;=\;\frac{\rho\,c_d\,\pi r^2}{2m}.
+\end{equation*}
 
-\paragraph{Numerical integration} \ \\
-The ODEs are integrated with a fixed time step $\Delta t>0$ using an explicit
-scheme; in the experiments we use forward Euler for $(x,h,u,w)$. The step size
-is chosen sufficiently small to ensure stability and time-discretization
-accuracy for the considered parameter ranges.
+The physically consistent planar model with quadratic aerodynamic drag reads
+
+\begin{equation}
+\label{eq:proj_ode_vector}
+\dot{\mathbf z}(t)
+\;=\;
+\begin{pmatrix}
+u\\
+w\\
+-\,k\,\|\mathbf v\|\,u\\
+-\,g \;-\; k\,\|\mathbf v\|\,w
+\end{pmatrix}\,.
+\end{equation}
+
+Equivalently, in component form,
+
+\begin{equation}
+\label{eq:proj_ode_components}
+\dot x = u,\quad
+\dot h = w,\quad
+\dot u = -\,k\,\|\mathbf{v}\|\,u,\quad
+\dot w = -\,g - k\,\|\mathbf{v}\|\,w.
+\end{equation}
+
+\paragraph{Initial conditions} \ \\
+Given launch speed $v_0>0$, angle $\alpha\in[0,\frac{\pi}{2}]$ and height
+$h_0\ge 0$,
+
+\begin{equation}
+\label{eq:proj_ic}
+x(0)=0,\qquad h(0)=h_0,\qquad
+u(0)=v_0\cos\alpha,\qquad w(0)=v_0\sin\alpha.
+\end{equation}
+
+\paragraph{Parameterization for learning} \ \\
+We collect the physical parameters in
+
+\begin{equation*}
+    \theta \;=\; (\rho, r, c_d, m, h_0, \alpha, v_0) \in \Theta
+\end{equation*}
+
+with the given application-driven bounds:
+
+\begin{equation*}
+\begin{aligned}
+&\rho\in[\rho_{\min},\rho_{\max}] = [0.269,\,1.225]~\mathrm{kg/m^3},\quad
+r\in[r_{\min},r_{\max}] = [0.0213,\,0.124]~\mathrm{m},\\
+&c_d\in[c_{d,\min},c_{d,\max}] = [0.25,\,0.70],\quad
+m\in[m_{\min},m_{\max}] = [0.30,\,0.78]~\mathrm{kg},\\
+&h_0\in[h_{0,\min},h_{0,\max}] = [1,\,100]~\mathrm{m},\quad
+\alpha\in[0,\,\frac{\pi}{2}],\quad
+v_0\in[v_{0,\min},v_{0,\max}] = [1,\,50]~\mathrm{m/s}.
+\end{aligned}
+\end{equation*}
+
+Here, $\Theta$ denotes the Cartesian product of all admissible intervals from
+above. In the experiments, $\mathbf{y}\in[0,1]^7$ is sampled according to the
+chosen sampling method. Then, $\theta(\mathbf y)$ is mapped affinely to the
+physical parameter ranges via
+
+\begin{equation*}
+p(\mathbf y)=p_{\min}+(p_{\max}-p_{\min})\,y,\quad
+p\in\{\rho,r,c_d,m,h_0,\alpha,v_0\},
+\end{equation*}
+
+and define the parameter-to-output map
+
+\begin{equation}
+\label{eq:param_to_output}
+\mathcal{F}:\ [0,1]^7\to\mathbb{R},\qquad
+\mathcal{F}(\mathbf y)\;=\;R\bigl(\theta(\mathbf y)\bigr),
+\end{equation}
+
+where $R(\cdot)$ is given by \eqref{eq:proj_range} for the ODE
+\eqref{eq:proj_ode_vector}-\eqref{eq:proj_ic}. The \acp{dnn} are trained to
+approximate $\mathcal{F}$.
+
+\paragraph{Well-posedness} \ \\
+The right-hand side in \eqref{eq:proj_ode_vector} is continuous and locally
+Lipschitz in $\mathbf z$ (the map $\mathbf v\mapsto \|\mathbf v\|\,\mathbf v$ is
+locally Lipschitz), hence for any fixed $\theta\in\Theta$ there exists a unique
+maximal solution up to $t_\star$. Moreover $h(t)$ is strictly decreasing after
+the apex, ensuring a unique impact time.
+
+\paragraph{Numerical solution} \ \\
+We integrate \eqref{eq:proj_ode_vector} with a fixed-step explicit scheme. By a
+small step size $\Delta t>0$, updates are computed with the forward Euler
+method
+
+\begin{equation*}
+\begin{pmatrix}
+x_{n+1}\\
+h_{n+1}\\
+u_{n+1}\\
+w_{n+1}
+\end{pmatrix}
+=
+\begin{pmatrix}
+x_n\\
+h_n\\
+u_n\\
+w_n
+\end{pmatrix}
++
+\Delta t
+\begin{pmatrix}
+u_n\\
+w_n\\
+-\,k\,\|\mathbf{v}_n\|\,u_n\\
+-\,g - k\,\|\mathbf{v}_n\|\,w_n
+\end{pmatrix}.
+\end{equation*}
+
+and terminate at the first $n$ with $h_{n+1}\le 0$. This approximates the traveled range $R \approx x_{n+1}$.
+
+\subsection{DNN training and evaluation}
+
+Since $R\circ\theta\in C^{1}([0,1]^7)$, we have
+$\widehat{V}_{\mathrm{HK}}(R\circ\theta)<\infty$. For small enough step size
+$\Delta t$, the numerical approximation of $R \circ \theta$ 
+
+\textcolor{red}{TODO: Argument why the numerical approx. is also in $C^1$?}
+
+The Deep Learning algorithm is applied with the following configurations
+obtained by hyperparameter optimization as described in
+Section~\ref{sec:impl_details_dnn}:
+
+\begin{table}[H]
+\begin{tabular}{lc}
+\textbf{DNN Architecture }& \\
+Number of hidden layers & $8$ \\
+Number of neurons per layer & $8$ \\
+Activation function & Tanh \\
+\midrule
+\textbf{Training Setup} & \\
+Batch size & $256$ \\
+Number of epochs & $2000$ \\
+\midrule
+\textbf{Optimizers} & \\
+Adam & \\
+Lion & \\
+\midrule
+\textbf{Hyperparameters} & \\
+Optimized via & Optuna \\
+\end{tabular}
+\centering
+\end{table}
