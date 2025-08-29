@@ -1,7 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-# LaTeX-style fonts (optional, für Konsistenz im Thesis-Look)
 plt.rcParams.update({
     "text.usetex": True,
     "font.family": "serif",
@@ -10,38 +9,24 @@ plt.rcParams.update({
     "legend.fontsize": 10,
 })
 
-# Wertebereich
 x = np.linspace(-6, 6, 500)
-relu = np.maximum(0, x)
+tanh = np.tanh(x)
 sigmoid = 1 / (1 + np.exp(-x))
 
-# Plot erstellen
-fig, axs = plt.subplots(1, 2, figsize=(6.5, 2.8))  # Side-by-side
+fig, ax = plt.subplots(figsize=(6.5, 2.8))
 
-# ReLU
-axs[0].plot(x, relu, label=r'$\sigma(x)$')
-axs[0].set_title("ReLU Activation")
-axs[0].axhline(0, color='gray', lw=0.5)
-axs[0].axvline(0, color='gray', lw=0.5)
-axs[0].grid(True, linestyle='--', linewidth=0.5, alpha=0.7)
+ax.plot(x, tanh, label=r'Tanh: $\tanh(x)$')
+ax.plot(x, sigmoid, label=r'Sigmoid: $\sigma(x) = \frac{1}{1 + e^{-x}}$', color='orange')
 
-# Sigmoid
-axs[1].plot(x, sigmoid, label=r'$\sigma(x) = \frac{1}{1 + e^{-x}}$', color='orange')
-axs[1].set_title("Sigmoid Activation")
-axs[1].axhline(0, color='gray', lw=0.5)
-axs[1].axvline(0, color='gray', lw=0.5)
-axs[1].grid(True, linestyle='--', linewidth=0.5, alpha=0.7)
-
-# Layout und speichern
-axs[0].set_ylim([-0.5, 6])
-axs[0].set_xlim([-6, 6])
-axs[0].set_xlabel(r'$x$')
-axs[0].set_ylabel(r'$\sigma(x)$')
-
-axs[1].set_ylim([-0.5, 6])
-axs[1].set_xlim([-6, 6])
-axs[1].set_xlabel(r'$x$')
-axs[1].set_ylabel(r'$\sigma(x)$')
+ax.set_title("Activation Functions")
+ax.axhline(0, color='gray', lw=0.5)
+ax.axvline(0, color='gray', lw=0.5)
+ax.grid(True, linestyle='--', linewidth=0.5, alpha=0.7)
+ax.set_ylim([-2, 2])
+ax.set_xlim([-6, 6])
+ax.set_xlabel(r'$x$')
+ax.set_ylabel(r'$\sigma(x)$')
+ax.legend()
 
 plt.tight_layout()
 plt.savefig("Figures/activations_functions.png", dpi=600)

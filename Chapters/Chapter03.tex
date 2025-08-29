@@ -159,7 +159,9 @@ becomes a norm if the full-dimensional term is included explicitly.
 
 \begin{example} \ \\
 Let $f(x) = \prod_{i=1}^d x_i$, the $d$-dimensional monomial. Then $f$ is smooth
-with bounded mixed derivatives and its Hardy--Krause variation is finite.
+with bounded mixed derivatives and its Hardy--Krause variation is finite. This
+can easily be verified using equation \eqref{eq:variation_hardy_krause_bound}
+which will be introduced in the Chapter~\ref{chapter6}.
 \end{example}
 
 \begin{example} \ \\
@@ -170,11 +172,12 @@ of \ac{qmc} for functions with low smoothness or sharp nonlinearity \cite[Prop.
 16]{owen2005multidimensional}.
 \end{example}
 
-These examples illustrate the importance of regularity assumptions in applying
-the Koksma--Hlawka inequality. In practice, many physically motivated maps --
-such as solutions to elliptic or parabolic PDEs -- do exhibit sufficient
-smoothness to ensure bounded Hardy--Krause variation, justifying the use of
-\ac{qmc} error bounds.
+In the next section, the Koksma--Hlawka inequality will be presented, which
+highly depends on the concept of function variation introduced in this section.
+These examples illustrate the importance of regularity assumptions. In practice,
+many physically motivated maps -- such as solutions to elliptic or parabolic
+PDEs -- do exhibit sufficient smoothness to ensure bounded Hardy--Krause
+variation, justifying the use of \ac{qmc} error bounds.
 
 % ------------------------------------------------------------------------------
 \section{The Koksma--Hlawka Inequality}
@@ -188,8 +191,8 @@ distributed sample points lead to smaller integration errors—provided the
 integrand is regular enough.
 
 The inequality relates the \ac{qmc} integration error to the star discrepancy of
-the point set and the Hardy--Krause variation of the integrand
-\cite{caflisch1998monte}.
+the point set and the Hardy--Krause variation of the integrand. A proof can be
+found in \cite{caflisch1998monte}.
 
 \begin{theorem}[Koksma--Hlawka Inequality] \ \\
 \label{thm:koksma-hlawka}
@@ -227,7 +230,7 @@ variation -- capture complementary aspects of integration error.
 
 Both quantities are required: even a low-discrepancy point set cannot guarantee
 small error if the function has unbounded variation. Conversely, even a smooth
-function may incur large error if the points cluster poorly.
+function may incur a large error if the points cluster poorly.
 
 \begin{remark} \ \\
 The Koksma--Hlawka inequality can be seen as a product-type estimate: each
@@ -248,7 +251,7 @@ The Koksma--Hlawka inequality provides valuable insight into the behavior of
 \end{itemize}
 
 In practical terms, the Koksma-Hlawka inequality implies that for sufficiently
-smooth integrands with bounded Hardy--Krause variation and point sets obtsined
+smooth integrands with bounded Hardy--Krause variation and point sets obtained
 by low-discrepancy sequences, with star discprepancy of order
 \eqref{def:low-discrepancy-sequence} by definition, one can achieve integration
 errors fulfilling 

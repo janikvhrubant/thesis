@@ -11,7 +11,7 @@ Chapter~\ref{chapter3}.
 \section{Preliminaries}
 
 For the sake of completeness, we start with some results on approximations of
-variations defined in Section~\ref{sec:variation}. First we recall an important
+variations defined in Section~\ref{sec:variation}. First, we recall an important
 identity for the alternating sum.
 
 The following results come from \cite[Section 9]{owen2005multidimensional}. For
@@ -110,8 +110,8 @@ Applying the triangle inequality then leads to
 \end{equation*}
 
 Since for a ladder $\mathcal{Y}$ of a hyperrectangle $[a,b]$ the equality
-$\bigcup\limits_{y\in\mathcal{Y}}[y,y_+] = [a,b]$ holds, the sum builds
-the integral over the whole hyperrectangle $[a,b]$:
+$\bigcup\limits_{y\in\mathcal{Y}}[y,y_+] = [a,b]$ holds per definition, the sum
+builds the integral over the whole hyperrectangle $[a,b]$:
 
 \begin{equation*}
     \sum_{y \in \mathcal{Y}} \int\limits_{[y,y_+]}\bigg|\frac{\partial^s}{\partial x_1 \cdots \partial x_s} f(x)\bigg| \, dx = \int\limits_{[a,b]}\bigg|\frac{\partial^s}{\partial x_1 \cdots \partial x_s} f(x)\bigg| \, dx.
@@ -145,20 +145,23 @@ Therefore
         \left| \frac{\partial f\big|_{x_i=b_i, \forall i\neq j}(x_j)}{\partial x_j} \right| \, dx.
     \end{equation*}
     Hereby,  the restricted function $f\big|_{x_i=b_i, \forall i \neq j}$ is
-    limited to the one remaining dimension $j$.
+    limited to the remaining dimension $j$.
 \end{remark}
 
 
 \section{Error estimation of DNN surrogates obtained by \\ low-discrepancy training data}
 
 Given the computable training error $\mathcal{E}_T$ depending on the training
-data, we now seek to estimate the generalization error $\mathcal{E}_G$. To get there, we will use an estimate of the generalization gap as in \cite{mishra2021enhancing}.
+data, we now seek to estimate the generalization error $\mathcal{E}_G$. To get
+there, we will use an estimate of the generalization gap and follow
+\cite{mishra2021enhancing}.
 
 \begin{theorem} \ \\
-    For the surrogate models $\hat{f}$ obtained by \ac{dnn} training of a
-    mapping $f$ on the hyperrectangle $[0,1]^s$ with a low-discrepancy sequence
-    $\mathcal{S}=\{x_n\}_{n=1}^N\subset [0,1]^s$ yields a generalization gap
-    estimated by
+    Assume that $\hat{f}$ is a surrogate model obtained by \ac{dnn} training of
+    a mapping $f$ on the hypercube $[0,1]^s$ and
+    $\mathcal{S}=\{x_n\}_{n=1}^N\subset [0,1]^s$ is a low-discrepancy sequnece.
+    Further, let $V_\mathrm{HK}(|f-\hat{f}|) < \infty$. Then, the following
+    estimate on the generalization gap holds:
     \begin{equation*}
         |\mathcal{E}_G - \mathcal{E}_T| \leq C \cdot \frac{V_{\mathrm{HK}}(|f-\hat{f}|)(\log N)^s}{N},
     \end{equation*}
@@ -180,33 +183,34 @@ data, we now seek to estimate the generalization error $\mathcal{E}_G$. To get t
 \end{proof}
 
 \begin{theorem} \ \\
-\label{thm:main-theorem}
-Let $f : [0,1]^s \to \mathbb{R}$ with $f\in C^s$ be a map with finite
-Hardy--Krause variation, i.e. $\widehat{V}_{HK}(f) < \infty$. Further let
-$\hat{f}$ be the \ac{dnn} surrogate with an activation function $\sigma \in C^s$
-trained on a low-discrepancy sequence $\mathcal{S}=\{x_n\}_{n=1}^N\subset
-[0,1]^s$. Then for a given tolerance $\delta > 0$ the following holds:
+Let $f : [0,1]^s \to \mathbb{R}$ be a map with $\widehat{V}_{HK}(f) < \infty$.
+Further let $\hat{f}$ be the \ac{dnn} surrogate with an activation function
+$\sigma \in C^s$ trained on a low-discrepancy sequence
+$\mathcal{S}=\{x_n\}_{n=1}^N\subset [0,1]^s$. Then for a given tolerance $\delta
+> 0$ the following holds:
 \begin{equation*}
-    \mathcal{E}_G \leq \mathcal{E}_T + C \cdot \frac{(\log N)^s}{N} + 2\delta.
+\mathcal{E}_G \leq \mathcal{E}_T + C \cdot \frac{(\log N)^s}{N} + 2\delta.
 \end{equation*}
 The constant $C$ depends on the learing algorithm and the tolerance $\delta$
 associated with the mollifier introduced in the proof.
+\label{thm:main-theorem}
 \end{theorem}
 
 To proof this theorem, we will use the following proposition stating a
 multivariate version of the Faà di Bruno formula from
 \cite{hardy2006combinatorics}.
 
-\label{prop:multivariate_faa_di_bruno}
 \begin{prop}[Multivariate Faà di Bruno formula] \ \\
-Let $h \in C^s(\mathbb{R}^s, \mathbb{R}^{d_1})$ and $g \in C^s(\mathbb{R}^{d_1},\mathbb{R}^{d_2})$ be two
-functions. Then the following derivative of the composition $g \circ
-h$ follows:
+Let $h:\mathbb{R}^s \to \mathbb{R}^{d_1}$ with continuous derivative
+$\frac{\partial^s}{\partial x_1 \dots \partial x_s}h$ and $g \in
+C^s(\mathbb{R}^{d_1},\mathbb{R}^{d_2})$ be two functions. Then the following
+derivative of the composition $g \circ h$ follows:
 \begin{equation*}
     \frac{\partial^s}{\partial x_1 \cdots \partial x_s} (g \circ h)(x) = \sum_{\pi} g^{(|\pi|)}\circ h(x) \cdot \prod_{B\in\pi} \frac{\partial^{|B|}}{\prod_{j\in B}\partial x_j}h(x)
 \end{equation*}
 Hereby the sum is taken over all partitions $\pi$ of the set $\{1,\ldots,s\}$
 and $B$ are the sets within the partition $\pi$.
+\label{prop:multivariate_faa_di_bruno}
 \end{prop}
 A proof of the Multivariate Faà di Bruno formula can be found in
 \cite[Proposition 1]{hardy2006combinatorics}.
@@ -308,51 +312,51 @@ it remains to show:
 \begin{equation*}
     \int\limits_{[a^{-v},b^{-v}]} \prod_{B\in\pi} \bigg| \frac{\partial^{|B|}}{\prod_{j\in B}\partial x_j}h(x^{-v};b^{v}) \bigg| \, dx^{-v} < \infty 
 \end{equation*}
-for all partitions $\pi$ of the subset $v$. This follows by the definition
-\eqref{eq:variation_hardy_krause_bound} of the assumption that
-$\widehat{V}_{\mathrm{HK}}(h) < \infty$.
+for all partitions $\pi$ of the subset $v$. As each element in the product is
+part of the recursion in equation \eqref{eq:variation_hardy_krause_bound} and we
+have assumed, that $\widehat{V}_\mathrm{HK}(h)<\infty$, we have shown that the
+Hardy--Krause variation of the composition $g \circ h$ is bounded.
 \end{proof}
 
 Now we can prove the theorem.
 \begin{proof}[Proof (Theorem~\ref{thm:main-theorem})] \ \\
-    First, we define a mollifer function $\eta_\delta \in C^s(\mathbb{R},
+    First, a mollifer function $\eta_\delta \in C^s(\mathbb{R},
     \mathbb{R}_+)$ fullfilling
     \begin{equation*}
-        \max \big\{\big\| |a| - \eta_\delta(a) \big\|_\infty\big\} \leq \delta.
+        \max \big\{\big\| |a| - \eta_\delta(a) \big\|_\infty\big\} \leq \delta \,,
     \end{equation*}
-
-    By further defining approximating the the generalization error
-    $\mathcal{E}_G$ and the training error $\mathcal{E}_T$ by using the
-    differentiable mollifier $\eta_\delta$ instead of the norm
-    $\|\cdot\|_\infty$ we obtain
+    is chosen. Mollifying the absolute value function in a neighborhood of the
+    origin, guarantees the existence of such a function. 
+   
+    The following auxiliary functions are defined:
     \begin{align*}
         \mathcal{E}_G^\delta &:= \int_X \eta_\delta(f(x) - \hat{f}(x)) \\
-        \mathcal{E}_T^\delta &:= \frac{1}{N} \sum_{n=1}^N \eta_\delta(f(x_n) - \hat{f}(x_n)).
+        \mathcal{E}_T^\delta &:= \frac{1}{N} \sum_{n=1}^N \eta_\delta(f(x_n) - \hat{f}(x_n))
     \end{align*}
 
-    Next to show, is that the mollified error $\eta_\delta\circ(f-\hat{f})$ has
+    Next, it is shown that the mollified error $\eta_\delta\circ(f-\hat{f})$ has
     bounded Hardy--Krause variation.
     
-    Since $\hat{f}$ is a composition of affine and activation functions $\sigma
+    Since $\hat{f}$ is a composition of affine functions and the activation function $\sigma
     \in C^s$ by definition \eqref{eq:dnn-definition}, $\hat{f} \in C^s([0,1]^s,
     \mathbb{R})$ holds. Let $\mathbb{1}_s$ denote the identity function on
     $\mathbb{R}^s$. $\widehat{V}_\mathrm{HK}(\mathbb{1}_s) < \infty$ holds
-    trivially. Thus applying Corollary~\ref{cor:bounded_composition} for $f = f
-    \circ \mathbb{1}_s$ yields
+    trivially. Thus applying Corollary~\ref{cor:bounded_composition} for
+    $\hat{f}\circ \mathbb{1}_s$ yields
 
     \begin{equation*}
         {V}_{\mathrm{HK}}(\hat{f}) \equiv \widehat{V}_{\mathrm{HK}}(\hat{f}) <
         \infty.
     \end{equation*}
 
-    By the definition \eqref{eq:variation_hardy_krause_bound} and from the given
-    assumption $\widehat{V}_{\mathrm{HK}}(f) < \infty$.
+    By the equation \eqref{eq:variation_hardy_krause_bound} and from the given
+    assumption $\widehat{V}_{\mathrm{HK}}(f) < \infty$, it follows that
     
     \begin{equation*}
         \widehat{V}_{\mathrm{HK}}(f-\hat{f}) \leq \infty
     \end{equation*}
 
-    holds. Applying Corollary~\ref{cor:bounded_composition} again on $\eta_\delta \circ (f-\hat{f})$ yields 
+    Applying Corollary~\ref{cor:bounded_composition} again on $\eta_\delta \circ (f-\hat{f})$ yields 
     
     \begin{equation*}
     V_{\mathrm{HK}}\big(\eta_\delta\circ(f-\hat{f})\big) \leq \widehat{V}_{\mathrm{HK}}\big(\eta_\delta\circ(f-\hat{f})\big) \leq C_1 < \infty.
@@ -390,8 +394,8 @@ Now we can prove the theorem.
     % also bounded.
 
 
-    for a constanct $C_1$. Therefore, by applying the Koksma-Hlawka inequality
-    (Theorem~\ref{thm:koksma-hlawka}) one gets
+    for a constanct $C_1$. Therefore, one can apply the Koksma-Hlawka inequality
+    (Theorem~\ref{thm:koksma-hlawka}) to $f-\hat{f}$ to get
     \begin{equation}
         \label{eq:hk_generalization_gap}
         |\mathcal{E}_G^\delta - \mathcal{E}_T^\delta| \leq C_2 \cdot \frac{V_{\mathrm{HK}}(\eta_\delta(f-\hat{f}))(\log N)^s}{N}.
@@ -407,21 +411,29 @@ Now we can prove the theorem.
     \begin{equation}
         \big| \mathcal{E}_G - \mathcal{E}_G^\delta \big|\leq \delta \qquad \text{and} \qquad \big| \mathcal{E}_T - \mathcal{E}_T^\delta \big| \leq \delta.
     \end{equation}
-    Applying by applying triangle inequality to the initial generalization gap, it follows that
+    By applying the triangle inequality to the initial generalization gap, it follows that
     \begin{align*}
         |\mathcal{E}_G - \mathcal{E}_T| &\leq \underbrace{|\mathcal{E}_G - \mathcal{E}_G^\delta|}_{\leq \delta} + \underbrace{|\mathcal{E}_T^\delta - \mathcal{E}_T|}_{\leq \delta} + |\mathcal{E}_G^\delta - \mathcal{E}_T^\delta| \\
         &\leq 2\delta + |\mathcal{E}_G^\delta - \mathcal{E}_T^\delta| \\
         &\leq 2\delta + C \cdot \frac{(\log N)^s}{N}.
     \end{align*}
-    It follows the bound on the generalization error as stated in the theorem:
+    The bound on the generalization error follows as stated in the theorem:
     \begin{equation}
         \mathcal{E}_G \leq \mathcal{E}_T + C \cdot \frac{(\log N)^s}{N} + 2\delta.
     \end{equation}
 
 \end{proof}
 
-
-
+\begin{remark} \ \\
+    Theorem~\ref{thm:main-theorem} gives an upper bound on the generalization
+    error. However, the bound requires $\widehat{V}_\mathrm{HK}(f) < \infty$. If
+    $f\in C^s([0,1]^s,\mathbb{R})$, this is necessarily fulfilled. Nevertheless,
+    $f\in C^s([0,1]^s,\mathbb{R})$ is a stronger assumption on the ground truth
+    function $f$ than $\widehat{V}_\mathrm{HK}(f) < \infty$. The boundedness of
+    the Hardy--Krause variation of $f$ is only on the mixed-first-order
+    derivatives of $f$ and not on all partial derivatives up to order $s$ as
+    required by $f\in C^s([0,1]^s,\mathbb{R})$. 
+\end{remark}
 
 
 

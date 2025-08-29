@@ -1,16 +1,239 @@
 %!TEX root = ../main.tex
-\chapter{Empirical Enaluation and Discussion}
+\chapter{Empirical Evaluation and Discussion}
 \label{chapter7}
 
-\begin{itemize}
-    \item Overview of benchmark tasks:
-    \begin{itemize}
-        \item Synthetic function approximation
-        \item ODE simulation (projectile motion)
-        \item Computational finance (option pricing)
-        \item CFD (airfoil flow)
-    \end{itemize}
-    \item Comparison of DLsob (QMC) and DLrand (MC) Performance
-    \item Error metrics and convergence plots
-    \item Limitations, edge cases and future directions
-\end{itemize}
+In the last chapter, the Koksma--Hlawka inequality was applied to the function
+approximation problem via \acfp{dnn}. These theoretical results, yielded a
+significant improvement in the approximation of the generalization error for
+training sets sampled from low-discrepancy sequences compared to pseudo-random
+sampling.
+
+In this chapter, these theoretical results are empirically evaluated for
+different examples.
+
+\section{Implementation details of the DNN surrogate training}
+\label{sec:impl_details_dnn}
+
+Before applying the Deep Learning algorithm to optimize the weights $\theta$ of
+the \aclp{dnn} for the approximation different of different ground truth
+functions $f$ later in this chapter, some implementation details are provided in
+the following. The ground truth functions studied in this chapter are the smooth
+sum of sines function on multiple dimensions and the approximate \acf{ode}
+solution to the distance achieved by projectile motion. The implementation is
+done in Python using the \emph{PyTorch} library \cite{paszke2019pytorch} and
+accessible via
+GitHub\footnote{\url{https://github.com/janikvhrubant/nn-sampling-analysis}}.
+
+As the main goal of this chapter is to evaluate the impact of different sampling
+strategies, the Deep Learning algorithm was applied on training sets sampled
+from three different strategies: pseudo-random sampling and two low-discrepancy
+sequences: Sobol' and Halton as introduced in Chapter~\ref{chapter3}. Each
+training set is obtained by evaluating the ground truth function $f$ at the
+sampled points. In the experiments, the number of training samples $N$ is varied
+from $64$ up to $8192$. According to the training set, a test set $\mathcal{T}$
+is chosen from the remaining sampling strategies. To ensure comparability and
+uniform coverage of the domain, the test sets are always chosen to be the full
+low-discrepancy sequence with $|\mathcal{T}|=8192$ points. The setup can be
+summarized as in Table~\ref{tab:test_set}.
+
+\begin{table}[H]
+\begin{tabular}{lcc}
+\toprule
+\textbf{Training Set} & \textbf{Test Set} \\
+\midrule
+Pseudo-random & Sobol' \\
+Sobol' & Halton \\
+Halton & Sobol' \\
+\bottomrule
+\end{tabular}
+\centering
+\caption{Test sets used for the evaluation of the \acp{dnn} trained
+on different training sets.}
+\label{tab:test_set}
+\end{table}
+
+For the evaluation of the approximation quality, the following test error metric
+is then applied on the test set $\mathcal{T}$
+
+\begin{equation*}
+    \text{MAE} = \frac{1}{|\mathcal{T}|} \sum_{\mathbf{x}\in\mathcal{T}} |f(\mathbf{x}) - \hat{f}_\theta(\mathbf{x})|\,.
+\end{equation*}
+The test set $\mathcal{T}$ is differing for the three training sets. The setup can be summarized as in Table~\ref{tab:test_set}.
+
+Further the Deep Learning algorithm is evaluated for a varying number of epochs
+between $100$ and $2000$ and the two different optimizers introduced in
+Chapter~\ref{chapter6}: Adam~\cite{goodfellow2016deep} and
+Lion~\cite{chen2023symbolic}.
+
+For the other training hyperparamters, a systematic study was conducted using
+\emph{Optuna} \cite{akiba2019optuna}. Hereby the architecture of the \acp{dnn}
+was varied in terms of the number of hidden layers, the number of neurons per
+layer and the activation function. Further different batch sizes were examined.
+For the two optimizers, different parameters were studied. The parameter ranges
+are summarized in Table~\ref{tab:dnn_configs}. The specific configurations used
+in the experiments will be detailed in the corresponding sections. 
+
+\begin{table}[H]
+\begin{tabular}{lcc}
+\toprule
+\textbf{DNN Architecture }& \\
+Number of hidden layers & $2-20$ \\
+Number of neurons per layer & $2-12$ \\
+Activation function & Sigmoid, Tanh \\
+\midrule
+\textbf{Training Setup} & \\
+Batch size & $64,128,256,512,1024$ \\
+\midrule
+\textbf{Adam Hyperparameters} & \\
+Learning rate & $1.0e{-}5 - 1.0e{-}2$ \\
+Weight decay & $1.0e{-}8 - 1.0e{-}3$ \\
+$\beta_1$ & $0.85 - 0.99$ \\
+$\beta_2$ & $0.95 - 0.999$ \\
+$\epsilon$ & $1e-8$ \\
+\midrule
+\textbf{Lion Hyperparameters} & \\
+Learning rate & $1.0e{-}5 - 1.0e{-}2$ \\
+Weight decay & $1.0e{-}8 - 1.0e{-}3$ \\
+$\beta_1$ & $0.85 - 0.99$ \\
+$\beta_2$ & $0.95 - 0.999$ \\
+\bottomrule
+\end{tabular}
+\centering
+\caption{Configurations used for Hyperparameter optimization.}
+\label{tab:dnn_configs}
+\end{table}
+
+
+\section{Multi-dimensional sum of sines}
+
+As a first example, the multidimensional and nonlinear sum of sines function is studied in for different dimensions $s\in\{6,8,10\}$
+\begin{equation}
+    \label{eq:sum_of_sines}
+    f(\mathbf{x}) = \sum_{i=1}^{s} \sin( 4\pi x_i), \quad \mathbf{x} \in [0,1]^s.
+\end{equation}
+To add variance to the function, the input is scaled by a factor of $4\pi$. It
+is clear, that $f\in C^\infty([0,1]^s)$ and thus
+$V_\mathrm{HK}(f)\sim\hat{V}_\mathrm{HK}(f)<\infty$ on the compact domain
+$[0,1]^s$.
+
+
+The Deep Learning algorithm is applied with the following configurations
+obtained by hyperparamter optimization as described in
+Section~\ref{sec:impl_details_dnn}:
+\begin{table}[H]
+\begin{tabular}{lc}
+\textbf{DNN Architecture }& \\
+Number of hidden layers & $8$ \\
+Number of neurons per layer & $8$ \\
+Activation function & Tanh \\
+\midrule
+\textbf{Training Setup} & \\
+Batch size & $256$ \\
+Number of epochs & $2000$ \\
+\midrule
+\textbf{Optimizers} & \\
+Adam & \\
+Lion & \\
+\midrule
+\textbf{Hyperparameters} & \\
+Optimized via & Optuna \\
+\end{tabular}
+\centering
+\end{table}
+
+The according \acp{dnn} are trained on training sets with
+$N\in\{128,256,512,1024,2048,4096,8192\}$ samples drawn from pseudo-random,
+Sobol' and Halton sequences.
+
+Hier kommt ein Plot für alle 6 Kombinationen: Adam/Lion und Sobol/Halton/Pseudo-random
+
+1. Test Error Entwicklung über Epochs (für alle 6 Kombinationen)
++  Train Error Entwicklung über Epochs (für alle 6 Kombinationen)
+
+2. Test Error Entwicklung über N (für alle 6 Kombinationen)
++  Train Error Entwicklung über N (für alle 6 Kombinationen)
+
+
+\section{Projectile Motion}
+As a second illustrative example, this section investigates the motion of a
+projectile. The experiment is introduced by formulating the underlying \acp{ode}
+system that describes the physical dynamics of the process. Based on approximate
+solutions of these \acp{ode} at the prescribed training points, \acp{dnn} are
+trained and subsequently evaluated.
+
+\subsection{ODE formulation of projectile motion}
+\label{subsec:proj_ode}
+\emph{Projectile motion} describes the trajectory of an object launched into the
+air and evolving under gravity and aerodynamic drag. We consider a planar motion
+with state
+\begin{equation*}
+x(t)\in\mathbb{R} \quad (\text{horizontal position}),\qquad
+h(t)\in\mathbb{R} \quad (\text{vertical position}),
+\end{equation*}
+and velocities $u(t)=\dot{x}(t)$, $w(t)=\dot{h}(t)$. The motion is terminated at the first impact time
+\begin{equation*}
+t_\star \;=\; \inf\{\, t>0 \;:\; h(t)=0 \,\},
+\end{equation*}
+and the traveled range is $R := x(t_\star)$.
+
+\textcolor{red}{TODO: Bild einfügen}
+
+\paragraph{Parameters and modeling assumptions}
+\begin{enumerate}
+    \item The moving object is modeled as a spherical projectile with mass $m$
+    in the range $0.3\,\frac{\mathrm{kg}}{\mathrm{m}^3}$ and radius
+    $r$ in range $0.0213 - 0.124 \,\mathrm{m}$. The extreme values correspond to a golf ball of gold and a basketball, respectively.
+    \item Gravitational acceleration is constant, $g=9.81\,\mathrm{m/s^2}$.
+    \item Air density is $\rho$ in a range of $0.269 - 1.225\,\mathrm{kg/m^3}$
+    and the drag
+    coefficient is $C_d=0.10$.
+    \item The cross-sectional area is $A=\pi r^2$ and the drag constant is
+    \begin{equation*}
+        k \;=\; \frac{\rho\,C_d\,A}{2m}\,.
+    \end{equation*}
+    \item Initial conditions are prescribed by the launch speed $v_0>0$,
+    launch angle $\alpha\in[0^\circ,90^\circ]$, and initial height $h_0\ge
+    0$:
+    \begin{equation*}
+        x(0)=0,\quad h(0)=h_0,\quad
+        u(0)=v_0\cos\alpha,\quad w(0)=v_0\sin\alpha.
+    \end{equation*}
+\end{enumerate}
+
+\paragraph{Quadratic-drag model (standard)} \ \\
+Let $\mathbf{v}(t)=(u(t),w(t))^\top$ and $\|\mathbf{v}\|=\sqrt{u^2+w^2}$.
+With drag proportional to dynamic pressure and opposing the velocity vector, the
+equations read
+\begin{equation}
+\label{eq:proj_full_drag}
+\begin{aligned}
+\dot{x} &= u, &\qquad \dot{h} &= w,\\
+\dot{u} &= -\,k\,\|\mathbf{v}\|\,u, &\qquad
+\dot{w} &= -\,g \;-\; k\,\|\mathbf{v}\|\,w.
+\end{aligned}
+\end{equation}
+System~\eqref{eq:proj_full_drag} is locally Lipschitz and admits a unique
+solution up to impact time $t_\star$.
+
+\paragraph{Simplified model used in the experiments} \ \\
+To align with the implementation used for the numerical study, we employ a
+reduced model in which drag acts only on the horizontal component while vertical
+dynamics are driven solely by gravity:
+\begin{equation}
+\label{eq:proj_simplified}
+\begin{aligned}
+\dot{x} &= u, &\qquad \dot{h} &= w,\\
+\dot{u} &= -\,k\,\|\mathbf{v}\|\,u, &\qquad
+\dot{w} &= -\,g.
+\end{aligned}
+\end{equation}
+This preserves the correct horizontal deceleration due to aerodynamic resistance
+while keeping the vertical equation linear. All parameters are as specified
+above, and the simulation is terminated at $h(t_\star)=0$, yielding the range
+$R=x(t_\star)$.
+
+\paragraph{Numerical integration} \ \\
+The ODEs are integrated with a fixed time step $\Delta t>0$ using an explicit
+scheme; in the experiments we use forward Euler for $(x,h,u,w)$. The step size
+is chosen sufficiently small to ensure stability and time-discretization
+accuracy for the considered parameter ranges.

@@ -19,7 +19,7 @@ fast evaluation online. However, using \acf{mc} sampling for generating training
 data may yield to slow convergence as introduced in Part~\ref{part1}.
 
 To overcome this limitation, this thesis explores the use of low-discrepancy
-sequences to generate training data which fills the input domain more uniformly.
+sequences to generate training data which fill the input domain more uniformly.
 Under mild regularity assumptions, they can significantly reduce the
 generalization error due to improved equidistribution properties.
 
@@ -28,12 +28,9 @@ Many-query problems refer to scenarios in which a computationally expensive
 model $f(x)$ must be evaluated for many different parameter values $x \in
 \mathcal{X} \subset \mathbb{R}^s$. Typical applications include:
 \begin{itemize}
-  \item \textbf{Uncertainty quantification (UQ)}: Compute statistics of $f(x)$
-  for uncertain $x$.
-  \item \textbf{Optimal design/control}: Evaluate objective functions $f(x)$ for
-  many designs $x$.
-  \item \textbf{Inverse problems}: Repeatedly evaluate $f(x)$ during parameter
-  inference.
+  \item Uncertainty quantification (UQ)
+  \item Optimal design/control
+  \item Inverse problems
 \end{itemize}
 
 The sheer cost of evaluating $f(x)$ (e.g., via numerical PDE solvers) motivates
@@ -56,10 +53,10 @@ later introduced \emph{activation functions} they proved to be able to
 approximate any continuous function on compact sets arbitrarily well
 \cite{cybenko1989approximation}.
 
-\section{The Choice of Training Data}
-Typically, training data is generated using \acl{mc} sampling, where points $x_i$ are drawn independently and identically distributed (i.i.d.) according to a probability measure $\mu$ on $[0,1]^s$. Under this approach, statistical learning theory provides an estimate for the expected generalization error $\mathbb{E}[\mathcal{E}_G]$ as follows:
+\section{Applicability of the Koksma-Hlawka Inequality to DNN Training}
+Generally, training data is generated using \acl{mc} sampling, where points $x_i$ are drawn independently and identically distributed (i.i.d.) according to a probability measure $\mu$ on $[0,1]^s$. Under this approach, statistical learning theory provides an estimate for the expected generalization error $\mathbb{E}[\mathcal{E}_G]$ as follows:
 \begin{equation*}
-\mathbb{E}[\mathcal{E}_G] \leq \mathcal{E}_T + \mathcal{O}\left(\frac{1}{\sqrt{N}}\right),
+\mathcal{E}_G \sim \mathcal{E}_T + \mathcal{O}\left(\frac{1}{\sqrt{N}}\right),
 \end{equation*}
 where $\mathcal{E}_T$ is the empirical training error. Both, the generalization
 and training error will be formally introduced in Section~\ref{sec:dnn-error}.
@@ -73,15 +70,27 @@ many-query problems because:
 \end{itemize}
 
 A promising alternative to random sampling is to use \acf{qmc} sampling.
-Low-discrepancy sequences (Sobol', Halton, etc.) provide a way to sample the
-domain $[0,1]^s$ more uniformly than random sampling. In \acl{qmc} theory, the Koksma-Hlawka inequality (Theorem~\ref{thm:koksma-hlawka}) gives an error bound of the form
+Low-discrepancy sequences, as the introduced Sobol' or Halton sequence, provide
+a way to sample the domain $[0,1]^s$ more uniformly than random sampling. In
+\acl{qmc} theory, the Koksma-Hlawka inequality (Theorem~\ref{thm:koksma-hlawka})
+gives an error bound of the form
 \begin{equation*}
-|\mathcal{E}_G - \mathcal{E}_T| \leq V_{\mathrm{HK}}(|f - \hat{f}|) \cdot D^*_N \leq  V_{\mathrm{HK}}(|f - \hat{f}|) \cdot C \cdot \frac{(\log N)^s}{N},
+|\mathcal{E}_G - \mathcal{E}_T| \leq V_{\mathrm{HK}}(|f - \hat{f}|) \cdot D^*_N \leq  V_{\mathrm{HK}}(|f - \hat{f}|) \cdot C \cdot \frac{(\log N)^s}{N}.
 \end{equation*}
-where $V_{\mathrm{HK}}$ denotes the Hardy--Krause variation and $D^*_N$ is the
-star-discrepancy of the training points.
+However, it is not immediately clear, whether this inequality can be applied to
+the generalization gap $|\mathcal{E}_G - \mathcal{E}_T|$ in the context of
+training \acp{dnn}. This is because the Koksma-Hlawka inequality requires the
+integrand to have bounded variation in the sense of Hardy--Krause to ensure a
+finite bound.
 
-This suggests that \ac{qmc} sampling can lead to significantly smaller generalization
-gaps -- especially when $f$ has bounded variation and the activation functions used
-in $\hat{f}$ are smooth.
+In the following chapters, we will show that under mild assumptions on the
+function $f$, the surrogate $\hat{f}$ obtained by training a \ac{dnn} has
+bounded variation in the sense of Hardy--Krause. This allows us to apply the
+Koksma-Hlawka inequality and prooves that applying low-discrepancy sequences for
+generating training data can significantly reduce the generalization gap.
 
+Since the direct application of the Koksma--Hlawka inequality, in particular the
+determination of the Hardy--Krause variation, is not practical for general
+formulations of the approximation function $\hat{f}$ depending on the training
+data, the usefulness and applicability of the approach will be verified in
+Chapter~\ref{chapter7} through selected examples.

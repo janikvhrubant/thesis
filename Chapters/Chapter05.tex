@@ -18,7 +18,7 @@ established in \cite{mishra2021enhancing}.
 
 The key feature enabling neural networks to approximate nonlinear functions is
 the application of scalar activation functions. We begin by introducing these
-components before defining the class of functions represented by \aclp{dnn}.
+components before defining the class of \acl{dnn} functions.
 
 \begin{definition}[Activation Function] \ \\
 An \emph{activation function} is a measurable function $\sigma : \mathbb{R} \to
@@ -31,17 +31,18 @@ each layer in a neural network.
 \end{remark}
 
 \begin{example}[Common Activation Functions] \ \\
-Two widely used activation functions are illustrated in
+Two widely used activation functions are given below and illustrated in
 Figure~\ref{fig:activation_functions}. These are also the activation functions
 we employ in the experimental evaluations presented in Chapter~\ref{chapter7}.
 
 \begin{itemize}
-    \item \textbf{ReLU (Rectified Linear Unit)}:
+    \item \textbf{Tanh}:
     \begin{equation*}
-        \sigma(z) = \max\{0, z\}
+        \sigma(z) = \tanh(z) = \frac{e^z - e^{-z}}{e^z + e^{-z}}
     \end{equation*}
-    ReLU is piecewise linear and unbounded. It is computationally efficient and
-    commonly used in deep architectures.
+    The hyperbolic tangent function maps real numbers to $(-1,1)$ and is
+    differentiable everywhere. It is often used in hidden layers of neural
+    networks.
     
     \item \textbf{Sigmoid}:
     \begin{equation*}
@@ -60,8 +61,8 @@ we employ in the experimental evaluations presented in Chapter~\ref{chapter7}.
   \label{fig:activation_functions}
 \end{figure}
 
-With an activation function in place, we now define the class of functions that
-a fully connected feedforward neural network can represent.
+With an activation function in place, we now define the class of \acf{dnn}
+functions that a fully connected feedforward neural network can represent.
 
 \begin{definition}[Class of Deep Neural Network Functions] \ \\
 Let $L \in \mathbb{N}$ and $\mathbf{d} = (d_0, d_1, \dots, d_L)$ be a sequence
@@ -80,15 +81,15 @@ an affine transformation
 \end{equation*}
 with weights $W_l \in \mathbb{R}^{d_l \times d_{l-1}}$ and biases $b_l \in
 \mathbb{R}^{d_l}$. The activation function $\sigma: \mathbb{R} \to \mathbb{R}$
-is applied component-wise.
+is applied componentwise.
 
 The collection of all trainable parameters is denoted by
 \begin{equation*}
 \theta = \{ (W_l, b_l) \}_{l=1}^L,
 \end{equation*}
-and fully determines the function $\hat{f}_\theta$ for a placed activation
+and fully determines the function $\hat{f}_\theta$ for a fixed activation
 function $\sigma$. The set of all such realizable functions for a given
-architecture $\mathbf{d}$ and activation $\sigma$ is denoted by
+architecture $\mathbf{d}$ and activation function $\sigma$ is denoted by
 $\mathcal{F}_{\mathbf{d}, \sigma}$.
 
 \vspace{0.5em}
@@ -179,16 +180,17 @@ truth function $f$. Supervised training of a \ac{dnn} therefore requires
 minimizing the discrepancy between the network output $\hat{f}_\theta(y)$ and a
 ground truth function $f(y)$ on a given training set $\{y_i\}_{i=1}^N$.
 
-We start by defining the loss function which is used to measure this discrepancy during the training:
+We start by defining the loss function which is used to measure this discrepancy
+during the training:
 
 \begin{definition}[Loss Function] \ \\
-Let $f:\mathcal{Y}\to\mathbb{R}$ be a ground truth function and $\hat{f}_\theta$
-a respective surrogate with network architecture $\mathbf{d}$, according
-parameters $\theta$ and activation function $\boldsymbol{\sigma}$. Then, given
-the surrogate and a respective point set $\mathcal{P}$, the \emph{loss function}
-is defined as
+Let $f:[0,1]^s\to\mathbb{R}$ be a ground truth function defined on the hypercube
+and $\hat{f}_\theta$ a respective surrogate with network architecture
+$\mathbf{d}$, according parameters $\theta$ and activation function
+$\boldsymbol{\sigma}$. Then, given the surrogate and a respective point set
+$\mathcal{P}$, the \emph{loss function} is defined as
 \begin{equation*}
-\mathcal{L}(\theta) := \sum\limits_{y \in \mathcal{P}} |f(y) - \hat{f}_\theta(y)|^p \, \mathrm{d}y,
+\mathcal{L}_{\mathcal{P}}(\theta) := \frac{1}{|\mathcal{P}|}\sum\limits_{y \in \mathcal{P}} |f(y) - \hat{f}_\theta(y)|^p\,,
 \end{equation*}
 for some $1\leq p < \infty$.
 \end{definition}
@@ -196,11 +198,12 @@ for some $1\leq p < \infty$.
 The point set $\mathcal{P}$ in the loss function is usually given by the training set. By defining the discrepancy on the training data, the \emph{training error} $\mathcal{E}_T$ is defined:
 
 \begin{definition}[Training Error] \ \\
-Let $f$ be a ground truth function and $\hat{f}_\theta$ a respective surrogate
-model with architecture $\mathbf{d}$, according parameters $\theta$ and
-activation function $\boldsymbol{\sigma}$. Then, given the matching training set
-$\{(y_i, f(y_i))\}_{i=1}^N$ of the surrogate model, the \emph{training error} is
-defined as
+Let $f:[0,1]^s \to \mathbb{R}$ be a ground truth function defined on the
+hypercube and $\hat{f}_\theta$ a respective surrogate model with architecture
+$\mathbf{d}$, according parameters $\theta$ and activation function
+$\boldsymbol{\sigma}$. Then, given the matching training set $\{(y_i,
+f(y_i))\}_{i=1}^N$ with $y_i \in [0,1]^s$ of the surrogate model, the
+\emph{training error} is defined as
  \begin{equation*}
 \mathcal{E}_\mathrm{T}(\theta) := \frac{1}{N} \sum_{i=1}^N |f(y_i) - \hat{f}_\theta(y_i)|.
  \end{equation*}
@@ -208,15 +211,16 @@ defined as
 
 The \emph{generalization error} $\mathcal{E}_\mathrm{G}$ is evaluating the
 discrepancy between the surrogate model $\hat{f}_\theta$ and the ground truth
-function $f$ on the entire domain $\mathcal{Y}$.
+function $f$ on the entire domain $[0,1]^s$.
 
 \begin{definition}[Generalization Error] \ \\
-Let $f:\mathcal{Y}\to\mathbb{R}$ be a ground truth function and $\hat{f}_\theta$
-a respective surrogate with nework architecture $\mathbf{d}$, according
-parameters $\theta$ and activation function $\boldsymbol{\sigma}$. Then, given
-the surrogate, the \emph{generalization error} is defined as:
+Let $f:[0,1]^s\to\mathbb{R}$ be a ground truth function defined on the hypercube
+and $\hat{f}_\theta$ a respective surrogate with nework architecture
+$\mathbf{d}$, according parameters $\theta$ and activation function
+$\boldsymbol{\sigma}$. Then, given the surrogate, the \emph{generalization
+error} is defined as:
 \begin{equation*}
-\mathcal{E}_\mathrm{G}(\theta) := \int\limits_{\mathcal{Y}} |f(y) - \hat{f}_\theta(y)| \, \mathrm{d}y.
+\mathcal{E}_\mathrm{G}(\theta) := \int\limits_{[0,1]^s} |f(y) - \hat{f}_\theta(y)| \, \mathrm{d}y.
 \end{equation*}
 \end{definition}
 
@@ -224,13 +228,15 @@ the surrogate, the \emph{generalization error} is defined as:
     Whereas the training error $\mathcal{E}_\mathrm{T}$ is numerically
     straightforward to compute, the generalization error
     $\mathcal{E}_\mathrm{G}$ is often not directly computable, as the ground
-    truth function $f$ is not known besides the training data.
+    truth function $f$ could not be known besides the training data or is costly
+    to compute.
 \end{remark}
 
 \begin{definition}[Generalization Gap] \ \\
-    The \emph{generalization gap} for a given \ac{dnn} architecture $\mathbf{d}$
-    and activation function $\boldsymbol{\sigma}$ is the difference between the
-    generalization and training error:
+    The \emph{generalization gap} for a given \ac{dnn} architecture
+    $\mathbf{d}$, according parameters $\theta$ and activation function
+    $\boldsymbol{\sigma}$ is the difference between the generalization and
+    training error:
     \begin{equation*}
         |\mathcal{E}_\mathrm{G}(\theta) - \mathcal{E}_\mathrm{T}(\theta)|.
     \end{equation*}
@@ -241,56 +247,47 @@ the surrogate, the \emph{generalization error} is defined as:
 \section{Optimization and Training Procedure}
 \label{sec:dnn-training}
 % ------------------------------------------------------------------------------
-
-In practice, an initial surrogate \ac{dnn} $\hat{f}_\theta$ is generated for
+In practice, an initial surrogate \ac{dnn} $\hat{f}_\theta$ is generated with
 initial parameters $\theta$. In supervised learning, the goal is to minimize the
-training error $\mathcal{E}_\mathrm{T}(\theta)$ with respect to the parameters
-$\theta$.
-
-The goal of training a \ac{dnn} is to optimize the weights of a neural network
-during the training process given the \emph{training data}.
-
-Within iterrations in each epoch, the \emph{training data} is devided into
-mini-batches. Training the \ac{dnn} then corresponds to solving the following
-regularized minimization problem for the training data within the mini-batches:
-
-\begin{equation}
-    \theta^* = \arg\min_{\theta \in \Theta} \left[ \mathcal{E}_\mathrm{T}(\theta) + \lambda \cdot R(\theta) \right],
-    \label{eq:regularized-objective}
-\end{equation}
-
-where $R(\theta)$ is a regularization term (e.g. $L2$ weight penalty) and
-$\lambda > 0$ controls its strength.
-
-In Figure~\ref{fig:dnn_learning_minimal}, a generic training workflow for the
-training of \aclp{dnn} is illustrated. 
-
-The input to the algorithm is given by a training dataset of input--output
-pairs $\{(x_n, f(x_n))\}_{n=1}^N$, a number of epochs $E \in \mathbb{N}$, a
-batch size $B \in \mathbb{N}$, initial parameters $\theta_0$ and an optimizer
-$\mathrm{Opt}$ (e.g. SGD or Adam) as input values. In an initialization step the
-algorithm then generates the initial surrogate model $\hat{f}_{\theta_0}$.
-
-At the beginning of each epoch $e \in \{1, \dots, E\}$, the dataset
-is shuffled and partitioned into mini-batches
+regularized loss function with respect to the parameters $\theta$ by adapting
+the weights of the network during the training process. Thus, one aims to find a
+solution to the following minimization problem
 
 \begin{equation*}
-    (\mathcal{B}^e_k)_{k=1}^{K}, \quad \text{with } 
-    K = \left\lceil \tfrac{N}{B} \right\rceil,
+    \theta^* = \arg\min_{\theta} \mathcal{J}_\mathcal{P}(\theta), \quad \text{with } \mathcal{J}(\theta) = \mathcal{L}_\mathcal{P}(\theta) + \lambda \cdot R(\theta),
 \end{equation*}
+where $\mathcal{P}$ is the training set, $\lambda > 0$ is a regularization parameter and $R(\theta)$ a regularization term (e.g. an $L^2$ weight penalty).
 
-each of size $B$. The union of all mini-batches in an epoch equals the full
-training dataset.
+The training is carried out on a given \emph{training dataset} consisting of
+$N$ input--output pairs ${(x_n, f(x_n))}_{n=1}^N$, where $N$ is called the
+\emph{training set size}. Since the dataset is usually too large to be processed
+at once, it is divided into smaller subsets of fixed cardinality $B$, called
+\emph{mini-batches}. The number $B$ is referred to as the \emph{batch size} and
+determines how many samples are processed simultaneously in each training step.
 
-Then for every mini-batch $\mathcal{B}^e_k$ the algorithm loops over the next
-steps: The loss $\mathcal{L}$ is computed by forward passing the
-mini-batch through the network and computing the loss accordingly. Furthermore,
-the gradient of the loss $\nabla_\theta \mathcal{L}$ is computed by
-backpropagation. Next, the parameters $\theta$ are updated using the
-Optimizer $\mathrm{Opt}$ and update the parameters $\theta$ accordingly.
+The training procedure is organized into multiple passes over the dataset,
+called \emph{epochs}. At the beginning of each epoch $e \in {1, \dots, E}$, the
+dataset is typically shuffled and then partitioned into mini-batches
+\begin{equation*}
+(\mathcal{B}^e_k)_{k=1}^{K}, \quad
+\text{with } K = \left\lceil \tfrac{N}{B} \right\rceil,
+\end{equation*}
+such that the union of all mini-batches corresponds to the full training set.
+This ensures that in each epoch, the entire dataset is used for training.
 
-This procedure is repeated for all epochs $e \in \{1, \dots, E\}$, yielding the 
-trained network $\hat{f}_{\theta^*} = \hat{f}_{\theta_E}$.
+For each mini-batch $\mathcal{B}^e_k$, the algorithm executes the following
+steps: the current surrogate network $\hat{f}_{\theta}$ is applied to all
+samples in $\mathcal{B}^e_k$ in a forward pass and the corresponding
+\emph{regularized loss function} $\mathcal{J}_{\mathcal{B}_k^e}$ is evaluated
+with respect to these samples. The gradient of the loss with respect to the
+parameters, $\nabla_\theta \mathcal{J}_{\mathcal{B}_k^e}$, is then computed by
+backpropagation. Finally, the parameters $\theta$ are updated according to the
+chosen optimization algorithm $\mathrm{Opt}$, e.g. SGD, Adam or Lion as
+introduced in the followup subsections.
+
+This procedure is repeated over all mini-batches of all epochs or until a
+stopping criterion is met, resulting in the final trained network
+$\hat{f}_{\theta^*} = \hat{f}_{\theta_E}$.
 
 \begin{figure}[H]
 \centering
@@ -302,7 +299,7 @@ trained network $\hat{f}_{\theta^*} = \hat{f}_{\theta_E}$.
 ]
 
 % % ---------- Input ----------
-\node[io] (input) {Dataset $\{(x_n,L(x_n))\}_{n=1}^N$, number of epochs $E$,
+\node[io] (input) {Dataset $\{(x_n,f(x_n))\}_{n=1}^N$, number of epochs $E$,
 batch size $B$, initial parameters $\theta_0$, Optimizer $\mathrm{Opt}$};
 
 \node[anchor=center, font=\bfseries] at ($(input.west)+(-1.2cm,0)$) {Input:};
@@ -320,12 +317,12 @@ $\hat{f}_{\theta_0}$, };
 into mini-batches $(\mathcal{B}^e_k)_{k=1}^{K}$};
 
 \node[block, below=4mm of batch] (forward) {Compute loss
-$\mathcal{L}(\theta_{k-1})$ and gradient $\nabla_\theta
-\mathcal{L}(\theta_{k-1})$ on the mini-batch $\mathcal{B}^e_k$};
+$\mathcal{J}_{\mathcal{B}_k^e}(\theta_{k-1})$ and gradient $\nabla_\theta
+\mathcal{J}_{\mathcal{B}_k^e}(\theta_{k-1})$ on the mini-batch $\mathcal{B}^e_k$};
 
 \node[block, below=4mm of forward] (update) {\centering \mbox{Update
 Parameters:} \mbox{$\theta_k \leftarrow \mathrm{Opt}\,\big(\theta_{k-1},
-\nabla_\theta \mathcal{L}(\theta_{k-1})\big)$.}};
+\nabla_\theta \mathcal{J}_{\mathcal{B}_k^e}(\theta_{k-1})\big)$.}};
 
 
 
@@ -337,9 +334,9 @@ Parameters:} \mbox{$\theta_k \leftarrow \mathrm{Opt}\,\big(\theta_{k-1},
 
 % loop within epoch
 \draw[dotted, line width=1.0pt, -{Latex[length=3mm]}] (update.east) -- ++(.5,0)
-|- (batch.east);
+|- (forward.east);
 
-\node[anchor=west, align=left] at ($(update.east)+(.6,1.5)$) {\textbf{Repeat}
+\node[anchor=west, align=left] at ($(update.east)+(.6,1)$) {\textbf{Repeat}
     for all\\[-1pt] mini-batches};
 
     %  \\[-1pt] \textbf
@@ -363,7 +360,7 @@ Parameters:} \mbox{$\theta_k \leftarrow \mathrm{Opt}\,\big(\theta_{k-1},
 
 % ---------- Output ----------
 \node[output, below=10mm of nextepoch] (output) 
-    {\centering \resizebox{!}{9pt}{Trained network $L^*=L_\theta$}};
+    {\centering \resizebox{!}{9pt}{Trained network $f^*=f_\theta$}};
     
 \draw[-{Latex[length=3mm]}, line width=1.1pt] (nextepoch) -- (output);
 
@@ -375,7 +372,7 @@ Parameters:} \mbox{$\theta_k \leftarrow \mathrm{Opt}\,\big(\theta_{k-1},
 \end{figure}
 
 In the following two subsections, two commonly used optimization algorithms in
-\ac{dnn} training are shortly introduced: \acf{sgd} and \acf{adam}. As the main
+\ac{dnn} training are shortly introduced: \ac{sgd}, \ac{adam} and Lion. As the main
 focus of this thesis is the comparison of different sampling strategies and not
 the optimization algorithms, we do not go into detail on the mathematical
 properties of these algorithms. For a more detailed introduction to optimization
@@ -386,195 +383,153 @@ algorithms in \acp{dnn}, we refer to \cite[Chapter 8]{goodfellow2016deep}.
 The very generic \ac{sgd} algorithm is a first-order optimization method that updates the parameters $\theta$ of the \ac{dnn} by computing
 
  \begin{equation*}
-\theta_{t+1} = \theta_t - \eta \cdot \nabla_\theta \mathcal{E}_\mathrm{T}^{(B)}(\theta_t),
+\theta_{t+1} = \theta_t - \eta \cdot \nabla_\theta \mathcal{J}_{\mathcal{B}}(\theta_t),
  \end{equation*}
 
-where $\eta>0$ is the fixed learning rate and $\mathcal{E}_\mathrm{T}^{(B_t)}$
-is the loss evaluated on the mini-batch. There also exist varaiants of the
-\ac{sgd} optimization algorithm, which adaptively change the learning rate
-$\eta$ during the training process.
-
+where $\eta>0$ is the fixed learning rate and $\mathcal{J}_{\mathcal{B}}$ is the
+generalized loss function evaluated on the mini-batch. There also exist
+varaiants of the \ac{sgd} optimization algorithm, which adaptively change the
+learning rate $\eta$ during the training process.
 
 \subsection{Adam Optimizer}
 
-The \acf{adam} algorithm \cite{goodfellow2016deep}
-is one of the most widely used stochastic optimization methods for training deep
-neural networks. Its central idea is to combine the benefits of momentum with
-coordinate-wise adaptive learning rates.
+The \acf{adam} algorithm~\cite{goodfellow2016deep} is a variant of stochastic
+gradient descent (SGD) that is designed to work well \emph{out of the box}. It
+combines two ideas:
 
-At each iteration $t$, given the stochastic gradient
+\begin{enumerate}
+    \item \emph{momentum}, which smooths noisy gradients by averaging them over
+    time, 
+    \item \emph{coordinatewise adaptive step sizes}, which scale the update of
+    each parameter according to how large its recent gradients have been.
+\end{enumerate}
+
+\paragraph{Mini-batch gradient.}
+At iteration $t$ we draw a mini-batch $\mathcal{B}_t$ from the training set and compute the mini-batch loss
 \[
-g_t = \nabla_\theta \mathcal{E}_T(\theta_{t-1}),
+\mathcal{J}_{\mathcal{B}_t}(\theta_{t-1}),
 \]
-Adam maintains two exponential moving averages:
+with gradient
+\[
+g_t \;=\; \nabla_\theta \mathcal{J}_{\mathcal{B}_t}(\theta_{t-1}).
+\]
+
+\paragraph{Running averages (``moments'').}
+Adam maintains two exponential moving averages of the gradients:
 the first-order moment (mean) $m_t$ and the second-order moment (uncentered variance) $v_t$:
 \begin{align}
 m_t &= \beta_1 m_{t-1} + (1-\beta_1) g_t, \\
 v_t &= \beta_2 v_{t-1} + (1-\beta_2) g_t^2,
 \end{align}
-where $\beta_1,\beta_2 \in [0,1)$ are decay parameters. The choice $\beta_1 \approx 0.9$, $\beta_2 \approx 0.999$ is common in practice.
+where the square and all operations are elementwise and $\beta_1,\beta_2\in[0,1)$ are decay parameters (typical defaults $\beta_1=0.9$, $\beta_2=0.999$). Intuitively, $m_t$ smooths the direction of descent (momentum), while $v_t$ tracks how large recent gradients have been for each parameter.
 
-Since both $m_t$ and $v_t$ are initialized at zero, they are biased towards zero, especially in the early stages of training. To correct for this, Adam introduces bias-corrected estimates
+\paragraph{Bias correction.}
+Because $m_0=v_0=0$, early averages are biased toward zero. Adam corrects this via
 \begin{align}
 \hat{m}_t &= \frac{m_t}{1-\beta_1^t}, \\
-\hat{v}_t &= \frac{v_t}{1-\beta_2^t}.
+\hat{v}_t &= \frac{v_t}{1-\beta_2^t},
 \end{align}
-These corrections ensure that the moving averages are unbiased estimators of the true first and second moments of the gradients.
+which are unbiased estimates of the first and second moments under the exponential averaging model.
 
-Finally, the parameters are updated using the element-wise adaptive learning rate:
-\[
-\theta_t = \theta_{t-1} - \eta \, \frac{\hat{m}_t}{\sqrt{\hat{v}_t} + \epsilon},
-\]
-where $\eta$ is the global learning rate and $\epsilon$ is a small constant (e.g.\ $10^{-8}$) included for numerical stability.
+\paragraph{Adaptive update.}
+Parameters are then updated elementwise using
 
-\begin{remark} \ \\
-The numerator $\hat{m}_t$ acts like a momentum term, smoothing the stochastic
-gradient, while the denominator $\sqrt{\hat{v}_t}$ normalizes by the magnitude
-of recent gradients, effectively assigning each parameter its own adaptive step
-size. This combination allows Adam to perform well in high-dimensional and noisy
-optimization landscapes. However, convergence guarantees depend sensitively on
-the choice of hyperparameters $\beta_1$, $\beta_2$, $\eta$, and $\epsilon$.
+$$\theta_t \;=\; \theta_{t-1} - \eta
+\,\frac{\hat{m}_t}{\sqrt{\hat{v}_t}+\epsilon},$$ 
+
+where $\eta$ is a global
+learning rate and $\epsilon$ (e.g.\ $10^{-8}$) ensures numerical stability. The
+numerator behaves like momentum; the denominator normalizes by a
+root-mean-square of recent gradients, giving each parameter its own effective
+step size.
+
+\begin{remark}\ \\
+This combination makes Adam robust in high-dimensional, noisy settings and when gradients have very different scales across parameters. Performance and convergence depend on the hyperparameters $(\beta_1,\beta_2,\eta,\epsilon)$ and on standard training choices (batch size, schedule, etc.).
 \end{remark}
 
 \begin{algorithm}[H]
 \caption{Adam Optimizer}
 \begin{algorithmic}[1]
-\State Initialize $\theta_0$, $m_0 = 0$, $v_0 = 0$
+\State Initialize $\theta_0$, $m_0 \gets 0$, $v_0 \gets 0$; choose $\eta>0$, $\beta_1,\beta_2\in[0,1)$, $\epsilon>0$
 \For{$t = 1$ to $T$}
-    \State $g_t \gets \nabla_\theta \mathcal{E}_T(\theta_{t-1})$
-    \State $m_t \gets \beta_1 m_{t-1} + (1 - \beta_1) g_t$
-    \State $v_t \gets \beta_2 v_{t-1} + (1 - \beta_2) g_t^2$
-    \State $\hat{m}_t \gets m_t / (1 - \beta_1^t)$
-    \State $\hat{v}_t \gets v_t / (1 - \beta_2^t)$
-    \State $\theta_t \gets \theta_{t-1} - \eta \cdot \hat{m}_t / (\sqrt{\hat{v}_t} + \epsilon)$
+    \State Sample mini-batch $\mathcal{B}_t$ and set $g_t \gets \nabla_\theta \mathcal{L}(\theta_{t-1};\mathcal{B}_t)$
+    \State $m_t \gets \beta_1 m_{t-1} + (1 - \beta_1)\, g_t$
+    \State $v_t \gets \beta_2 v_{t-1} + (1 - \beta_2)\, g_t^2$
+    \State $\hat{m}_t \gets m_t / (1 - \beta_1^{t})$
+    \State $\hat{v}_t \gets v_t / (1 - \beta_2^{t})$
+    \State $\theta_t \gets \theta_{t-1} - \eta \,\hat{m}_t / \big(\sqrt{\hat{v}_t} + \epsilon\big)$
 \EndFor
 \end{algorithmic}
 \end{algorithm}
 
 
+\subsection{Lion Optimizer}
 
+The \emph{Lion} optimizer (\textbf{EvoLved Sign
+Momentum})~\cite{chen2023symbolic} is a recently discovered first-order
+optimization algorithm for training deep neural networks. Unlike adaptive
+methods such as Adam, which maintain both first- and second-moment estimates of
+gradients, Lion keeps track only of momentum and applies a \emph{sign-based}
+update. This leads to a very lightweight algorithm with strong empirical
+performance across large-scale vision, language and multimodal tasks.
 
+\paragraph{Key ideas.}
+Lion builds on two simple components:
+\begin{enumerate}
+    \item \emph{Momentum}, maintained as an exponential moving average of past gradients,
+    \item a \emph{sign update}, which discards the magnitude and uses only the
+    direction of the combined momentum and gradient.
+\end{enumerate}
+The sign operation ensures that every parameter update has the same step size in
+magnitude, making the algorithm robust to rescaling of gradients. At the same
+time, the momentum term provides stability by smoothing out noisy updates.
 
+\paragraph{Mini-batch gradient.}
+As in other stochastic optimizers, at iteration $t$ a mini-batch $\mathcal{B}_t$
+is sampled and the stochastic gradient is computed:
+\[
+g_t \;=\; \nabla_\theta \mathcal{J}_{\mathcal{B}_t}(\theta_{t-1}).
+\]
 
+\paragraph{Momentum update.}
+Lion maintains an exponential moving average of past gradients:
+\[
+m_t \;=\; \beta_1 m_{t-1} + (1 - \beta_1)\, g_t,
+\]
+where $\beta_1 \in [0,1)$ controls how quickly past gradients decay. A common
+choice is $\beta_1 = 0.9$.
 
+\paragraph{Parameter update.}
+The parameter step is determined by the sign of a linear combination of current
+momentum and gradient:
+\[
+\theta_t \;=\; \theta_{t-1} - \eta \cdot 
+\operatorname{sign}\!\big(\beta_2 m_t + (1-\beta_2) g_t\big),
+\]
+where $\eta$ is the learning rate and $\beta_2$ balances between the momentum
+term and the current gradient. The \texttt{sign} function is applied elementwise
+so that each parameter receives a step of equal magnitude $\eta$, with the
+direction determined by the gradient information.
 
+\begin{remark}\ \\
+Lion differs from Adam and similar adaptive methods by eliminating the
+second-moment accumulation $v_t$, reducing memory usage and computation. The use
+of the sign function makes updates invariant to gradient scale, while the
+combination of $m_t$ and $g_t$ ensures stability. Because the sign update yields
+larger effective step norms, Lion typically requires a smaller learning rate
+(often 3--10$\times$ smaller than AdamW) and a larger decoupled weight decay to
+achieve comparable regularization strength. Empirically, Lion has been shown to
+match or outperform AdamW on diverse large-scale benchmarks.
+\end{remark}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-% % Chapter Template
-
-% \chapter{Neural Network Training for Stochastic Functions} % Main chapter
-% title
-
-% \label{Chapter4} % Change X to a consecutive number; for referencing this
-% chapter elsewhere, use \ref{ChapterX}
-
-% %----------------------------------------------------------------------------------------
-% % SECTION 1
-% %----------------------------------------------------------------------------------------
-
-% \section{Modeling Randomness in Physical Simulations}
-
-% Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam ultricies
-% lacinia euismod. Nam tempus risus in dolor rhoncus in interdum enim tincidunt.
-% Donec vel nunc neque. In condimentum ullamcorper quam non consequat. Fusce
-% sagittis tempor feugiat. Fusce magna erat, molestie eu convallis ut, tempus
-% sed arcu. Quisque molestie, ante a tincidunt ullamcorper, sapien enim
-% dignissim lacus, in semper nibh erat lobortis purus. Integer dapibus ligula ac
-% risus convallis pellentesque.
-
-% %----------------------------------------------------------------------------------------
-% % SECTION 2
-% %----------------------------------------------------------------------------------------
-
-% \section{Sampling Stochastic Variables with QMC and MC}
-
-% Sed ullamcorper quam eu nisl interdum at interdum enim egestas. Aliquam
-% placerat justo sed lectus lobortis ut porta nisl porttitor. Vestibulum mi
-% dolor, lacinia molestie gravida at, tempus vitae ligula. Donec eget quam
-% sapien, in viverra eros. Donec pellentesque justo a massa fringilla non
-% vestibulum metus vestibulum. Vestibulum in orci quis felis tempor lacinia.
-% Vivamus ornare ultrices facilisis. Ut hendrerit volutpat vulputate. Morbi
-% condimentum venenatis augue, id porta ipsum vulputate in. Curabitur luctus
-% tempus justo. Vestibulum risus lectus, adipiscing nec condimentum quis,
-% condimentum nec nisl. Aliquam dictum sagittis velit sed iaculis. Morbi
-% tristique augue sit amet nulla pulvinar id facilisis ligula mollis. Nam elit
-% libero, tincidunt ut aliquam at, molestie in quam. Aenean rhoncus vehicula
-% hendrerit.
-
-% %----------------------------------------------------------------------------------------
-% % SECTION 3
-% %----------------------------------------------------------------------------------------
-
-% \section{Data Generation: Simulating Photon Scatter}
-
-% Sed ullamcorper quam eu nisl interdum at interdum enim egestas. Aliquam
-% placerat justo sed lectus lobortis ut porta nisl porttitor. Vestibulum mi
-% dolor, lacinia molestie gravida at, tempus vitae ligula. Donec eget quam
-% sapien, in viverra eros. Donec pellentesque justo a massa fringilla non
-% vestibulum metus vestibulum. Vestibulum in orci quis felis tempor lacinia.
-% Vivamus ornare ultrices facilisis. Ut hendrerit volutpat vulputate. Morbi
-% condimentum venenatis augue, id porta ipsum vulputate in. Curabitur luctus
-% tempus justo. Vestibulum risus lectus, adipiscing nec condimentum quis,
-% condimentum nec nisl. Aliquam dictum sagittis velit sed iaculis. Morbi
-% tristique augue sit amet nulla pulvinar id facilisis ligula mollis. Nam elit
-% libero, tincidunt ut aliquam at, molestie in quam. Aenean rhoncus vehicula
-% hendrerit.
-
-% %----------------------------------------------------------------------------------------
-% % SECTION 4
-% %----------------------------------------------------------------------------------------
-
-% \section{Learning Setup and Experimental Design}
-
-% Sed ullamcorper quam eu nisl interdum at interdum enim egestas. Aliquam
-% placerat justo sed lectus lobortis ut porta nisl porttitor. Vestibulum mi
-% dolor, lacinia molestie gravida at, tempus vitae ligula. Donec eget quam
-% sapien, in viverra eros. Donec pellentesque justo a massa fringilla non
-% vestibulum metus vestibulum. Vestibulum in orci quis felis tempor lacinia.
-% Vivamus ornare ultrices facilisis. Ut hendrerit volutpat vulputate. Morbi
-% condimentum venenatis augue, id porta ipsum vulputate in. Curabitur luctus
-% tempus justo. Vestibulum risus lectus, adipiscing nec condimentum quis,
-% condimentum nec nisl. Aliquam dictum sagittis velit sed iaculis. Morbi
-% tristique augue sit amet nulla pulvinar id facilisis ligula mollis. Nam elit
-% libero, tincidunt ut aliquam at, molestie in quam. Aenean rhoncus vehicula
-% hendrerit.
-
-% %----------------------------------------------------------------------------------------
-% % SECTION 5
-% %----------------------------------------------------------------------------------------
-
-% \section{Convergence and Performance Comparison}
-
-% Sed ullamcorper quam eu nisl interdum at interdum enim egestas. Aliquam
-% placerat justo sed lectus lobortis ut porta nisl porttitor. Vestibulum mi
-% dolor, lacinia molestie gravida at, tempus vitae ligula. Donec eget quam
-% sapien, in viverra eros. Donec pellentesque justo a massa fringilla non
-% vestibulum metus vestibulum. Vestibulum in orci quis felis tempor lacinia.
-% Vivamus ornare ultrices facilisis. Ut hendrerit volutpat vulputate. Morbi
-% condimentum venenatis augue, id porta ipsum vulputate in. Curabitur luctus
-% tempus justo. Vestibulum risus lectus, adipiscing nec condimentum quis,
-% condimentum nec nisl. Aliquam dictum sagittis velit sed iaculis. Morbi
-% tristique augue sit amet nulla pulvinar id facilisis ligula mollis. Nam elit
-% libero, tincidunt ut aliquam at, molestie in quam. Aenean rhoncus vehicula
-% hendrerit.
+\begin{algorithm}[H]
+\caption{Lion Optimizer}
+\begin{algorithmic}[1]
+\State Initialize $\theta_0$, $m_0 \gets 0$; choose $\eta>0$, $\beta_1,\beta_2\in[0,1)$
+\For{$t = 1$ to $T$}
+    \State Sample mini-batch $\mathcal{B}_t$ and set $g_t \gets \nabla_\theta \mathcal{L}(\theta_{t-1};\mathcal{B}_t)$
+    \State $m_t \gets \beta_1 m_{t-1} + (1 - \beta_1)\, g_t$
+    \State $\theta_t \gets \theta_{t-1} - \eta \cdot \operatorname{sign}\!\big(\beta_2 m_t + (1 - \beta_2) g_t\big)$
+\EndFor
+\end{algorithmic}
+\end{algorithm}
