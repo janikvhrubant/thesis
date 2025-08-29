@@ -26,13 +26,13 @@ performance.
 First, we define the more general \emph{extreme discrepancy}:
 
 \begin{definition}[Extreme Discrepancy] \ \\
-Let $\mathcal{P}\subset [0,1)^s$ with $|\mathcal{P}| = N$ be a finite point
-set. Then the extreme discrepancy $D_N(\mathcal{P})$ is defined as
+Let $\mathcal{P}\subset [0,1)^s$ with $|\mathcal{P}| = N$ be a finite point set.
+Then the extreme discrepancy $D_N(\mathcal{P})$ is defined as
 \begin{equation*}
     D_N(\mathcal{P}) = \sup\limits_{\substack{\boldsymbol{a,b} \in [0,1]^s \\ \boldsymbol{a} \leq \boldsymbol{b}}} \bigg| \frac{A([\boldsymbol{a},\boldsymbol{b}) , \mathcal{P})}{N} - \lambda_s([\boldsymbol{a},\boldsymbol{b})] \bigg|.
 \end{equation*}
-Hereby $A([\boldsymbol{a},\boldsymbol{b}), \mathcal{P})$ denotes the number
-of points in $\mathcal{P}$ that fall into the box
+Hereby $A([\boldsymbol{a},\boldsymbol{b}), \mathcal{P})$ denotes the number of
+points in $\mathcal{P}$ that fall into the box
 $[\boldsymbol{a},\boldsymbol{b})$, and
 $\lambda_s([\boldsymbol{a},\boldsymbol{b})]$ is the Lebesgue measure of that
 box, given by $\prod_{i=1}^{s} (b_i - a_i)$.
@@ -42,8 +42,8 @@ In practice, a common and slightly more tractable variant is the \emph{star
 discrepancy}, which restricts the test boxes to be anchored at the origin.
 
 \begin{definition}[Star Discrepancy] \ \\
-Let $\mathcal{P}\subset [0,1)^s$ with $|\mathcal{P}| = N$ be a finite point
-set. Then the star discrepancy $D_N^*$ is defined as
+Let $\mathcal{P}\subset [0,1)^s$ with $|\mathcal{P}| = N$ be a finite point set.
+Then the star discrepancy $D_N^*$ is defined as
 \begin{equation*}
     D_N^*(\mathcal{P}) = \sup\limits_{\boldsymbol{t} \in [0,1]^s} \bigg| \frac{A([\boldsymbol{0},\boldsymbol{t}), \mathcal{P}, N)}{N} - \lambda_s([\boldsymbol{0},\boldsymbol{t})] \bigg|.
 \end{equation*}
@@ -136,7 +136,8 @@ low-discrepancy sequences, which are designed to fill the unit cube $[0,1)^s$ as
 uniformly as possible.
 
 \begin{definition}[Low-Discrepancy Sequence] \ \\
-A sequence $\mathcal{S} = (x_n)_{n\in \mathbb{N}}$ in $[0,1)^s$ is called a low-discrepancy sequence if its star discrepancy satisfies
+A sequence $\mathcal{S} = (x_n)_{n\in \mathbb{N}}$ in $[0,1)^s$ is called a
+low-discrepancy sequence if its star discrepancy satisfies
 \begin{equation}
 \label{def:low-discrepancy-sequence}
     D_N^*(\mathcal{S}) = \mathcal{O}\left( \frac{(\log N)^s}{N} \right)
@@ -145,7 +146,8 @@ for all $N \in \mathbb{N}$. Such sequences are also referred to as
 \emph{Quasi-Monte Carlo sequences} or \ac{qmc} sequences.
 \end{definition}
 
-Throughout this thesis, the terms low-discrepancy sequence and \ac{qmc} sequence are used interchangeably, as is common in literature.
+Throughout this thesis, the terms low-discrepancy sequence and \ac{qmc} sequence
+are used interchangeably, as is common in literature.
 
 Low discrepancy sequences are constructed to minimize the star discrepancy,
 which is crucial for the convergence of \ac{qmc} methods according to the
@@ -157,8 +159,8 @@ the \ac{mc} estimator from \ref{def:mc-estimator} and define its equivalent
 
 \begin{definition}[Quasi-Monte Carlo Estimator] \ \\
 Let $f \colon [0,1]^s \to \mathbb{R}$ be a measurable function and let
-$\{\boldsymbol{x}_n\}_{n=1}^{N} \subset [0,1]^s$ be a \ac{qmc} point set.
-Then the \emph{Quasi-Monte Carlo estimator} for the integral
+$\{\boldsymbol{x}_n\}_{n=1}^{N} \subset [0,1]^s$ be a \ac{qmc} point set. Then
+the \emph{Quasi-Monte Carlo estimator} for the integral
 \begin{equation*}
     I(f) = \int_{[0,1]^s} f(\boldsymbol{x}) \, d\boldsymbol{x}
 \end{equation*}
@@ -189,7 +191,10 @@ The Halton sequence is one of the earliest and most widely used constructions of
 low-discrepancy sequences in arbitrary dimensions. 
 
 The construction of the Halton sequence is based on the one-dimensional
-\emph{Van der Corput sequence}, introduced by Johannes van der Corput in 1935. Therefore, we utilize the radical-inverse function $\phi_b(n)$, which maps an integer $n$ to a real number in $[0,1)$ by reflecting its base-$b$ representation about the decimal point. This function is defined as follows:
+\emph{Van der Corput sequence}, introduced by Johannes van der Corput in 1935.
+Therefore, we utilize the radical-inverse function $\phi_b(n)$, which maps an
+integer $n$ to a real number in $[0,1)$ by reflecting its base-$b$
+representation about the decimal point. This function is defined as follows:
 
 \begin{equation*}
     \phi_b(n) = \sum_{k=0}^\infty d_k b^{-k-1}, \quad \text{ where } n = \sum_
@@ -204,8 +209,8 @@ The one-dimensional Van der Corput sequence in base $b$ is defined as
 \end{equation*}
 \end{definition}
 
-John Halton generalized this idea to higher dimensions by combining
-multiple Van der Corput sequences in different bases in 1960 \cite{halton1960efficiency}.
+John Halton generalized this idea to higher dimensions by combining multiple Van
+der Corput sequences in different bases in 1960 \cite{halton1960efficiency}.
 
 \begin{definition}[Halton Sequence] \ \\
 \label{def:halton}
@@ -216,19 +221,26 @@ chosen as the first $s$ prime numbers. The $n$-th point $\boldsymbol{x}_n \in
     \boldsymbol{x}_n = \left( \phi_{b_1}(n), \dots, \phi_{b_s}(n) \right),
 \end{equation*}
 where $\phi_b(n)$ denotes the Van der Corput radical-inverse function in base
-$b$. The Halton sequence is then given by $\mathcal{S}_{b_1, \dots, b_s} = (x_n)_{n\in \mathbb{N}}$.
+$b$. The Halton sequence is then given by $\mathcal{S}_{b_1, \dots, b_s} =
+(x_n)_{n\in \mathbb{N}}$.
 \end{definition}
 
 \begin{example}[First Elements of the Halton Sequence in 2D] \ \\
-Consider the two-dimensional Halton sequence based on the first two prime bases $b_1 = 2$ and $b_2 = 3$. The first three elements are obtained by computing the radical-inverse values $\phi_{b_1}(n)$ and $\phi_{b_2}(n)$ for $n = 1, 2, 3$:
+Consider the two-dimensional Halton sequence based on the first two prime bases
+$b_1 = 2$ and $b_2 = 3$. The first three elements are obtained by computing the
+radical-inverse values $\phi_{b_1}(n)$ and $\phi_{b_2}(n)$ for $n = 1, 2, 3$:
 
 \begin{itemize}
-    \item $n = 1$: $\boldsymbol{x}_1 = \left( \phi_2(1), \phi_3(1) \right) = \left( \tfrac{1}{2}, \tfrac{1}{3} \right)$
-    \item $n = 2$: $\boldsymbol{x}_2 = \left( \phi_2(2), \phi_3(2) \right) = \left( \tfrac{1}{4}, \tfrac{2}{3} \right)$
-    \item $n = 3$: $\boldsymbol{x}_3 = \left( \phi_2(3), \phi_3(3) \right) = \left( \tfrac{3}{4}, \tfrac{1}{9} \right)$
+    \item $n = 1$: $\boldsymbol{x}_1 = \left( \phi_2(1), \phi_3(1) \right) =
+    \left( \tfrac{1}{2}, \tfrac{1}{3} \right)$
+    \item $n = 2$: $\boldsymbol{x}_2 = \left( \phi_2(2), \phi_3(2) \right) =
+    \left( \tfrac{1}{4}, \tfrac{2}{3} \right)$
+    \item $n = 3$: $\boldsymbol{x}_3 = \left( \phi_2(3), \phi_3(3) \right) =
+    \left( \tfrac{3}{4}, \tfrac{1}{9} \right)$
 \end{itemize}
 
-This illustrates how the Halton sequence fills the unit square in a low-discrepancy manner even for small $n$.
+This illustrates how the Halton sequence fills the unit square in a
+low-discrepancy manner even for small $n$.
 \end{example}
 
 Intuitively, this construction ensures that each component of the sequence
@@ -265,17 +277,23 @@ Constructed to fill the $s$-dimensional unit cube $[0,1)^s$ as uniformly as
 possible, Sobol' sequences are based on a recursive structure that allows for
 efficient generation and high-dimensional performance.
 
-Therefore functions from the \emph{ring of polynomials} $\mathbb{F}_2[x] = \{ a_0 + a_1 x + a_2 x^2 + \dots + a_n x^n \mid n \in \mathbb{N},\; a_i \in \mathbb{F}_2 \}$ with coefficients in the finite field $\mathbb{F}_2$ are necessary.
+Therefore functions from the \emph{ring of polynomials} $\mathbb{F}_2[x] = \{
+a_0 + a_1 x + a_2 x^2 + \dots + a_n x^n \mid n \in \mathbb{N},\; a_i \in
+\mathbb{F}_2 \}$ with coefficients in the finite field $\mathbb{F}_2$ are
+necessary.
 
 \begin{definition}[Sobol' Sequence Construction] \ \\
 \label{def:sobol}
-Let $p_1, \dots, p_s \in \mathbb{F}_2[x]$ be primitive polynomials ordered by non-decreasing degree. Each polynomial $p_j$ for dimension $j$ is of the form
+Let $p_1, \dots, p_s \in \mathbb{F}_2[x]$ be primitive polynomials ordered by
+non-decreasing degree. Each polynomial $p_j$ for dimension $j$ is of the form
 \begin{equation*}
     p_j(x) = x^{e_j} + a_{1,j}x^{e_j - 1} + \dots + a_{e_j - 1,j}x + 1,
 \end{equation*}
 where $e_j \in \mathbb{N}$ and the coefficients $a_{k,j} \in \{0,1\}$.
 
-Choose initial values $m_{1,j}, \dots, m_{e_j,j}$ such that each $m_{k,j}$ is an odd integer and $1 \leq m_{k,j} < 2^k$ for $1 \leq k \leq e_j$. For $k > e_j$, the values $m_{k,j}$ are computed recursively as:
+Choose initial values $m_{1,j}, \dots, m_{e_j,j}$ such that each $m_{k,j}$ is an
+odd integer and $1 \leq m_{k,j} < 2^k$ for $1 \leq k \leq e_j$. For $k > e_j$,
+the values $m_{k,j}$ are computed recursively as:
 \begin{align*}
     m_{k,j} =& 2 a_{1,j} \cdot m_{k-1,j} \oplus 2^2 a_{2,j} \cdot m_{k-2,j} \oplus \dots \\
     &\oplus 2^{e_j-1} a_{e_j-1,j} \cdot m_{k-(e_j-1),j} \oplus 2^{e_j} m_{k-e_j,j} \oplus m_{k-e_j,j},
@@ -325,7 +343,8 @@ Thus the first direction numbers are
     v_{1,1}=\tfrac12,\qquad v_{1,2}=\tfrac12,\qquad v_{2,1}=\tfrac34,\qquad v_{2,2}=\tfrac14.
 \end{equation*}
 
-With $n=n_0+2n_1+\cdots$ and $x_{n,j}=n_0 v_{1,j}\oplus n_1 v_{2,j}\oplus\cdots$, the first three points are
+With $n=n_0+2n_1+\cdots$ and $x_{n,j}=n_0 v_{1,j}\oplus n_1
+v_{2,j}\oplus\cdots$, the first three points are
 
 \begin{align*}
 n=0:\ & (n_0,n_1)=(0,0)\ \Rightarrow\ \boldsymbol{x}_0=(0,0).\\

@@ -109,7 +109,7 @@ By independence,
 \begin{equation*}
 \mathrm{Var}\!\left(I_N^{\mathrm{MC}}(f)\right) = \frac{\mathrm{Var}[f]}{N}.
 \end{equation*}
-With $X = I_N^{\mathrm{MC}}(f)-I(f)$, Jensen's inequality for the concave 
+With $X = I_N^{\mathrm{MC}}(f)-I(f)$, Jensen's inequality for the concave
 $\phi(t)=\sqrt{t}$ gives
 \begin{equation*}
 \mathbb{E}[|X|] = \mathbb{E}[\phi(X^2)]
@@ -119,11 +119,14 @@ $\phi(t)=\sqrt{t}$ gives
 This yields the stated $O(N^{-1/2})$ bound.
 \end{proof}
 
-Despite its robustness and simplicity, MC integration has several well-known limitations:
+Despite its robustness and simplicity, MC integration has several well-known
+limitations:
 \begin{itemize}
-    \item The convergence rate is relatively slow, especially for smooth integrands.
+    \item The convergence rate is relatively slow, especially for smooth
+    integrands.
     \item Error bounds are probabilistic rather than deterministic.
-    \item The method does not exploit structural properties of the integrand, such as smoothness or sparsity.
+    \item The method does not exploit structural properties of the integrand,
+    such as smoothness or sparsity.
 \end{itemize}
 
 These limitations arise due to the imperfect uniformity of random sample points
@@ -193,8 +196,9 @@ elements from a \ac{qmc} sequence. The latter sequence is u.d. mod 1.
 \begin{figure}[H]
   \centering
   \includegraphics[width=0.8\textwidth]{Figures/mc_vs_qmc.png}
-  \caption{Comparison of $300$ randomly drawn sample points in $[0,1]^2$ using standard
-  \ac{mc} (left) and the first $300$ elements of the Sobol' sequence in $2$ dimension.}
+  \caption{Comparison of $300$ randomly drawn sample points in $[0,1]^2$ using
+  standard \ac{mc} (left) and the first $300$ elements of the Sobol' sequence in
+  $2$ dimension.}
   \label{fig:mc-vs-qmc}
 \end{figure}
 
@@ -202,7 +206,8 @@ elements from a \ac{qmc} sequence. The latter sequence is u.d. mod 1.
     Uniform distribution modulo one is a necessary condition for the convergence
     of \ac{qmc} estimators. If a point sequence is not u.d.\ mod 1, then there
     exists at least one Riemann-integrable function for which the sample average
-    $$\frac{1}{N}\sum\limits_{n=1}^N f(x_n)$$ fails to converge to the integral. \cite[Section 2.1]{leobacher2014introduction}
+    $$\frac{1}{N}\sum\limits_{n=1}^N f(x_n)$$ fails to converge to the integral.
+    \cite[Section 2.1]{leobacher2014introduction}
 \end{remark}
 
 The following result, known as Weyl's criterion, provides a necessary and
