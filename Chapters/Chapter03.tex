@@ -69,7 +69,7 @@ on the concept of \emph{ladders}:
 
 \begin{definition}[Ladder] \ \\
     A \emph{ladder} on the hyperrectangle $[\boldsymbol{a},\boldsymbol{b}]$ is of the form $\mathcal{Y} =
-    \prod\limits_{j=1}^s \mathcal{Y}^j$, where each $\mathcal{Y}^j$ is a finite
+    \varprod\limits_{j=1}^s \mathcal{Y}^j$, where $\varprod$ denotes the Cartesian product of sets. Each $\mathcal{Y}^j$ is a finite
     subset of $[a_j, b_j]$ for $j = 1, \dots, s$ where $\mathcal{Y}^j = \{y_1^j,
     \dots, y_k^j\}$ is ordered such that $a_j = y_1^j < y_2^j < \dots < y_k^j$.
     The ladder could consist of a different number of points in each dimension.
@@ -85,6 +85,58 @@ on the concept of \emph{ladders}:
 
 $\mathbb{Y}$ denotes the set of all such ladders on
 $[\boldsymbol{a},\boldsymbol{b}]$.
+
+\begin{example}
+    Consider the two-dimensional hyperrectangle $[\boldsymbol{a},\boldsymbol{b}] = [0,1]^2$ and the ladder $\mathcal{Y} = \{0, 0.5\} \times \{0, 0.25\}$. The ladder points are
+    \begin{equation*}
+        \mathcal{Y} = \{(0,0), (0,0.25), (0.5,0), (0.5,0.25)\}.
+    \end{equation*}
+    The successors of these points are
+    \begin{equation*}
+    \begin{alignedat}{7}
+    &(& 0   &,& 0    &)&_+ &= &(& 0.5 &,& 0.25 &)&, \\
+    &(& 0   &,& 0.25 &)&_+ &= &(& 0.5 &,& 1    &)&, \\
+    &(& 0.5 &,& 0    &)&_+ &= &(& 1   &,& 0.25 &)&, \\
+    &(& 0.5 &,& 0.25 &)&_+ &= &(& 1   &,& 1    &)&.
+    \end{alignedat}
+    \end{equation*}
+
+
+
+    The visualization can be found in Figure~\ref{fig:ladder_example}.
+
+
+    \begin{figure}
+    \centering
+    \begin{tikzpicture}
+        % Draw the square
+        \draw[thick] (0,0) rectangle (4,4);
+        
+        % Draw the ladder lines
+        \draw[dashed, thick] (2,0) -- (2,4); % Vertical line at x=0.5
+        \draw[dashed, thick] (0,1) -- (4,1); % Horizontal line at y=0.25
+        
+        % Draw the ladder points
+        \filldraw[blue] (0,0) circle (3pt);
+        \filldraw[blue] (0,1) circle (3pt);
+        \filldraw[blue] (2,0) circle (3pt);
+        \filldraw[blue] (2,1) circle (3pt);
+        
+        % Draw the successors
+        \filldraw[blue] (2,1) circle (3pt);
+        \filldraw[black] (4,1) circle (3pt);
+        \filldraw[black] (4,4) circle (3pt);
+        \filldraw[black] (2,4) circle (3pt);
+
+        \draw[-{Stealth[length=8pt,width=6pt]},shorten >=2pt,blue,dashed] (0,0) -- (2,1);
+        \draw[-{Stealth[length=8pt,width=6pt]},shorten >=2pt,blue,dashed] (0,1) -- (2,4);
+        \draw[-{Stealth[length=8pt,width=6pt]},shorten >=2pt,blue,dashed] (2,0) -- (4,1);
+        \draw[-{Stealth[length=8pt,width=6pt]},shorten >=2pt,blue,dashed] (2,1) -- (4,4);
+    \end{tikzpicture}
+    \caption{Visualization of the ladder $\mathcal{Y} = \{0, 0.5\} \times \{0, 0.25\}$ on the unit square $[0,1]^2$ and its successors.}
+    \label{fig:ladder_example}
+    \end{figure}
+\end{example}
 
 \begin{remark} \ \\
     For a ladder $\mathcal{Y}$ on the hypercube
@@ -137,31 +189,24 @@ variations over all lower-dimensional axis-aligned faces of the unit hypercube.
 It is defined as:
 
 \begin{definition}[Hardy--Krause Variation] \ \\
-    \label{def:variation_hardy_krause}
-    The \emph{Hardy--Krause variation} of a function $f$ on the hyperrectangle
-    $[\boldsymbol{a},\boldsymbol{b}]$ is defined as
-    \begin{equation}
-        \label{eq:hardy-krause-variation}
-        V_{\mathrm{HK}}(f) = \sum_{u\subset \{1,\dots,s\}} V_{[\boldsymbol{a}^{-u},\boldsymbol{b}^{-u}]}\big(f(x^{-u};\boldsymbol{b}^u)\big).
-    \end{equation}
-    This definition coincides with the Vitali variation but is typically used
-    when $[\boldsymbol{a},\boldsymbol{b}] = [0,1]^s$.
+The \emph{Hardy--Krause variation} of a function $f$ on the hyperrectangle
+$[\boldsymbol{a},\boldsymbol{b}]$ is defined as
+\begin{equation}
+    \label{eq:hardy-krause-variation}
+    V_{\mathrm{HK}}(f) = \sum_{u\subset \{1,\dots,s\}} V_{[\boldsymbol{a}^{-u},\boldsymbol{b}^{-u}]}\big(f(x^{-u};\boldsymbol{b}^u)\big).
+\end{equation}
+\label{def:variation_hardy_krause}
 \end{definition}
 
 Note that the Hardy--Krause variation reduces to the total variation in the
 univariate case. Importantly, $V_{\mathrm{HK}}(f) < \infty$ implies that $f$ has
 bounded variation in all axis-aligned directions and projections.
 
-\begin{remark} \ \\
-The Hardy--Krause variation is a seminorm, vanishing for constant functions. It
-becomes a norm if the full-dimensional term is included explicitly.
-\end{remark}
-
 \begin{example} \ \\
 Let $f(x) = \prod_{i=1}^d x_i$, the $d$-dimensional monomial. Then $f$ is smooth
 with bounded mixed derivatives and its Hardy--Krause variation is finite. This
 can easily be verified using equation \eqref{eq:variation_hardy_krause_bound}
-which will be introduced in the Chapter~\ref{chapter6}.
+which will be introduced in Chapter~\ref{chapter6}.
 \end{example}
 
 \begin{example} \ \\

@@ -88,9 +88,9 @@ regions.
 
 \begin{example} \ \\
 Let $x_n = \frac{n}{N}$ for $n = 0, \dots, N-1$. Then $F_N(t)$ is a piecewise
-constant staircase function and the discrepancy can be shown to be
-$\mathcal{O}(1/N)$. This is an optimal rate in 1D
-\cite[Section~2.3]{leobacher2014introduction}.
+constant staircase function. With Theorem 2.4 from
+\cite{zahrnhofer2007einfuhrung}, one gets that the discrepancy is $\frac{1}{N}$.
+This is an optimal rate in 1D.
 \label{ex:grid-discrepancy}
 \end{example}
 
@@ -136,6 +136,14 @@ low-discrepancy sequences, which are designed to fill the unit cube $[0,1)^s$ as
 uniformly as possible.
 
 \begin{definition}[Low-Discrepancy Sequence] \ \\
+A point set $\mathcal{P} = \{\boldsymbol{x}_0, \dots, \boldsymbol{x}_{N-1}\} \subset
+[0,1)^s$ with $|\mathcal{P}| = N$ is called a low-discrepancy point set if its star
+discrepancy satisfies
+\begin{equation}
+\label{def:low-discrepancy-point-set}
+    D_N^*(\mathcal{P}) = \mathcal{O}\left( \frac{(\log N)^s}{N} \right)\,.
+\end{equation}
+
 A sequence $\mathcal{S} = (x_n)_{n\in \mathbb{N}}$ in $[0,1)^s$ is called a
 low-discrepancy sequence if its star discrepancy satisfies
 \begin{equation}
@@ -146,12 +154,24 @@ for all $N \in \mathbb{N}$. Such sequences are also referred to as
 \emph{Quasi-Monte Carlo sequences} or \ac{qmc} sequences.
 \end{definition}
 
-Throughout this thesis, the terms low-discrepancy sequence and \ac{qmc} sequence
-are used interchangeably, as is common in literature.
-
-Low discrepancy sequences are constructed to minimize the star discrepancy,
-which is crucial for the convergence of \ac{qmc} methods according to the
-Koksma-Hlawka inequality introduced in Chapter~\ref{chapter3}.
+\begin{remark} \ \\
+Low-discrepancy sequences are constructed to minimize the star discrepancy. For
+dimension $s=1$ and $s=2$, it is known that
+\eqref{def:low-discrepancy-point-set} is an optimal bound. K. F. Roth proved in
+1954 that for everz dimension $s \in \mathbb{N}$ there exists a constant $c_s >
+0$ such that for every point set $\mathcal{P} \subset [0,1)^s$ with
+$|\mathcal{P}| = N$ the lower bound 
+\begin{equation*}
+    D_N(\mathcal{P}) \geq D_N^*(\mathcal{P}) \geq c_s \frac{(\log N)^{\frac{s-1}{2}}}{N}
+\end{equation*}
+holds \cite[Theorem 2.24]{leobacher2014introduction}. It is still an open
+problem whether the bound also holds with exponent $s-1$ instead of
+$\frac{s-1}{2}$ for $s \geq 3$. Nevertheless, since this is conjectured to be
+true, it has become common in literature to refer to sequences satisfying
+\eqref{def:low-discrepancy-sequence} as low-discrepancy sequences. The bound on
+the discrepancy is crucial for the convergence of \ac{qmc} methods according to
+the Koksma-Hlawka inequality introduced in Chapter~\ref{chapter3}.
+\end{remark}
 
 With the definition of a low-discrepancy sequence in place, we now get back to
 the \ac{mc} estimator from \ref{def:mc-estimator} and define its equivalent
@@ -256,8 +276,11 @@ has star discrepancy of order
 \end{equation*}
 making it a prototypical example of a low-discrepancy sequence. However, for
 larger dimensions, correlation effects between the different base components can
-lead to degraded uniformity and higher discrepancy. Variants such as scrambling
-or leaping are commonly employed to mitigate this issue.
+lead to degraded uniformity and higher discrepancy. To mitigate this, variants
+are used in practice: leaping (taking only every $k$-th element of the sequence)
+and scrambling (applying randomized permutations to the digits in the
+radical-inverse function). Both reduce correlation effects and improve
+uniformity in higher dimensions.
 
 \begin{remark} \ \\
 The Halton sequence is extensible in $N$ and $s$, making it suitable for
@@ -277,10 +300,17 @@ Constructed to fill the $s$-dimensional unit cube $[0,1)^s$ as uniformly as
 possible, Sobol' sequences are based on a recursive structure that allows for
 efficient generation and high-dimensional performance.
 
-Therefore functions from the \emph{ring of polynomials} $\mathbb{F}_2[x] = \{
-a_0 + a_1 x + a_2 x^2 + \dots + a_n x^n \mid n \in \mathbb{N},\; a_i \in
-\mathbb{F}_2 \}$ with coefficients in the finite field $\mathbb{F}_2$ are
-necessary.
+Therefore functions from the \emph{ring of polynomials} 
+\begin{equation*}
+    \mathbb{F}_2[x] = \{
+    a_0 + a_1 x + a_2 x^2 + \dots + a_n x^n \mid n \in \mathbb{N},\; a_i \in
+    \mathbb{F}_2 \}
+\end{equation*}
+with coefficients in the finite field $\mathbb{F}_2$ are necessary.
+$\mathbb{F}_2=\{0,1\}$ denotes the finite field with two elements, equipped with
+addition and multiplication modulo $2$. A primitive polynomial of degree $m$ in
+$\mathbb{F}_2[x]$ is an irreducible polynomial whose roots generate all non-zero
+elements of the field extension $\mathbb{F}_{2^m}$.
 
 \begin{definition}[Sobol' Sequence Construction] \ \\
 \label{def:sobol}
@@ -371,7 +401,7 @@ The practical performance of low-discrepancy sequences is strongly influenced by
 the dimension $s$ of the integration domain. Although both Halton and Sobol'
 sequences achieve the asymptotic star discrepancy bound of order
 $\mathcal{O}((\log N)^s / N)$, their behavior in higher dimensions differs
-significantly in practice.
+significantly in practice due to the hidden constants.
 
 \paragraph{Halton Sequence.}
 While the Halton sequence performs well in low-dimensional settings, its
@@ -379,7 +409,9 @@ structure leads to correlation artifacts in higher dimensions due to the use of
 increasing prime bases. These artifacts manifest as clustering or gaps in
 certain coordinate directions, which can degrade uniformity. As a result, the
 empirical discrepancy of the Halton sequence often grows faster than the
-theoretical bound suggests in moderate to high dimensions.
+theoretical bound suggests in moderate to high dimensions, as the hidden
+constant $C$ depends on the dimension $s$\cite[Section
+2.4]{leobacher2014introduction}.
 
 \paragraph{Sobol' Sequence.}
 In contrast, the Sobol' sequence is explicitly constructed for high-dimensional
@@ -408,8 +440,8 @@ demonstrating lower star discrepancy than the Halton sequence.}
 \begin{remark} \ \\
 In the experiments of Part~\ref{part2} and Part~\ref{part3}, the Sobol' and
 Halton sequences are not implemented manually. Instead, the implementation
-available in the Python package \texttt{SciPy} (version~1.16.0) through the
-module \texttt{scipy.stats.qmc} \cite{virtanen2020scipy, scipy-qmc} were used.
-The sobol and halton sequences from this package though follow
+available in the Python package \emph{SciPy} (version~1.16.0) through the module
+\texttt{scipy.stats.qmc} \cite{virtanen2020scipy, scipy-qmc} were used. The
+Sobol' and Halton sequences from this package though follow
 Definition~\ref{def:sobol} and Definition~\ref{def:halton}. 
 \end{remark}
