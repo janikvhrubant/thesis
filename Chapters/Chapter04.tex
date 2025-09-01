@@ -75,21 +75,24 @@ A promising alternative to random sampling is to use \acf{qmc} sampling.
 Low-discrepancy sequences, as the introduced Sobol' or Halton sequence, provide
 a way to sample the domain $[0,1]^s$ more uniformly than random sampling. In
 \acl{qmc} theory, the Koksma-Hlawka inequality (Theorem~\ref{thm:koksma-hlawka})
-gives an error bound of the form
+applied to the difference $f-\hat{f}$ gives an error bound of the form
 \begin{equation*}
-|\mathcal{E}_G - \mathcal{E}_T| \leq V_{\mathrm{HK}}(|f - \hat{f}|) \cdot D^*_N \leq  V_{\mathrm{HK}}(|f - \hat{f}|) \cdot C \cdot \frac{(\log N)^s}{N}.
+|\mathcal{E}_G - \mathcal{E}_T| \leq V_{\mathrm{HK}}(|f - \hat{f}|) \cdot D^*_N \leq  V_{\mathrm{HK}}(|f - \hat{f}|) \cdot C_s \cdot \frac{(\log N)^s}{N}.
 \end{equation*}
-However, it is not immediately clear, whether this inequality can be applied to
-the generalization gap $|\mathcal{E}_G - \mathcal{E}_T|$ in the context of
-training \acp{dnn}. This is because the Koksma-Hlawka inequality requires the
-integrand to have bounded variation in the sense of Hardy--Krause to ensure a
-finite bound.
+The left part of the inequality will be formally derived in
+Theorem~\ref{thm:generalization_gap}. The right part follows from the known
+discrepancy for low-discrepancy sequences. It is not immediately clear, whether
+the Koksma--Hlawka inequality can be applied to the generalization gap
+$|\mathcal{E}_G - \mathcal{E}_T|$ in the context of training \acp{dnn}. This is
+because the Koksma-Hlawka inequality requires the integrand to have bounded
+variation in the sense of Hardy--Krause to ensure a finite bound.
 
-In the following chapters, we will show that under mild assumptions on the
-function $f$, the surrogate $\hat{f}$ obtained by training a \ac{dnn} has
-bounded variation in the sense of Hardy--Krause. This allows us to apply the
-Koksma-Hlawka inequality and prooves that applying low-discrepancy sequences for
-generating training data can significantly reduce the generalization gap.
+In the following chapters, it will be shown that under mild assumptions on the
+surrogate model $\hat{f}$ and that the ground truth function $f$ has bounded
+variation in the sense of Hardy--Krause, the Koksma--Hlawka inequality is
+applicable to the generalization gap. In particular, it will be demonstrated
+that using low-discrepancy sequences for generating training data can
+significantly reduce the generalization gap.
 
 Since the direct application of the Koksma--Hlawka inequality, in particular the
 determination of the Hardy--Krause variation, is not practical for general

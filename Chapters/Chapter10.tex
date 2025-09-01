@@ -2,9 +2,9 @@
 \chapter{The Simulation Algorithm}
 \label{chapter10}
 
-This chapter presents the algorithm used for X-ray image simulation. It
-incorporates elements of \emph{Forced Detection} as introduced in \cite{fd2001},
-in order to accelerate convergence.
+In this chapter, the algorithms developed for X-ray image simulation are
+presented. To enhance convergence, they integrate aspects of the \emph{Forced
+Detection} approach introduced in \cite{fd2001}.
 
 Unlike standard Monte Carlo simulations, where a random variable determines
 whether a photon escapes the phantom or undergoes another scattering event, the
@@ -15,7 +15,7 @@ scattering. Instead of probabilistically terminating the photon trajectory, the
 algorithm tracks it through a predefined number of scattering events $N$. At
 each interaction, the remaining intensity is updated to reflect both the
 probability of Compton scattering and the conditional escape probability. This
-ensures that both potential outcomes—escape or continued scattering—are
+ensures that both potential outcomes --- escape or continued scattering --- are
 implicitly accounted for in the evolving photon intensity. As a result, the
 simulation maintains physical accuracy while achieving a significant reduction
 in variance.
@@ -26,7 +26,16 @@ and escape probability. Conversely, the distance to the next interaction is
 sampled based on the probability of not escaping the phantom. Further
 implementation details are discussed in Section~\ref{sec:algorithmOverview}.
 
-This variance reduction strategy enables the simulation to converge more rapidly
+This approach serves as a variance reduction technique by avoiding the
+all-or-nothing outcomes of conventional photon attenuation sampling, where a
+photon either escapes and contributes fully to the detector or scatters and may
+never be detected. Such binary contributions yield high statistical
+fluctuations. In forced detection, each interaction deterministically splits the
+photon weight into an escape fraction --- proportional to the exponential
+attenuation along the path to the detector --- and a residual fraction that
+continues via scattering, with free paths sampled from the attenuation law. Thus
+every photon history contributes to the detector tally, preserving unbiasedness
+while reducing variance. This enables the simulation to converge more rapidly
 toward high-resolution images with suppressed noise and well-preserved
 structural detail.
 
@@ -85,10 +94,10 @@ it reaches the first material which is not air. This is done with a ray
 traversal algorithm. Once the phantom at a point $A_0$ is reached, the photon
 transport is simulated by the physical laws described in Chapter~\ref{chapter6}.
 
-Hereby, as in all other scatter points within the phantom, the free \emph{free
+Here, as in all other scatter points within the phantom, the free \emph{free
 path length} $t_i$ is sampled from the exponential distribution based on
 \emph{Beer-Lambert's law} (Eq.~\ref{eq:lambert_beer_law}) and the \emph{total
-attenuation coefficient} $\mu(A_i, E_i)$ accordingly. $A_i$ hereby denotes the
+attenuation coefficient} $\mu(A_i, E_i)$ accordingly. $A_i$ consequently denotes the
 current position and $E_i$ the current energy. First, the \emph{escape
 probability} depending on the current position $A_i$ and the unit direction
 $\vec{\omega}_i$ and the energy $E_i$ is computed. The escape probability in
@@ -100,9 +109,9 @@ the phantom at the current position $A_i$ without being further scattered.
     p(A_i, \omega_i, E_i) = \exp\bigg(-\int\limits_{\overrightarrow{A_iC_i}} \mu(x, E_i) dx\bigg)
 \end{equation}
 
-Hereby $C_i$ denotes the exit point of the phantom in the direction of the photon $\vec{\omega}_i$. The escape probability is used to determine the intensity of the photon without the $(i+1)$-th scatter event.
+$C_i$ consequently denotes the exit point of the phantom in the direction of the photon $\vec{\omega}_i$. The escape probability is used to determine the intensity of the photon without the $(i+1)$-th scatter event.
 
-Using one random variable $u_{3i+1}$, the free path length is sampled. Hereby both cases are being considered:
+Using one random variable $u_{3i+1}$, the free path length is sampled. Here, both cases are being considered:
 
 \begin{enumerate}
     \item \textbf{Photon escapes the phantom without further scattering:}\\
@@ -479,7 +488,7 @@ through the voxel grid in detail.
 \subsection{Forced Detection}
 
 The forced detection algorithm is responsible to apply one iteration of the
-forced detection process to a photon within the phantom. Hereby the algorithm
+forced detection process to a photon within the phantom. Consequently, the algorithm
 accounts:
 
 \begin{itemize}
@@ -668,7 +677,12 @@ Coordinates $C^{\text{gridCoords}}$. The algorithm is implemented as follows:
 
 \subsection{Compton Scattering}
 
-The Compton scattering algorithm is responsible for simulating the physical process for the event of Compton scattering. Based on the Klein-Nishina formula (Equation~\ref{eq:kleinNishina}) and the rejection sampling method from Section~\ref{sec:physicsComptonScattering}, the algorithm samples the scatter angle and computes the new photon energy and direction after the scattering event.
+The Compton scattering algorithm is responsible for simulating the physical
+process for the event of Compton scattering. Based on the Klein-Nishina formula
+(Equation~\ref{eq:kleinNishina}) and the rejection sampling method from
+Section~\ref{sec:physicsComptonScattering}, the algorithm samples the scatter
+angle and computes the new photon energy and direction after the scattering
+event.
 
 The algorithm initializes with the following parameters:
 
@@ -697,15 +711,13 @@ procedure:
                 f(k,x) &= \frac{1+x^2+\frac{k^2(1-x)^2}{1+k(1-x)}}{(1+k(1-x))^2} \\
                 h(k,x) &= \frac{a}{b-x} \\
             \end{align*}
-            \item \textbf{If} $u_1 \leq \frac{f(k,x)}{h(k,x)}$ \textbf{then}: $\theta = \arccos(x)$
+            \item \textbf{If} $u_1 \leq \frac{f(k,x)}{h(k,x)}$ \textbf{then}:
+            $\theta = \arccos(x)$
         \end{enumerate}
-    \item Calculate photon energy with Equation~\ref{eq:compton_energy} and direction using the azimuthal angle $\phi$ from Equation~\ref{eq:azimuthal_angle}.
+    \item Calculate photon energy with Equation~\ref{eq:compton_energy} and
+    direction using the azimuthal angle $\phi$ from
+    Equation~\ref{eq:azimuthal_angle}.
 \end{enumerate}
-
-Given the scatter angle $\theta$, the new photon energy $E_{i+1}$ is computed as in \cite{nelsoncompton}:
-\begin{equation}
-    E_{i+1} = \frac{E_i}{1 + k (1 - \cos \theta)}.
-\end{equation}
 
 With the random variable $u_2$ an azimuthal angle $\phi$ is sampled to determine the new direction.
 \begin{equation}
@@ -799,7 +811,7 @@ The algorithm is initialized with the following parameters:
     sample the photon energies, directions and free path lengths.
 \end{itemize}
 
-Hereby, the photon generation algorithm is called to generate the photon energies and directions.
+Thus, the photon generation algorithm is called to generate the photon energies and directions.
 
 Then the photon is initialized with the an initial energy $E_0$, an initial
 direction $\vec{\omega}_0$ and an initial intensity $W_0=1$ by applying

@@ -487,7 +487,7 @@ Now, the \ac{cdf} $F:\mathbb{R}\to[0,1]$ can be computed as
 It is clear that $F(e_i)$ is monotonically increasing with $F(-\infty) = 0$ and
 $F(\infty) = 1$. The generalized inverse is defined as follows:
 
-\begin{definition}[Generalized Inverse]
+\begin{definition}[Generalized Inverse] \ \\
     Let $f: \mathbb{R} \to \mathbb{R}$ be a monotonically increasing function. The \emph{generalized inverse} $f^{-1}: \mathbb{R} \to \mathbb{R}$ is defined as
     \begin{equation*}
         f^{-1}(y) = \inf\{x \in \mathbb{R} : f(x) \geq y\}\,.
@@ -549,33 +549,171 @@ because $U \sim \mathcal{U}(0,1)$ and thus  $\mathbb{P}[U \leq u] = u$ for all $
 \end{remark}
 
 
-\subsection{Photon position and direction}
-The direction of each emitted photon is sampled uniformly within a conical
-emission cone defined by the half-angle $\Theta$. For the simulation a spherical alignment of the X-ray tube is assumed, such that the beam is oriented along the vector $\vec{v} = (v_1,v_2,v_3)$ in the Cartesian coordinate system.
+\subsection{Photon Position and Direction}
 
-Followingly, the direction of the emitted photon is sampled based on two random
-values $u_1, u_2 \in [0,1)$ as follows:
+In addition to the photon energy at emission, its initial position and direction
+must be specified. Within the simulation framework, two different source models
+are considered:
+
 \begin{enumerate}
-    \item Sample a random angle $\theta$ uniformly from the interval $[0,
-    \Theta]$ with $u_1$:
-    $$\theta = u_1 \cdot \Theta$$
-    \item Sample a random azimuthal angle $\phi$ uniformly from the interval
-    $[0, 2\pi)$ with $u_2$:
-    $$\phi = u_2 \cdot 2\pi$$
-    \item Compute the direction vector $\vec{d}$ of the photon as:
-    $$\vec{d} = (\sin(\theta) \cos(\phi), \sin(\theta) \sin(\phi),
-    \cos(\theta))$$
+    \item \textbf{Point Source:} Photons are emitted from a single point in
+    space, typically representing the focal spot of the X-ray tube. The emission
+    direction is sampled uniformly within a conical emission region defined by
+    the half-opening angle $\Theta$.
+    \item \textbf{Extended Source:} Photons are emitted from a finite
+    rectangular area on a plane, with each photon initially traveling
+    perpendicular to this plane.
 \end{enumerate}
+
+\paragraph{Point Source} \ \\
+This model reflects the global imaging geometry of an X-ray tube with a
+pointlike focal spot and divergent beam. In line with common practice (e.g.\
+Geant4's angular settings~\cite{geant4}), photon directions are sampled
+uniformly on a spherical cap, i.e.\ uniformly in the solid angle.
+
+All photons are emitted from a fixed source position
+$\vec{p}=(p_1,p_2,p_3)\in\mathbb{R}^3$. To describe the corresponding
+probability measure, recall that the unit sphere $S^2$ in spherical coordinates
+is parameterized by
+\[
+x=\sin\theta\cos\phi,\quad y=\sin\theta\sin\phi,\quad z=\cos\theta,
+\]
+with $\theta\in[0,\pi]$ and $\phi\in[0,2\pi)$. The induced surface element on
+$S^2$ is given by
+\[
+d\Omega = \sin\theta\,d\theta\,d\phi,
+\]
+see for instance \cite[Theorem~5-6]{spivak2018calculus}. A uniform distribution
+on the spherical surface thus corresponds to a constant density with respect to
+this measure. Restricting the support to the spherical cap
+$\{\theta \in [0,\Theta]\}$ gives the normalized density
+\[
+f(\theta,\phi) = \frac{1}{2\pi\,(1-\cos\Theta)} \quad \text{for } 
+\theta\in[0,\Theta],\ \phi\in[0,2\pi).
+\]
+
+For sampling, one draws $u_1,u_2\sim\mathcal{U}(0,1)$ and sets
+\begin{equation*}
+    \phi = 2\pi u_2,\qquad
+    \cos\theta = 1 - u_1\,(1-\cos\Theta),\qquad
+    \theta = \arccos \bigl(1-u_1(1-\cos\Theta)\bigr),
+\end{equation*}
+followed by
+\begin{equation*}
+    \vec{d}=\bigl(\sin\theta\cos\phi,\; \sin\theta\sin\phi,\; \cos\theta\bigr).
+\end{equation*}
+
+This procedure yields a conical beam with half-opening angle $\Theta$ whose
+directions are uniformly distributed over the spherical cap surface. Photon
+energies are sampled independently from the spectrum as described above.
+Figure~\ref{fig:cone_sampling} illustrates the resulting geometry.
+
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[scale=.8, >=Latex, line cap=round, line join=round, every node/.style={font=\small}]
+\pgfmathsetmacro{\R}{2.8}
+\pgfmathsetmacro{\ang}{40}
+
+\pgfmathsetmacro{\ycap}{\R*cos(\ang)}
+\pgfmathsetmacro{\acap}{\R*sin(\ang)}
+\pgfmathsetmacro{\hcap}{\R-\ycap}
+
+\coordinate (O)  at (0,0);
+\coordinate (N)  at (0,\R);
+\coordinate (RO) at (\ycap,\acap);
+\coordinate (RU) at (\ycap,-\acap);
+
+% \draw[thick] (O) circle (\R);
+
+\shade[ball color=white!99.9!gray, opacity=0.3] (O) circle (\R); % very light
+\fill[blue!40, opacity=0.35]
+    (RO) arc[start angle=90, end angle=-90, x radius=.05*\R, y radius=\acap]
+    arc[start angle=-\ang, end angle=\ang, radius=\R] -- cycle;
+\fill[blue!40, opacity=0.35]
+    (\ycap,0) ellipse [x radius=0.18, y radius=\acap];
+
+\draw[dashed, blue] (O) -- (RO);
+\draw[dashed, blue] (O) -- (RU);
+\draw[dashed, black] (O) -- (\R,0);
+
+\pgfmathsetmacro{\ppp}{cos(\ang)}
+\pgfmathsetmacro{\qqq}{sin(\ang)}
+\draw[thin] (1,0) arc[start angle=0, end angle=\ang, radius=1] -- (\ppp,\qqq);
+\draw[thin] (1,0) arc[start angle=0, end angle=-\ang, radius=1] -- (\ppp,-\qqq);
+
+
+\pgfmathsetmacro{\rrr}{\R*cos(\ang)}
+\pgfmathsetmacro{\sss}{\R*sin(\ang)}
+\draw[thin, color=green!60!black] (\R,0) arc[start angle=0, end angle=-20, radius=\R] -- (O);
+\fill[green!60!black, opacity=0.2] (\R,0) arc[start angle=0, end angle=-20, radius=\R] -- (O) -- cycle;
+\node[left=1pt] at ($ (\R,0)!0.2!(\rrr,-\sss) $) {$\theta$};
+\pgfmathsetmacro{\ttt}{\R*cos(20)}
+\pgfmathsetmacro{\uuu}{\R*sin(20)}
+\draw[thin, color=green!60!black] (0,0) -- (\ttt,-\uuu);
+\fill[green!60!black] (\ttt,-\uuu) circle (2pt);
+
+\pgfmathsetmacro{\vvv}{\acap}
+\draw (RO) arc[start angle=90, end angle=270, x radius=.18, y radius=\vvv];
+\draw[dashed] (RO) 
+    arc[start angle=90, end angle=270, x radius=-.18, y radius=\vvv];
+
+\fill (O) circle (2pt);
+\node[left=0.5pt] at ($ (1,0)!0.4!(\ppp,-\qqq) $) {$\Theta$};
+\node[left=0.5pt] at ($ (1,0)!0.4!(\ppp,\qqq) $) {$\Theta$};
+\end{tikzpicture}
+\caption{Sampling of photon directions uniformly within a cone defined by the half-opening angle $\Theta$.}
+\label{fig:cone_sampling}
+\end{figure}
+
+In Geant4's \texttt{General Particle Source}, this corresponds to
+\emph{isotropic} angular sampling restricted to a cone via min/max $\theta$ and
+$\phi$ (e.g.\ \texttt{/gps/ang/type iso}, \texttt{/gps/ang/mintheta 0},
+\texttt{/gps/ang/maxtheta $\Theta$}, \texttt{/gps/ang/minphi 0},
+\texttt{/gps/ang/maxphi 360 deg}).
+
+
+\paragraph{Extended Source} \ \\
+In contrast, the finite planar source serves primarily as an analytical model.
+It describes a local view of the photon--phantom interaction and is employed to
+study the influence of source extension on scattering and attenuation effects.
+
+The initial position of each photon is sampled uniformly on the rectangular
+surface of the source. For a rectangular source with vertices
+$P_1,P_2,P_3,P_4 \in \mathbb{R}^3$, the position of each photon is determined
+by two random variables $u_1,u_2 \sim \mathcal{U}(0,1)$ via bilinear
+interpolation:
+\begin{equation*}
+    \vec{p} = (1-u_1)(1-u_2) P_1 + u_1(1-u_2) P_2 + u_1 u_2 P_3 +
+    (1-u_1)u_2 P_4 \, .
+\end{equation*}
+This yields a uniform distribution of starting points over the rectangular
+surface. The emission direction of each photon is then set to the unit normal
+vector of the source plane, which is aligned with the detector plane, thus
+representing a parallel beam geometry.
+
+Such a rectangular planar source model is also supported in Geant4's
+\texttt{General Particle Source}, where planar shapes (square or rectangle) can
+be chosen for the position distribution and combined with a \emph{planar}
+angular type to enforce emission perpendicular to the plane (see
+\texttt{/gps/pos/type Plane}, \texttt{/gps/pos/shape Rectangle},
+\texttt{/gps/ang/type planar}). This configuration is commonly employed in
+benchmark simulations to model collimated or extended X-ray beams.
+
 
 
 % ------------------------------------------------------------------------------
 \section{Scattering and Attenuation}
 %-------------------------------------------------------------------------------
 
-This section provides the basic concepts of photon interaction with matter. The
-interaction relevant for medical imaging results in a reduction of radiation
-intensity, which corresponds to a decreased number of photons reaching the
-detector. Hereby X-ray photons may be fully absorbed by \emph{photoelectric absorption} or undergo either \emph{elastic scattering} (Rayleigh) or \emph{inelastic scattering} (Compton) as they interact with matter.
+Following their emission from the X-ray source, photons traverse space until
+they encounter matter, where various interaction processes may occur. The
+subsequent section outlines the fundamental mechanisms of photon interactions
+with matter. The interaction relevant for medical imaging results in a reduction
+of radiation intensity, which corresponds to a decreased number of photons
+reaching the detector. Here, X-ray photons may be fully absorbed by
+\emph{photoelectric absorption} or undergo either \emph{elastic scattering}
+(Rayleigh) or \emph{inelastic scattering} (Compton) as they interact with
+matter.
 
 The attenuation of X-ray photons arises from physical processes that alter their
 number, direction, or energy as they interact with matter. These interactions
@@ -590,7 +728,7 @@ effect on the photon transport.
 
 \begin{figure}
     \centering
-    \begin{minipage}[t]{0.45\textwidth}
+    \begin{minipage}[t]{0.4\textwidth}
         \raggedright
         \begin{tikzpicture}[scale=.8]
             \draw[decorate, decoration=snake, {Latex[scale=1.5]}-, shorten <=-10] (2.5,2.3) -- (-2.5,2.3) node[left] {\small$\gamma$};
@@ -719,11 +857,11 @@ effect on the photon transport.
 All mentioned interaction processes - the photoelectric effect, Compton
 scattering and Rayleigh scattering - are probabilistic in nature. The according
 attenuation coefficients $\mu$ characterizes the extend of the beam being
-reduced by its according effect, when passing through the material, in \si{\square\centi\metre\per\gram}. For the
-simulation of photons, the attenuation coefficients are dependend on the
-according energy $E$ of the photon and the material at spherical location $x$ of
-the photon. The coefficients are summarized in
-Table~\ref{tab:attenuation_coefficients}.
+reduced by its according effect, when passing through the material, in
+\si{\square\centi\metre\per\gram}. For the simulation of photons, the
+attenuation coefficients are dependend on the according energy $E$ of the photon
+and the material at spherical location $x$ of the photon. The coefficients are
+summarized in Table~\ref{tab:attenuation_coefficients}.
 
 \begin{table}[H]
     \centering
@@ -753,11 +891,13 @@ When an X-ray photon eneters the phantom two main effects are considered:
     without any interaction.
 \end{itemize}
 
-The \emph{free path length} $t$ of a photon describes the distance a photon takes to traverse through the phantom before it interacts with matter. Supposing the phantoms location is $x$ and the photon is traveling in the unit direction $\vec{v}$, as in \cite{qmcXray2023} the free path length $t$ follows the distribution given by:
+The \emph{free path length} $t$ of a photon describes the distance a photon
+takes to traverse through the phantom before it interacts with matter. Supposing
+the phantoms location is $x$ and the photon is traveling in the unit direction
+$\vec{v}$, as in \cite{qmcXray2023} the free path length $t$ follows the
+distribution given by:
 
-$$t \sim \mu(x,E)\exp\bigg[-\int_{0}^{t}{\mu(x+s\cdot\vec{v})}\bigg]$$
-
-\textcolor{red}{Check: nach dem paper müsste $\mu$ abhängig vom Endpunkt sein.}
+$$t \sim \mu(x,E)\exp\bigg[-\int_{0}^{t}{\mu(x+s\cdot\vec{v})\,ds}\bigg]$$
 
 The free path length $t$ is constraint by the maximum distance $c$ ($0\leq t\leq
 c$) to the next exit point of the phantom along the ray with direction
@@ -806,20 +946,32 @@ produces a positive ion, the "recoil electron" and a scattered photon. If the de
 
 For the distribution of the scattering angle $\theta$ of the scattered photons
 in the differential cross section, we apply the formula derived by \emph{Klein
-and Nishina} in 1928. This equation describes the distribution of the scattering
-angle of X-ray photons in Compton scattering assuming the electron is initially
-free and stationary, the relation between energy loss and photon deflection is
-determined from conservation of momentum and energy between the photon and the
-recoiling electron \cite{hubbell1969photon,klein1928scattering}.
+and Nishina} in 1928. This equation describes the angular distribution of X-ray
+photons in Compton scattering, assuming the electron is initially free and
+stationary. The relation between energy loss and photon deflection is determined
+from conservation of momentum and energy between the photon and the recoiling
+electron \cite{hubbell1969photon,klein1928scattering}.
 
 \begin{equation}
     \label{eq:kleinNishina}
-    \frac{d\sigma}{d\Omega} = \frac{1}{2} r_e^2 \frac{1}{(1 + k(1 - \cos \theta))^2} \left( 1 + \cos^2 \theta + \frac{k^2 (1 - \cos \theta)^2}{1+ k(1 - \cos \theta)} \right)
+    \frac{d\sigma}{d\Omega} (\theta, E)= \frac{1}{2} r_e^2 
+    \frac{1}{(1 + k(1 - \cos \theta))^2} \left( 1 + \cos^2 \theta + 
+    \frac{k^2 (1 - \cos \theta)^2}{1+ k(1 - \cos \theta)} \right),
 \end{equation}
 
-where $k=\frac{e}{mc^2} \approx \frac{E}{0.511}$ with $mc^2$ being the rest mass
-energy of the electron, $E$ being the energy of the incident photon and $r_e$
-being the classical electron radius.
+where $k = \tfrac{E}{mc^2} \approx \tfrac{E}{0.511}$ with $mc^2$ denoting the
+rest mass energy of the electron, $E$ the energy of the incident photon and
+$r_e$ the classical electron radius. Here, $\sigma$ denotes the scattering cross
+section, which quantifies the effective area for scattering, and $\Omega$
+denotes the solid angle element, $d\Omega = \sin \theta \, d\theta \, d\phi$,
+describing the angular extent in three-dimensional space. The expression
+$\tfrac{d\sigma}{d\Omega}$ is thus the \emph{differential cross section}, which
+represents the probability density of photons being scattered into a particular
+direction. By integrating over all scattering directions one obtains the total
+cross section $\sigma$, while normalizing $\tfrac{d\sigma}{d\Omega}$ yields the
+probability distribution of the scattering angle $\theta$. This distribution is
+anisotropic: for low photon energies it is nearly isotropic, whereas for higher
+energies it becomes increasingly forward peaked.
 
 For sampling from the distribution of the scattering angle we cannot apply the
 same procedure as for the photon energy in Section~\ref{sec:photon_energy},

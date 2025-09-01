@@ -1,0 +1,88 @@
+\documentclass[a4paper,11pt]{article}
+
+% --------------------------------------------------------------------
+% Encoding and language
+% --------------------------------------------------------------------
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[english]{babel}
+
+% --------------------------------------------------------------------
+% Page layout
+% --------------------------------------------------------------------
+\usepackage[a4paper,margin=2.5cm]{geometry}
+\usepackage{setspace}
+\onehalfspacing   % or \singlespacing / \doublespacing
+
+% --------------------------------------------------------------------
+% Mathematics
+% --------------------------------------------------------------------
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+
+% Theorem-like environments
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}[theorem]{Example}
+
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+% --------------------------------------------------------------------
+% Useful extras
+% --------------------------------------------------------------------
+\usepackage{hyperref}      % clickable refs
+\usepackage{cleveref}      % smart references
+\usepackage{enumitem}      % custom lists
+\usepackage{graphicx}      % figures
+\usepackage{xcolor}        % colors
+
+% --------------------------------------------------------------------
+% Title
+% --------------------------------------------------------------------
+\title{My Mathematics Document}
+\author{Your Name}
+\date{\today}
+
+% --------------------------------------------------------------------
+% Document
+% --------------------------------------------------------------------
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+This is a short abstract of the document. 
+\end{abstract}
+
+\section{Introduction}
+
+Here is some text and inline math $a^2 + b^2 = c^2$.  
+Here is a displayed equation:
+\begin{equation}
+    \int_{0}^{1} x^2 \, dx = \frac{1}{3}.
+\end{equation}
+
+\section{Definitions and Theorems}
+
+\begin{definition}[Metric Space]
+A \emph{metric space} is a pair $(X,d)$ where $X$ is a set and 
+$d : X \times X \to \mathbb{R}$ is a function satisfying the axioms of a metric.
+\end{definition}
+
+\begin{theorem}[Pythagoras]
+In a right triangle with legs $a,b$ and hypotenuse $c$, we have
+\[
+    a^2 + b^2 = c^2.
+\]
+\end{theorem}
+
+\begin{proof}
+This is a sketch of the proof.
+\end{proof}
+
+\end{document}

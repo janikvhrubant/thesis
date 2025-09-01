@@ -193,7 +193,7 @@ The \emph{Hardy--Krause variation} of a function $f$ on the hyperrectangle
 $[\boldsymbol{a},\boldsymbol{b}]$ is defined as
 \begin{equation}
     \label{eq:hardy-krause-variation}
-    V_{\mathrm{HK}}(f) = \sum_{u\subset \{1,\dots,s\}} V_{[\boldsymbol{a}^{-u},\boldsymbol{b}^{-u}]}\big(f(x^{-u};\boldsymbol{b}^u)\big).
+    V_{\mathrm{HK}}(f) = \sum_{\substack{u\subseteq \{1,\dots,s\}} \\{u\neq\varnothing}} V_{[\boldsymbol{a}^{u},\boldsymbol{b}^{u}]}\big(f(x^{u};\boldsymbol{b}^{-u})\big).
 \end{equation}
 \label{def:variation_hardy_krause}
 \end{definition}
@@ -203,14 +203,23 @@ univariate case. Importantly, $V_{\mathrm{HK}}(f) < \infty$ implies that $f$ has
 bounded variation in all axis-aligned directions and projections.
 
 \begin{example} \ \\
-Let $f(x) = \prod_{i=1}^d x_i$, the $d$-dimensional monomial. Then $f$ is smooth
-with bounded mixed derivatives and its Hardy--Krause variation is finite. This
-can easily be verified using equation \eqref{eq:variation_hardy_krause_bound}
-which will be introduced in Chapter~\ref{chapter6}.
+Let $f(x) = \prod\limits_{i=1}^s x_i$, the $s$-dimensional monomial on the
+hypercube $[0,1]^s$. Then it is clear that $f\in C^s$. According to Equation~\eqref{eq:variation_hardy_krause_bound} and
+Remark~\ref{rem:variation-approximation} the calculation follows as:
+
+\begin{align*}
+    V_{\mathrm{HK}}(f) &= \widehat{V}_{\mathrm{HK}}(f) \\
+    &= \sum\limits_{\substack{u \subseteq \{1,\dots,s\} \\ {u \neq \varnothing}}} \ \int\limits_{[0,1]^{|u|}} \bigg| \frac{\partial^{|u|}}{\partial x^u} f(x^u; 1^{-u}) \bigg| \, dx^u \\
+    &= \sum\limits_{\substack{u \subseteq \{1,\dots,s\} \\ {u \neq \varnothing}}} \ \int\limits_{[0,1]^{|u|}} 1 \, dx^u \\
+    &= \sum\limits_{\substack{u \subseteq \{1,\dots,s\} \\ {u \neq \varnothing}}}  \ 1 \\
+    &= 2^s - 1 \,.
+\end{align*}
+
+The notations will also be introduced in Chapter~\ref{chapter6}.
 \end{example}
 
 \begin{example} \ \\
-Consider $f_{d,r}(x) = \left( \max\left\{ \sum_{i=1}^d x_i - \frac{1}{2}, 0
+Consider $f_{d,r}(x) = \left( \max\left\{ \sum\limits_{i=1}^d x_i - \frac{1}{2}, 0
 \right\} \right)^r$. For $d > r + 2$, this function has infinite Vitali and
 hence infinite Hardy--Krause variation. Such examples underline the limitations
 of \ac{qmc} for functions with low smoothness or sharp nonlinearity \cite[Prop.

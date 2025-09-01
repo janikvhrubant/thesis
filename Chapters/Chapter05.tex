@@ -61,10 +61,10 @@ we employ in the experimental evaluations presented in Chapter~\ref{chapter7}.
   \label{fig:activation_functions}
 \end{figure}
 
-With an activation function in place, we now define the class of \acf{dnn}
-functions that a fully connected feedforward neural network can represent.
+With an activation function in place, we now define the term \acl{dnn}
+by introducing the representing function that a fully connected feedforward neural network is expressing\cite{mishra2021enhancing}.
 
-\begin{definition}[Class of Deep Neural Network Functions] \ \\
+\begin{definition}[Fully Connected Deep Neural Network] \ \\
 Let $L \in \mathbb{N}$ and $\mathbf{d} = (d_0, d_1, \dots, d_L)$ be a sequence
 of positive integers, where $d_0 = s$ is the input dimension and $d_L = 1$ the
 output dimension. A \acf{dnn} of \emph{depth} $L$ and \emph{layer widths} $d_1,
@@ -95,14 +95,19 @@ $\mathcal{F}_{\mathbf{d}, \sigma}$.
 \vspace{0.5em}
 \noindent The architectural parameters are interpreted as follows:
 \begin{itemize}
-    \item The \emph{depth} $L$ is the number of affine layers.
+    \item The \emph{depth} $L$ is the number of affine transformations.
+    \item The number of \emph{hidden layers} is $L-1$.
     \item The \emph{width} $d_l$ specifies the number of neurons in layer $l$.
     \item The \emph{layer structure} is encoded in the tuple $\mathbf{d}$.
+    \item The \emph{activation function} $\sigma$ usually introduces nonlinearity.
 \end{itemize}
 \end{definition}
 
-In Figure~\ref{fig:dnn-architecture}, a fully connected \ac{dnn}
-with constant width is illustrated.
+As common in literature, the \emph{number of layers} is referenced by the number
+of affine transformations $L$ and coincides with the term \emph{depth}. The
+input layer is not counted as a layer in this context. In
+Figure~\ref{fig:dnn-architecture}, a fully connected \ac{dnn} with constant
+width is illustrated.
 
 \begin{figure}[H]
 \centering
@@ -152,21 +157,27 @@ at (7.5,.5) {Output Layer\\ };
 \foreach \i in {1,2,3,4} \draw[-stealth] (H3\i) -- (O1);
 
 \end{tikzpicture}
-\caption{Schematic of a fully connected \aclp{dnn} with constant width $m=4$ and
-depth $L=3$ layers.}
+\caption{Schematic of a fully connected \acl{dnn} with constant width $m=4$ and
+depth $L=4$ layers. Each circular node represents an artificial neuron. The arrows represent the connections between neurons in adjacent layers.}
 \label{fig:dnn-architecture}
 \end{figure}
 
 
 \begin{remark} \ \\
-    For common \ac{dnn} architectures with a constant number $m$ of neurons in
-    each layer $d=(d_0,...,d_L)$, with $d_0=s$ input paramters and $d_L=1$
-    output parameters, the total number of trainable parameters (weights and
-    biases) of $\theta$ in the network is given by
+    For common \ac{dnn} architectures with $L$ layers, a constant number of
+    neurons $m$ in each layer, input dimension $d_0=s$ and output dimension
+    $d_L=1$ the layer structure follows:
     \begin{equation*}
-        N_\theta = \sum_{l=1}^{L} (d_{l-1} \cdot d_l + d_l) = (L-2) \cdot m^2 + (L+s) \cdot m + 1.
+        d=(d_0,d_1,...,d_{L-1},d_L) = (s,m,\dots,m,1)
     \end{equation*}
-    
+    Thus, for each affine transformation $l\in\{1,...,L\}$, one counts $d_{l-1}
+    \cdot d_l$ weights and $d_l$ biases. Hence, the total number of trainable
+    parameters (weights and biases) $\theta$ in the network is given by
+    \begin{align*}
+        N_\theta &= \sum_{l=1}^{L} (d_{l-1} \cdot d_l + d_l) \\
+        &= (s \cdot m + m) + \sum_{l=2}^{L-1} (m \cdot m + m) + (m \cdot 1 + 1) \\
+        &= (L-2) \cdot m^2 + (L+s) \cdot m + 1.
+    \end{align*}
 \end{remark}
 
 % ------------------------------------------------------------------------------
@@ -177,10 +188,10 @@ depth $L=3$ layers.}
 The training of a \ac{dnn} involves supervised learning, where the goal is to
 minimize the difference between the surrogate model $\hat{f}$ and the ground
 truth function $f$. Supervised training of a \ac{dnn} therefore requires
-minimizing the discrepancy between the network output $\hat{f}_\theta(y)$ and a
+minimizing the difference between the network output $\hat{f}_\theta(y)$ and a
 ground truth function $f(y)$ on a given training set $\{y_i\}_{i=1}^N$.
 
-We start by defining the loss function which is used to measure this discrepancy
+We start by defining the loss function which is used to measure this difference
 during the training:
 
 \begin{definition}[Loss Function] \ \\
@@ -195,7 +206,7 @@ $\mathcal{P}$, the \emph{loss function} is defined as
 for some $1\leq p < \infty$.
 \end{definition}
 
-The point set $\mathcal{P}$ in the loss function is usually given by the training set. By defining the discrepancy on the training data, the \emph{training error} $\mathcal{E}_T$ is defined:
+The point set $\mathcal{P}$ in the loss function is usually given by the training set. By defining the loss on the training data, the \emph{training error} $\mathcal{E}_T$ is defined:
 
 \begin{definition}[Training Error] \ \\
 Let $f:[0,1]^s \to \mathbb{R}$ be a ground truth function defined on the
@@ -210,7 +221,7 @@ f(y_i))\}_{i=1}^N$ with $y_i \in [0,1]^s$ of the surrogate model, the
 \end{definition}
 
 The \emph{generalization error} $\mathcal{E}_\mathrm{G}$ is evaluating the
-discrepancy between the surrogate model $\hat{f}_\theta$ and the ground truth
+difference between the surrogate model $\hat{f}_\theta$ and the ground truth
 function $f$ on the entire domain $[0,1]^s$.
 
 \begin{definition}[Generalization Error] \ \\
@@ -249,14 +260,25 @@ error} is defined as:
 % ------------------------------------------------------------------------------
 In practice, an initial surrogate \ac{dnn} $\hat{f}_\theta$ is generated with
 initial parameters $\theta$. In supervised learning, the goal is to minimize the
-regularized loss function with respect to the parameters $\theta$ by adapting
-the weights of the network during the training process. Thus, one aims to find a
-solution to the following minimization problem
+\emph{regularized loss function} with respect to the parameters $\theta$ by
+adapting the weights of the network during the training process. Regularization
+is introduced to counteract \emph{overfitting}, i.e. the tendency of a highly
+flexible network to reproduce noise of the training data instead of the
+underlying function. The regularization term penalizes certain properties of the
+parameters, thereby enforcing additional structure on the solution. For
+instance, an $L^2$ penalty discourages large weight magnitudes and effectively
+promotes smoother functions.
 
+Thus, one aims to find a solution to the following minimization problem:
 \begin{equation*}
-    \theta^* = \arg\min_{\theta} \mathcal{J}_\mathcal{P}(\theta), \quad \text{with } \mathcal{J}(\theta) = \mathcal{L}_\mathcal{P}(\theta) + \lambda \cdot R(\theta),
+    \theta^* = \arg\min_{\theta} \mathcal{J}_\mathcal{P}(\theta),
+    \quad \text{with } 
+    \mathcal{J}(\theta) = \mathcal{L}_\mathcal{P}(\theta) + \lambda \cdot R(\theta),
 \end{equation*}
-where $\mathcal{P}$ is the training set, $\lambda > 0$ is a regularization parameter and $R(\theta)$ a regularization term (e.g. an $L^2$ weight penalty).
+where $\mathcal{P}$ is the training set, $\mathcal{L}_\mathcal{P}$ is the
+empirical loss (e.g. mean squared error), $R(\theta)$ is a regularization
+functional and $\lambda > 0$ is the regularization parameter balancing fidelity
+to the training data and the strength of the imposed constraint.
 
 The training is carried out on a given \emph{training dataset} consisting of
 $N$ input--output pairs ${(x_n, f(x_n))}_{n=1}^N$, where $N$ is called the
@@ -372,11 +394,11 @@ Parameters:} \mbox{$\theta_k \leftarrow \mathrm{Opt}\,\big(\theta_{k-1},
 \end{figure}
 
 In the following two subsections, two commonly used optimization algorithms in
-\ac{dnn} training are shortly introduced: \ac{sgd}, \ac{adam} and Lion. As the main
-focus of this thesis is the comparison of different sampling strategies and not
-the optimization algorithms, we do not go into detail on the mathematical
-properties of these algorithms. For a more detailed introduction to optimization
-algorithms in \acp{dnn}, we refer to \cite[Chapter 8]{goodfellow2016deep}.
+\ac{dnn} training are shortly introduced: \ac{adam} and Lion. As the main focus
+of this thesis is the comparison of different sampling strategies and not the
+optimization algorithms, we do not go into detail on the mathematical properties
+of these algorithms. For a more detailed introduction to optimization algorithms
+in \acp{dnn}, see \cite[Chapter 8]{goodfellow2016deep}.
 
 \subsection{Stochastic Gradient Descent (SGD)}
 
@@ -406,13 +428,16 @@ combines two ideas:
 
 \paragraph{Mini-batch gradient.}
 At iteration $t$ we draw a mini-batch $\mathcal{B}_t$ from the training set and compute the mini-batch loss
-\[
-\mathcal{J}_{\mathcal{B}_t}(\theta_{t-1}),
-\]
+
+\begin{equation*}
+    \mathcal{J}_{\mathcal{B}_t}(\theta_{t-1}),
+\end{equation*}
+
 with gradient
-\[
-g_t \;=\; \nabla_\theta \mathcal{J}_{\mathcal{B}_t}(\theta_{t-1}).
-\]
+
+\begin{equation*}
+    g_t \;=\; \nabla_\theta \mathcal{J}_{\mathcal{B}_t}(\theta_{t-1}).
+\end{equation*}
 
 \paragraph{Running averages (``moments'').}
 Adam maintains two exponential moving averages of the gradients:

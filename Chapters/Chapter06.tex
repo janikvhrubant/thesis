@@ -125,27 +125,25 @@ Therefore
 \end{proof}
 
 \begin{remark} \ \\
-    As computing the Hardy--Krause variation is not tractable, the
-    following recursively defined upper bound follows immediately from the
-    preceding results by Corollary~\ref{cor:variation-approximation}:
+    As computing the Hardy--Krause variation is not tractable, the following
+    upper bound follows immediately from the preceding results by
+    Corollary~\ref{cor:variation-approximation} and
+    Definition~\ref{def:variation_hardy_krause} of the Hardy--Krause variation:
 
     \begin{equation}
         \label{eq:variation_hardy_krause_bound}
-        V_{\mathrm{HK}}(f) \leq \widehat{V}_{\mathrm{HK}}(f) := \int\limits_{[a,b]} 
-        \left| \frac{\partial^s}{\partial x_1 \cdots \partial x_s} f(x) \right| \, 
-        dx + \sum\limits_{i=1}^s \widehat{V}_{\mathrm{HK}}(f|_{x_i=b_i}).
+        V_{\mathrm{HK}}(f) \leq \widehat{V}_{\mathrm{HK}}(f) := 
+        \sum\limits_{\substack{u\subseteq \{1,\dots,s\} \\ u \neq \varnothing}} 
+        \,\, \int\limits_{[a^u,b^u]} \bigg|\frac{\partial^{|u|}}{\partial x^u}
+        f(x^u;b^{-u}) \bigg| \,dx^u\,.
     \end{equation}
 
-    Here, $f|_{x_i=b_i}$ denotes the restriction of $f$ to the boundary with
-    $x_i=b_i$. In the first place this is a restriction to the $s-1$ dimensional
-    case. In the last recursive step, the univariate case is reached with
-
+    Here, $\partial x^{-u}$ abbreviates the product $\prod\limits_{j \in
+    \{1,\dots,s\}\setminus u} \partial x_j$. Ausserdem hier erklären wann gleichheit folgt:
     \begin{equation*}
-        \widehat{V}_{\mathrm{HK}}(f\big|_{x_i=b_i, \forall i \neq j}) = \int\limits_{[a_j,b_j]} 
-        \left| \frac{\partial f\big|_{x_i=b_i, \forall i\neq j}(x_j)}{\partial x_j} \right| \, dx.
-    \end{equation*}
-    Hereby,  the restricted function $f\big|_{x_i=b_i, \forall i \neq j}$ is
-    limited to the remaining dimension $j$.
+        V_{\mathrm{HK}}(f) = \widehat{V}_{\mathrm{HK}}(f)
+    \end{equation*}    
+    \label{rem:variation-approximation}
 \end{remark}
 
 
@@ -163,23 +161,23 @@ there, we will use an estimate of the generalization gap and follow
     Further, let $V_\mathrm{HK}(|f-\hat{f}|) < \infty$. Then, the following
     estimate on the generalization gap holds:
     \begin{equation*}
-        |\mathcal{E}_G - \mathcal{E}_T| \leq C \cdot \frac{V_{\mathrm{HK}}(|f-\hat{f}|)(\log N)^s}{N},
+        |\mathcal{E}_G - \mathcal{E}_T| \leq C_s \cdot \frac{V_{\mathrm{HK}}(|f-\hat{f}|)(\log N)^s}{N},
     \end{equation*}
-    where $C$ is a constant and $V_{\mathrm{HK}}(|f-\hat{f}|)$ is the
+    where $C_s$ is a constant and $V_{\mathrm{HK}}(|f-\hat{f}|)$ is the
     Hardy--Krause variation from Definition~\ref{def:variation_hardy_krause}.
+    \label{thm:generalization_gap}
 \end{theorem}
 
 \begin{proof} \ \\
     This simply follows from the Koksma-Hlawka inequality
     (Theorem~\ref{thm:koksma-hlawka}) applied to the difference $f-\hat{f}$:
     \begin{align*}
-        |\mathcal{E}_G - \mathcal{E}_T| &= \bigg| \int\limits_{[0,1]^s} f(x) - \hat{f}(x) \, dx - \frac{1}{N} \sum_{n=1}^N f(x_n) - \hat{f}(x_n) \bigg| \\
+        |\mathcal{E}_G - \mathcal{E}_T| &= \bigg| \int\limits_{[0,1]^s} f(x) - \hat{f}(x) \, dx - \frac{1}{N} \sum_{n=1}^N \big[f(x_n) - \hat{f}(x_n)\big] \bigg| \\
         &\leq V_{\mathrm{HK}}(|f-\hat{f}|) \cdot D^*_N \\
-        &\leq C \cdot \frac{V_{\mathrm{HK}}(|f-\hat{f}|)(\log N)^s}{N}
+        &\leq C_s \cdot \frac{V_{\mathrm{HK}}(|f-\hat{f}|)(\log N)^s}{N}
     \end{align*}
     Here, $D^*_N$ is the star-discrepancy of the low-discrepancy sequence
-    $\mathcal{S}$ and $C$ is a constant depending on the discrepancy of the
-    sequence.
+    $\mathcal{S}$ and the constant $C_s$, associated with the discrepancy of the sequence $\mathcal{S}$, is dependent on the dimension $s$.
 \end{proof}
 
 \begin{theorem} \ \\
@@ -208,7 +206,7 @@ derivative of the composition $g \circ h$ follows:
 \begin{equation*}
     \frac{\partial^s}{\partial x_1 \cdots \partial x_s} (g \circ h)(x) = \sum_{\pi} g^{(|\pi|)}\circ h(x) \cdot \prod_{B\in\pi} \frac{\partial^{|B|}}{\prod_{j\in B}\partial x_j}h(x)
 \end{equation*}
-Hereby the sum is taken over all partitions $\pi$ of the set $\{1,\ldots,s\}$
+Here, the sum is taken over all partitions $\pi$ of the set $\{1,\ldots,s\}$
 and $B$ are the sets within the partition $\pi$.
 \label{prop:multivariate_faa_di_bruno}
 \end{prop}
