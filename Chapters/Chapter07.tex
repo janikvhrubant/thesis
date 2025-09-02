@@ -61,9 +61,8 @@ is then applied on the test set $\mathcal{T}$
 The test set $\mathcal{T}$ is differing for the three training sets. The setup can be summarized as in Table~\ref{tab:test_set}.
 
 Further the Deep Learning algorithm is evaluated for a varying number of epochs
-between $100$ and $2000$ and the two different optimizers introduced in
-Chapter~\ref{chapter6}: Adam~\cite{goodfellow2016deep} and
-Lion~\cite{chen2023symbolic}.
+between $100$ and $2000$ together with the optimizer introduced in
+Chapter~\ref{chapter6}: \ac{adam}~\cite{goodfellow2016deep}.
 
 For the other training hyperparameters, a systematic study was conducted using
 \emph{Optuna} \cite{akiba2019optuna}. Hereby the architecture of the \acp{dnn}
@@ -91,11 +90,6 @@ $\beta_1$ & $0.85 - 0.99$ \\
 $\beta_2$ & $0.95 - 0.999$ \\
 $\epsilon$ & $1e-8$ \\
 \midrule
-\textbf{Lion Hyperparameters} & \\
-Learning rate & $1.0e{-}5 - 1.0e{-}2$ \\
-Weight decay & $1.0e{-}8 - 1.0e{-}3$ \\
-$\beta_1$ & $0.85 - 0.99$ \\
-$\beta_2$ & $0.95 - 0.999$ \\
 \bottomrule
 \end{tabular}
 \centering
@@ -117,29 +111,70 @@ $V_\mathrm{HK}(f)\sim\hat{V}_\mathrm{HK}(f)<\infty$ on the compact domain
 $[0,1]^s$.
 
 
+\subsubsection*{10 dimensional sum of sines} \ \\
+Now, the Deep Learning algorithm is applied to approximate the
+Equation~\eqref{eq:sum_of_sines} for $s=10$ dimensions.
+
 The Deep Learning algorithm is applied with the following configurations
 obtained by hyperparameter optimization as described in
 Section~\ref{sec:impl_details_dnn}:
+
+
+\begin{minipage}{0.48\textwidth}
 \begin{table}[H]
 \begin{tabular}{lc}
+\textbf{Adam Training Setup} & \\
+\toprule \\
 \textbf{DNN Architecture }& \\
-Number of hidden layers & $8$ \\
-Number of neurons per layer & $8$ \\
-Activation function & Tanh \\
+Number of hidden layers & $9$ \\
+Number of neurons per layer & $12$ \\
+Activation function & Sigmoid \\
 \midrule
 \textbf{Training Setup} & \\
 Batch size & $256$ \\
-Number of epochs & $2000$ \\
 \midrule
-\textbf{Optimizers} & \\
-Adam & \\
-Lion & \\
+\textbf{Adam Parameters} & \\
+ & \\
+Learning Rate & $5.426e{-}3$ \\
+Weight Decay & $4.357e{-}5$ \\
+$\beta_1$ & $0.92$ \\
+$\beta_2$ & $0.959$ \\
+$\varepsilon$ & $1e-8$ \\
 \midrule
-\textbf{Hyperparameters} & \\
-Optimized via & Optuna \\
 \end{tabular}
 \centering
+\caption{DNN and Adam configurations for the 10D sum of sines.}
+\label{tab:sum_of_sines_dnn_adam}
 \end{table}
+\end{minipage}
+\hfill
+\begin{minipage}{0.48\textwidth}
+\begin{table}[H]
+\begin{tabular}{lc}
+\textbf{Lion Training Setup} & \\
+\toprule \\
+\textbf{DNN Architecture }& \\
+Number of hidden layers & $7$ \\
+Number of neurons per layer & $12$ \\
+Activation function & Sigmoid \\
+\midrule
+\textbf{Training Setup} & \\
+Batch size & $64$ \\
+\midrule
+\textbf{Lion Parameters} & \\
+ & \\
+Learning Rate & $5.565e{-}4$ \\
+Weight Decay & $2.105e{-}5$ \\
+$\beta_1$ & $0.91$ \\
+$\beta_2$ & $0.965$ \\
+$\,$ & $\,$ \\
+\midrule
+\end{tabular}
+\centering
+\caption{DNN and Lion configurations for the 10D sum of sines.}
+\label{tab:sum_of_sines_dnn_lion}
+\end{table}
+\end{minipage}
 
 The according \acp{dnn} are trained on training sets with
 $N\in\{128,256,512,1024,2048,4096,8192\}$ samples drawn from pseudo-random,

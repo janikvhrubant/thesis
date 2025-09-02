@@ -85,13 +85,13 @@ This yields another result for the variation in the sense of Vitali on functions
 with existing and integrable derivative.
 
 \begin{cor} \ \\
-\label{cor:variation-approximation}
     Let $f$ be a function defined on the hypercube $[a,b]\subset \mathbb{R}^s$ with existing and
     integrable derivative $\frac{\partial^s}{\partial x_1 \cdots \partial x_s}
     f$. Then, the following holds for the variation in the sense of Vitali:
     \begin{equation*}
         V_{[a,b]}(f) \leq \int\limits_{[a,b]} \left| \frac{\partial^s}{\partial x_1 \cdots \partial x_s} f(x) \right| \, dx.
     \end{equation*}
+    \label{cor:variation-approximation}
 \end{cor}
 
 \begin{proof} \ \\
@@ -134,15 +134,19 @@ Therefore
         \label{eq:variation_hardy_krause_bound}
         V_{\mathrm{HK}}(f) \leq \widehat{V}_{\mathrm{HK}}(f) := 
         \sum\limits_{\substack{u\subseteq \{1,\dots,s\} \\ u \neq \varnothing}} 
-        \,\, \int\limits_{[a^u,b^u]} \bigg|\frac{\partial^{|u|}}{\partial x^u}
+        \,\, \int\limits_{[a^u,b^u]} \bigg|\frac{\partial^{|u|}}{\prod_{j\in u}\partial x_j}
         f(x^u;b^{-u}) \bigg| \,dx^u\,.
     \end{equation}
+    
+    Assuming $\widehat{V}_{\mathrm{HK}}(f) < \infty$ implies that all derivatives in the
+    sum $\frac{\partial^{|u|}}{\partial x^u} f(x^u;b^{-u})$ for all
+    $\varnothing\neq u \subseteq \{1,\ldots,s\}$ exist.
 
-    Here, $\partial x^{-u}$ abbreviates the product $\prod\limits_{j \in
-    \{1,\dots,s\}\setminus u} \partial x_j$. Ausserdem hier erklären wann gleichheit folgt:
+    If all derivatives in the sum exist and are continuous, then by
+    \cite[Section 9]{owen2005multidimensional} it follows that:
     \begin{equation*}
-        V_{\mathrm{HK}}(f) = \widehat{V}_{\mathrm{HK}}(f)
-    \end{equation*}    
+        V_{\mathrm{HK}}(f) = \widehat{V}_{\mathrm{HK}}(f) \,.
+    \end{equation*}
     \label{rem:variation-approximation}
 \end{remark}
 
@@ -180,16 +184,23 @@ there, we will use an estimate of the generalization gap and follow
     $\mathcal{S}$ and the constant $C_s$, associated with the discrepancy of the sequence $\mathcal{S}$, is dependent on the dimension $s$.
 \end{proof}
 
+Theorem~\ref{thm:generalization_gap} states that the generalization gap can be
+bounded by the Hardy--Krause variation of the difference $|f-\hat{f}|$ and the
+discrepancy of the training data. However, it is still not clear under what
+conditions the Hardy--Krause variation of the difference $|f-\hat{f}|$ is
+bounded. The following theorem states sufficient conditions for the boundedness
+of the Hardy--Krause variation of the difference $|f-\hat{f}|$.
+
 \begin{theorem} \ \\
-Let $f : [0,1]^s \to \mathbb{R}$ be a map with $\widehat{V}_{HK}(f) < \infty$.
-Further let $\hat{f}$ be the \ac{dnn} surrogate with an activation function
+Let $f : [0,1]^s \to \mathbb{R}$ be a map with $\widehat{V}_{HK}(f) < \infty$ and $\frac{\partial^{|v|}}{\prod_{j\in v}\partial x_j}f(x^v;1^{-v})$ for all $\varnothing \neq v \subseteq \{1,\dots,s\}$ is continuous.
+Further, let $\hat{f}$ be the \ac{dnn} surrogate with an activation function
 $\sigma \in C^s$ trained on a low-discrepancy sequence
 $\mathcal{S}=\{x_n\}_{n=1}^N\subset [0,1]^s$. Then for a given tolerance $\delta
 > 0$ the following holds:
 \begin{equation*}
 \mathcal{E}_G \leq \mathcal{E}_T + C \cdot \frac{(\log N)^s}{N} + 2\delta.
 \end{equation*}
-The constant $C$ depends on the learing algorithm and the tolerance $\delta$
+The constant $C$ depends on the training algorithm and the tolerance $\delta$
 associated with the mollifier introduced in the proof.
 \label{thm:main-theorem}
 \end{theorem}
@@ -200,11 +211,11 @@ multivariate version of the Faà di Bruno formula from
 
 \begin{prop}[Multivariate Faà di Bruno formula] \ \\
 Let $h:\mathbb{R}^s \to \mathbb{R}^{d_1}$ with continuous derivative
-$\frac{\partial^s}{\partial x_1 \dots \partial x_s}h$ and $g \in
+$\frac{\partial^s}{\partial x_1 \cdots \partial x_s}h$ and $g \in
 C^s(\mathbb{R}^{d_1},\mathbb{R}^{d_2})$ be two functions. Then the following
 derivative of the composition $g \circ h$ follows:
 \begin{equation*}
-    \frac{\partial^s}{\partial x_1 \cdots \partial x_s} (g \circ h)(x) = \sum_{\pi} g^{(|\pi|)}\circ h(x) \cdot \prod_{B\in\pi} \frac{\partial^{|B|}}{\prod_{j\in B}\partial x_j}h(x)
+    \frac{\partial^s}{\partial x_1 \cdots \partial x_s} (g \circ h)(x) = \sum_{\pi} \big(g^{(|\pi|)}\circ h\big)(x) \cdot \prod_{B\in\pi} \frac{\partial^{|B|}}{\prod_{j\in B}\partial x_j}h(x)
 \end{equation*}
 Here, the sum is taken over all partitions $\pi$ of the set $\{1,\ldots,s\}$
 and $B$ are the sets within the partition $\pi$.
@@ -215,111 +226,98 @@ A proof of the Multivariate Faà di Bruno formula can be found in
 
 The multivariate Faà di Bruno formula will be used to proof the following result on the conditions for boundedness of the Hardy--Krause variation of compositions of functions.
 
-% \begin{remark}\label{rem:compositions} \ \\
-% To check in what cases the variation in the sense of Vitali is bounded for the
-% composition of two functions, we first apply
-% Corollary~\ref{cor:variation-approximation} on the composition of two functions
-% $h \in C^s([0,1]^s, \mathcal{X})$ and $g \in C^s(\mathcal{X})$, where
-% $\mathcal{X}$ is compact. For $g \circ h$ this yields
-% \begin{equation*}
-%     V_{[0,1]^s}(g \circ h) \leq \int\limits_{[0,1]^s} \bigg| \frac{\partial^s}{\partial x_1 \cdots \partial x_s} (g \circ h)(x) \bigg| \, dx.
-% \end{equation*}
-% By applying the multivariate Faà di Bruno formula from
-% Proposition~\ref{prop:multivariate_faa_di_bruno} it follows that
-% \begin{equation*}
-%     V_{[0,1]^s}(g \circ h) \leq \int\limits_{[0,1]^s} \bigg| \sum_{\pi} g^{(|\pi|)}\circ h(x) \cdot \prod_{B\in\pi} \frac{\partial^{|B|}}{\prod_{j\in B}\partial x_j}h(x) \bigg| \, dx.
-% \end{equation*}
-% Now we want to use this inequality to find conditions, such that the variation
-% in the sense of Vitali is bounded. For finite dimensions $s$, the number of
-% partitions $\pi$ is finite and therefore the sum over all partitions $\pi$ of
-% $\{1,\dots,s\}$ is finite. Thus, it suffices to show that each summand is
-% bounded.
-% \begin{equation*}
-%     \int\limits_{[0,1]^s} \bigg| g^{(|\pi|)}\circ h(x) \cdot \prod_{B\in\pi} \frac{\partial^{|B|}}{\prod_{j\in B}\partial x_j}h(x) \bigg| \, dx < \infty.
-% \end{equation*}
-% As $g \in C^s(\mathcal{X})$, $g^{(\pi)}$ is continuous. As $h$ is also continuous and the integral is over a compact set, the image $g^{(|\pi|)}\circ h([0,1]^s)$ is also compact and therefore bounded. Thus, it suffices to show the following for all partitions $\pi$ of the set $\{1,\ldots,s\}$:
-% \begin{equation*}
-%     \int\limits_{[0,1]^s} \prod_{B\in\pi} \bigg| \frac{\partial^{|B|}}{\prod_{j\in B}\partial x_j}h(x) \bigg| \, dx < \infty.
-% \end{equation*}
-% \end{remark}
-
-% As the Variation in the sense of Hardy--Krause is defined by a finite sum over
-% variations in the sense of Vitali, the following Corollary follows immediately
-% for finite dimensions $s$.
-
-% \begin{cor} \ \\
-% \label{cor:bounded_composition}
-%     Let $f \in C^s([0,1]^s, \mathcal{X})$ for $\mathcal{X}\subset \mathbb{R}^d$
-%     and $s$ finite. If
-%     \begin{equation*}
-%         \int\limits_{[0,1]^{|v|}} \prod_{B\in\pi} \bigg| \frac{\partial^{|B|}}{\prod_{j\in B} \partial x_j}f(x) \bigg| \, dx < \infty
-%     \end{equation*}
-%     holds for all partitions $\pi$ of the set $\{1,\ldots,s\}$, then the
-%     Hardy--Krause variation of the composition $\eta \circ f$ is bounded for all
-%     $\eta \in C^s(\mathcal{X})$:
-%     \begin{equation*}
-%         V_{\mathrm{HK}}(\eta \circ f) < \infty.
-%     \end{equation*}
-% \end{cor}
-
 \begin{cor} \ \\
-\label{cor:bounded_composition}
-Let $h: [a,b]\to\mathcal{X}$ for a hyperrectangle $[a,b]\in\mathbb{R}^s$ and a
-compact subset $\mathcal{X}\subset \mathbb{R}$. Further assume that
-$\widehat{V}_{\mathrm{HK}}(h) < \infty$. Then, the Hardy--Krause variation of
+Let $h: [a,b]\to\mathcal{X}$ for a hyperrectangle $[a,b]\in\mathbb{R}^s$ and
+$\mathcal{X}\subset \mathbb{R}$. Further, assume that
+$\widehat{V}_{\mathrm{HK}}(h) < \infty$ and
+$\frac{\partial^{|v|}}{\prod_{j\in v}\partial x_j} h(x^v;b^{-v})$ for all $\varnothing \neq
+v\subseteq \{1,\dots,s\}$ is continuous. Then, the Hardy--Krause variation of
 the composition $g \circ h$ is bounded
 \begin{equation*}
     V_{\mathrm{HK}}(g \circ h) < \infty
 \end{equation*}
 for all $g \in C^s(\mathbb{R})$.
+\label{cor:bounded_composition}
 \end{cor}
 
 \begin{proof} \ \\
 To check the boundedness of the Hardy--Krause variation of a composition of two
-functions, its definition \eqref{eq:hardy-krause-variation} is applied.
-\begin{equation*}
-    V_{\mathrm{HK}}(g \circ h) = \sum_{v \subset \{1,\ldots,s\}} V_{[a^{-v},b^{-v}]}(g \circ h) (x^{-v};b^{v})
-\end{equation*}
+functions, first Corollary~\ref{cor:variation-approximation} is applied on the
+Hardy--Krause variation of the composition $g \circ h$:
+\begin{align*}
+    V_{\mathrm{HK}}(g \circ h) &= \sum_{\substack{{v \subseteq \{1,\ldots,s\}}\\{v\neq\varnothing}}} V_{[a^{v},b^{v}]}(g \circ h) (x^{v};b^{-v}) \\
+    &\leq \sum_{\substack{{v \subseteq \{1,\ldots,s\}}\\{v\neq\varnothing}}} \int\limits_{[a^{v},b^{v}]} \bigg| \frac{\partial^{|v|}}{\prod_{j\in v}\partial x_j} (g \circ h)(x^{v};b^{-v}) \bigg| \, dx^{v} \,.
+\end{align*}
 
 As the dimension $s$ is finite, the sum in the definition of the Hardy--Krause
-variation has finitely many summands and therefore it suffices to show that each
-summand is bounded. It remains to proof that for each subset $v \subset
-\{1,\ldots,s\}$ the variation in the sense of Vitali is bounded.
-
-By applying Corollary~\ref{cor:variation-approximation} on the summand, it would
-suffice to show  that
-
-\begin{equation*}
-    \int\limits_{[a^{-v},b^{-v}]} \bigg| \frac{\partial^{|v|}}{\prod_{j\in v}\partial x_j} (g \circ h)(x^{-v};b^{v}) \bigg| \, dx^{-v} <\infty.
-\end{equation*}
+variation has finitely many summands and therefore it suffices to show for each
+summand that it is bounded.
 
 Applying the multivariate Faà di Bruno formula
-(Proposition~\ref{prop:multivariate_faa_di_bruno}) yields
+(Proposition~\ref{prop:multivariate_faa_di_bruno}) to each summand yields
+
+\begin{align*}
+    &\int\limits_{[a^{v},b^{v}]} \bigg| \frac{\partial^{|v|}}{\prod_{j\in v}\partial x_j} (g \circ h)(x^{v};b^{-v}) \bigg| \, dx^{v} \\ 
+    =& \int\limits_{[a^{v},b^{v}]} \bigg| \sum_{\pi} \big(g^{(|\pi|)}\circ h\big)(x^{v};b^{-v}) \cdot \prod_{B\in\pi} \frac{\partial^{|B|}}{\prod_{j\in B}\partial x_j}h(x^{v};b^{-v}) \bigg| \, dx^{v}
+\end{align*}
+
+with the sum taken over all partitions $\pi$ of the subset $v$. Now applying the triangle inequality gives
 
 \begin{equation*}
-    \int\limits_{[a^{-v},b^{-v}]} \bigg| \sum_{\pi} \big(g^{(|\pi|)}\circ h\big)(x^{-v};b^{v}) \cdot \prod_{B\in\pi} \frac{\partial^{|B|}}{\prod_{j\in B}\partial x_j}h(x^{-v};b^{v}) \bigg| \, dx^{-v} < \infty
+    \leq \sum_{\pi} \int\limits_{[a^{v},b^{v}]} \bigg| \big(g^{(|\pi|)}\circ h\big)(x^{v};b^{-v}) \cdot \prod_{B\in\pi} \frac{\partial^{|B|}}{\prod_{j\in B}\partial x_j}h(x^{v};b^{-v}) \bigg| \, dx^{v} \,.
 \end{equation*}
 
-with the sum taken over all partitions $\pi$ of the subset $v$. The boundedness
-of $h$ which follows from the compactness of $\mathcal{X}$ and the continuity of
-the derivative  $g^{(|\pi|)}$ yields an upper bound on $\big(g^{(|\pi|)}\circ
-h\big)(x^{-v};b^{v})$.
+Again, the sum has finitely many summands as there are finitely many partitions
+$\pi$ of the finite set $v\subseteq \{1,\ldots,s\}$. Thus, to show that the
+Hardy--Krause variation of the composition $g \circ h$ is bounded, it remains to
+show that each summand
 
-As the number of partitions $\pi$ of the finite subset $v$ of $\{1,\ldots,s\}$
-it remains to show:
 \begin{equation*}
-    \int\limits_{[a^{-v},b^{-v}]} \prod_{B\in\pi} \bigg| \frac{\partial^{|B|}}{\prod_{j\in B}\partial x_j}h(x^{-v};b^{v}) \bigg| \, dx^{-v} < \infty 
+    \int\limits_{[a^{v},b^{v}]} \bigg| \underbrace{\big(g^{(|\pi|)}\circ h\big)(x^{v};b^{-v})}_{(*)} \cdot \prod_{B\in\pi} \frac{\partial^{|B|}}{\prod_{j\in B}\partial x_j}h(x^{v};b^{-v}) \bigg| \, dx^{v}
 \end{equation*}
-for all partitions $\pi$ of the subset $v$. As each element in the product is
-part of the recursion in equation \eqref{eq:variation_hardy_krause_bound} and we
-have assumed, that $\widehat{V}_\mathrm{HK}(h)<\infty$, we have shown that the
-Hardy--Krause variation of the composition $g \circ h$ is bounded.
+
+is bounded. 
+
+From the boundedness of $h$ given by $\widehat{V}_\mathrm{HK}(h) <
+\infty$ and $g\in C^s$, it follows that $g\circ h$ and thus the term $(*)$ is
+bounded on the whole integration domain $[a,b]$. Therefore, it suffices to show that
+
+\begin{equation}
+    \int\limits_{[a^{v},b^{v}]} \prod_{B\in\pi} \bigg| \frac{\partial^{|B|}}{\prod_{j\in B}\partial x_j}h(x^{v};b^{-v}) \bigg| \, dx^{v} < \infty\,.
+    \label{eq:variation_requirement}
+\end{equation}
+
+Following the assumption that all factors $\frac{\partial^{|B|}}{\prod_{j\in
+B}\partial x_j}h(x^{v};b^{-v})$ for all $B\in\pi$ exist and are continuous,
+$\frac{\partial^{|B|}}{\prod_{j\in B}\partial x_j}h(x^{v};b^{-v}) \in
+L^1([a^v,b^v])$ holds. Thus, by the generalized H{\"o}lder inequality, see for
+example \cite[Corollary 2.11.5]{bogachev2007measure} applied to Equation~\eqref{eq:variation_requirement} and using the known relation $L^p([a^v,b^v]) \subseteq L^1(a^v,b^v)$ for $p \geq 1$, it suffices to show that 
+
+\begin{equation}
+    \int\limits_{[a^{v},b^{v}]} \bigg| \frac{\partial^{|B|}}{\prod_{j\in B}\partial x_j}h(x^{v};b^{-v}) \bigg| \, dx^{v} < \infty\,.
+    \label{eq:variation_requirement_factors}
+\end{equation}
+
+for all $B\in\pi$.
+
+Recalling the definition of $\widehat{V}_\mathrm{HK}(h)$ from Remark~\ref{rem:variation-approximation} and with the assumption that $\widehat{V}_\mathrm{HK}(h) < \infty$ one gets:
+
+\begin{equation}
+    \widehat{V}_{\mathrm{HK}}(h) = 
+    \sum\limits_{\substack{v\subseteq \{1,\dots,s\} \\ v \neq \varnothing}} 
+    \,\, \int\limits_{[a^v,b^v]} \bigg|\frac{\partial^{|v|}}{\prod_{j\in u}\partial x_j}
+    h(x^v;b^{-v}) \bigg| \,dx^v < \infty \,.
+    \label{eq:variation_requirement_finiteness}
+\end{equation}
+
+Consequently, all summands in \eqref{eq:variation_requirement_finiteness} are
+bounded. Thus, Equation~\eqref{eq:variation_requirement_factors} holds for all $B\in\pi$ and consequently, the Hardy--Krause variation of the composition $g \circ h$ is bounded.
 \end{proof}
 
 Now we can prove the theorem.
 \begin{proof}[Proof (Theorem~\ref{thm:main-theorem})] \ \\
     First, a mollifer function $\eta_\delta \in C^s(\mathbb{R},
-    \mathbb{R}_+)$ fullfilling
+    \mathbb{R}_+)$ fulfilling
     \begin{equation*}
         \max \big\{\big\| |a| - \eta_\delta(a) \big\|_\infty\big\} \leq \delta \,,
     \end{equation*}
@@ -337,10 +335,7 @@ Now we can prove the theorem.
     
     Since $\hat{f}$ is a composition of affine functions and the activation function $\sigma
     \in C^s$ by definition \eqref{eq:dnn-definition}, $\hat{f} \in C^s([0,1]^s,
-    \mathbb{R})$ holds. Let $\mathbb{1}_s$ denote the identity function on
-    $\mathbb{R}^s$. $\widehat{V}_\mathrm{HK}(\mathbb{1}_s) < \infty$ holds
-    trivially. Thus applying Corollary~\ref{cor:bounded_composition} for
-    $\hat{f}\circ \mathbb{1}_s$ yields
+    \mathbb{R})$ holds. Consequently, it follows that 
 
     \begin{equation*}
         {V}_{\mathrm{HK}}(\hat{f}) \equiv \widehat{V}_{\mathrm{HK}}(\hat{f}) <
@@ -350,47 +345,16 @@ Now we can prove the theorem.
     By the equation \eqref{eq:variation_hardy_krause_bound} and from the given
     assumption $\widehat{V}_{\mathrm{HK}}(f) < \infty$, it follows that
     
-    \begin{equation*}
+    \begin{equation}
         \widehat{V}_{\mathrm{HK}}(f-\hat{f}) \leq \infty
-    \end{equation*}
+    \label{eq:variation_difference_bound}
+    \end{equation}
 
-    Applying Corollary~\ref{cor:bounded_composition} again on $\eta_\delta \circ (f-\hat{f})$ yields 
+    Using the assumptions on $f$ and Equation~\eqref{eq:variation_difference_bound}, Corollary~\ref{cor:bounded_composition} can be applied to $\eta_\delta \circ (f-\hat{f})$ which yields 
     
     \begin{equation*}
     V_{\mathrm{HK}}\big(\eta_\delta\circ(f-\hat{f})\big) \leq \widehat{V}_{\mathrm{HK}}\big(\eta_\delta\circ(f-\hat{f})\big) \leq C_1 < \infty.
     \end{equation*}
-    
-    % Therefore, we apply Corollary~\ref{cor:bounded_composition} and need to
-    % therefore to show, that $f-\hat{f} \in C^s([0,1]^s, \mathbb{R})$.
-
-    % The ground truth function $f$ fullfils this by assumptions. As the
-    % composition $\hat{f}$ from \eqref{eq:dnn-definition} is a composition of
-    % affine and activation functions fullfilling $C^s$ by assumption, it follows
-    % that $\hat{f} \in C^s([0,1]^s, \mathbb{R})$.
-
-    % Furthermore, to apply Corollary~\ref{cor:bounded_composition} we need to show that
-
-    % \begin{equation} \label{eq:variation_requirement}
-    %     \int\limits_{[0,1]^s} \big| \prod_{B\in\pi} \frac{\partial^{|B|}}{\prod_{j\in B}\partial x_j} (f-\hat{f})(x) \big| \, dx < \infty.
-    % \end{equation}
-
-    % holds for all partitions $\pi$ of the set $\{1,\ldots,s\}$.
-
-    % As $f$ has bounded Hardy--Krause variation by assumption and the surrogate
-    % model $\hat{f}$ is a composition of affine (hence $C^s$) and sufficiently
-    % smooth activation functions $\sigma$, \eqref{eq:variation_requirement} holds
-    % for all partitions $\pi$ of the set $\{1,\ldots,s\}$:
-    % \begin{equation}
-    %     \label{eq:bounded_mollified_generalization_gap}
-    %     \eta_\delta(f(x) - \hat{f}(x)) \leq C < \infty \qquad \text{for all } x \in [0,1]^s.
-    % \end{equation}
-
-    % The constant $C$ depends on both the dimension $s$ and the tolerance
-    % $\delta$ associated with the mollifier. Since it has been established that
-    % the mollified difference $\eta_\delta(f(x) - \hat{f}(x))$ is bounded,
-    % Remark~\ref{rem:compositions} implies that its Hardy--Krause variation is
-    % also bounded.
-
 
     for a constanct $C_1$. Therefore, one can apply the Koksma-Hlawka inequality
     (Theorem~\ref{thm:koksma-hlawka}) to $f-\hat{f}$ to get

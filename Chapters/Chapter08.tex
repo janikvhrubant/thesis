@@ -149,21 +149,30 @@ classified into the following categories:
 \end{itemize}
 
 In \citeyear{mcffd2011}, \citeauthor{mcffd2011} \cite{mcffd2011} already
-demonstrated promising results using computationally expensive \ac{mc}
-simulations of CT scans of a cylindrical phantom with two bone inserts. The
-results showed significant improvements in image quality, as illustrated by
-\citeauthor{mcffd2011} in Figure~\ref{fig:scatter_correction_comparison}.
+demonstrated promising results\cite{mcffd2011} using computationally expensive
+\ac{mc} simulations of CT scans of a cylindrical phantom with two bone inserts.
+The results showed significant improvements in image quality. The presented
+\ac{qmc} simulation mthod aims to further enhance the efficiency of such
+simulations and yields the following results for a similar phantom, once with
+scattering and once without scattering. In
+Figure~\ref{fig:scatter_correction_comparison}, the Sobol' sampling method was
+used and $5e{+}6$ photons were simulated from a spectrum with a maximum energy
+of 35\,keV which corresponds to a 35\,kVp X-ray tube voltage.
 
 \captionsetup{justification=justified,singlelinecheck=false}
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.8\textwidth]{Figures/mcffd.png}
-    \caption{\ac{cbct} of a 70\,mm soft-tissue cylinder with two bone inserts.
-    Right: Simulation of a X-ray image with scattering, exibiting typical
-    cupping and streak artifacts. Right: Image after scatter correction applying
-    \ac{mc} techniques for the simulation of $5 \times 10^6$ photons, showing
-    improved uniformity and quantitative accuracy. Right: Image without
-    correction, exhibiting typical cupping and streak artifacts. (Figure adapted from \cite{mcffd2011}, \textcopyright 2011 IEEE)}
+    \begin{minipage}{0.49\textwidth}
+        \includegraphics[width=\textwidth,clip,trim=1.5cm 0cm 1.5cm 0cm]{Figures/full_energies_scatter_red.png}
+    \end{minipage}
+    \hfill
+    \begin{minipage}{0.49\textwidth}
+        \includegraphics[width=\textwidth,clip,trim=1.5cm 0cm 1.5cm 0cm]{Figures/primary_energies_scatter_red.png}
+    \end{minipage}
+    \caption{\ac{qmc} generated Cone-Beam X-ray image with $5e{+}6$ photons of a
+    70\,mm soft-tissue cylinder with three bone inserts. Left: Simulation of a
+    X-ray image with Compton scattering. Right: Image after removing Compton
+    scatters.}
     \label{fig:scatter_correction_comparison}
 \end{figure}
 
