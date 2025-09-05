@@ -550,6 +550,7 @@ because $U \sim \mathcal{U}(0,1)$ and thus  $\mathbb{P}[U \leq u] = u$ for all $
 
 
 \subsection{Photon Position and Direction}
+\label{sec:photon_position_direction}
 
 In addition to the photon energy at emission, its initial position and direction
 must be specified. Within the simulation framework, two different source models
@@ -677,14 +678,14 @@ In contrast, the finite planar source serves primarily as an analytical model.
 It describes a local view of the photon--phantom interaction and is employed to
 study the influence of source extension on scattering and attenuation effects.
 
-The initial position of each photon is sampled uniformly on the rectangular
-surface of the source. For a rectangular source with vertices
-$P_1,P_2,P_3,P_4 \in \mathbb{R}^3$, the position of each photon is determined
-by two random variables $u_1,u_2 \sim \mathcal{U}(0,1)$ via bilinear
-interpolation:
+The initial position of a photon is sampled uniformly on the rectangular surface
+of the source. For a rectangular source with vertices $P_1,P_2,P_3,P_4 \in
+\mathbb{R}^3$ with $\overrightarrow{P_1 P_2} \parallel \overrightarrow{P_3 P_4}$
+and $\overrightarrow{P_1 P_4} \parallel \overrightarrow{P_2 P_3}$ being
+parallel, the initial position of a photon is determined by two random variables
+$u_1,u_2 \sim \mathcal{U}(0,1)$:
 \begin{equation*}
-    \vec{p} = (1-u_1)(1-u_2) P_1 + u_1(1-u_2) P_2 + u_1 u_2 P_3 +
-    (1-u_1)u_2 P_4 \, .
+    A_0 = P_1 + u_1 \cdot (P_2-P_1) + u_2 \cdot (P_4-P_1) \, .
 \end{equation*}
 This yields a uniform distribution of starting points over the rectangular
 surface. The emission direction of each photon is then set to the unit normal
@@ -699,6 +700,27 @@ angular type to enforce emission perpendicular to the plane (see
 \texttt{/gps/ang/type planar}). This configuration is commonly employed in
 benchmark simulations to model collimated or extended X-ray beams.
 
+\qquad
+
+Within this thesis, the experiments were conducted to simulate an X-ray tube
+with the paramters listed in Table~\ref{tab:xray_params}.
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{ll}
+        \toprule
+        \textbf{Parameter}      & \textbf{Value} \\
+        \midrule
+        Tube voltage            & 30--120\,kVp \\
+        Anode material          & Tungsten \\
+        Filtration              & 1\,\si{\milli\meter} Aluminum (Al),
+        0.2\,\si{\milli\meter} Copper (Cu) \\
+        Target angle            & 10--60\textdegree \\
+        \bottomrule
+    \end{tabular}
+    \caption{Parameters used to generate the X-ray spectrum with \emph{Spekpy}.}
+    \label{tab:xray_params}
+\end{table}
 
 
 % ------------------------------------------------------------------------------

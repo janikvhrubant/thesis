@@ -191,12 +191,31 @@ conditions the Hardy--Krause variation of the difference $|f-\hat{f}|$ is
 bounded. The following theorem states sufficient conditions for the boundedness
 of the Hardy--Krause variation of the difference $|f-\hat{f}|$.
 
+For this, we need the following definition of $L^q$ spaces.
+
+\begin{definition} \ \\
+For a measurable set $\Omega \subseteq \mathbb{R}^n$ and $1 \leq q < \infty$, the space
+\begin{equation*}
+L^q(\Omega) = \left\{ f : \Omega \to \mathbb{R} \,\middle|\, 
+\int_{\Omega} |f(x)|^q \, dx < \infty \right\}
+\end{equation*}
+is the set of measurable functions whose $q$-th power is integrable.  
+For $q = \infty$,
+\begin{equation*}
+L^\infty(\Omega) = \left\{ f : \Omega \to \mathbb{R} \,\middle|\, 
+\sup_{x \in \Omega} |f(x)| < \infty \right\}.
+\end{equation*}
+\end{definition}
+
+Now, we can state the main theorem of this chapter.
+
 \begin{theorem} \ \\
-Let $f : [0,1]^s \to \mathbb{R}$ be a map with $\widehat{V}_{HK}(f) < \infty$ and $\frac{\partial^{|v|}}{\prod_{j\in v}\partial x_j}f(x^v;1^{-v})$ for all $\varnothing \neq v \subseteq \{1,\dots,s\}$ is continuous.
-Further, let $\hat{f}$ be the \ac{dnn} surrogate with an activation function
-$\sigma \in C^s$ trained on a low-discrepancy sequence
-$\mathcal{S}=\{x_n\}_{n=1}^N\subset [0,1]^s$. Then for a given tolerance $\delta
-> 0$ the following holds:
+Let $f : [0,1]^s \to \mathbb{R}$ be a map with $\widehat{V}_{HK}(f) < \infty$
+and $\frac{\partial^{|v|}}{\prod_{j\in v}\partial x_j}f(x^v;1^{-v}) \in
+L^1([0,1]^s)$ for all $\varnothing \neq v \subseteq \{1,\dots,s\}$. Further, let
+$\hat{f}$ be the \ac{dnn} surrogate with an activation function $\sigma \in C^s$
+trained on a low-discrepancy sequence $\mathcal{S}=\{x_n\}_{n=1}^N\subset
+[0,1]^s$. Then for a given tolerance $\delta > 0$ the following holds:
 \begin{equation*}
 \mathcal{E}_G \leq \mathcal{E}_T + C \cdot \frac{(\log N)^s}{N} + 2\delta.
 \end{equation*}
@@ -229,8 +248,8 @@ The multivariate Faà di Bruno formula will be used to proof the following resul
 \begin{cor} \ \\
 Let $h: [a,b]\to\mathcal{X}$ for a hyperrectangle $[a,b]\in\mathbb{R}^s$ and
 $\mathcal{X}\subset \mathbb{R}$. Further, assume that
-$\widehat{V}_{\mathrm{HK}}(h) < \infty$ and
-$\frac{\partial^{|v|}}{\prod_{j\in v}\partial x_j} h(x^v;b^{-v})$ for all $\varnothing \neq
+$\widehat{V}_{\mathrm{HK}}(h) < \infty$ and $\frac{\partial^{|v|}}{\prod_{j\in
+v}\partial x_j} h(x^v;b^{-v}) \in L^1([a,b])$ for all $\varnothing \neq
 v\subseteq \{1,\dots,s\}$ is continuous. Then, the Hardy--Krause variation of
 the composition $g \circ h$ is bounded
 \begin{equation*}
@@ -288,10 +307,12 @@ bounded on the whole integration domain $[a,b]$. Therefore, it suffices to show 
 \end{equation}
 
 Following the assumption that all factors $\frac{\partial^{|B|}}{\prod_{j\in
-B}\partial x_j}h(x^{v};b^{-v})$ for all $B\in\pi$ exist and are continuous,
-$\frac{\partial^{|B|}}{\prod_{j\in B}\partial x_j}h(x^{v};b^{-v}) \in
-L^1([a^v,b^v])$ holds. Thus, by the generalized H{\"o}lder inequality, see for
-example \cite[Corollary 2.11.5]{bogachev2007measure} applied to Equation~\eqref{eq:variation_requirement} and using the known relation $L^p([a^v,b^v]) \subseteq L^1(a^v,b^v)$ for $p \geq 1$, it suffices to show that 
+B}\partial x_j}h(x^{v};b^{-v}) \in L^1([a,b])$ for all $B\in\pi$, it is clear
+that $\frac{\partial^{|B|}}{\prod_{j\in B}\partial x_j}h(x^{v};b^{-v}) \in
+L^1([a^v,b^v])$. Thus, by the generalized H{\"o}lder inequality, see for
+example \cite[Corollary 2.11.5]{bogachev2007measure} applied to
+equation~\eqref{eq:variation_requirement} and using the known relation
+$L^p([a^v,b^v]) \subseteq L^1(a^v,b^v)$ for $p \geq 1$, it suffices to show that 
 
 \begin{equation}
     \int\limits_{[a^{v},b^{v}]} \bigg| \frac{\partial^{|B|}}{\prod_{j\in B}\partial x_j}h(x^{v};b^{-v}) \bigg| \, dx^{v} < \infty\,.
@@ -311,7 +332,7 @@ Recalling the definition of $\widehat{V}_\mathrm{HK}(h)$ from Remark~\ref{rem:va
 \end{equation}
 
 Consequently, all summands in \eqref{eq:variation_requirement_finiteness} are
-bounded. Thus, Equation~\eqref{eq:variation_requirement_factors} holds for all $B\in\pi$ and consequently, the Hardy--Krause variation of the composition $g \circ h$ is bounded.
+bounded. Thus, equation~\eqref{eq:variation_requirement_factors} holds for all $B\in\pi$ and consequently, the Hardy--Krause variation of the composition $g \circ h$ is bounded.
 \end{proof}
 
 Now we can prove the theorem.
@@ -319,7 +340,7 @@ Now we can prove the theorem.
     First, a mollifer function $\eta_\delta \in C^s(\mathbb{R},
     \mathbb{R}_+)$ fulfilling
     \begin{equation*}
-        \max \big\{\big\| |a| - \eta_\delta(a) \big\|_\infty\big\} \leq \delta \,,
+        \max \big\{\big\| |a| - \eta_\delta(a) \big\|_\infty\big\} \leq \delta \quad \text{for all } a\in\mathbb{R}\,,
     \end{equation*}
     is chosen. Mollifying the absolute value function in a neighborhood of the
     origin, guarantees the existence of such a function. 
@@ -333,9 +354,10 @@ Now we can prove the theorem.
     Next, it is shown that the mollified error $\eta_\delta\circ(f-\hat{f})$ has
     bounded Hardy--Krause variation.
     
-    Since $\hat{f}$ is a composition of affine functions and the activation function $\sigma
-    \in C^s$ by definition \eqref{eq:dnn-definition}, $\hat{f} \in C^s([0,1]^s,
-    \mathbb{R})$ holds. Consequently, it follows that 
+    Since $\hat{f}$ is a composition of affine functions and the activation
+    function $\sigma \in C^s$ by definition \eqref{eq:dnn-definition}, $\hat{f}
+    \in C^s([0,1]^s, \mathbb{R})$ and $\hat{f}\in L^1([0,1]^s)$ holds.
+    Consequently, it follows that 
 
     \begin{equation*}
         {V}_{\mathrm{HK}}(\hat{f}) \equiv \widehat{V}_{\mathrm{HK}}(\hat{f}) <
@@ -350,13 +372,13 @@ Now we can prove the theorem.
     \label{eq:variation_difference_bound}
     \end{equation}
 
-    Using the assumptions on $f$ and Equation~\eqref{eq:variation_difference_bound}, Corollary~\ref{cor:bounded_composition} can be applied to $\eta_\delta \circ (f-\hat{f})$ which yields 
+    Using the assumptions on $f$ and equation~\eqref{eq:variation_difference_bound}, Corollary~\ref{cor:bounded_composition} can be applied to $\eta_\delta \circ (f-\hat{f})$ which yields 
     
     \begin{equation*}
     V_{\mathrm{HK}}\big(\eta_\delta\circ(f-\hat{f})\big) \leq \widehat{V}_{\mathrm{HK}}\big(\eta_\delta\circ(f-\hat{f})\big) \leq C_1 < \infty.
     \end{equation*}
 
-    for a constanct $C_1$. Therefore, one can apply the Koksma-Hlawka inequality
+    for a constanct $C_1$. Therefore, one can utilize the Koksma-Hlawka inequality
     (Theorem~\ref{thm:koksma-hlawka}) to $f-\hat{f}$ to get
     \begin{equation}
         \label{eq:hk_generalization_gap}
@@ -388,28 +410,10 @@ Now we can prove the theorem.
 
 \begin{remark} \ \\
     Theorem~\ref{thm:main-theorem} gives an upper bound on the generalization
-    error. However, the bound requires $\widehat{V}_\mathrm{HK}(f) < \infty$. If
-    $f\in C^s([0,1]^s,\mathbb{R})$, this is necessarily fulfilled. Nevertheless,
-    $f\in C^s([0,1]^s,\mathbb{R})$ is a stronger assumption on the ground truth
-    function $f$ than $\widehat{V}_\mathrm{HK}(f) < \infty$. The boundedness of
-    the Hardy--Krause variation of $f$ is only on the mixed-first-order
-    derivatives of $f$ and not on all partial derivatives up to order $s$ as
-    required by $f\in C^s([0,1]^s,\mathbb{R})$. 
+    error. If $f\in C^s([0,1]^s,\mathbb{R})$, the assumptions of the theorem on
+    $f$ are necessarily fulfilled. However, this is a stronger assumption on the
+    ground truth function than actually needed. By the demonstrated Theorem, it
+    suffices, that $\widehat{V}_{\mathrm{HK}}(h) < \infty$ and
+    $\frac{\partial^{|v|}}{\prod_{j\in v}\partial x_j} h(x^v;b^{-v}) \in
+    L^1([a,b])$ for all $\varnothing \neq v\subseteq \{1,\dots,s\}$.
 \end{remark}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
