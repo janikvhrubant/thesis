@@ -735,25 +735,17 @@ of radiation intensity, which corresponds to a decreased number of photons
 reaching the detector. Here, X-ray photons may be fully absorbed by
 \emph{photoelectric absorption} or undergo either \emph{elastic scattering}
 (Rayleigh) or \emph{inelastic scattering} (Compton) as they interact with
-matter.
+matter. These processes depend on the photon energy and the atomic molecules in
+the material respecting the density and molecular distribution of the material.
+A visualization of these interaction mechanisms is shown in
+Figure~\ref{fig:tungsten_atomic_model}.
 
-The attenuation of X-ray photons arises from physical processes that alter their
-number, direction, or energy as they interact with matter. These interactions
-occur at the level of individual photons and are highly dependent on the photon
-energy. This section presents an overview of the primary interaction mechanisms
-relevant to attenuation like in \cite{medicalImagingSystemsIntro2019:}.
-
-For correctness, in the simmulations it is further assumed that the X-ray
-photons are propagating through vacuum before entering and after exiting the
-phantom. Usually the tissues are surrounded by air, which has a negligible
-effect on the photon transport.
-
-\begin{figure}
+\begin{figure}[H]
     \centering
-    \begin{minipage}[t]{0.4\textwidth}
+    \begin{minipage}[t]{0.3\textwidth}
         \raggedright
         \begin{tikzpicture}[scale=.8]
-            \draw[decorate, decoration=snake, {Latex[scale=1.5]}-, shorten <=-10] (2.5,2.3) -- (-2.5,2.3) node[left] {\small$\gamma$};
+            \draw[decorate, decoration=snake, {Latex[scale=1.5]}-, shorten <=-10] (2.5,2.3) -- (-2.5,2.3) node[left, xshift=-4pt] {\small$\gamma$};
             \fill[black] (0,0) circle (0.3);
             \foreach \angle in {90, 270} {
                 \fill[color=blue] (0,0) ++(\angle:1) circle (3pt);
@@ -771,10 +763,11 @@ effect on the photon transport.
             \node[below, font=\large] at (0,-2.5) {No Interaction};
         \end{tikzpicture}
     \end{minipage}
-    \begin{minipage}[t]{0.45\textwidth}
+    \hspace{2em} % extra horizontal spacing
+    \begin{minipage}[t]{0.3\textwidth}
         \raggedleft
         \begin{tikzpicture}[scale=.8]
-            \draw[decorate, decoration=snake, segment length=2mm, {Latex[scale=1.5]}-, shorten <=-10] (2.5,-.15) -- (.25,-.7) -- (-2.5,-.25) node[left] {\small$\gamma$};
+            \draw[decorate, decoration=snake, segment length=2mm, {Latex[scale=1.5]}-, shorten <=-10] (2.5,-.15) -- (.25,-.7) -- (-2.5,-.25) node[left, xshift=-4pt] {\small$\gamma$};
             \fill[black] (0,0) circle (0.3);
             \foreach \angle in {90, 270} {
                 \fill[color=blue] (0,0) ++(\angle:1) circle (3pt);
@@ -792,12 +785,12 @@ effect on the photon transport.
             \node[below, font=\large] at (0,-2.5) {Rayleigh Scattering};
         \end{tikzpicture}
     \end{minipage}
-    \par\vspace{2em}
-    \begin{minipage}[t]{0.45\textwidth}
+    \par\vspace{3em} % more vertical space
+    \begin{minipage}[t]{0.3\textwidth}
         \raggedright
         \begin{tikzpicture}[scale=.8]
-            \draw[decorate, decoration=snake] (0,1) -- (-2.5,2.1) node[left] {\small$\gamma$};
-            \draw[thick] [thick, -{Latex[scale=1.5]}, shorten >=5] (0,1) --
+            \draw[decorate, decoration=snake] (0,1) -- (-2.5,2.1) node[left, xshift=-4pt] {\small$\gamma$};
+            \draw[thick, -{Latex[scale=1.5]}, shorten >=5] (0,1) --
             (2.5, .7) node[draw, circle, fill=black, minimum size=5pt, inner
             sep=0pt] {} node[xshift=10pt, yshift=2pt] {\small$e^\text{-}$};
             \foreach \angle in {90, 270} {
@@ -816,11 +809,12 @@ effect on the photon transport.
             \node[below, font=\large] at (0,-2.5) {Photoelectric Absorption};
         \end{tikzpicture}
     \end{minipage}
-    \begin{minipage}[t]{0.45\textwidth}
+    \hspace{2em}
+    \begin{minipage}[t]{0.3\textwidth}
         \raggedleft
         \begin{tikzpicture}[scale=.8]
             \draw[decorate, decoration=snake, segment length=2mm] (.3,-2) --
-            (-2.5,-2) node[left] {\small$\gamma$};
+            (-2.5,-2) node[left, xshift=-4pt] {\small$\gamma$};
             \draw[decorate, decoration=snake, segment length=4mm, -{Latex[scale=1.5]}, shorten >=-6] (.3,-2) -- (2.0,-1.5);
             \draw[thick, -{Latex[scale=1.5]}, shorten >=5] (.3,-2) -- (2.5,-2.5)
             node[draw, circle, fill=black, minimum size=5pt, inner sep=0pt] {}
@@ -842,48 +836,44 @@ effect on the photon transport.
             \node[below, font=\large] at (0,-2.5) {Compton Scattering};
         \end{tikzpicture}
     \end{minipage}
-    \begin{minipage}[t]{0.45\textwidth}
-        \centering
-        \begin{tikzpicture}[scale=.8]
-            \draw[decorate, decoration=snake, segment length=2mm] (0,-.3) --
-            (-2.5,-.3) node[left] {\small$\gamma$};
-            \draw[thick, -{Latex[scale=1.5]}, shorten >=5] (0,-.3) -- (2.5,1)
-            node[draw, circle, fill=black, minimum size=5pt, inner sep=0pt] {}
-            node[xshift=10pt, yshift=2pt] {\small$e^\text{-}$};
-            \draw[thick, -{Latex[scale=1.5]}, shorten >=5] (0,-.3) -- (2.5,-1.3)
-            node[draw, circle, fill=black, minimum size=5pt, inner sep=0pt] {}
-            node[xshift=10pt, yshift=2pt] {\small$e^\text{-}$};
-            \fill[black] (0,0) circle (0.3);
-            \foreach \angle in {90, 270} {
-                \fill[color=blue] (0,0) ++(\angle:1) circle (3pt);
-            }
-            \foreach \angle in {0, 45, 90, 135, 180, 225, 270, 315} {
-                \fill[color=blue] (0,0) ++(\angle:1.5) circle (3pt);
-            }
-            \foreach \angle in {0, 40, 80, 120, 160, 200, 240, 280, 320} {
-                \fill[color=blue] (0,0) ++(\angle:2cm) circle (3pt);
-            }
-            \foreach \radius in {1,1.5,2}
-            {
-                \draw[thick] (0,0) circle (\radius);
-            }
-            \node[below, font=\large] at (0,-2.5) {Pair Production};
-        \end{tikzpicture}
-    \end{minipage}
     \caption{Principles from photon interaction with matter similar to \cite[Chap. 7]{medicalImagingSystemsIntro2019:}}
     \label{fig:tungsten_atomic_model}
 \end{figure}
 
+The attenuation of X-ray photons arises from physical processes that alter their
+number, direction or energy as they interact with matter. These interactions
+occur at the level of individual photons and are highly dependent on the photon
+energy. This section presents an overview of the primary interaction mechanisms
+relevant to attenuation like in \cite{medicalImagingSystemsIntro2019:}.
+
+For correctness, in the simulations it is further assumed that the X-ray
+photons are propagating through air before entering and after exiting the
+phantom, where the possible interactions with molecules in the air are neglected.
+
 \subsection{Free Path Length}
 
 All mentioned interaction processes - the photoelectric effect, Compton
-scattering and Rayleigh scattering - are probabilistic in nature. The according
-attenuation coefficients $\mu$ characterizes the extend of the beam being
-reduced by its according effect, when passing through the material, in
-\si{\square\centi\metre\per\gram}. For the simulation of photons, the
-attenuation coefficients are dependend on the according energy $E$ of the photon
-and the material at spherical location $x$ of the photon. The coefficients are
-summarized in Table~\ref{tab:attenuation_coefficients}.
+scattering and Rayleigh scattering - are probabilistic in nature. Their
+attenuation is stochastically characterized by the \emph{mass attenuation
+coefficient} $\tilde{\mu}$ in \si{\square\centi\metre\per\gram}. The attenuation
+coefficient reflects the composition of the material and the energy of the
+photon.  Even though, the attenuation is depending on the density of the
+material, the \emph{mass attenuation coefficients} do not depend on the density.
+
+Therefore, the \emph{linear attenuation coefficient} $\mu$ in
+\si{\per\centi\metre}, applied within the Beer--Lambert law, is obtained by
+multiplying the mass attenuation coefficient $\tilde{\mu}$ with the density
+$\rho$ of the material:
+
+$$\mu(x,E) = \rho(x) \cdot \tilde{\mu}(x,E)$$
+
+For comprehensibility, the dependence on the material and density is implicitly
+expressed by the cartesian coordinates $x$ of the photon position. This is
+justified, as the material and density also depend on the spatial location
+within the phantom. Therefore, a simple helper function is returning the
+\emph{linear attenuation coefficient} $\mu$ for a given position $x$ and energy
+$E$. The coefficients are summarized in
+Table~\ref{tab:attenuation_coefficients}.
 
 \begin{table}[H]
     \centering
@@ -901,37 +891,33 @@ summarized in Table~\ref{tab:attenuation_coefficients}.
 \end{table}
 
 The linear attenuation coefficient $\mu(x,E)$ is the sum of the individual
-attenuation coefficients of the interaction coefficients:
+linear attenuation coefficients for interactions:
 
 $$\mu(x,E) = \mu_{\text{PE}}(x,E) + \mu_{\text{RS}}(x,E) +
 \mu_{\text{CS}}(x,E)$$
 
-When an X-ray photon eneters the phantom two main effects are considered:
+For the simulations within this thesis, the attenuation coefficients for the
+respective phantoms are retrieved from the \emph{XCOM Photon Cross Sections
+Database} \cite{nistXCOM}.
+
+When an X-ray photon two main effects are considered:
 \begin{itemize}
-    \item \textbf{Attenuation:} The photon may be absorbed or Scattered.
+    \item \textbf{Attenuation:} The photon may be absorbed or scattered.
     \item \textbf{No Interaction:} The photon may pass through the phantom
     without any interaction.
 \end{itemize}
 
-The \emph{free path length} $t$ of a photon describes the distance a photon
-takes to traverse through the phantom before it interacts with matter. Supposing
-the phantoms location is $x$ and the photon is traveling in the unit direction
-$\vec{v}$, as in \cite{qmcXray2023} the free path length $t$ follows the
-distribution given by:
+The probability, that a phantom survives from a certain point $A$ to another point $B$ without any interaction, is described by as follows \cite{bezug2014computed}:
 
-$$t \sim \mu(x,E)\exp\bigg[-\int_{0}^{t}{\mu(x+s\cdot\vec{v})\,ds}\bigg]$$
+$$P(A \to B) = \exp\bigg[-\int_{A}^{B}{A + \mu\bigg(\frac{s}{\|\overrightarrow{AB}\|}(B-A),E \bigg)\,ds}\bigg]$$
 
-The free path length $t$ is constraint by the maximum distance $c$ ($0\leq t\leq
-c$) to the next exit point of the phantom along the ray with direction
-$\vec{v}$. After leaving the phantom, we assume the photon is reaching the
-detector or leaving the simulation domain.
+To sample the free path length of a photon, one can project the photon within a given direction $\vec{\omega}$ from its current position $A$ to the detector position $\hat{C}$, as shown in Figure~\ref{fig:exit_point}. Then, a random variable $U \sim \mathcal{U}(0,1)$ is sampled.
 
-The probability of the photon to leave the phantom unaltered is
-described by the \emph{escape probability} $\mathcal{P}$ of a photon at a given
-position $A$ with unit direction $\vec{v}$ and energy $E$ as in
-\cite{qmcXray2023}:
-
-$$\mathcal{P}(x, \vec{v}, E) = \exp \bigg[ -\int\limits_{0}^{c}{\mu(x+t\vec{v}, E)} dt \bigg],$$
+\begin{itemize}
+    \item If $U < \mathcal{P}(A, \vec{\omega}, E)$, the photon reaches the detector without any interaction.
+    \item If $U \geq \mathcal{P}(A, \vec{\omega}, E)$, the photon interacts with matter after traveling the free path length $t$. The free path length $t$ is then determined by solving the equation 
+    $$\int_{0}^{t}{\mu(A+s\cdot\vec{\omega},E)\,ds} = -\log(1-U)$$
+\end{itemize}
 
 \begin{figure}[H]
     \centering
@@ -945,26 +931,37 @@ $$\mathcal{P}(x, \vec{v}, E) = \exp \bigg[ -\int\limits_{0}^{c}{\mu(x+t\vec{v}, 
         \filldraw[fill=black] (4,-1) circle (4pt) node[above, inner sep=7pt] {$C$};
         \draw[thick, -{Latex[scale=1.5]}] (4,-1) -- (7,-1.5);
 
+        \filldraw[
+            draw=teal,
+            pattern={Lines[angle=0, distance=4pt, line width=0.5pt]},
+            pattern color=teal
+        ] (7,-4) rectangle (7.3,4);
+        \node[rotate=90, anchor=south, color=teal] at (8,0) {Detector Grid};
+
         % \node[above] at (-.5,.5) {$A_0$};
     \end{tikzpicture}
     \caption{Illustration of the entry and exit point of the ray of a photon without interaction.}
     \label{fig:exit_point}
 \end{figure}
 
-% \textcolor{green}{Todo: Image illustrating the entry and exit point of a ray without interaction.}
-
 
 \subsection{Compton Scattering}
 \label{sec:physicsComptonScattering}
 \emph{Compton scattering} is the most dominant interaction mechanism for X-ray
 photons in tissue \cite[Chap. 7]{medicalImagingSystemsIntro2019:}. It occurs
-when a X-ray photon with considerably higher energy than the binding energy of an outer shell electron collides with this electron. This interaction
-results in a transfer of energy and momentum. The electron is ejected from the atom, while the incoming photon is scattered at an
-angle and its energy is reduced.
+when a X-ray photon with considerably higher energy than the binding energy of
+an outer shell electron collides with this electron. This interaction results in
+a transfer of energy and momentum. The electron is ejected from the atom, while
+the incoming photon is scattered at an angle and its energy is reduced.
 
-A portion of the incident photon energy is transferred to the electron, which
-is referred to as the "recoil electron" or Compton electron. The interaction
-produces a positive ion, the "recoil electron" and a scattered photon. If the deflection angle of the scattered photon is small, most of the energy is retained by the scattered photon. The deflection angle can vary from 0 to 180 degrees, depending on the energy transfer during the interaction.
+A portion of the incident photon energy is transferred to the electron, which is
+referred to as the "recoil electron" or Compton electron. The interaction
+produces a positive ion, the "recoil electron" and a scattered photon. If the
+deflection angle of the scattered photon is small, most of the energy is
+retained by the scattered photon. The deflection angle can vary from 0 to 180
+degrees, depending on the energy transfer during the interaction. Thus, the
+photon can be scattered in any direction, with the probability of scattering at
+smaller angles being higher than at larger angles.
 
 For the distribution of the scattering angle $\theta$ of the scattered photons
 in the differential cross section, we apply the formula derived by \emph{Klein
@@ -974,72 +971,140 @@ stationary. The relation between energy loss and photon deflection is determined
 from conservation of momentum and energy between the photon and the recoiling
 electron \cite{hubbell1969photon,klein1928scattering}.
 
+The Klein--Nishina formula provides the differential cross section for Compton
+scattering with scattering angle $\theta$, initial photon energy $E$ and
+scattered photon energy $E'$. Thus, $\theta$ is the angle between the direction
+of the incident photon and the direction of the scattered photon.
+
+$$ \frac{d\sigma}{d\Omega} = \frac{r_e^2}{2}
+\bigg(\frac{E^\prime}{E}\bigg)^2 \bigg(\frac{E}{E^\prime} + \frac{E^\prime}{E} -
+\sin^2(\theta)\bigg) $$
+
+Further, the relation
+between the energies of the incident photon $E$ and the scattered photon $E'$ is
+given by the Compton formula:
+
+$$ E' = \frac{E}{1 + \frac{E}{m_e c^2} (1 - \cos \theta)} = \frac{E}{1 + k(1 - \cos \theta)} $$
+
+For readability, $k=\tfrac{E}{m_ec^2}$ is used in the following.
+Here, $m_ec^2$ denotes the electron rest energy which is approximately $0.511$ and $r_e$ denotes the classical
+electron radius. This yields the following form of the Klein-Nishina formula:
+
 \begin{equation}
     \label{eq:kleinNishina}
-    \frac{d\sigma}{d\Omega} (\theta, E)= \frac{1}{2} r_e^2 
+    \frac{d\sigma}{d\Omega} (\theta, k)= \frac{1}{2} r_e^2 
     \frac{1}{(1 + k(1 - \cos \theta))^2} \left( 1 + \cos^2 \theta + 
     \frac{k^2 (1 - \cos \theta)^2}{1+ k(1 - \cos \theta)} \right),
 \end{equation}
 
-where $k = \tfrac{E}{mc^2} \approx \tfrac{E}{0.511}$ with $mc^2$ denoting the
-rest mass energy of the electron, $E$ the energy of the incident photon and
-$r_e$ the classical electron radius. Here, $\sigma$ denotes the scattering cross
-section, which quantifies the effective area for scattering, and $\Omega$
-denotes the solid angle element, $d\Omega = \sin \theta \, d\theta \, d\phi$,
-describing the angular extent in three-dimensional space. The expression
-$\tfrac{d\sigma}{d\Omega}$ is thus the \emph{differential cross section}, which
-represents the probability density of photons being scattered into a particular
-direction. By integrating over all scattering directions one obtains the total
-cross section $\sigma$, while normalizing $\tfrac{d\sigma}{d\Omega}$ yields the
-probability distribution of the scattering angle $\theta$. This distribution is
-anisotropic: for low photon energies it is nearly isotropic, whereas for higher
-energies it becomes increasingly forward peaked.
+The Klein--Nishina formula describes the angular distribution of the scattering
+probability. Here, $\sigma$ denotes the scattering cross section, which
+quantifies the probability of an interaction by the effective area for
+scattering, and $\Omega$ denotes the solid angle, describing the
+three-dimensional angular space into which the photon may be scattered. The
+expression $\tfrac{d\sigma}{d\Omega}$ is thus the \emph{differential cross
+section}, which represents the probability density of photons being scattered
+into a particular direction. 
 
 For sampling from the distribution of the scattering angle we cannot apply the
 same procedure as for the photon energy in Section~\ref{sec:photon_energy},
-since the Klein-Nishina formula is not a cumulative distribution function (CDF).
+since the structure of the Klein-Nishina formula and the dependency of $\theta$
+is more complex and does not allow for an analytical inversion.
 Instead the method of \emph{rejection sampling} is used. 
 
-Rejection sampling is a technique to generate samples from a target distribution
-by using an envelope distribution that is easy to sample from. The envelope
-distribution is an upper bound to the original distribution. The basic idea is
-to sample from this proposal distribution and accept or reject the samples based
-on a criterion that relates the envelope distribution to the target distribution
-from Klein-Nishina \cite[Chap. 4]{muller2012monte}.
+Acceptance--rejection sampling is a method for generating random samples from a
+probability distribution $f(x)$ when direct sampling is difficult. The idea is
+to employ a simpler envelope distribution $g(x)$, from which samples can be
+drawn efficiently, and which dominates $f(x)$ up to a constant factor. More
+precisely, one requires a constant $0< c \leq 1$ such that $c\,f(x) \leq g(x)$
+for all $x$. A candidate value $x$ is drawn from $g(x)$, and an auxiliary
+uniform random number $u \sim \mathcal{U}(0,1)$ is generated. The sample $x$ is
+accepted if $u \leq \tfrac{c\,f(x)}{g(x)}$, otherwise it is rejected and the
+procedure is repeated until an acceptance occurs.
 
-In the context of the distribution of Klein-Nishina, the convergence behavior for $E\to\infty$ and $k\to\infty$ consequently is:
+The efficiency of the algorithm depends on how tightly $g(x)$ bounds $c\,f(x)$:
+the closer the proposal envelope matches the target distribution, the higher the
+acceptance rate. Acceptance--rejection sampling is thus most effective when a
+proposal distribution can be chosen that both resembles the target distribution
+and allows efficient evaluation. For more details, see for instance \cite[Chap 4]{muller2012monte} or \cite[Chap. 8.1]{leobacher2014introduction}.
 
+To apply the acceptance--rejection sampling method to the Klein-Nishina formula equation~\eqref{eq:kleinNishina}, we first rewrite $\frac{d\sigma}{d\Omega} (\theta, k)$ to $f(k,x)$ using $x=\cos\theta$ and ignore the constant factors which are not relevant for sampling:
 \begin{equation}
-    f(k,x) \in \mathcal{O} (\frac{1}{k(1-x)})
+    f(k,x) = \frac{1}{(1 + k(1 - x))^2} \left( 1 + x^2 + \frac{k^2 (1 - x)^2}{1+ k(1 - x)} \right)
 \end{equation}
 
-A suitable envelope distribution is of the form
+Following \cite{ozmutlu1992sampling}, we start by choosing an envelope distribution $h(k,x)$ of the form
 \begin{equation*}
-    h(k,x) = \frac{1}{k(1-x)}
+    h(k,x) = \frac{a(k)}{b(k)-x}
 \end{equation*}
 
-with the given conditions
+with $a(k), b(k)$ to be determined such that the envelope function matches the target function at the boundaries $x=1$ and $x=-1$. This leads to the conditions:
+
 \begin{align*}
-    f(k,1) &= h(k,1) = 2 \\
-    f(k,-1) &= h(k,-1) = \zeta(k) \\
-    \zeta(k) &= \frac{2(2k^2 + 2k + 1)}{(2k + 1)^3}
-\end{align*}
-By a straightforward calculation, this leads to the following values\cite{ozmutlu1992sampling}:
-\begin{align*}
-    a(k) = 2(b(k)-1) \\
-    b(k) = \frac{1+\frac{\zeta(k)}{2}}{1-\frac{\zeta(k)}{2}}
+    f(k,1) &= 2 = h(k,1) \\
+    f(k,-1) &= \zeta(k) = h(k,-1)  \quad \text{ with}\\
+     \zeta(k) &= \frac{2(2k^2 + 2k + 1)}{(2k + 1)^3}
 \end{align*}
 
-Now by using the rejection sampling method, $x=\cos\theta$ is sampled from the distribution $h$ by generating a uniform random variable $r \sim \mathcal{U}(0,1)$ and calculating the value $x$ as follows:
-\begin{equation}
-    x = b(k)- (b(k)-1) \left(\frac{\zeta}{2}\right)^r
-\end{equation}
+Imposing these endpoint conditions on $h(k,x)=\dfrac{a(k)}{b(k)-x}$, yields
+\begin{align*}
+\frac{a(k)}{b(k)-1}=2 \quad&\Rightarrow\quad a(k)=2(b(k)-1),\\
+\frac{a(k)}{b(k)+1}=\zeta \quad&\Rightarrow\quad \frac{2(b(k)-1)}{b(k)+1}=\zeta.
+\end{align*}
+Solving for $b(k)$ by multiplying out gives
+$$
+b(k)=\frac{2+\zeta(k)}{2-\zeta(k)}=\frac{1+\frac{\zeta(k)}{2}}{1-\frac{\zeta(k)}{2}} $$
 
-We will accept this value if $\frac{f(k,x)}{h(k,x)} \geq u_1$, where $u_1$ denotes the random input variable. To derive an exact direction of the scattered photon, we need to further sample an azimuthal angle $\phi$, which is done by the second random input variable:
-\begin{equation}
-    \label{eq:azimuthal_angle}
-    \phi = 2\pi u_2
-\end{equation}
+Thus, the envelope function is given with the values:
+
+
+
+\begin{align*}
+    h(k,x) &= \frac{a(k)}{b(k)-x} \\
+    a(k) &= 2(b(k)-1) \\
+    b(k) &= \frac{1+\frac{\zeta(k)}{2}}{1-\frac{\zeta(k)}{2}}
+\end{align*}
+
+For the acceptance--rejection method to be applicable, we need to ensure that $c\,f(k,x) \leq h(k,x)$ for all $x \in [-1,1]$ and some constant $0 < c \leq 1$. 
+
+Therefore, consider the ratio $R_k(x)\coloneqq h(k,x)/f(k,x)$ for $x\in[-1,1]$.
+Since $f(k,x)>0$ for all $x\in[-1,1]$ (Klein--Nishina is strictly positive) and
+$h(k,x)>0$ because $b(k)>1$ implies $b(k)-x>0$ on $[-1,1]$, we have $R_k(x)>0$
+on $[-1,1]$. At the endpoints, $R_k(\pm 1)=1$ by the matching conditions above,
+so $c_k\le 1$. Therefore, $h(k,x)\ge c_k\,f(k,x)$ for all $x\in[-1,1]$, with a
+uniform constant $c_k \in(0,1]$.
+
+Now the acceptance--rejection method can be applied. To sample the scattering angle $\theta$, $x=\cos\theta$ is sampled from the distribution $h$ the inverse
+transform method:
+
+The cumulative distribution function of $h$ is
+$$
+H(x) = \int_{-1}^x \frac{a}{b-t}\,dt
+= a\,\ln\!\left(\frac{b+1}{b-x}\right),
+$$
+which, after normalization, becomes
+$$
+\tilde H(x)
+= \frac{\ln\!\left(\tfrac{b+1}{\,b-x\,}\right)}
+       {\ln\!\left(\tfrac{b+1}{\,b-1\,}\right)}.
+$$
+Setting $\tilde H(x)=r$ for $r\sim\mathcal U(0,1)$ and solving for $x$ yields
+$$
+x = b - (b+1)\left(\frac{b-1}{b+1}\right)^{r}.
+$$
+With the parametrization
+$$
+b(k) = \frac{1+\frac{\zeta(k)}/{2}}{1-\frac{\zeta(k)}/{2}}
+\quad\Longrightarrow\quad
+\frac{b-1}{b+1} = \frac{\zeta(k)}{2},
+$$
+this simplifies to the final sampling formula
+$$
+x = b(k) - (b(k)+1)\left(\frac{\zeta(k)}{2}\right)^{r},
+$$
+for a uniform random variable $r \sim \mathcal{U}(0,1)$. 
+
+This values is accepted if $\frac{f(k,x)}{h(k,x)} \geq u_1$, where $u_1$ denotes a random input variable. If the value is not accepted, a new value is sampled until acceptance occurs. The scattering angle $\theta$ is then obtained by $\theta = \arccos(x)$
 
 Once the scattering angle $\theta$ is sampled, the energy of the scattered
 photon $E'$ can be calculated using the Compton formula:
@@ -1048,6 +1113,17 @@ photon $E'$ can be calculated using the Compton formula:
     \label{eq:compton_energy}
     E' = \frac{E}{1 + \frac{E}{m_e c^2} (1 - \cos \theta)}
 \end{equation}
+
+Given the scattering angle $\theta$ and an azimuthal angle $\phi=u_2 \cdot 2\pi$
+for $u_2\in[0,1]$ denoting a second random value, the new direction
+$\vec{\omega}'$ can be obtained by rotating the initial direction $\vec{\omega}$
+accordingly. This is achieved by constructing a local orthonormal basis
+$\{\vec{e}_1,\vec{e}_2,\vec{\omega}\}$ and expressing the scattered direction as  
+\[
+    \vec{\omega}' = \cos\theta \, \vec{\omega}
+    + \sin\theta \bigl(\cos\phi \, \vec{e}_1 + \sin\phi \, \vec{e}_2\bigr)\,.
+\]
+
 
 \subsection{Rayleigh Scattering}
 \emph{Rayleigh scattering} is a type of elastic scattering that occurs at low X-ray energies \cite[Chap. 7]{medicalImagingSystemsIntro2019:}. The incident photon interacts with several electrons that are
