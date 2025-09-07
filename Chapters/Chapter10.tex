@@ -461,6 +461,59 @@ The algorithm returns the following values:
 \end{algorithm}
 
 
+\subsection{Compton Scattering}
+
+The Compton scattering algorithm strictly follows the description in
+Section~\ref{sec:physicsComptonScattering}. The algorithm implements the
+Klein--Nishina formula (Eq.~\ref{eq:kleinNishina}) to sample the scattering
+angle $\theta$ with the acceptance-rejection method. The energy update is
+applied with the Compton formula (Eq.~\ref{eq:compton_formula}). Finally, the
+new direction $\vec{\omega}'$ is computed with the sampled angles $\theta$ and
+$\phi$.
+
+The algorithm requires the following inputs:
+\begin{itemize}
+    \item The initial photon energy $E \in \mathbb{R}$.
+    \item The initial (unit) direction of the photon $\vec{\omega} \in \mathbb{R}^3$.
+    \item Two random variables $u_1, u_2 \in [0,1]$.
+\end{itemize}
+
+\begin{algorithm}[H]
+\caption{Compton Scattering (Klein--Nishina + Acceptance--Rejection)}
+\label{alg:comptonScattering}
+\begin{algorithmic}[1]
+\Require Initial photon energy $E$, unit direction $\vec{\omega}$
+\Require Random inputs $u_1,u_2 \in [0,1]$ (reused until acceptance)
+\Ensure Scattered energy $E'$ and unit direction $\vec{\omega}'$
+
+\State $E_{\mathrm{rest}} \gets 0.511\,\mathrm{MeV}$ \Comment{Initialize electron rest energy}
+\State $k \gets E/E_{\mathrm{rest}}$
+\State $\zeta(k) \gets \dfrac{2(2k^2+2k+1)}{(2k+1)^3}$
+\State $b(k) \gets \dfrac{1+\zeta/2}{1-\zeta/2}$,\quad $a(k) \gets 2\,(b-1)$
+\State Define $f(k,x) \gets \dfrac{1}{(1+k(1-x))^2}\!\left(1+x^2+\dfrac{k^2(1-x)^2}{1+k(1-x)}\right)$
+\State Define $h(k,x) \gets \dfrac{a}{b-x}$ \Comment{Envelope on $x\in[-1,1]$}
+
+\Repeat \Comment{Acceptance--Rejection Sampling loop}
+    \State Draw $r \sim \mathcal{U}(0,1)$
+    \State $x \gets b - (b+1)\left(\dfrac{\zeta}{2}\right)^{r}$
+    \State $\mathrm{acc} \gets \dfrac{f(k,x)}{h(k,x)}$
+\Until{$u_1 \le \mathrm{acc}$}
+\State $\theta \gets \arccos(x)$
+
+\State $E' \gets \dfrac{E}{1+k(1-\cos\theta)}$ \Comment{Energy update (Compton formula \eqref{eq:compton_energy})}
+
+\State $\phi \gets 2\pi u_2$ \Comment{Azimuthal angle}
+\If{$|\omega_z|<0.999$} \State $\vec{v}\gets(0,0,1)$ \Else \State $\vec{v}\gets(1,0,0)$ \EndIf
+\State $\vec{e}_1 \gets \dfrac{\vec{v}\times\vec{\omega}}{\|\vec{v}\times\vec{\omega}\|}$,\quad
+       $\vec{e}_2 \gets \vec{\omega}\times\vec{e}_1$ \Comment{Orthonormal basis}
+
+\State $\vec{\omega}' \gets \cos\theta\,\vec{\omega} + \sin\theta\bigl(\cos\phi\,\vec{e}_1+\sin\phi\,\vec{e}_2\bigr)$
+
+\State \Return $E',\ \vec{\omega}'$
+\end{algorithmic}
+\end{algorithm}
+
+
 \subsection{Forced Fixed Detection}
 \label{sc:forcedDetection}
 
@@ -591,50 +644,6 @@ less than or equal to the target attenuation $attGoal$ as described in line
 
 The forced fixed detection algorithm then yields the exit positions and
 according intensities for both the primary and scattered photons.
-
-
-\subsection{Compton Scattering}
-
-\begin{algorithm}[H]
-\caption{Compton Scattering (Klein--Nishina + Acceptance--Rejection)}
-\label{alg:comptonScattering}
-\begin{algorithmic}[1]
-\Require Initial photon energy $E$, unit direction $\vec{\omega}$
-\Require Random inputs $u_1,u_2 \in [0,1]$ (reused until acceptance)
-\Ensure Scattered energy $E'$ and unit direction $\vec{\omega}'$
-
-\LineComment{Precompute KN parameters}
-\State $E_{\mathrm{rest}} \gets 511\,\mathrm{keV}$ \Comment{Initialize electron rest energy}
-\State $k \gets E/E_{\mathrm{rest}}$
-\State $\zeta(k) \gets \dfrac{2(2k^2+2k+1)}{(2k+1)^3}$
-\State $b(k) \gets \dfrac{1+\zeta/2}{1-\zeta/2}$,\quad $a(k) \gets 2\,(b-1)$
-\State Define $f(k,x) \gets \dfrac{1}{(1+k(1-x))^2}\!\left(1+x^2+\dfrac{k^2(1-x)^2}{1+k(1-x)}\right)$
-\State Define $h(k,x) \gets \dfrac{a}{b-x}$ \Comment{Envelope on $x\in[-1,1]$}
-
-\Comment{Sample $x=\cos\theta$ by inverse CDF of $h$ and accept--reject w.r.t.\ $f$}
-\Repeat
-    \State $x \gets b - (b+1)\left(\dfrac{\zeta}{2}\right)^{r}$ \Comment{Inverse CDF of $h$ on $[-1,1]$}
-    \State Draw $u_1 \sim \mathcal{U}(0,1)$
-    \State $\mathrm{acc} \gets \min\!\left\{1,\ \dfrac{f(k,x)}{h(k,x)}\right\}$
-\Until{$u_1 \le \mathrm{acc}$}
-\State $\theta \gets \arccos(x)$
-
-\LineComment{Energy update (Compton formula \eqref{eq:compton_energy})}
-\State $E' \gets \dfrac{E}{1+k(1-\cos\theta)}$
-
-\LineComment{Azimuthal angle and orthonormal frame around $\vec{\omega}$}
-\State $\phi \gets 2\pi u_2$
-\If{$|\omega_z|<0.999$} \State $\vec{a}\gets(0,0,1)$ \Else \State $\vec{a}\gets(1,0,0)$ \EndIf
-\State $\vec{e}_1 \gets \dfrac{\vec{a}\times\vec{\omega}}{\|\vec{a}\times\vec{\omega}\|}$,\quad
-       $\vec{e}_2 \gets \vec{\omega}\times\vec{e}_1$
-
-\LineComment{Direction update}
-\State $\vec{\omega}' \gets \cos\theta\,\vec{\omega} + \sin\theta\bigl(\cos\phi\,\vec{e}_1+\sin\phi\,\vec{e}_2\bigr)$
-
-\State \Return $E',\ \vec{\omega}'$
-\end{algorithmic}
-\end{algorithm}
-
 
 
 % ------------------------------------------------------------------------------

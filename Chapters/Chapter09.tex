@@ -806,6 +806,7 @@ Figure~\ref{fig:tungsten_atomic_model}.
             {
                 \draw[thick] (0,0) circle (\radius);
             }
+            \fill[black] (0,0) circle (0.3);
             \node[below, font=\large] at (0,-2.5) {Photoelectric Absorption};
         \end{tikzpicture}
     \end{minipage}
@@ -984,10 +985,13 @@ Further, the relation
 between the energies of the incident photon $E$ and the scattered photon $E'$ is
 given by the Compton formula:
 
-$$ E' = \frac{E}{1 + \frac{E}{m_e c^2} (1 - \cos \theta)} = \frac{E}{1 + k(1 - \cos \theta)} $$
+\begin{equation}
+    E' = \frac{E}{1 + \frac{E}{m_e c^2} (1 - \cos \theta)} = \frac{E}{1 + k(1 - \cos \theta)}
+    \label{eq:compton_formula}
+\end{equation}
 
 For readability, $k=\tfrac{E}{m_ec^2}$ is used in the following.
-Here, $m_ec^2$ denotes the electron rest energy which is approximately $0.511$ and $r_e$ denotes the classical
+Here, $m_ec^2$ denotes the electron rest energy which is approximately $0.511 MeV$ and $r_e$ denotes the classical
 electron radius. This yields the following form of the Klein-Nishina formula:
 
 \begin{equation}
