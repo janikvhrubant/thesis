@@ -200,9 +200,10 @@ and $\hat{f}_\theta$ a respective surrogate with network architecture
 $\mathbf{d}$, according parameters $\theta$ and activation function
 $\boldsymbol{\sigma}$. Then, given the surrogate and a respective point set
 $\mathcal{P}$, the \emph{loss function} is defined as
-\begin{equation*}
+\begin{equation}
 \mathcal{L}_{\mathcal{P}}(\theta) := \frac{1}{|\mathcal{P}|}\sum\limits_{y \in \mathcal{P}} |f(y) - \hat{f}_\theta(y)|^p\,,
-\end{equation*}
+\label{eq:loss_function}
+\end{equation}
 for some $1\leq p < \infty$.
 \end{definition}
 
@@ -415,6 +416,8 @@ learning rate $\eta$ during the training process.
 
 \subsection{Adam Optimizer}
 
+\textcolor{red}{TODO: Adam Optimizer überarbeiten}
+
 The \acf{adam} algorithm~\cite{goodfellow2016deep} is a variant of stochastic
 gradient descent (SGD) that is designed to work well \emph{out of the box}. It
 combines two ideas:
@@ -483,78 +486,6 @@ This combination makes Adam robust in high-dimensional, noisy settings and when 
     \State $\hat{m}_t \gets m_t / (1 - \beta_1^{t})$
     \State $\hat{v}_t \gets v_t / (1 - \beta_2^{t})$
     \State $\theta_t \gets \theta_{t-1} - \eta \,\hat{m}_t / \big(\sqrt{\hat{v}_t} + \epsilon\big)$
-\EndFor
-\end{algorithmic}
-\end{algorithm}
-
-
-\subsection{Lion Optimizer}
-
-The \emph{Lion} optimizer (\textbf{EvoLved Sign
-Momentum})~\cite{chen2023symbolic} is a recently discovered first-order
-optimization algorithm for training deep neural networks. Unlike adaptive
-methods such as Adam, which maintain both first- and second-moment estimates of
-gradients, Lion keeps track only of momentum and applies a \emph{sign-based}
-update. This leads to a very lightweight algorithm with strong empirical
-performance across large-scale vision, language and multimodal tasks.
-
-\paragraph{Key ideas.}
-Lion builds on two simple components:
-\begin{enumerate}
-    \item \emph{Momentum}, maintained as an exponential moving average of past gradients,
-    \item a \emph{sign update}, which discards the magnitude and uses only the
-    direction of the combined momentum and gradient.
-\end{enumerate}
-The sign operation ensures that every parameter update has the same step size in
-magnitude, making the algorithm robust to rescaling of gradients. At the same
-time, the momentum term provides stability by smoothing out noisy updates.
-
-\paragraph{Mini-batch gradient.}
-As in other stochastic optimizers, at iteration $t$ a mini-batch $\mathcal{B}_t$
-is sampled and the stochastic gradient is computed:
-\[
-g_t \;=\; \nabla_\theta \mathcal{J}_{\mathcal{B}_t}(\theta_{t-1}).
-\]
-
-\paragraph{Momentum update.}
-Lion maintains an exponential moving average of past gradients:
-\[
-m_t \;=\; \beta_1 m_{t-1} + (1 - \beta_1)\, g_t,
-\]
-where $\beta_1 \in [0,1)$ controls how quickly past gradients decay. A common
-choice is $\beta_1 = 0.9$.
-
-\paragraph{Parameter update.}
-The parameter step is determined by the sign of a linear combination of current
-momentum and gradient:
-\[
-\theta_t \;=\; \theta_{t-1} - \eta \cdot 
-\operatorname{sign}\!\big(\beta_2 m_t + (1-\beta_2) g_t\big),
-\]
-where $\eta$ is the learning rate and $\beta_2$ balances between the momentum
-term and the current gradient. The \texttt{sign} function is applied elementwise
-so that each parameter receives a step of equal magnitude $\eta$, with the
-direction determined by the gradient information.
-
-\begin{remark}\ \\
-Lion differs from Adam and similar adaptive methods by eliminating the
-second-moment accumulation $v_t$, reducing memory usage and computation. The use
-of the sign function makes updates invariant to gradient scale, while the
-combination of $m_t$ and $g_t$ ensures stability. Because the sign update yields
-larger effective step norms, Lion typically requires a smaller learning rate
-(often 3--10$\times$ smaller than AdamW) and a larger decoupled weight decay to
-achieve comparable regularization strength. Empirically, Lion has been shown to
-match or outperform AdamW on diverse large-scale benchmarks.
-\end{remark}
-
-\begin{algorithm}[H]
-\caption{Lion Optimizer}
-\begin{algorithmic}[1]
-\State Initialize $\theta_0$, $m_0 \gets 0$; choose $\eta>0$, $\beta_1,\beta_2\in[0,1)$
-\For{$t = 1$ to $T$}
-    \State Sample mini-batch $\mathcal{B}_t$ and set $g_t \gets \nabla_\theta \mathcal{L}(\theta_{t-1};\mathcal{B}_t)$
-    \State $m_t \gets \beta_1 m_{t-1} + (1 - \beta_1)\, g_t$
-    \State $\theta_t \gets \theta_{t-1} - \eta \cdot \operatorname{sign}\!\big(\beta_2 m_t + (1 - \beta_2) g_t\big)$
 \EndFor
 \end{algorithmic}
 \end{algorithm}

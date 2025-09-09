@@ -52,17 +52,16 @@ on different training sets.}
 \label{tab:test_set}
 \end{table}
 
-For the evaluation of the approximation quality, the following test error metric
-is then applied on the test set $\mathcal{T}$
+For the evaluation of the approximation quality, the loss function \eqref{eq:loss_function} for $p=1$ is evaluated on the test set $\mathcal{T}$, yielding:
 
 \begin{equation*}
-    \text{MAE} = \frac{1}{|\mathcal{T}|} \sum_{\mathbf{x}\in\mathcal{T}} |f(\mathbf{x}) - \hat{f}_\theta(\mathbf{x})|\,.
+\mathcal{L}_{\mathcal{T}}(\theta) := \frac{1}{|\mathcal{T}|}\sum\limits_{y \in \mathcal{T}} |f(y) - \hat{f}_\theta(y)|\,,
 \end{equation*}
-The test set $\mathcal{T}$ is differing for the three training sets. The setup can be summarized as in Table~\ref{tab:test_set}.
 
-Further the Deep Learning algorithm is evaluated for a varying number of epochs
-between $100$ and $2000$ together with the optimizer introduced in
-Chapter~\ref{chapter6}: \ac{adam}~\cite{goodfellow2016deep}.
+
+Further, the Deep Learning algorithm is evaluated for a varying number of epochs
+between $100$ and $2000$ together with the \ac{adam} optimizer
+\cite{goodfellow2016deep} introduced in Chapter~\ref{chapter6}.
 
 For the other training hyperparameters, a systematic study was conducted using
 \emph{Optuna} \cite{akiba2019optuna}. Hereby the architecture of the \acp{dnn}
@@ -100,7 +99,10 @@ $\epsilon$ & $1e-8$ \\
 
 \section{Multi-dimensional sum of sines}
 
-As a first example, the multidimensional and nonlinear sum of sines function is studied in for different dimensions $s\in\{6,8,10\}$
+As a first example, the multidimensional and nonlinear sum of sines function is
+studied for $s = 6$ dimensions. The function was introduced in
+\cite{lye2020deep} as a benchmark example. Further the function will be analyzed
+for $s=8$ dimensions to study the impact of the curse of dimensionality.
 \begin{equation}
     \label{eq:sum_of_sines}
     f(\mathbf{x}) = \sum_{i=1}^{s} \sin( 4\pi x_i), \quad \mathbf{x} \in [0,1]^s.
@@ -110,75 +112,83 @@ is clear, that $f\in C^\infty([0,1]^s)$ and thus
 $V_\mathrm{HK}(f)\sim\hat{V}_\mathrm{HK}(f)<\infty$ on the compact domain
 $[0,1]^s$.
 
-
-\subsubsection*{10 dimensional sum of sines} \ \\
-Now, the Deep Learning algorithm is applied to approximate the
-equation~\eqref{eq:sum_of_sines} for $s=10$ dimensions.
-
 The Deep Learning algorithm is applied with the following configurations
 obtained by hyperparameter optimization as described in
 Section~\ref{sec:impl_details_dnn}:
 
-
-\begin{minipage}{0.48\textwidth}
 \begin{table}[H]
 \begin{tabular}{lc}
-\textbf{Adam Training Setup} & \\
-\toprule \\
-\textbf{DNN Architecture }& \\
-Number of hidden layers & $9$ \\
-Number of neurons per layer & $12$ \\
+\toprule
+\textbf{DNN Architecture} & \\
+Number of hidden layers & $24$ \\
+Number of neurons per layer & $4$ \\
 Activation function & Sigmoid \\
 \midrule
 \textbf{Training Setup} & \\
-Batch size & $256$ \\
+Batch size & $8192$ \\
 \midrule
 \textbf{Adam Parameters} & \\
- & \\
-Learning Rate & $5.426e{-}3$ \\
-Weight Decay & $4.357e{-}5$ \\
-$\beta_1$ & $0.92$ \\
-$\beta_2$ & $0.959$ \\
-$\varepsilon$ & $1e-8$ \\
-\midrule
+Learning Rate & $1.0 \times 10^{-2}$ \\
+Weight Decay & $1.0 \times 10^{-4}$ \\
+$\beta_1$ & $0.9$ \\
+$\beta_2$ & $0.999$ \\
+$\varepsilon$ & $1 \times 10^{-8}$ \\
+\bottomrule
 \end{tabular}
 \centering
-\caption{DNN and Adam configurations for the 10D sum of sines.}
+\caption{DNN and Adam configurations for the 6D sum of sines.}
 \label{tab:sum_of_sines_dnn_adam}
 \end{table}
-\end{minipage}
-\hfill
-\begin{minipage}{0.48\textwidth}
-\begin{table}[H]
-\begin{tabular}{lc}
-\textbf{Lion Training Setup} & \\
-\toprule \\
-\textbf{DNN Architecture }& \\
-Number of hidden layers & $7$ \\
-Number of neurons per layer & $12$ \\
-Activation function & Sigmoid \\
-\midrule
-\textbf{Training Setup} & \\
-Batch size & $64$ \\
-\midrule
-\textbf{Lion Parameters} & \\
- & \\
-Learning Rate & $5.565e{-}4$ \\
-Weight Decay & $2.105e{-}5$ \\
-$\beta_1$ & $0.91$ \\
-$\beta_2$ & $0.965$ \\
-$\,$ & $\,$ \\
-\midrule
-\end{tabular}
-\centering
-\caption{DNN and Lion configurations for the 10D sum of sines.}
-\label{tab:sum_of_sines_dnn_lion}
-\end{table}
-\end{minipage}
+
+The Deep Leanring algorithm was further applied for various number of training
+set sizes with $N\in\{128,256,512,1024,2048,4096,8192\}$ samples drawn from
+pseudo-random, Sobol' and Halton sequences. The results were stored after each
+epoch up to $2000$ epochs.
+
+In the following two figures, the test error is plotted against the number of
+epochs for training set sizes $N=4096$ and $N=8192$ in
+Figures~\ref{fig:sum_of_sines_test_error_6d4} and
+\ref{fig:sum_of_sines_test_error_6d8}, respectively.
+
+\begin{figure}[H]
+    \centering
+    \begin{subfigure}[b]{0.48\textwidth}
+        \includegraphics[width=\textwidth]{Figures/testing_error_sumsines6d4.png}
+        \caption{Test error for training set size $N=4096$.}
+        \label{fig:sum_of_sines_test_error_6d4}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.48\textwidth}
+        \includegraphics[width=\textwidth]{Figures/testing_error_sumsines6d8.png}
+        \caption{Test error for training set size $N=8192$.}
+        \label{fig:sum_of_sines_test_error_6d8}
+    \end{subfigure}
+\end{figure}
+
+Both trainings show a significant improvement in the test error for higher numbers of epochs. Further, for both training set sizes, the high training errors only appear for the pseudo-randomly sampled training sets. The \acp{dnn} trained on low-discrepancy sequences show a significantly lower test error. Especially the Sobol' sequence outperforms.
+
+As this analysis shows significant improvements in the test error after $800$
+epochs, different training set sizes will be evaluated accordingly.
+
+
+
+
+First, the Deep Learning algorithm is applied to training sets with 4096 samples drawn from pseudo-random, Sobol' and Halton sequences. The according \acp{dnn} are trained for different number of epochs between 100 and 2000 using Adam as optimizer. The test error is evaluated on the corresponding test sets as described in Table~\ref{tab:test_set}. The results are illustrated in Figure~\ref{fig:sum_of_sines_test_error}.
 
 The according \acp{dnn} are trained on training sets with
 $N\in\{128,256,512,1024,2048,4096,8192\}$ samples drawn from pseudo-random,
 Sobol' and Halton sequences.
+
+In Figure kommt noch the 
+
+\begin{figure}
+\centering
+\includegraphics[width=0.7\textwidth]{Figures/testing_error_sumsinses8d.png}
+\caption{Test error for the 8D sum of sines function \eqref{eq:sum_of_sines} for
+different  sizes $N$ and different training set sampling strategies
+using Adam as optimizer.}
+\label{fig:sum_of_sines_test_error}
+\end{figure}
 
 Hier kommt ein Plot für alle 6 Kombinationen: Adam/Lion und Sobol/Halton/Pseudo-random
 

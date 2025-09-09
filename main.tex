@@ -135,6 +135,29 @@ headsepline, % Uncomment to get a line under the header
 
 \usetikzlibrary{decorations.pathmorphing} % for zigzag
 
+\usepackage{listings}
+\usepackage{xcolor}
+
+\lstdefinelanguage{yaml}{
+  keywords={true,false,null,y,n},
+  keywordstyle=\color{blue}\bfseries,
+  basicstyle=\ttfamily\small,
+  sensitive=false,
+  comment=[l]{\#},
+  commentstyle=\color{gray}\ttfamily,
+  stringstyle=\color{red},
+  moredelim=[l][\color{magenta}]{:},
+}
+
+\lstset{
+  language=yaml,
+  showstringspaces=false,
+  columns=fullflexible,
+  keepspaces=true,
+  tabsize=2
+}
+
+
 
 % Linecomments in algorithms
 \usepackage{xcolor}

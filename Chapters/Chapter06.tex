@@ -212,9 +212,9 @@ Now, we can state the main theorem of this chapter.
 \begin{theorem} \ \\
 Let $f : [0,1]^s \to \mathbb{R}$ be a map with $\widehat{V}_{HK}(f) < \infty$
 and $\frac{\partial^{|v|}}{\prod_{j\in v}\partial x_j}f(x^v;1^{-v}) \in
-L^1([0,1]^s)$ for all $\varnothing \neq v \subseteq \{1,\dots,s\}$. Further, let
-$\hat{f}$ be the \ac{dnn} surrogate with an activation function $\sigma \in C^s$
-trained on a low-discrepancy sequence $\mathcal{S}=\{x_n\}_{n=1}^N\subset
+L^1([0,1]^{|v|})$ for all $\varnothing \neq v \subseteq \{1,\dots,s\}$. Further,
+let $\hat{f}$ be the \ac{dnn} surrogate with an activation function $\sigma \in
+C^s$ trained on a low-discrepancy sequence $\mathcal{S}=\{x_n\}_{n=1}^N\subset
 [0,1]^s$. Then for a given tolerance $\delta > 0$ the following holds:
 \begin{equation*}
 \mathcal{E}_G \leq \mathcal{E}_T + C \cdot \frac{(\log N)^s}{N} + 2\delta.
@@ -249,7 +249,7 @@ The multivariate Faà di Bruno formula will be used to proof the following resul
 Let $h: [a,b]\to\mathcal{X}$ for a hyperrectangle $[a,b]\in\mathbb{R}^s$ and
 $\mathcal{X}\subset \mathbb{R}$. Further, assume that
 $\widehat{V}_{\mathrm{HK}}(h) < \infty$ and $\frac{\partial^{|v|}}{\prod_{j\in
-v}\partial x_j} h(x^v;b^{-v}) \in L^1([a,b])$ for all $\varnothing \neq
+v}\partial x_j} h(x^v;b^{-v}) \in L^1([a,b]^{|v|})$ for all $\varnothing \neq
 v\subseteq \{1,\dots,s\}$ is continuous. Then, the Hardy--Krause variation of
 the composition $g \circ h$ is bounded
 \begin{equation*}
@@ -306,11 +306,10 @@ bounded on the whole integration domain $[a,b]$. Therefore, it suffices to show 
     \label{eq:variation_requirement}
 \end{equation}
 
-Following the assumption that all factors $\frac{\partial^{|B|}}{\prod_{j\in
-B}\partial x_j}h(x^{v};b^{-v}) \in L^1([a,b])$ for all $B\in\pi$, it is clear
-that $\frac{\partial^{|B|}}{\prod_{j\in B}\partial x_j}h(x^{v};b^{-v}) \in
-L^1([a^v,b^v])$. Thus, by the generalized H{\"o}lder inequality, see for
-example \cite[Corollary 2.11.5]{bogachev2007measure} applied to
+Following the assumption it holds for all factors with $B\in\pi$ that
+$\frac{\partial^{|B|}}{\prod_{j\in B}\partial x_j}h(x^{v};b^{-v}) \in
+L^1([a,b])$. Thus, by the generalized H{\"o}lder inequality, see for example
+\cite[Corollary 2.11.5]{bogachev2007measure} applied to
 equation~\eqref{eq:variation_requirement} and using the known relation
 $L^p([a^v,b^v]) \subseteq L^1(a^v,b^v)$ for $p \geq 1$, it suffices to show that 
 
@@ -416,4 +415,12 @@ Now we can prove the theorem.
     suffices, that $\widehat{V}_{\mathrm{HK}}(h) < \infty$ and
     $\frac{\partial^{|v|}}{\prod_{j\in v}\partial x_j} h(x^v;b^{-v}) \in
     L^1([a,b])$ for all $\varnothing \neq v\subseteq \{1,\dots,s\}$.
+\end{remark}
+
+\begin{remark} \ \\
+    To apply Theorem~\ref{thm:main-theorem} the activation function $\sigma$ of
+    the neural network has to be $s$-times continuously differentiable. This is
+    for example the case for the commonly used sigmoid or hyperbolic tangent
+    activation functions. However, popular activation functions like ReLU or
+    Leaky ReLU are not covered by this theorem.
 \end{remark}
