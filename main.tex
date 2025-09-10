@@ -287,7 +287,7 @@ neither this thesis nor any part of it has been submitted by me or by others as
 part of any other academic assessment. Literal or paraphrased quotations from
 other sources—whether in print or electronic form—are clearly marked as such.
 All secondary literature and other sources used are properly cited and listed in
-the bibliography. This also applies to graphical representations, images, and
+the bibliography. This also applies to graphical representations, images and
 all online sources. I furthermore agree that my thesis may be submitted and
 stored in anonymized electronic form for the purpose of plagiarism detection. I
 am aware that the thesis may not be evaluated if this declaration is not
@@ -339,7 +339,32 @@ erteilt wird.
 
 \begin{abstract}
 \addchaptertocentry{\abstractname}
-Here comes the Abstract or Introduction of the thesis.
+This thesis studies \acf{qmc} methods from their mathematical foundations to
+their applications in deep learning and medical imaging.
+
+Part I provides a theoretical treatment of \ac{qmc} integration. Central
+concepts such as discrepancy, uniformity and Hardy--Krause variation are
+introduced, culminating in the Koksma--Hlawka inequality. This inequality offers
+a deterministic error bound for \ac{qmc} integration and serves as the
+theoretical foundation for the later applications.
+
+Part~\ref{part2} applies these theoretical results to the training of \acp{dnn}.
+By interpreting the generalization gap through the lens of \ac{qmc} error
+bounds, it is shown that \ac{qmc}-based sampling can significantly reduce the
+generalization error compared to classical Monte Carlo sampling. At the same
+time, the mathematical analysis of the underlying theorem by Mishra and Rusch
+reveals stricter assumptions than originally stated: the ground truth function
+must exhibit $L^1$-continuity of all first-order mixed partial derivatives.
+Empirical experiments support the conclusion that \ac{qmc} sequences are a
+promising and worthwhile choice for generating training data in many-query
+problems.
+
+Part~\ref{part3} presents a publicly available \ac{qmc}-based framework for
+photon transport simulations in X-ray imaging. The algorithm can be applied
+flexibly to different phantom geometries and achieves improvements of up to
+$7\%$ over standard Monte Carlo methods. These results highlight the potential
+of \ac{qmc} methods for scatter estimation and provide a foundation for further
+research into their role in Computed Tomography.
 \end{abstract}
 
 %-------------------------------------------------------------------------------

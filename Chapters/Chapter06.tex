@@ -229,10 +229,11 @@ multivariate version of the Faà di Bruno formula from
 \cite{hardy2006combinatorics}.
 
 \begin{prop}[Multivariate Faà di Bruno formula] \ \\
-Let $h:\mathbb{R}^s \to \mathbb{R}^{d_1}$ with continuous derivative
-$\frac{\partial^s}{\partial x_1 \cdots \partial x_s}h$ and $g \in
-C^s(\mathbb{R}^{d_1},\mathbb{R}^{d_2})$ be two functions. Then the following
-derivative of the composition $g \circ h$ follows:
+Let $h:\mathbb{R}^s \to \mathbb{R}$ with existing mixed first order
+derivatives $\frac{\partial^{|B|}}{\prod_{j\in B}\partial x_j} h(x)$
+for all $\varnothing \neq B\subseteq \{1,\dots,s\}$ and $g \in
+C^s(\mathbb{R})$. Then the following derivative of the
+composition $g \circ h$ follows:
 \begin{equation*}
     \frac{\partial^s}{\partial x_1 \cdots \partial x_s} (g \circ h)(x) = \sum_{\pi} \big(g^{(|\pi|)}\circ h\big)(x) \cdot \prod_{B\in\pi} \frac{\partial^{|B|}}{\prod_{j\in B}\partial x_j}h(x)
 \end{equation*}

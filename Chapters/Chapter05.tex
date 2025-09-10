@@ -394,98 +394,91 @@ Parameters:} \mbox{$\theta_k \leftarrow \mathrm{Opt}\,\big(\theta_{k-1},
 \label{fig:dnn_learning_minimal}
 \end{figure}
 
-In the following two subsections, two commonly used optimization algorithms in
-\ac{dnn} training are shortly introduced: \ac{adam} and Lion. As the main focus
-of this thesis is the comparison of different sampling strategies and not the
-optimization algorithms, we do not go into detail on the mathematical properties
-of these algorithms. For a more detailed introduction to optimization algorithms
-in \acp{dnn}, see \cite[Chapter 8]{goodfellow2016deep}.
+
+Training deep neural networks requires the minimization of a loss function
+$\mathcal{J}(\theta)$ with respect to the network parameters $\theta$. As
+computing the exact minimum is intractable in practice, iterative first-order
+methods are typically employed. In this section, two widely used optimization
+algorithms are briefly introduced: \acl{sgd} and Adam. Since the primary focus
+of this thesis lies on sampling strategies rather than on optimization methods,
+the discussion remains concise; for a more detailed treatment, see
+\cite[Chapter~8]{goodfellow2016deep}.
 
 \subsection{Stochastic Gradient Descent (SGD)}
 
-The very generic \ac{sgd} algorithm is a first-order optimization method that updates the parameters $\theta$ of the \ac{dnn} by computing
+The most basic algorithm for training neural networks is Gradient Descent. As defined above, given the entire dataset $\mathcal{P}$, the Gradient Descent update is given by
+\begin{equation*}
+    \theta_{k+1} = \theta_k - \eta \nabla_\theta \mathcal{J}_{\mathcal{P}}(\theta_k), 
+\end{equation*}
+where $\eta>0$ is the learning rate.
 
- \begin{equation*}
-\theta_{t+1} = \theta_t - \eta \cdot \nabla_\theta \mathcal{J}_{\mathcal{B}}(\theta_t),
- \end{equation*}
+Computing this full gradient at every iteration is costly for large
+datasets. The idea of \emph{\acl{sgd}} is to approximate it by using a randomly
+chosen mini-batch $\mathcal{B}_k \subset \mathcal{P}$ at each iteration $k$:
+$$
+    g_k = \nabla_\theta \mathcal{J}_{\mathcal{B}_k}(\theta_{k-1}).
+$$
+The parameter update is then given by
+$$
+    \theta_k = \theta_{k-1} - \eta g_k,
+$$
 
-where $\eta>0$ is the fixed learning rate and $\mathcal{J}_{\mathcal{B}}$ is the
-generalized loss function evaluated on the mini-batch. There also exist
-varaiants of the \ac{sgd} optimization algorithm, which adaptively change the
-learning rate $\eta$ during the training process.
+
+The crucial point is that $g_k$ is an \emph{exact gradient} on the mini-batch,
+but only an \emph{unbiased stochastic estimator} of the full gradient. This
+randomness in the update direction explains why the method is called
+\emph{stochastic gradient descent}. The gradient itself is computed efficiently
+by backpropagation. Further details on backpropagation can be found in
+\cite[Section~6.5]{goodfellow2016deep}.
+
+A widely used extension of \ac{sgd} is \emph{momentum}. Instead of following the
+raw stochastic gradient at each step, the algorithm maintains a moving average
+of past gradients, the second momentum
+$$
+    v_k = \beta_2 v_{k-1} + (1-\beta_2) g_k^2,
+$$
+with $\beta_2 \in [0,1)$. The updated gradient step is then scaled by this
+second momentum:
+
+$$
+    \theta_k = \theta_{k-1} - \frac{\eta}{v_k}g_k\,.
+$$
+
+Intuitively, momentum accelerates progress along consistent descent directions
+and damps oscillations in directions of high curvature, much like inertia in
+physical systems.
 
 \subsection{Adam Optimizer}
 
-\textcolor{red}{TODO: Adam Optimizer überarbeiten}
+The Adam optimizer~\cite[Section~8.5]{goodfellow2016deep} extends the usage of
+momentum. At each iteration, Adam maintains exponential moving averages of both
+the gradient (first moment) and its elementwise square (second moment):
+\begin{align*}
+    m_k &= \beta_1 m_{k-1} + (1-\beta_1) g_k, \\
+    v_k &= \beta_2 v_{k-1} + (1-\beta_2) g_k^2,
+\end{align*}
+where $\beta_1,\beta_2\in[0,1)$ are decay parameters.
 
-The \acf{adam} algorithm~\cite{goodfellow2016deep} is a variant of stochastic
-gradient descent (SGD) that is designed to work well \emph{out of the box}. It
-combines two ideas:
-
-\begin{enumerate}
-    \item \emph{momentum}, which smooths noisy gradients by averaging them over
-    time, 
-    \item \emph{coordinatewise adaptive step sizes}, which scale the update of
-    each parameter according to how large its recent gradients have been.
-\end{enumerate}
-
-\paragraph{Mini-batch gradient.}
-At iteration $t$ we draw a mini-batch $\mathcal{B}_t$ from the training set and compute the mini-batch loss
-
-\begin{equation*}
-    \mathcal{J}_{\mathcal{B}_t}(\theta_{t-1}),
-\end{equation*}
-
-with gradient
-
-\begin{equation*}
-    g_t \;=\; \nabla_\theta \mathcal{J}_{\mathcal{B}_t}(\theta_{t-1}).
-\end{equation*}
-
-\paragraph{Running averages (``moments'').}
-Adam maintains two exponential moving averages of the gradients:
-the first-order moment (mean) $m_t$ and the second-order moment (uncentered variance) $v_t$:
-\begin{align}
-m_t &= \beta_1 m_{t-1} + (1-\beta_1) g_t, \\
-v_t &= \beta_2 v_{t-1} + (1-\beta_2) g_t^2,
-\end{align}
-where the square and all operations are elementwise and $\beta_1,\beta_2\in[0,1)$ are decay parameters (typical defaults $\beta_1=0.9$, $\beta_2=0.999$). Intuitively, $m_t$ smooths the direction of descent (momentum), while $v_t$ tracks how large recent gradients have been for each parameter.
-
-\paragraph{Bias correction.}
-Because $m_0=v_0=0$, early averages are biased toward zero. Adam corrects this via
-\begin{align}
-\hat{m}_t &= \frac{m_t}{1-\beta_1^t}, \\
-\hat{v}_t &= \frac{v_t}{1-\beta_2^t},
-\end{align}
-which are unbiased estimates of the first and second moments under the exponential averaging model.
-
-\paragraph{Adaptive update.}
-Parameters are then updated elementwise using
-
-$$\theta_t \;=\; \theta_{t-1} - \eta
-\,\frac{\hat{m}_t}{\sqrt{\hat{v}_t}+\epsilon},$$ 
-
-where $\eta$ is a global
-learning rate and $\epsilon$ (e.g.\ $10^{-8}$) ensures numerical stability. The
-numerator behaves like momentum; the denominator normalizes by a
-root-mean-square of recent gradients, giving each parameter its own effective
-step size.
-
-\begin{remark}\ \\
-This combination makes Adam robust in high-dimensional, noisy settings and when gradients have very different scales across parameters. Performance and convergence depend on the hyperparameters $(\beta_1,\beta_2,\eta,\epsilon)$ and on standard training choices (batch size, schedule, etc.).
-\end{remark}
+The algorithm also includes bias-correction terms to account for the
+initialization and is given in Algorithm~\ref{alg:adam}.
 
 \begin{algorithm}[H]
 \caption{Adam Optimizer}
+\label{alg:adam}
 \begin{algorithmic}[1]
-\State Initialize $\theta_0$, $m_0 \gets 0$, $v_0 \gets 0$; choose $\eta>0$, $\beta_1,\beta_2\in[0,1)$, $\epsilon>0$
-\For{$t = 1$ to $T$}
-    \State Sample mini-batch $\mathcal{B}_t$ and set $g_t \gets \nabla_\theta \mathcal{L}(\theta_{t-1};\mathcal{B}_t)$
-    \State $m_t \gets \beta_1 m_{t-1} + (1 - \beta_1)\, g_t$
-    \State $v_t \gets \beta_2 v_{t-1} + (1 - \beta_2)\, g_t^2$
-    \State $\hat{m}_t \gets m_t / (1 - \beta_1^{t})$
-    \State $\hat{v}_t \gets v_t / (1 - \beta_2^{t})$
-    \State $\theta_t \gets \theta_{t-1} - \eta \,\hat{m}_t / \big(\sqrt{\hat{v}_t} + \epsilon\big)$
-\EndFor
+\Require initial parameters $\theta_0$; learning rate $\eta>0$; decay rates
+$\beta_1,\beta_2\in[0,1)$; small $\varepsilon>0$ \State $m_0 \gets 0$ \State
+$v_0 \gets 0$ \For{$k=1,2,\dots$} \State sample mini-batch $\mathcal{B}_k
+\subset \mathcal{P}$ \State $g_k \gets \nabla_\theta
+\mathcal{J}_{\mathcal{B}_k}(\theta_{k-1})$ \State $m_k \gets \beta_1 m_{k-1} +
+(1-\beta_1) g_k$ \Comment{first momentum} \State $v_k \gets \beta_2 v_{k-1} +
+(1-\beta_2) g_k^{\;2}$ \Comment{second momentum} \State $\hat m_k \gets
+\dfrac{m_k}{1-\beta_1^{\,k}}$ \Comment{bias correction} \State $\hat v_k \gets
+\dfrac{v_k}{1-\beta_2^{\,k}}$ \Comment{bias correction} \State $\theta_k \gets
+\theta_{k-1} - \eta \; \dfrac{\hat m_k}{\sqrt{\hat v_k}+\varepsilon}$ \EndFor
 \end{algorithmic}
 \end{algorithm}
+
+Overall, Adam combines the stabilizing effect of momentum with per-parameter
+adaptive learning rates, which makes it one of the most robust and widely used
+optimizers in modern deep learning applications.

@@ -15,14 +15,14 @@ different examples.
 \label{sec:impl_details_dnn}
 
 Before applying the Deep Learning algorithm to optimize the weights $\theta$ of
-the \aclp{dnn} for the approximation different of different ground truth
+the \aclp{dnn} for the approximation of different ground truth
 functions $f$ later in this chapter, some implementation details are provided in
 the following. The ground truth functions studied in this chapter are the smooth
 sum of sines function on multiple dimensions and the approximate \acf{ode}
 solution to the distance achieved by projectile motion. The implementation is
 done in Python using the \emph{PyTorch} library \cite{paszke2019pytorch} and
 accessible via
-GitHub\footnote{\url{https://github.com/janikvhrubant/nn-sampling-analysis}}.
+GitHub\footnote{\url{https://github.com/janikvhrubant/photon-imaging-sim}}.
 
 As the main goal of this chapter is to evaluate the impact of different sampling
 strategies, the Deep Learning algorithm was applied on training sets sampled
@@ -179,8 +179,6 @@ The according \acp{dnn} are trained on training sets with
 $N\in\{128,256,512,1024,2048,4096,8192\}$ samples drawn from pseudo-random,
 Sobol' and Halton sequences.
 
-In Figure kommt noch the 
-
 \begin{figure}
 \centering
 \includegraphics[width=0.7\textwidth]{Figures/testing_error_sumsinses8d.png}
@@ -190,7 +188,7 @@ using Adam as optimizer.}
 \label{fig:sum_of_sines_test_error}
 \end{figure}
 
-Hier kommt ein Plot für alle 6 Kombinationen: Adam/Lion und Sobol/Halton/Pseudo-random
+TODO: Hier kommt ein Plot für alle 6 Kombinationen: Adam und Sobol/Halton/Pseudo-random
 
 1. Test Error Entwicklung über Epochs (für alle 6 Kombinationen)
 +  Train Error Entwicklung über Epochs (für alle 6 Kombinationen)
@@ -405,7 +403,7 @@ Since $R\circ\theta\in C^{1}([0,1]^7)$, we have
 $\widehat{V}_{\mathrm{HK}}(R\circ\theta)<\infty$. For small enough step size
 $\Delta t$, the numerical approximation of $R \circ \theta$ 
 
-\textcolor{red}{TODO: Argument why the numerical approx. is also in $C^1$?}
+% \textcolor{red}{TODO: Argument why the numerical approx. is also in $C^1$?}
 
 The Deep Learning algorithm is applied with the following configurations
 obtained by hyperparameter optimization as described in
@@ -431,3 +429,5 @@ Optimized via & Optuna \\
 \end{tabular}
 \centering
 \end{table}
+
+TODO: Evaluation mit Plots
