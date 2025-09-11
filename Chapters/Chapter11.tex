@@ -426,9 +426,9 @@ photons were used for each sampling strategy.
 
 The noise can be further observed in the intensity profile along the horizontal
 red line. In Figure~\ref{fig:primary_intensity_profile}, the intensity profiles
-for the Sobol' and Monte Carlo sampling strategies are compared. Although the
-Halton sampling strategy shows a similar performance as the Sobol' sampling
-strategy, it is not shown here for better visibility.
+for the sampling strategies are compared. They all show the expected intensity
+drop in the regions where the bone cylinders are located, however, the Monte
+Carlo profile is significantly noisier than the Halton and Sobol' profiles.
 
 \begin{figure}[H]
     \centering
@@ -515,7 +515,7 @@ intensities are significantly noisier than the primary intensities.
 Even though it is difficult to visually assess the noise levels in the scattered
 intensity images, a quantitative evaluation can be performed by computing the
 metrics introduced in Section~\ref{sec:evaluation_metrics}. In
-Table~\ref{tab:scatter_line_variance}, the advantages of the Halton and Sobol
+Table~\ref{tab:scatter_line_variances}, the advantages of the Halton and Sobol
 sampling strategies are summarized. For the stated horizontal red line, the
 Halton Variance is even $8\%$ lower than the \ac{mc} variance. The Sobol
 variance is $18\%$ lower than the \ac{mc} variance.
@@ -532,15 +532,16 @@ variance is $18\%$ lower than the \ac{mc} variance.
         Monte Carlo  & $2291$ & $2517$ \\
         \bottomrule
     \end{tabular}
-    \label{tab:scatter_line_variance}
     \caption{Variance of the intensity of scattered photons for the Bone-in-Water phantom.}
+    \label{tab:scatter_line_variances}
 \end{table}
 
 For a more detailed evaluation of the noise levels, the water-wall phantom is
 used again. This phantom is homogeneous and therefore the scattered intensities
 are expected to be spatially uniform across the entire detector. This allows for
-the computation of the uniformity variance (Def.~\ref{def:uniformity_variance})
-as a second metric for the evaluation of the noise levels.
+the computation of the uniformity variance
+(Definition~\ref{def:uniformity_variance}) as a second metric for the evaluation
+of the noise levels.
 
 \begin{figure}[H]
     \centering
@@ -625,7 +626,8 @@ the Halton sequence show their curse of dimensionality with almost no advantage
 over \ac{mc} simulations. As the experiments suggest, the Sobol' sequence
 overcomes this problem. This can be explained by the fact that the Sobol'
 sequence maintains low discrepancy in higher dimensions better than the Halton
-sequence. Further it is known that the Halton sequence starts suffering beginning from the 6th dimension.
+sequence. Further it is known that the Halton sequence starts suffering
+beginning from the 6th dimension.
 
 \section{Future Work}
 
@@ -641,7 +643,8 @@ explore such hybrid sampling strategies and evaluate their effectiveness in
 reducing noise levels.
 
 It would be interesting to extend the evaluation to an optimization problem,
-where the goal is to minimize the noise level for a certain phantom and figure out the optimal number of \ac{qmc} dimensions to use.
+where the goal is to minimize the noise level for a certain phantom and figure
+out the optimal number of \ac{qmc} dimensions to use.
 
 Further enhancements to the simulation framework could include the integration
 of this hybrid approach and enhancing its robustness for a wider range of
