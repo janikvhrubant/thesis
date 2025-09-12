@@ -107,29 +107,28 @@ for $s=8$ dimensions to study the impact of the curse of dimensionality.
     \label{eq:sum_of_sines}
     f(\mathbf{x}) = \sum_{i=1}^{s} \sin( 4\pi x_i), \quad \mathbf{x} \in [0,1]^s.
 \end{equation}
-To add variance to the function, the input is scaled by a factor of $4\pi$. It
-is clear, that $f\in C^\infty([0,1]^s)$ and thus
+
+To add oscillation to the function, the input is scaled by a factor of $4\pi$.
+It is clear, that $f\in C^\infty([0,1]^s)$ and thus
 $V_\mathrm{HK}(f)\sim\hat{V}_\mathrm{HK}(f)<\infty$ on the compact domain
 $[0,1]^s$.
 
-The Deep Learning algorithm is applied with the following configurations
-obtained by hyperparameter optimization as described in
-Section~\ref{sec:impl_details_dnn}:
+Evaluating different hyperparameters (as in Table~\ref{tab:dnn_configs}) for the
+\acp{dnn} training resulted in the following configurations yielding
+consistently good and reliable results specified in
+Table~\ref{tab:sum_of_sines6d_dnn_adam}.
 
 \begin{table}[H]
 \begin{tabular}{lc}
 \toprule
 \textbf{DNN Architecture} & \\
-Number of hidden layers & $24$ \\
+Number of hidden layers & $12$ \\
 Number of neurons per layer & $4$ \\
 Activation function & Sigmoid \\
 \midrule
-\textbf{Training Setup} & \\
-Batch size & $8192$ \\
-\midrule
 \textbf{Adam Parameters} & \\
-Learning Rate & $1.0 \times 10^{-2}$ \\
-Weight Decay & $1.0 \times 10^{-4}$ \\
+Learning Rate & $1.0 \times 10^{-1}$ \\
+Weight Decay & $1.0 \times 10^{-6}$ \\
 $\beta_1$ & $0.9$ \\
 $\beta_2$ & $0.999$ \\
 $\varepsilon$ & $1 \times 10^{-8}$ \\
@@ -137,35 +136,28 @@ $\varepsilon$ & $1 \times 10^{-8}$ \\
 \end{tabular}
 \centering
 \caption{DNN and Adam configurations for the 6D sum of sines.}
-\label{tab:sum_of_sines_dnn_adam}
+\label{tab:sum_of_sines6d_dnn_adam}
 \end{table}
 
-The Deep Leanring algorithm was further applied for various number of training
-set sizes with $N\in\{128,256,512,1024,2048,4096,8192\}$ samples drawn from
-pseudo-random, Sobol' and Halton sequences. The results were stored after each
-epoch up to $2000$ epochs.
+The Deep Leanring algorithm was applied for various number of training set sizes
+with $N\in\{32,64,128,256,512,1024,2048,4096,8192\}$ samples drawn from \ac{mc}
+randoms, Sobol' and Halton sequences. The results were stored after each epoch
+for up to $2000$ epochs.
 
-In the following two figures, the test error is plotted against the number of
-epochs for training set sizes $N=4096$ and $N=8192$ in
-Figures~\ref{fig:sum_of_sines_test_error_6d4} and
-\ref{fig:sum_of_sines_test_error_6d8}, respectively.
+The training evaluation of the test error on the corresponding test sets for the different epochs is illustrated in Figure~\ref{fig:sum_of_sines_test_error_6d}.
 
 \begin{figure}[H]
     \centering
-    \begin{subfigure}[b]{0.48\textwidth}
-        \includegraphics[width=\textwidth]{Figures/testing_error_sumsines6d4.png}
-        \caption{Test error for training set size $N=4096$.}
-        \label{fig:sum_of_sines_test_error_6d4}
-    \end{subfigure}
-    \hfill
-    \begin{subfigure}[b]{0.48\textwidth}
-        \includegraphics[width=\textwidth]{Figures/testing_error_sumsines6d8.png}
-        \caption{Test error for training set size $N=8192$.}
-        \label{fig:sum_of_sines_test_error_6d8}
-    \end{subfigure}
+    \includegraphics[width=0.7\textwidth]{Figures/testing_error_sumsins6d.png}
+    \caption{Test error for training set size $N=4096$ for the 6D sum of sines function.}
+    \label{fig:sum_of_sines_test_error_6d}
 \end{figure}
 
-Both trainings show a significant improvement in the test error for higher numbers of epochs. Further, for both training set sizes, the high training errors only appear for the pseudo-randomly sampled training sets. The \acp{dnn} trained on low-discrepancy sequences show a significantly lower test error. Especially the Sobol' sequence outperforms.
+Both trainings show a significant improvement in the test error for higher
+numbers of epochs. Further, for both training set sizes, the high training
+errors only appear for the pseudo-randomly sampled training sets. The \acp{dnn}
+trained on low-discrepancy sequences show a significantly lower test error.
+Especially the Sobol' sequence outperforms.
 
 As this analysis shows significant improvements in the test error after $800$
 epochs, different training set sizes will be evaluated accordingly.
