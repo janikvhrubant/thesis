@@ -144,50 +144,35 @@ with $N\in\{32,64,128,256,512,1024,2048,4096,8192\}$ samples drawn from \ac{mc}
 randoms, Sobol' and Halton sequences. The results were stored after each epoch
 for up to $2000$ epochs.
 
-The training evaluation of the test error on the corresponding test sets for the different epochs is illustrated in Figure~\ref{fig:sum_of_sines_test_error_6d}.
+The training evaluation of the test error on the corresponding test sets for the
+different epochs is illustrated in Figure~\ref{fig:sum_of_sines_test_error_6d}.
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.7\textwidth]{Figures/testing_error_sumsins6d.png}
-    \caption{Test error for training set size $N=4096$ for the 6D sum of sines function.}
+    \includegraphics[width=0.55\textwidth]{Figures/testing_error_sumsins6d.png}
+    \caption{Test error for training set size $N=1024$ for the 6D sum of sines function.}
     \label{fig:sum_of_sines_test_error_6d}
 \end{figure}
 
-Both trainings show a significant improvement in the test error for higher
-numbers of epochs. Further, for both training set sizes, the high training
-errors only appear for the pseudo-randomly sampled training sets. The \acp{dnn}
-trained on low-discrepancy sequences show a significantly lower test error.
-Especially the Sobol' sequence outperforms.
+Beginning from $\sim 1000$ epochs, the test error shows a significant improvement for training data sampled according to Sobol' and Halton sequences. Therefore, an evaluation of the test error for different training set sizes $N$ is conducted for $1000$ epochs. The results are illustrated in Figure~\ref{fig:sum_of_sines_test_error} in a $\log_2 -\log_{10}$ plot.
 
-As this analysis shows significant improvements in the test error after $800$
-epochs, different training set sizes will be evaluated accordingly.
-
-
-
-
-First, the Deep Learning algorithm is applied to training sets with 4096 samples drawn from pseudo-random, Sobol' and Halton sequences. The according \acp{dnn} are trained for different number of epochs between 100 and 2000 using Adam as optimizer. The test error is evaluated on the corresponding test sets as described in Table~\ref{tab:test_set}. The results are illustrated in Figure~\ref{fig:sum_of_sines_test_error}.
-
-The according \acp{dnn} are trained on training sets with
-$N\in\{128,256,512,1024,2048,4096,8192\}$ samples drawn from pseudo-random,
-Sobol' and Halton sequences.
-
-\begin{figure}
-\centering
-\includegraphics[width=0.7\textwidth]{Figures/testing_error_sumsinses8d.png}
-\caption{Test error for the 8D sum of sines function \eqref{eq:sum_of_sines} for
-different  sizes $N$ and different training set sampling strategies
-using Adam as optimizer.}
-\label{fig:sum_of_sines_test_error}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.55\textwidth]{Figures/testing_error_sumsines6d_trainingsetsizes.png}
+    \caption{Test error for the 6D sum of sines function approximation by training with different sizes $N$.}
+    \label{fig:sum_of_sines_test_error}
 \end{figure}
 
-TODO: Hier kommt ein Plot für alle 6 Kombinationen: Adam und Sobol/Halton/Pseudo-random
+To analyze the convergence behavior, linear regression lines are fitted to the
+data points. The results show similar rates of convergence for the \ac{mc} and
+Sobol' sampling, although the \ac{qmc} sampling strategies show better fit to
+the ground truth function. The Sobol' sequence shows a slightly better
+performance compared to the Halton sequence. Further the Halton sequence seems
+to stagnate for larger training set sizes.
 
-1. Test Error Entwicklung über Epochs (für alle 6 Kombinationen)
-+  Train Error Entwicklung über Epochs (für alle 6 Kombinationen)
-
-2. Test Error Entwicklung über N (für alle 6 Kombinationen)
-+  Train Error Entwicklung über N (für alle 6 Kombinationen)
-
+It is important to mention, that the results are highly dependent on the chosen
+hyperparameters. For different configurations, the results can vary
+significantly. 
 
 \section{Projectile Motion}
 As a second illustrative example, this section investigates the motion of a
@@ -393,33 +378,52 @@ and terminate at the first $n$ with $h_{n+1}\le 0$. This approximates the travel
 
 Since $R\circ\theta\in C^{1}([0,1]^7)$, we have
 $\widehat{V}_{\mathrm{HK}}(R\circ\theta)<\infty$. For small enough step size
-$\Delta t$, the numerical approximation of $R \circ \theta$ 
+$\Delta t$, the numerical approximation of $R \circ \theta$
 
-% \textcolor{red}{TODO: Argument why the numerical approx. is also in $C^1$?}
-
-The Deep Learning algorithm is applied with the following configurations
-obtained by hyperparameter optimization as described in
-Section~\ref{sec:impl_details_dnn}:
+Again, the deep learning algorithm was applied to various trainin
+hyperparameters and has showed the best performance for the following
+configurations summarized in Table~\ref{tab:proj_dnn_configs}.
 
 \begin{table}[H]
 \begin{tabular}{lc}
+\toprule
 \textbf{DNN Architecture }& \\
-Number of hidden layers & $8$ \\
-Number of neurons per layer & $8$ \\
+Number of hidden layers & $6$ \\
+Number of neurons per layer & $16$ \\
 Activation function & Tanh \\
 \midrule
-\textbf{Training Setup} & \\
-Batch size & $256$ \\
-Number of epochs & $2000$ \\
-\midrule
-\textbf{Optimizers} & \\
-Adam & \\
-Lion & \\
-\midrule
-\textbf{Hyperparameters} & \\
-Optimized via & Optuna \\
+\textbf{Adam Paramters} & \\
+Learning Rate & $1.0 \times 10^{-2}$ \\
+Weight Decay & $1.0 \times 10^{-4}$ \\
+$\beta_1$ & $0.9$ \\
+$\beta_2$ & $0.999$ \\
+$\varepsilon$ & $1 \times 10^{-8}$ \\
+\bottomrule
 \end{tabular}
+\caption{DNN and Adam configurations for the projectile motion example.}
+\label{tab:proj_dnn_configs}
 \centering
 \end{table}
 
+The Deep Learning algorithm was applied for various number of training set sizes
+with $N\in\{32,64,128,256,512,1024,2048,4096,8192\}$ samples drawn from
+\ac{mc} randoms, Sobol' and Halton sequences. The results were again stored
+after each epoch for up to $2000$ epochs.
+
+The training evaluation of the test error on the corresponding test sets for the
+different epochs is illustrated in Figure~\ref{fig:proj_test_error}.
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.55\textwidth]{Figures/testing_error_projectile_trainingsetsizes.png}
+    \caption{Test error for training set size $N=1024$ for the projectile motion function.}
+    \label{fig:proj_test_error}
+\end{figure}
+
+
 TODO: Evaluation mit Plots
+
+\section{Conclusion}
+
+QMC war zwar auch häufig unter den besten trainings zu finden, allerdings lange
+nicht ausschliesslich. monte carlo war auch häufig dabei.
