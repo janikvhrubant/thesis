@@ -4,7 +4,7 @@
 
 \documentclass[
 11pt, % The default document font size, options: 10pt, 11pt, 12pt
-%oneside, % Two side (alternating margins) for binding by default, uncomment to switch to one side
+% oneside, % Two side (alternating margins) for binding by default, uncomment to switch to one side
 english, % ngerman for German
 singlespacing, % Single line spacing, alternatives: onehalfspacing or doublespacing
 %draft, % Uncomment to enable draft mode (no pictures, no links, overfull hboxes
@@ -201,15 +201,25 @@ headsepline, % Uncomment to get a line under the header
 %	MARGIN SETTINGS
 %----------------------------------------------------------------------------------------
 
+% \geometry{
+% 	paper=a4paper, % Change to letterpaper for US letter
+% 	inner=2.5cm, % Inner margin
+% 	outer=3.8cm, % Outer margin
+% 	bindingoffset=.5cm, % Binding offset
+% 	top=1.5cm, % Top margin
+% 	bottom=1.5cm, % Bottom margin
+% 	head=27.2pt, % Adjust head height to avoid warnings
+% 	% showframe, % Uncomment to show how the type block is set on the page
+% }
 \geometry{
 	paper=a4paper, % Change to letterpaper for US letter
-	inner=2.5cm, % Inner margin
-	outer=3.8cm, % Outer margin
-	bindingoffset=.5cm, % Binding offset
+	inner=3.5cm, % Inner margin
+	outer=2.5cm, % Outer margin
+	% bindingoffset=.5cm, % Binding offset
 	top=1.5cm, % Top margin
 	bottom=1.5cm, % Bottom margin
 	head=27.2pt, % Adjust head height to avoid warnings
-	%showframe, % Uncomment to show how the type block is set on the page
+	% showframe, % Uncomment to show how the type block is set on the page
 }
 
 %----------------------------------------------------------------------------------------
@@ -407,8 +417,32 @@ Overall, the thesis demonstrates both the mathematical foundations and the pract
 %-------------------------------------------------------------------------------
 
 \begin{acknowledgements}
-\addchaptertocentry{\acknowledgementname} % Add the acknowledgements to the table of contents
-The acknowledgments and the people to thank go here, don't forget to include your project advisor\ldots
+\addchaptertocentry{\acknowledgementname}
+
+\section*{Acknowledgements}
+
+First and foremost, I would like to thank my supervisor, Professor Dr. Andreas
+Neuenkirch, for accompanying me on this journey and for his supportive guidance
+throughout the process.
+
+I am also thankful to Bastien Doignies and David Sarrut from the CREATIS
+laboratory at the University of Lyon for the valuable exchanges on their areas
+of expertise, which broadened my perspective.  
+
+Furthermore, I would like to thank my fellow student and friend Tobias for his
+indispensable help in setting up the extensive simulation runs on the latest
+NVIDIA machines. I also extend my gratitude to other friends and relatives who
+generously provided me with computing resources during this time.  
+
+I wish to acknowledge my colleagues from my time in Newport Beach. The
+experience of working with them has shaped my programming skills in a lasting
+way. The knowledge and practices I acquired there proved essential for the
+successful implementation of the methods developed in this thesis.  
+
+Finally, I am deeply grateful to my family and my four siblings for their
+unwavering support and for making my studies possible.
+
+
 \end{acknowledgements}
 
 %-------------------------------------------------------------------------------

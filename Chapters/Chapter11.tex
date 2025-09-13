@@ -598,55 +598,82 @@ significantly different attenuation behavior due to the bone structures.
 
 \section{Conclusion}
 
-The evaluation of \ac{qmc} methods for X-ray scatter estimation
-demonstrated their potential to reduce noise levels in simulated images. Using
-both a homogeneous water--wall phantom and a more complex bone-in-water phantom,
-the experiments showed that low-discrepancy sequences such as Halton and Sobol'
-can outperform traditional \ac{mc} sampling in terms of noise reduction.
+Part~\ref{part3} of this thesis introduced the application of \acl{qmc}
+methods to X-ray photon transport simulation with the goal of improving scatter
+estimation in computed tomography. The part began in Chapter~\ref{chapter8} with
+a motivation for simulation-based scatter correction, highlighting the
+limitations of analytical and empirical methods and the computational challenges
+inherent to \acl{mc} photon simulations. Against this background, the
+potential of low-discrepancy sequences for variance reduction and faster
+convergence was discussed in Part~\ref{part1}.
 
-Even at the primary stage, the distribution of primary intensities benefits 
+Building on this motivation, Chapter~\ref{chapter9} introduced the fundamental
+physical processes governing photon transport, including X-ray tube spectra,
+photon generation and the stochastic interaction mechanisms of attenuation,
+Compton scattering, and Rayleigh scattering. These principles provided the
+foundation for the simulation framework developed in Chapter~\ref{chapter10},
+which integrates photon generation, ray traversal and scattering processes into
+a complete algorithm. A particular focus was placed on the Forced Fixed
+Detection technique as a variance reduction strategy, which ensures that every
+simulated photon contributes to the detector signal. Within this algorithm,
+\ac{qmc} sequences such as Sobol' and Halton were employed to sample both the
+initial photon properties and the subsequent stochastic interaction variables.
+
+The framework was then evaluated in Chapter~\ref{chapter11} on both a
+homogeneous water--wall phantom and a more complex bone-in-water phantom.
+Evaluation metrics such as noise levels, variance and total variation along
+detector profiles were used to quantify the effect of different sampling
+strategies. The experiments demonstrated that \ac{qmc} methods substantially
+reduce noise in both primary and scattered intensity images. 
+
+The distribution of primary intensities benefits 
 significantly from the use of \ac{qmc} methods. Both Halton and Sobol'
 sequences produced noticeably smoother primary intensity images compared to
-standard \ac{mc} sampling. Therefore, only the first three random values per
-photon are needed.
+standard \ac{mc} sampling. 
 
 Scattered intensities require more extensive sampling due to the complex
-interactions involved. For every scattered photon, three further random values
-are needed for each scattering event (scatter angle with energy, azimuthal
-angle, free path length). The number of scattering events is set to $10$ in the
-experiments. This results in a total of $3 + 3 \times 10 = 33$ random values per
-photon. Here, the Sobol' sequence consistently achieved the lowest noise levels,
-with reductions of up to $18\%$ in the bone-in-water phantom and $16\%$ in the
-water--wall phantom compared to \ac{mc} sampling.
+interactions involved.Here, the Sobol' sequence consistently achieved the lowest
+noise levels, with reductions of up to $18\%$ in the bone-in-water phantom and
+$16\%$ in the water--wall phantom compared to \ac{mc} sampling.
 
-When sampling scattered photons, the photon intensity (for the forced fixed
-detection simulation) and the photon energy decrease at every scattering event.
-Therefore, the first scattering events contribute the most to the overall
-intensity at the detector grid. Since six random values are needed for the
-photon generation and the first scattering event, low-discrepancy sequences as
-the Halton sequence suffer from the curse of dimensionality yielding little
-advantage over \ac{mc} simulations. As the experiments suggest, the Sobol'
-sequence overcomes this problem. This can be explained by the fact that the
-Sobol' sequence maintains low-discrepancy in higher dimensions better than the
-Halton sequence. In \cite{morokoff1995quasi}, it is shown that the Halton
-sequence starts to suffer from the sixth dimension.
+While
+Halton sampling showed improvements at lower dimensions, its performance
+degraded due to the curse of dimensionality, consistent with known theoretical
+results. By contrast, Sobol' sequences maintained their advantage even in higher
+dimensions, making them especially suitable for complex scatter simulations
+involving many random variables.
+
+In summary, Part~\ref{part3} provided a proof of concept for the use of \ac{qmc}
+methods in X-ray photon simulation. By combining rigorous physical modeling with
+low-discrepancy sampling, it was shown that \ac{qmc} can offer measurable
+accuracy gains and noise reduction over classical \ac{mc} approaches. These
+results illustrate the potential of \ac{qmc} methods as a foundational modeling
+approach to enhance simulation-based scatter correction in computed tomography.
+
 
 \section{Future Work}
 
-The evaluation presented in this chapter provides a solid foundation for
-understanding the benefits of \ac{qmc} methods in X-ray scatter
-estimation. However, several avenues for future research remain open.
+While the results of Part~\ref{part3} demonstrate the potential of \ac{qmc} methods for
+improving scatter estimation in X-ray imaging, several directions for future
+research remain open.
 
-As shown in the experiments, the curse of dimensionality affects the performance
-of low-discrepancy sequences. This suggests a hybrid approach: use low-discrepancy sequences
-for the first few random values and switch to pseudo-random sampling for
-later values. Therefore, future work could
-explore such hybrid sampling strategies and evaluate their effectiveness in
-reducing noise levels.
+First, the experiments highlighted the impact of the curse of dimensionality on
+the performance of low-discrepancy sequences. This motivates the exploration of
+hybrid sampling strategies in which low-discrepancy sequences are employed for
+the first few random variables, while pseudo-random numbers are used for
+higher-order dimensions. Future work could systematically analyze such hybrid
+approaches and evaluate their effectiveness in reducing noise levels. In this
+context, it would be particularly interesting to formulate an optimization
+problem, where the objective is to minimize noise for a given phantom by
+determining the optimal number of \ac{qmc} dimensions to employ.
 
-It would be interesting to extend the evaluation to an optimization problem,
-where the goal is to minimize the noise level for a certain phantom and determine the optimal number of \ac{qmc} dimensions to use.
+Second, the simulation framework itself could be extended to incorporate these
+hybrid strategies more natively and to increase its robustness across a broader
+spectrum of phantoms and imaging scenarios. This would not only strengthen the
+general applicability of the framework but also facilitate comparative studies
+under clinically relevant conditions.
 
-Further enhancements to the simulation framework could include integrating this
-hybrid approach and enhancing the framework's robustness for a wider range of
-phantoms and imaging scenarios.
+Finally, further research could investigate post-processing techniques to
+suppress residual noise, for example by applying advanced filtering methods to
+the Compton scattering component. Such approaches may complement the benefits of
+improved sampling and further enhance the overall quality of scatter estimation.

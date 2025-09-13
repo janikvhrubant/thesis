@@ -45,15 +45,16 @@ Assume the statement holds for dimension $s-1$.
 
 \textbf{Induction step ($s-1 \to s$).}\\
 Write $x = (x',x_s)$ with $x' \in [a',b'] := \prod_{j=1}^{s-1} [a_j,b_j]$.
-First, apply the one-dimensional fundamental theorem of calculus in the last
-coordinate:
-\begin{equation*}
+First, apply the one-dimensional generalized fundamental theorem of calculus (see for example \cite{stein2009real}) in
+the last coordinate:
+\begin{equation}
 \int\limits_{a_s}^{b_s} 
 \frac{\partial^s f(x',t)}{\partial x_1 \cdots \partial x_s} \, dt
 = \frac{\partial^{s-1} f(x',b_s)}{\partial x_1 \cdots \partial x_{s-1}}
  - \frac{\partial^{s-1} f(x',a_s)}{\partial x_1 \cdots \partial x_{s-1}}.
-\end{equation*}
-Now integrate over $x'$ and use Fubini's theorem:
+ \label{eq:ftc-last-coordinate}
+\end{equation}
+Now integrate \eqref{eq:ftc-last-coordinate} over $x'$ and use Fubini's theorem:
 \begin{equation*}
 \int\limits_{[a,b]} 
 \frac{\partial^s f(x)}{\partial x_1 \cdots \partial x_s} \, dx
@@ -251,7 +252,7 @@ Let $h: [a,b]\to\mathcal{X}$ for a hyperrectangle $[a,b]\in\mathbb{R}^s$ and
 $\mathcal{X}\subset \mathbb{R}$. Further, assume that
 $\widehat{V}_{\mathrm{HK}}(h) < \infty$ and $\frac{\partial^{|v|}}{\prod_{j\in
 v}\partial x_j} h(x^v;b^{-v}) \in L^1([a,b]^{|v|})$ for all $\varnothing \neq
-v\subseteq \{1,\dots,s\}$ is continuous. Then, the Hardy--Krause variation of
+v\subseteq \{1,\dots,s\}$. Then, the Hardy--Krause variation of
 the composition $g \circ h$ is bounded
 \begin{equation*}
     V_{\mathrm{HK}}(g \circ h) < \infty
