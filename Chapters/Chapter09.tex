@@ -1165,9 +1165,25 @@ the interaction is elastic, no electrons are ejected and no ionization occurs.
 At diagnostic energies, the differential cross section is strongly
 forward-peaked, so most scattered photons are deflected by small angles.
 
-Although Rayleigh scattering takes place in the X-ray tube, it can be 
-excluded from the linear attenuation coefficient, as it does not contribute to
-the attenuation of the X-ray beam in the same way as Compton scattering or
-photoelectric absorption. As described in \cite{poludniowski2022calculating}, the exclusion of Rayleigh scattering from the linear attenuation coefficient is based on the assumption that the characteristic radiation emitted by the target is isotropic, meaning it is emitted uniformly in all directions. As the X-ray is not attenuated by Rayleigh scattering, it is a common assumption to exclude Rayleigh scattering from the attenuation coefficient.
+Although Rayleigh scattering takes place in the X-ray tube, it can be excluded
+from the linear attenuation coefficient, as it does not contribute to the
+attenuation of the X-ray beam in the same way as Compton scattering or
+photoelectric absorption. As described in \cite{poludniowski2022calculating},
+the exclusion of Rayleigh scattering from the linear attenuation coefficient is
+based on the assumption that the characteristic radiation emitted by the target
+is isotropic, meaning it is emitted uniformly in all directions. As the X-ray is
+not attenuated by Rayleigh scattering, it is a common assumption to exclude
+Rayleigh scattering from the attenuation coefficient.
 
-Therefore, it is justified to neglect Rayleigh scattering in the simulation of X-ray imaging, as it does not significantly affect the overall attenuation of the X-ray beam. This simplification allows for a more efficient simulation without compromising the accuracy of the results.
+Therefore, it is justified to neglect Rayleigh scattering in the simulation of
+X-ray imaging, as it does not significantly affect the overall attenuation of
+the X-ray beam. This simplification allows for a more efficient simulation
+without compromising the accuracy of the results.
+
+\bigskip
+The physical principles described in this chapter provide the building blocks
+for modeling photon transport in X-ray imaging. Based on these laws, the
+subsequent Chapter~\ref{chapter10} presents the simulation
+framework, combining photon generation, ray traversal, and interaction
+mechanisms into a coherent algorithmic structure that integrates \ac{qmc}
+sampling strategies.

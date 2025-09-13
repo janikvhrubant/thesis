@@ -6,13 +6,15 @@
 \section{Measuring Uniformity: Discrepancy}
 % ------------------------------------------------------------------------------
 
-One of the cornerstones of \ac{qmc} theory is the concept of \emph{discrepancy},
-which quantifies how uniformly a finite point set samples the $s$-dimensional
-unit cube $[0,1]^s$. While uniform distribution modulo one describes the
-asymptotic behavior of infinite sequences, discrepancy provides a finite-sample
-measure of deviation from perfect uniformity. Low-discrepancy sequences are the
-foundation of \ac{qmc} methods because they minimize this deviation, thus
-yielding more accurate numerical integration.
+Building on the principles of Monte Carlo and Quasi-Monte Carlo integration from
+Chapter~\ref{chapter1}, we now turn to the question of how to formally measure
+the uniformity of sample points. One of the cornerstones of \ac{qmc} theory is
+the concept of \emph{discrepancy}, which quantifies how uniformly a finite point
+set samples the $s$-dimensional unit cube $[0,1]^s$. While uniform distribution
+modulo one describes the asymptotic behavior of infinite sequences, discrepancy
+provides a finite-sample measure of deviation from perfect uniformity.
+Low-discrepancy sequences are the foundation of \ac{qmc} methods because they
+minimize this deviation, thus yielding more accurate numerical integration.
 
 This section introduces formal definitions, geometric intuition and empirical
 insights into discrepancy measures. It lays the theoretical groundwork for

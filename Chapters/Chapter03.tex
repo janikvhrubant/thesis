@@ -6,10 +6,13 @@
 \label{sec:variation}
 % ------------------------------------------------------------------------------
 
-In \acf{qmc} theory, the variation of a function plays a key role in bounding
-the integration error. Intuitively, variation quantifies how much a function
+Complementing the discrepancy analysis of Chapter~\ref{chapter2}, this chapter
+addresses the second key ingredient in bounding QMC integration errors: the
+regularity of the integrand. In \acf{qmc} theory, the variation of a function
+plays a central role in this context, as it quantifies how much a function
 oscillates or changes over its domain. This can be observed particularly well in
 the univariate total variation:
+
 \begin{definition}[Total Variation] \ \\
 Let $f:[a,b] \to \mathbb{R}$ be a real-valued univariate function.  
 The \emph{total variation} of $f$ on the interval $[a,b]\subset \mathbb{R}$ is defined as
@@ -22,12 +25,12 @@ $$\mathcal{P}=\{a=x_0 < x_1 < \dots < x_n = b\}\,,$$
 of $[a,b]$.
 \end{definition}
 
-While the total variation is sufficient for univariate
-functions, higher dimensions necessitate more refined notions. In this section,
-we follow the definitions of \cite{owen2005multidimensional} and introduce two
-such notions: the Vitali variation and the variation in the sense of
-Hardy--Krause. These concepts are crucial for understanding the convergence
-guarantees provided by the Koksma--Hlawka inequality.
+While the total variation is sufficient for univariate functions, higher
+dimensions necessitate more refined notions. In this section, we follow the
+definitions of \cite{owen2005multidimensional} and introduce two such notions:
+the Vitali variation and the variation in the sense of Hardy--Krause. These
+concepts are crucial for understanding the convergence guarantees provided by
+the Koksma--Hlawka inequality.
 
 % ------------------------------------------------------------------------------
 \subsection{Variation in the Sense of Vitali}
