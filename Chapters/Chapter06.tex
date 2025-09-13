@@ -53,7 +53,7 @@ coordinate:
 = \frac{\partial^{s-1} f(x',b_s)}{\partial x_1 \cdots \partial x_{s-1}}
  - \frac{\partial^{s-1} f(x',a_s)}{\partial x_1 \cdots \partial x_{s-1}}.
 \end{equation*}
-Now integrate over $x'$ and use Fubini’s theorem:
+Now integrate over $x'$ and use Fubini's theorem:
 \begin{equation*}
 \int\limits_{[a,b]} 
 \frac{\partial^s f(x)}{\partial x_1 \cdots \partial x_s} \, dx
@@ -161,7 +161,7 @@ there, we will use an estimate of the generalization gap and follow
 \begin{theorem} \ \\
     Assume that $\hat{f}$ is a surrogate model obtained by \ac{dnn} training of
     a mapping $f$ on the hypercube $[0,1]^s$ and
-    $\mathcal{S}=\{x_n\}_{n=1}^N\subset [0,1]^s$ is a low-discrepancy sequnece.
+    $\mathcal{S}=\{x_n\}_{n=1}^N\subset [0,1]^s$ is a low-discrepancy sequence.
     Further, let $V_\mathrm{HK}(|f-\hat{f}|) < \infty$. Then, the following
     estimate on the generalization gap holds:
     \begin{equation*}
@@ -224,7 +224,7 @@ associated with the mollifier introduced in the proof.
 \label{thm:main-theorem}
 \end{theorem}
 
-To proof this theorem, we will use the following proposition stating a
+To prove this theorem, we will use the following proposition stating a
 multivariate version of the Faà di Bruno formula from
 \cite{hardy2006combinatorics}.
 
@@ -241,10 +241,10 @@ Here, the sum is taken over all partitions $\pi$ of the set $\{1,\ldots,s\}$
 and $B$ are the sets within the partition $\pi$.
 \label{prop:multivariate_faa_di_bruno}
 \end{prop}
-A proof of the Multivariate Faà di Bruno formula can be found in
+A proof of the multivariate Faà di Bruno formula can be found in
 \cite[Proposition 1]{hardy2006combinatorics}.
 
-The multivariate Faà di Bruno formula will be used to proof the following result on the conditions for boundedness of the Hardy--Krause variation of compositions of functions.
+The multivariate Faà di Bruno formula will be used to prove the following result on the conditions for boundedness of the Hardy--Krause variation of compositions of functions.
 
 \begin{cor} \ \\
 Let $h: [a,b]\to\mathcal{X}$ for a hyperrectangle $[a,b]\in\mathbb{R}^s$ and
@@ -337,13 +337,13 @@ bounded. Thus, equation~\eqref{eq:variation_requirement_factors} holds for all $
 
 Now we can prove the theorem.
 \begin{proof}[Proof (Theorem~\ref{thm:main-theorem})] \ \\
-    First, a mollifer function $\eta_\delta \in C^s(\mathbb{R},
+    First, a mollifier function $\eta_\delta \in C^s(\mathbb{R},
     \mathbb{R}_+)$ fulfilling
     \begin{equation*}
         \max \big\{\big\| |a| - \eta_\delta(a) \big\|_\infty\big\} \leq \delta \quad \text{for all } a\in\mathbb{R}\,,
     \end{equation*}
     is chosen. Mollifying the absolute value function in a neighborhood of the
-    origin, guarantees the existence of such a function. 
+    origin guarantees the existence of such a function. 
    
     The following auxiliary functions are defined:
     \begin{align*}
@@ -378,7 +378,7 @@ Now we can prove the theorem.
     V_{\mathrm{HK}}\big(\eta_\delta\circ(f-\hat{f})\big) \leq \widehat{V}_{\mathrm{HK}}\big(\eta_\delta\circ(f-\hat{f})\big) \leq C_1 < \infty.
     \end{equation*}
 
-    for a constanct $C_1$. Therefore, one can utilize the Koksma-Hlawka inequality
+    for a constant $C_1$. Therefore, one can utilize the Koksma-Hlawka inequality
     (Theorem~\ref{thm:koksma-hlawka}) to $f-\hat{f}$ to get
     \begin{equation}
         \label{eq:hk_generalization_gap}
@@ -391,7 +391,7 @@ Now we can prove the theorem.
         |\mathcal{E}_G^\delta - \mathcal{E}_T^\delta | \leq C \cdot \frac{(\log N)^s}{N}.
     \end{equation}
 
-    By construction of $\eta_\delta$ it holds that
+    By construction of $\eta_\delta$, it holds that
     \begin{equation}
         \big| \mathcal{E}_G - \mathcal{E}_G^\delta \big|\leq \delta \qquad \text{and} \qquad \big| \mathcal{E}_T - \mathcal{E}_T^\delta \big| \leq \delta.
     \end{equation}
@@ -401,7 +401,7 @@ Now we can prove the theorem.
         &\leq 2\delta + |\mathcal{E}_G^\delta - \mathcal{E}_T^\delta| \\
         &\leq 2\delta + C \cdot \frac{(\log N)^s}{N}.
     \end{align*}
-    The bound on the generalization error follows as stated in the theorem:
+    The bound on the generalization error then follows as stated in the theorem:
     \begin{equation}
         \mathcal{E}_G \leq \mathcal{E}_T + C \cdot \frac{(\log N)^s}{N} + 2\delta.
     \end{equation}
@@ -410,18 +410,17 @@ Now we can prove the theorem.
 
 \begin{remark} \ \\
     Theorem~\ref{thm:main-theorem} gives an upper bound on the generalization
-    error. If $f\in C^s([0,1]^s,\mathbb{R})$, the assumptions of the theorem on
-    $f$ are necessarily fulfilled. However, this is a stronger assumption on the
-    ground truth function than actually needed. By the demonstrated Theorem, it
-    suffices, that $\widehat{V}_{\mathrm{HK}}(h) < \infty$ and
-    $\frac{\partial^{|v|}}{\prod_{j\in v}\partial x_j} h(x^v;b^{-v}) \in
-    L^1([a,b])$ for all $\varnothing \neq v\subseteq \{1,\dots,s\}$.
+    error. If $f\in C^s([0,1]^s,\mathbb{R})$, the assumptions of the theorem
+    regarding $f$ are necessarily fulfilled. However, this is a stronger
+    assumption on the ground truth function than actually needed. By the
+    demonstrated theorem, it suffices, that $\widehat{V}_{\mathrm{HK}}(h) <
+    \infty$ and $\frac{\partial^{|v|}}{\prod_{j\in v}\partial x_j} h(x^v;b^{-v})
+    \in L^1([a,b])$ for all $\varnothing \neq v\subseteq \{1,\dots,s\}$.
 \end{remark}
 
 \begin{remark} \ \\
     To apply Theorem~\ref{thm:main-theorem} the activation function $\sigma$ of
-    the neural network has to be $s$-times continuously differentiable. This is
-    for example the case for the commonly used sigmoid or hyperbolic tangent
-    activation functions. However, popular activation functions like ReLU or
-    Leaky ReLU are not covered by this theorem.
+    the neural network has to be $s$-times continuously differentiable. This is,
+    for example, the case for the commonly used sigmoid or hyperbolic tangent
+    activation functions. However, popular activation functions such as ReLU are not covered by this theorem.
 \end{remark}

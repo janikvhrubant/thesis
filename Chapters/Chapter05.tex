@@ -27,7 +27,7 @@ each layer in a neural network.
 \end{definition}
 
 \begin{remark} \ \\
-    In general the activation function $\sigma$ is 1-dimensional, i.e. $\sigma: \mathbb{R} \to \mathbb{R}$. However, it is common to apply it componentwise to vectors and extend the definition to $\sigma: \mathbb{R}^k \to \mathbb{R}^k$ with $\sigma(z) = (\sigma(z_1), \dots, \sigma(z_k))^\top$.
+    In general, the activation function $\sigma$ is 1-dimensional, i.e. $\sigma: \mathbb{R} \to \mathbb{R}$. However, it is common to apply it componentwise to vectors and extend the definition to $\sigma: \mathbb{R}^k \to \mathbb{R}^k$ with $\sigma(z) = (\sigma(z_1), \dots, \sigma(z_k))^\top$.
 \end{remark}
 
 \begin{example}[Common Activation Functions] \ \\
@@ -62,7 +62,7 @@ we employ in the experimental evaluations presented in Chapter~\ref{chapter7}.
 \end{figure}
 
 With an activation function in place, we now define the term \acl{dnn}
-by introducing the representing function that a fully connected feedforward neural network is expressing\cite{mishra2021enhancing}.
+by introducing the representing function that a fully connected feedforward neural network expresses \cite{mishra2021enhancing}.
 
 \begin{definition}[Fully Connected Deep Neural Network] \ \\
 Let $L \in \mathbb{N}$ and $\mathbf{d} = (d_0, d_1, \dots, d_L)$ be a sequence
@@ -103,7 +103,7 @@ $\mathcal{F}_{\mathbf{d}, \sigma}$.
 \end{itemize}
 \end{definition}
 
-As common in literature, the \emph{number of layers} is referenced by the number
+As is common in literature, the \emph{number of layers} is referenced by the number
 of affine transformations $L$ and coincides with the term \emph{depth}. The
 input layer is not counted as a layer in this context. In
 Figure~\ref{fig:dnn-architecture}, a fully connected \ac{dnn} with constant
@@ -170,7 +170,7 @@ depth $L=4$ layers. Each circular node represents an artificial neuron. The arro
     \begin{equation*}
         d=(d_0,d_1,...,d_{L-1},d_L) = (s,m,\dots,m,1)
     \end{equation*}
-    Thus, for each affine transformation $l\in\{1,...,L\}$, one counts $d_{l-1}
+    Thus, for each affine transformation $l\in\{1,\dots,L\}$, one counts $d_{l-1}
     \cdot d_l$ weights and $d_l$ biases. Hence, the total number of trainable
     parameters (weights and biases) $\theta$ in the network is given by
     \begin{align*}
@@ -227,7 +227,7 @@ function $f$ on the entire domain $[0,1]^s$.
 
 \begin{definition}[Generalization Error] \ \\
 Let $f:[0,1]^s\to\mathbb{R}$ be a ground truth function defined on the hypercube
-and $\hat{f}_\theta$ a respective surrogate with nework architecture
+and $\hat{f}_\theta$ a respective surrogate with network architecture
 $\mathbf{d}$, according parameters $\theta$ and activation function
 $\boldsymbol{\sigma}$. Then, given the surrogate, the \emph{generalization
 error} is defined as:
@@ -433,7 +433,7 @@ by backpropagation. Further details on backpropagation can be found in
 
 A widely used extension of \ac{sgd} is \emph{momentum}. Instead of following the
 raw stochastic gradient at each step, the algorithm maintains a moving average
-of past gradients, the second momentum
+of past gradients, called the second momentum
 $$
     v_k = \beta_2 v_{k-1} + (1-\beta_2) g_k^2,
 $$
@@ -450,7 +450,7 @@ physical systems.
 
 \subsection{Adam Optimizer}
 
-The Adam optimizer~\cite[Section~8.5]{goodfellow2016deep} extends the usage of
+The Adam optimizer~\cite[Section~8.5]{goodfellow2016deep} extends the use of
 momentum. At each iteration, Adam maintains exponential moving averages of both
 the gradient (first moment) and its elementwise square (second moment):
 \begin{align*}
@@ -460,7 +460,7 @@ the gradient (first moment) and its elementwise square (second moment):
 where $\beta_1,\beta_2\in[0,1)$ are decay parameters.
 
 The algorithm also includes bias-correction terms to account for the
-initialization and is given in Algorithm~\ref{alg:adam}.
+initialization, as given in Algorithm~\ref{alg:adam}.
 
 \begin{algorithm}[H]
 \caption{Adam Optimizer}

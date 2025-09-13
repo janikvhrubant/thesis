@@ -1,12 +1,12 @@
 %!TEX root = ../main.tex
-\chapter{Physical laws of Photon Simulation}
+\chapter{Physical Laws of Photon Simulation}
 \label{chapter9}
 
 This chapter introduces the physical and mathematical principles underlying the
 simulation of X-ray imaging. Central to this is the modeling of individual
 photon interactions with matter, including attenuation and scattering processes.
 These interactions are inherently stochastic due to the quantum nature of
-radiation-matter interactions. The stochastic nature of photons and their interactions with matter is modelled using monte Carlo methods of uniformly distributed values between 0 and 1, which are then transformed to follow the physical probability distributions relevant to the specific interactions being simulated. This approach allows for a realistic representation of photon transport and interaction within the imaging system.
+radiation-matter interactions. The stochastic nature of photons and their interactions with matter is modeled using monte Carlo methods of uniformly distributed values between 0 and 1, which are then transformed to follow the physical probability distributions relevant to the specific interactions being simulated. This approach allows for a realistic representation of photon transport and interaction within the imaging system.
 
 \begin{figure}[H]
     \centering
@@ -236,7 +236,7 @@ construction of an X-ray tube as in \cite{poludniowski2022calculating}
         \node[right, below, align=center, text height=.5cm] at (2.7,-2) {X-ray Beam};
         \draw (1.8,-1.5) -- (4,-2.5) node[right, align=center, text height=.5cm] {Filter};
     \end{tikzpicture}
-    \caption{Schematic of an X-ray tube with Filter.}
+    \caption{Schematic of an X-ray tube with filter.}
     \label{fig:xray_tube}
 \end{figure}
 
@@ -252,14 +252,14 @@ The key components are:
 \begin{itemize}
     \item \textbf{Filament (Cathode):} A tungsten wire filament serves as the
     electron source through thermionic emission. When a current of approximately
-    3-6\,A passes through it, the filament reaches incandescence, releasing
+    3--6\,A passes through it, the filament reaches incandescence, releasing
     electrons from its surface. These free electrons form a cloud near the
     cathode until they are accelerated toward the anode by the applied high
     voltage.
 
     \item \textbf{Focusing Cup:} The filament is embedded in a negatively
     charged, nickel-made focusing cup. Its function is to electrostatically
-    shape and direct the electron stream toward the anode’s focal spot, thereby
+    shape and direct the electron stream toward the anode's focal spot, thereby
     influencing the resolution and size of the resulting X-ray beam.
 
     \item \textbf{Anode Target:} The anode consists of a tungsten target, often
@@ -403,13 +403,13 @@ apparatus for the purposes of simulation, this background information allows one
 to assess how key simulation parameters influence the resulting X-ray spectrum
 and photon behavior.
 
-Figure~\ref{fig:spectrum100kvp} below shows an resulting energy spectrum for an
+Figure~\ref{fig:spectrum100kvp} below shows a resulting energy spectrum for an
 X-ray tube with a tungsten cathode operated at 100 kVp. It illustrates the
 resulting distribution of photon energies, which is shaped by both the material
 and the applied voltage. The intensity of the different photon energies is
-measured in \emph{spectral fluence} in
+measured as \emph{spectral fluence} in
 \si{\per\square\centi\meter\per\kilo\electronvolt}, which describes the number
-of X-ray photons per unit area per unit energy interval. It certainly shows the
+of X-ray photons per unit area per unit energy interval. It clearly shows the
 two components of the X-ray spectrum: the continuous bremsstrahlung spectrum and
 the characteristic radiation peaks:
 
@@ -437,7 +437,7 @@ the characteristic radiation peaks:
     \label{fig:spectrum100kvp_comparison}
 \end{figure}
 
-The applied fiter in Figure~\ref{fig:spectrum100kvp_with_filter} effectively
+The applied filter in Figure~\ref{fig:spectrum100kvp_with_filter} effectively
 removes low-energy photons below approximately 30\,keV, which would otherwise
 contribute to patient dose without enhancing image quality, as low energy
 photons are likely to be absorbed superficially. The filter thus "hardens" the
@@ -471,7 +471,7 @@ following steps need to be made:
 \begin{enumerate}[label=(\roman*)]
     \item Construct the appropriate probability density function from the given
     spectrum.
-    \item Compute the \ac{cdf} from the probability density function $F$.
+    \item Compute the \ac{cdf} $F$ from the probability density function.
     \item Determine the generalized inverse of the \ac{cdf} $F^{-1}$ as defined
     below.
     \item Sample a uniformly distributed random variable $U$ on the interval
@@ -498,7 +498,7 @@ $F(\infty) = 1$. The generalized inverse is defined as follows:
 \end{definition}
 
 \begin{remark}
-    For discrete distributions with support $\{x_1, \ldots, x_M\}$ with $x_1<\ldots<x_M$, the generalized inverse can be explicitely expressed as:
+    For discrete distributions with support $\{x_1, \ldots, x_M\}$ with $x_1<\ldots<x_M$, the generalized inverse can be explicitly expressed as:
     \begin{equation*}
         f^{-1}(y) = \begin{cases}
             -\infty, & y =0 \\
@@ -577,7 +577,7 @@ considered:
 
 \paragraph{Point Source} \ \\
 This model reflects the global imaging geometry of an X-ray tube with a
-pointlike focal spot and divergent beam. In line with common practice (e.g.\
+point-like focal spot and divergent beam. In line with common practice (e.g.\
 Geant4's angular settings~\cite{geant4}), photon directions are sampled
 uniformly on a spherical cap, i.e.\ uniformly in the solid angle.
 
@@ -731,7 +731,7 @@ with the parameters listed in Table~\ref{tab:xray_params}.
         Target angle            & 10--60\textdegree \\
         \bottomrule
     \end{tabular}
-    \caption{Parameters used to generate the X-ray spectrum with \emph{Spekpy}.}
+    \caption{Parameters used to generate the X-ray spectrum with \emph{SpekPy}.}
     \label{tab:xray_params}
 \end{table}
 
@@ -852,7 +852,7 @@ Figure~\ref{fig:tungsten_atomic_model}.
             \node[below, font=\large] at (0,-2.5) {Compton Scattering};
         \end{tikzpicture}
     \end{minipage}
-    \caption{Principles from photon interaction with matter similar to \cite[Chap. 7]{medicalImagingSystemsIntro2019:}}
+    \caption{Principles from photon interaction with matter similar to \cite[Chapter 7]{medicalImagingSystemsIntro2019:}}
     \label{fig:tungsten_atomic_model}
 \end{figure}
 
@@ -860,7 +860,7 @@ The attenuation of X-ray photons arises from physical processes that alter their
 number, direction or energy as they interact with matter. These interactions
 occur at the level of individual photons and are highly dependent on the photon
 energy. This section presents an overview of the primary interaction mechanisms
-relevant to attenuation like in \cite{medicalImagingSystemsIntro2019:}.
+relevant to attenuation as in \cite{medicalImagingSystemsIntro2019:}.
 
 For correctness, in the simulations it is further assumed that the X-ray
 photons are propagating through air before entering and after exiting the
@@ -884,7 +884,7 @@ density $\rho$ of the material:
 $$\mu(x,E) = \rho(x) \cdot \tilde{\mu}(x,E)$$
 
 For comprehensibility, the dependence on the material and density is implicitly
-expressed by the cartesian coordinates $x$ of the photon position. This is
+expressed by the Cartesian coordinates $x$ of the photon position. This is
 justified, as the material and density also depend on the spatial location
 within the phantom. Therefore, a simple and not further mentioned helper
 function is returning the \emph{linear attenuation coefficient} $\mu$ for a
@@ -914,7 +914,7 @@ $$\mu(x,E) = \mu_{\text{PE}}(x,E) + \mu_{\text{RS}}(x,E) +
 
 For the simulations within this thesis, the attenuation coefficients for the
 respective phantoms are retrieved from the \emph{XCOM Photon Cross Sections
-Database} \cite{nistXCOM}. XCOM is standard dabase provided by the National
+Database} \cite{nistXCOM}. XCOM is standard database provided by the National
 Institute of Standards and Technology (NIST) that comprehends attenuation
 coefficients for elements, compounds, and mixtures at energies ranging from
 1\,keV to 100\,GeV.
@@ -926,10 +926,9 @@ For the behavior of X-ray photons two main effects are considered:
     without any interaction.
 \end{itemize}
 
-The attenuation behavior might happen at some point within the direction of the
-ray. The probability, that a phantom survives from a certain point $A$ to
-another point $B$ without any interaction, is described as follows
-\cite{bezug2014computed}:
+An interaction may occur at some point along the ray. The probability that a
+phantom survives from a certain point $A$ to another point $B$ without any
+interaction, is described as follows \cite{bezug2014computed}:
 
 $$\mathcal{P}(A, \overrightarrow{AB},E) = \exp\bigg[-\int_{A}^{B}{A +
 \mu\bigg(\frac{s}{\|\overrightarrow{AB}\|}(B-A),E \bigg)\,ds}\bigg]$$
@@ -937,7 +936,7 @@ $$\mathcal{P}(A, \overrightarrow{AB},E) = \exp\bigg[-\int_{A}^{B}{A +
 The free path length of a photon is the distance it travels before interacting
 with matter. To sample the free path length of a photon, one can project the
 photon within a given direction $\vec{\omega}$ from its current position $A$ to
-the detector position $\hat{C}$, as shown in Figure~\ref{fig:exit_point}. Then,
+the detector position $\hat{C}$, as shown in Figure~\ref{fig:exit_point}. Then
 a random variable $U \sim \mathcal{U}(0,1)$ is sampled.
 
 \begin{itemize}
@@ -975,7 +974,7 @@ a random variable $U \sim \mathcal{U}(0,1)$ is sampled.
 \subsection{Compton Scattering}
 \label{sec:physicsComptonScattering}
 \emph{Compton scattering} is the most dominant interaction mechanism for X-ray
-photons in tissue \cite[Chap. 7]{medicalImagingSystemsIntro2019:}. It occurs
+photons in tissue \cite[Chapter 7]{medicalImagingSystemsIntro2019:}. It occurs
 when a X-ray photon with considerably higher energy than the binding energy of
 an outer shell electron collides with this electron. This interaction results in
 a transfer of energy and momentum. The electron is ejected from the atom, while
@@ -1016,8 +1015,8 @@ given by the \emph{Compton formula}:
     \label{eq:compton_formula}
 \end{equation}
 
-Where $k=\tfrac{E}{m_ec^2}$ is used for readability.
-Here, $m_ec^2$ denotes the electron rest energy which is approximately $0.511 MeV$ and $r_e$ denotes the classical
+where $k=\tfrac{E}{m_ec^2}$ is used for readability.
+Here, $m_ec^2$ denotes the electron rest energy, which is approximately $0.511 MeV$ and $r_e$ denotes the classical
 electron radius. Together, this yields the following form of the Klein-Nishina formula:
 
 \begin{equation}
@@ -1036,11 +1035,11 @@ expression $\tfrac{d\sigma}{d\Omega}$ is thus the \emph{differential cross
 section}, which represents the probability density of photons being scattered
 into a particular direction. 
 
-For sampling from the Klein-Nishina distribution we cannot apply the Inverse
+For sampling from the Klein-Nishina distribution, we cannot apply the Inverse
 Transform Sampling method as described in Section~\ref{sec:photon_energy}, 
 since the structure of the Klein-Nishina formula and the dependency of $\theta$
 is more complex and does not allow for an analytical inversion.
-Instead the method of \emph{acceptance-rejection sampling} is used. 
+Instead the method of \emph{acceptance--rejection sampling} is used. 
 
 Acceptance--rejection sampling is a method for generating random samples from a
 probability distribution $f(x)$ when direct sampling is difficult. The idea is
@@ -1056,7 +1055,7 @@ The efficiency of the algorithm depends on how tightly $h(x)$ bounds $c\,f(x)$:
 the closer the proposal envelope matches the target distribution, the higher the
 acceptance rate. Acceptance--rejection sampling is thus most effective when a
 proposal distribution can be chosen that both resembles the target distribution
-and allows efficient evaluation. For more details, see for instance \cite[Chap 4]{muller2012monte} or \cite[Chap. 8.1]{leobacher2014introduction}.
+and allows efficient evaluation. For more details, see for instance \cite[Chap 4]{muller2012monte} or \cite[Section 8.1]{leobacher2014introduction}.
 
 To apply the acceptance--rejection sampling method to the Klein-Nishina formula equation~\eqref{eq:kleinNishina}, we first rewrite $\frac{d\sigma}{d\Omega} (\theta, k)$ to $f(k,x)$ using $x=\cos\theta$ and ignore the constant factors which are not relevant for sampling:
 \begin{equation}
@@ -1104,8 +1103,9 @@ on $[-1,1]$. At the endpoints, $R_k(\pm 1)=1$ by the matching conditions above,
 so $c_k\le 1$. Therefore, $h(k,x)\ge c_k\,f(k,x)$ for all $x\in[-1,1]$, with a
 uniform constant $c_k \in(0,1]$.
 
-Now the acceptance--rejection method can be applied. To sample the scattering angle $\theta$, $x=\cos\theta$ is sampled from the distribution $h$ the inverse
-transform method:
+Now the acceptance--rejection method can be applied. To sample the scattering
+angle $\theta$, $x=\cos\theta$ is sampled from the distribution $h$ by the
+inverse transform method:
 
 The cumulative distribution function of $h$ is
 $$
@@ -1134,7 +1134,7 @@ x = b(k) - (b(k)+1)\left(\frac{\zeta(k)}{2}\right)^{r},
 $$
 for a uniform random variable $r \sim \mathcal{U}(0,1)$. 
 
-This value is accepted if $\frac{f(k,x)}{h(k,x)} \geq u_1$, where $u_1$ denotes a random input variable. If the value is not accepted, a new value is sampled until acceptance occurs. The scattering angle $\theta$ is then obtained by $\theta = \arccos(x)$.
+This value is accepted if $\frac{f(k,x)}{h(k,x)} \geq u_1$, where $u_1$ denotes a uniform random variable. If the value is not accepted, a new value is sampled until acceptance occurs. The scattering angle $\theta$ is then obtained by $\theta = \arccos(x)$.
 
 Once the scattering angle $\theta$ is sampled, the new energy of the scattered
 photon $E'$ can be calculated using the Compton formula:
@@ -1156,11 +1156,16 @@ $\{\vec{e}_1,\vec{e}_2,\vec{\omega}\}$ and expressing the scattered direction as
 
 
 \subsection{Rayleigh Scattering}
-\emph{Rayleigh scattering} is a type of elastic scattering that occurs at low X-ray energies \cite[Chap. 7]{medicalImagingSystemsIntro2019:}. The incident photon interacts with several electrons that are
-usually bound in the outer shells of the atom. In this process, the low energy photon is not ejected, but rather the electrons and in turn the whole atom is
-set to vibration with respect to the incident photon’s wavelength. The vibrating photon transfers its excess energy to an electromagnetic photon with the same wavelength but probably a different direction than the incident photon. The majority of these scattered photons are emitted in a forward direction. This interaction does not result in the ejection of electrons from the atom and no ionization occurs as no energy is converted into kinetic energy.
+\emph{Rayleigh scattering} is an elastic scattering process that occurs at low
+X-ray energies \cite[Chapter 7]{medicalImagingSystemsIntro2019:}. The incident
+photon interacts coherently with bound electrons in the outer shells, driving a
+collective oscillation of the electron cloud. The atom then re-radiates a photon
+of the same energy (wavelength) but generally in a different direction. Because
+the interaction is elastic, no electrons are ejected and no ionization occurs.
+At diagnostic energies, the differential cross section is strongly
+forward-peaked, so most scattered photons are deflected by small angles.
 
-Although Rayleigh scattering is taking place in the X-ray tube, it can be 
+Although Rayleigh scattering takes place in the X-ray tube, it can be 
 excluded from the linear attenuation coefficient, as it does not contribute to
 the attenuation of the X-ray beam in the same way as Compton scattering or
 photoelectric absorption. As described in \cite{poludniowski2022calculating}, the exclusion of Rayleigh scattering from the linear attenuation coefficient is based on the assumption that the characteristic radiation emitted by the target is isotropic, meaning it is emitted uniformly in all directions. As the X-ray is not attenuated by Rayleigh scattering, it is a common assumption to exclude Rayleigh scattering from the attenuation coefficient.

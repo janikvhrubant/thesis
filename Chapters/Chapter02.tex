@@ -11,8 +11,8 @@ which quantifies how uniformly a finite point set samples the $s$-dimensional
 unit cube $[0,1]^s$. While uniform distribution modulo one describes the
 asymptotic behavior of infinite sequences, discrepancy provides a finite-sample
 measure of deviation from perfect uniformity. Low-discrepancy sequences are the
-foundation of \ac{qmc} methods because they minimize this deviation and thus
-yield more accurate numerical integration.
+foundation of \ac{qmc} methods because they minimize this deviation, thus
+yielding more accurate numerical integration.
 
 This section introduces formal definitions, geometric intuition and empirical
 insights into discrepancy measures. It lays the theoretical groundwork for
@@ -29,12 +29,12 @@ First, we define the more general \emph{extreme discrepancy}:
 Let $\mathcal{P}\subset [0,1)^s$ with $|\mathcal{P}| = N$ be a finite point set.
 Then the extreme discrepancy $D_N(\mathcal{P})$ is defined as
 \begin{equation*}
-    D_N(\mathcal{P}) = \sup\limits_{\substack{\boldsymbol{a,b} \in [0,1]^s \\ \boldsymbol{a} \leq \boldsymbol{b}}} \bigg| \frac{A([\boldsymbol{a},\boldsymbol{b}) , \mathcal{P})}{N} - \lambda_s([\boldsymbol{a},\boldsymbol{b})] \bigg|.
+    D_N(\mathcal{P}) = \sup\limits_{\substack{\boldsymbol{a,b} \in [0,1]^s \\ \boldsymbol{a} \leq \boldsymbol{b}}} \bigg| \frac{A([\boldsymbol{a},\boldsymbol{b}) , \mathcal{P})}{N} - \lambda_s([\boldsymbol{a},\boldsymbol{b})) \bigg|.
 \end{equation*}
 Here $A([\boldsymbol{a},\boldsymbol{b}), \mathcal{P})$ denotes the number of
 points in $\mathcal{P}$ that fall into the box
 $[\boldsymbol{a},\boldsymbol{b})$, and
-$\lambda_s([\boldsymbol{a},\boldsymbol{b})]$ is the Lebesgue measure of that
+$\lambda_s([\boldsymbol{a},\boldsymbol{b}))$ is the Lebesgue measure of that
 box, given by $\prod_{i=1}^{s} (b_i - a_i)$.
 \end{definition}
 
@@ -45,7 +45,7 @@ discrepancy}, which restricts the test boxes to be anchored at the origin.
 Let $\mathcal{P}\subset [0,1)^s$ with $|\mathcal{P}| = N$ be a finite point set.
 Then the star discrepancy $D_N^*$ is defined as
 \begin{equation*}
-    D_N^*(\mathcal{P}) = \sup\limits_{\boldsymbol{t} \in [0,1]^s} \bigg| \frac{A([\boldsymbol{0},\boldsymbol{t}), \mathcal{P}, N)}{N} - \lambda_s([\boldsymbol{0},\boldsymbol{t})] \bigg|.
+    D_N^*(\mathcal{P}) = \sup\limits_{\boldsymbol{t} \in [0,1]^s} \bigg| \frac{A([\boldsymbol{0},\boldsymbol{t}), \mathcal{P})}{N} - \lambda_s([\boldsymbol{0},\boldsymbol{t})] \bigg|.
 \end{equation*}
 \end{definition}
 
@@ -64,7 +64,7 @@ anchored at the origin.
 \subsection{Geometric Interpretation and Examples}
 % ------------------------------------------------------------------------------
 
-To build geometric intuition, consider the 1-dimensional case. Given $N$ sample
+To build geometric intuition, consider the one-dimensional case. Given $N$ sample
 points $x_0, \dots, x_{N-1} \in [0,1)$, we can visualize discrepancy as the
 maximum vertical deviation between the empirical distribution function
 \begin{equation*}
@@ -90,7 +90,7 @@ regions.
 Let $x_n = \frac{n}{N}$ for $n = 0, \dots, N-1$. Then $F_N(t)$ is a piecewise
 constant staircase function. With Theorem 2.4 from
 \cite{zahrnhofer2007einfuhrung}, one gets that the discrepancy is $\frac{1}{N}$.
-This is an optimal rate in 1D.
+This is an optimal rate in one dimension.
 \label{ex:grid-discrepancy}
 \end{example}
 
@@ -104,7 +104,7 @@ due to subtle gaps or clustering in certain regions.
 \subsection{Empirical Observation of Discrepancy in QMC}
 % ------------------------------------------------------------------------------
 
-Discrepancy is not just a theoretical construct -- its practical relevance
+Discrepancy is not just a theoretical construct --- its practical relevance
 becomes evident when comparing the behavior of \ac{qmc} sequences with \ac{mc}
 samples. In particular, structured point sets like Halton and Sobol' sequences
 as introduced in the next section, achieve much lower discrepancy than random
@@ -114,7 +114,7 @@ samples of the same size.
 \centering
 \includegraphics[width=0.9\textwidth]{Figures/qmc_discrepancy_comparison.png}
 \caption{Comparison of discrepancy growth for Sobol', Halton and random
-(\ac{mc}) point sets in 2D. Low-discrepancy sequences exhibit significantly
+(\ac{mc}) point sets in two dimensions. Low-discrepancy sequences exhibit significantly
 slower discrepancy growth.}
 \label{fig:qmc-discrepancy-comparison}
 \end{figure}
@@ -130,7 +130,7 @@ upper bounds of order $\mathcal{O}((\log N)^s / N)$ exist.
 % ------------------------------------------------------------------------------
 \section{Low-Discrepancy Sequences}
 % ------------------------------------------------------------------------------
-Now we will introduce the concept of low-discrepancy sequences and analyse their
+Now we will introduce the concept of low-discrepancy sequences and analyze their
 dimensional performance properties. We start by defining the term of
 low-discrepancy sequences, which are designed to fill the unit cube $[0,1)^s$ as
 uniformly as possible.
@@ -158,7 +158,7 @@ for all $N \in \mathbb{N}$. Such sequences are also referred to as
 Low-discrepancy sequences are constructed to minimize the star discrepancy. For
 dimension $s=1$ and $s=2$, it is known that
 \eqref{def:low-discrepancy-point-set} is an optimal bound. K. F. Roth proved in
-1954 that for everz dimension $s \in \mathbb{N}$ there exists a constant $c_s >
+1954 that for every dimension $s \in \mathbb{N}$ there exists a constant $c_s >
 0$ such that for every point set $\mathcal{P} \subset [0,1)^s$ with
 $|\mathcal{P}| = N$ the lower bound 
 \begin{equation*}
@@ -170,7 +170,7 @@ $\frac{s-1}{2}$ for $s \geq 3$. Nevertheless, since this is conjectured to be
 true, it has become common in literature to refer to sequences satisfying
 \eqref{def:low-discrepancy-sequence} as low-discrepancy sequences. The bound on
 the discrepancy is crucial for the convergence of \ac{qmc} methods according to
-the Koksma-Hlawka inequality introduced in Chapter~\ref{chapter3}.
+the Koksma--Hlawka inequality introduced in Chapter~\ref{chapter3}.
 \end{remark}
 
 With the definition of a low-discrepancy sequence in place, we now get back to
@@ -194,11 +194,11 @@ I_N^{\mathrm{QMC}}(f) := \frac{1}{N} \sum_{n=1}^{N} f(\boldsymbol{x}_n).
 Even though grid points as in Example~\ref{ex:grid-discrepancy} can achieve
 optimal discrepancy in 1D, they are not considered low-discrepancy sequences in
 the sense of the above definition, since they do not satisfy the asymptotic
-bound for all $N$. Furthermore, grids are not easily extensible -- adding new
+bound for all $N$. Furthermore, grids are not easily extensible --- adding new
 points requires global recomputation and destroys nesting.
 \end{remark}
 
-Now that we have established the definitions of low-discrepancy sequences we
+Now that we have established the definitions of low-discrepancy sequences, we
 will introduce two examples of low-discrepancy sequences that are widely used in
 practice: the Halton sequence and the Sobol' sequence.
 
@@ -214,7 +214,7 @@ The construction of the Halton sequence is based on the one-dimensional
 \emph{Van der Corput sequence}, introduced by Johannes van der Corput in 1935.
 Therefore, we utilize the radical-inverse function $\phi_b(n)$, which maps an
 integer $n$ to a real number in $[0,1)$ by reflecting its base-$b$
-representation about the decimal point. This function is defined as follows:
+representation across the decimal point. This function is defined as follows:
 
 \begin{equation*}
     \phi_b(n) = \sum_{k=0}^\infty d_k b^{-k-1}, \quad \text{ where } n = \sum_
@@ -229,8 +229,8 @@ The one-dimensional Van der Corput sequence in base $b$ is defined as
 \end{equation*}
 \end{definition}
 
-John Halton generalized this idea to higher dimensions by combining multiple Van
-der Corput sequences in different bases in 1960 \cite{halton1960efficiency}.
+In 1960 John Halton generalized this idea to higher dimensions by combining multiple Van
+der Corput sequences in different bases \cite{halton1960efficiency}.
 
 \begin{definition}[Halton Sequence] \ \\
 \label{def:halton}
@@ -300,7 +300,7 @@ Constructed to fill the $s$-dimensional unit cube $[0,1)^s$ as uniformly as
 possible, Sobol' sequences are based on a recursive structure that allows for
 efficient generation and high-dimensional performance.
 
-Therefore functions from the \emph{ring of polynomials} 
+Therefore, functions from the \emph{ring of polynomials} 
 \begin{equation*}
     \mathbb{F}_2[x] = \{
     a_0 + a_1 x + a_2 x^2 + \dots + a_n x^n \mid n \in \mathbb{N},\; a_i \in
@@ -385,8 +385,8 @@ n=2:\ & (0,1)\ \Rightarrow\ \boldsymbol{x}_2=\bigl(\tfrac34,\tfrac14\bigr).
 \end{example}
 
 \begin{remark} \ \\
-Different valid choices of $p_j$ and $m_{k,j}$ produce different -- but
-equivalent -- Sobol' sequences.
+Different valid choices of $p_j$ and $m_{k,j}$ produce different --- but
+equivalent --- Sobol' sequences.
 \end{remark}
 
 The bitwise structure of the Sobol' sequence makes it particularly efficient to
@@ -410,7 +410,7 @@ increasing prime bases. These artifacts manifest as clustering or gaps in
 certain coordinate directions, which can degrade uniformity. As a result, the
 empirical discrepancy of the Halton sequence often grows faster than the
 theoretical bound suggests in moderate to high dimensions, as the hidden
-constant $C$ depends on the dimension $s$\cite[Section
+constant $C$ depends on the dimension $s$ \cite[Section
 2.4]{leobacher2014introduction}.
 
 \paragraph{Sobol' Sequence.}
@@ -422,13 +422,12 @@ Sobol' sequences generally exhibit lower discrepancy than Halton sequences in
 dimensions $s > 10$, making them a standard choice in modern \ac{qmc}
 applications.
 
-The below Figure~\ref{fig:dimensional-comparison} illustrates the difference in
-a two-dimensional setting between the two low discrepancy sequences. The Sobol'
+Figure~\ref{fig:dimensional-comparison} below illustrates the difference in
+a two-dimensional setting between the two low-discrepancy sequences. The Sobol'
 sequence fills the unit square more uniformly, while the Halton sequence shows
 visible clustering.
 
 \begin{figure}[H]
-\label{fig:dimensional-comparison}
 \centering
 \includegraphics[width=0.8\textwidth]{Figures/sobol-vs-halton.png}
 \caption{Comparison of Halton and Sobol' sequences in $s=2$ dimensions for
@@ -441,7 +440,7 @@ demonstrating lower star discrepancy than the Halton sequence.}
 In the experiments of Part~\ref{part2} and Part~\ref{part3}, the Sobol' and
 Halton sequences are not implemented manually. Instead, the implementation
 available in the Python package \emph{SciPy} (version~1.16.0) through the module
-\texttt{scipy.stats.qmc} \cite{virtanen2020scipy, scipy-qmc} were used. The
-Sobol' and Halton sequences from this package though follow
+\texttt{scipy.stats.qmc} \cite{virtanen2020scipy, scipy-qmc} was used. The
+Sobol' and Halton sequences from this package, however, follow
 Definition~\ref{def:sobol} and Definition~\ref{def:halton}. 
 \end{remark}

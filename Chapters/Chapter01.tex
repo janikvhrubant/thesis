@@ -20,10 +20,10 @@ of the form
     I(f) = \int\limits_{[0,1]^s} f(x)\,dx\,,
 \end{equation}
 
-where $s$ denotes the dimensionality of the problem and $f$ is a function, where
-the integral is expensive or impractical to evaluate analytically. Throughout
-this thesis, we will limit our discussion on functions of the type $f:
-\mathbb{R}^s \to \mathbb{R}$.
+where $s$ denotes the dimensionality of the problem and $f$ is a function for
+which the integral is expensive or impractical to evaluate analytically.
+Throughout this thesis, we will limit our discussion on functions of the type
+$f: \mathbb{R}^s \to \mathbb{R}$.
 
 One of the most widely used approaches to compute such integrals is the
 classical \ac{mc} method, which estimates the integral based on averages over
@@ -46,7 +46,7 @@ allows for faster convergence under certain smoothness conditions and forms the
 basis for many state-of-the-art techniques in high-dimensional numerical
 integration.
 
-The first part of this thesis is structured into three chapters.
+The first part of this thesis is consists of three chapters.
 Chapter~\ref{chapter1} introduces the concepts of \ac{mc} and \ac{qmc} methods
 to estimate the integral from \eqref{eq:integration_problem}.
 Chapter~\ref{chapter2} provides a formal introduction to discrepancy theory and
@@ -61,10 +61,10 @@ simulation in \acl{ct}.
 % ------------------------------------------------------------------------------
 \section{Monte Carlo Integration: Principle and Convergence}
 % ------------------------------------------------------------------------------
-The classical \ac{mc} method is a probabilistic approach to numerically evaluate
-the integral $I(f)$ as defined in \eqref{eq:integration_problem}. The goal is to
-approximate this integral by averaging function evaluations at randomly sampled
-points in the integration domain $[0,1]^s$.
+The classical \ac{mc} method is a probabilistic approach for numerically
+evaluating the integral $I(f)$ as defined in \eqref{eq:integration_problem}. The
+goal is to approximate this integral by averaging function evaluations at
+randomly sampled points in the integration domain $[0,1]^s$.
 
 \begin{definition}[Monte Carlo Estimator] \ \\
 \label{def:mc-estimator}
@@ -119,7 +119,7 @@ $\phi(t)=\sqrt{t}$ gives
 This yields the stated $O(N^{-1/2})$ bound.
 \end{proof}
 
-Despite its robustness and simplicity, MC integration has several well-known
+Despite its robustness and simplicity, \ac{mc} integration has several well-known
 limitations:
 \begin{itemize}
     \item The convergence rate is relatively slow, especially for smooth
@@ -129,9 +129,19 @@ limitations:
     such as smoothness or sparsity.
 \end{itemize}
 
-These limitations arise due to the imperfect uniformity of random sample points
+These limitations arise from the imperfect uniformity of random sample points
 in the hypercube $[0,1]^s$, a phenomenon that motivates the introduction of the
-notions of uniformity and discrepancy in the next section.
+concepts of uniformity and discrepancy in the next section.
+
+\begin{remark}\ \\
+In this thesis, all random samples used in Monte Carlo procedures are produced
+by deterministic pseudorandom number generators. As a result, the simulated
+draws only approximate independent and identically distributed uniform variables
+on the interval $[0,1]$. Unless stated otherwise, the statistical quality of the
+generator is assumed to be sufficient for the results reported here. A
+systematic study of the choice of generator and its influence on accuracy or
+variance lies outside the scope of this work.
+\end{remark}
 
 
 % ------------------------------------------------------------------------------
@@ -152,7 +162,7 @@ integration.
 
 In \ac{qmc} methods, the notion of \emph{uniform distribution modulo one}
 provides a rigorous criterion for how evenly a sequence covers the unit cube.
-This concept forms the foundation for analyzing the convergence behavior of QMC
+This concept forms the foundation for analyzing the convergence behavior of \ac{qmc}
 estimators.
 
 \begin{definition}[Uniform Distribution Modulo One] \ \\
@@ -160,7 +170,7 @@ Let $(\boldsymbol{x}_n)_{n \in \mathbb{N}_0} \subset [0,1]^s$ be a sequence of
 sample points. The sequence is said to be \emph{uniformly distributed modulo
 one} (u.d.\ mod~1) if for every axis-aligned box $[\boldsymbol{a},
 \boldsymbol{b}) \subset [0,1]^s$, the proportion of points falling into this box
-converges to its Lebesgue measure:
+converges to its Lebesgue measure as $N \to \infty$:
 \begin{equation*}
     \lim_{N \to \infty} \frac{1}{N} \sum_{n=0}^{N-1} \chi_{[\boldsymbol{a}, \boldsymbol{b})}(\boldsymbol{x}_n)
     = \lambda_s([\boldsymbol{a}, \boldsymbol{b})) \,,
@@ -177,9 +187,9 @@ $\mathbb{R}^s$ defined by
 \end{equation*}
 
 This definition emphasizes asymptotic spatial coverage: in the limit, every
-subregion of the domain is sampled proportionally to its volume. Importantly,
+subregion of the domain is sampled in proportion to its volume. Importantly,
 this property is purely deterministic and does not rely on any probabilistic
-assumptions — in contrast to Monte Carlo methods, which only guarantee
+assumptions —- in contrast to Monte Carlo methods, which only guarantee
 uniformity in expectation.
 
 In contrast, when speaking of a random sample $\{X_1, \dots, X_N\} \subset
@@ -191,14 +201,14 @@ equidistribution refers to the ideal uniform coverage that we seek
 deterministically, while uniform random sampling only ensures this behavior in
 expectation or with high probability. In Figure~\ref{fig:mc-vs-qmc}, a randomly
 sampled set of $300$ points in $[0,1]^2$ is compared to the first $300$ sequence
-elements from a \ac{qmc} sequence. The latter sequence is u.d. mod 1.
+elements from a \ac{qmc} sequence. The latter sequence is u.d.\ mod 1.
 
 \begin{figure}[H]
   \centering
   \includegraphics[width=0.8\textwidth]{Figures/mc_vs_qmc.png}
   \caption{Comparison of $300$ randomly drawn sample points in $[0,1]^2$ using
   standard \ac{mc} (left) and the first $300$ elements of the Sobol' sequence in
-  $2$ dimension.}
+  $2$ dimensions.}
   \label{fig:mc-vs-qmc}
 \end{figure}
 
@@ -226,7 +236,7 @@ A proof can be found in \cite[Section 2.1]{leobacher2014introduction}.
 
 \begin{example} \ \\
 Let $\alpha \in \mathbb{R}$ be irrational. Then the Kronecker sequence $(n
-\alpha \bmod 1)_{n \geq 0}$ is uniformly distributed in $[0,1]$. This is a
-consequence of Weyl's criterion and illustrates the existence of simple,
+\alpha \bmod 1)_{n \geq 0}$ is uniformly distributed modulo one in $[0,1]$. This
+is a consequence of Weyl's criterion and illustrates the existence of simple,
 deterministic sequences with excellent uniformity properties.
 \end{example}

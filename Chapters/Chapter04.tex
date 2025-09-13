@@ -7,7 +7,7 @@
 
 The second part of this thesis investigates the application of \acf{qmc}
 sampling techniques to enhance the training of \acfp{dnn} in \emph{many-query
-problems} -- computational tasks in which a parameterized map must be evaluated
+problems} --- computational tasks in which a parameterized map must be evaluated
 for a large number of inputs, each requiring costly simulations or numerical
 solutions of PDEs. This situation arises frequently in scientific computing,
 e.g. in uncertainty quantification, Bayesian inversion, optimal control and
@@ -18,7 +18,7 @@ specifically the article by \citeauthor{mishra2021enhancing}
 Such problems motivate the use of surrogate models, typically based on deep
 neural networks, which are trained offline on a set of inputs and then used for
 fast evaluation online. However, using \acf{mc} sampling for generating training
-data may yield to slow convergence as introduced in Part~\ref{part1}.
+data may lead to slow convergence as introduced in Part~\ref{part1}.
 
 To overcome this limitation, this thesis explores the use of low-discrepancy
 sequences to generate training data which fill the input domain more uniformly.
@@ -50,17 +50,16 @@ deep neural networks and is trained on data $\{(x_i, f(x_i))\}_{i=1}^N$. The aim
 is to approximate $f$ with high accuracy while minimizing the number of required
 evaluations.
 
-\aclp{dnn} are known to be universal approximators. Under mild conditions on the
-later introduced \emph{activation functions} they proved to be able to
+\aclp{dnn} are known to be universal approximators. Under mild conditions on the \emph{activation functions} introduced later, they have been proven to 
 approximate any continuous function on compact sets arbitrarily well
 \cite{cybenko1989approximation}.
 
-\section{Applicability of the Koksma-Hlawka Inequality to DNN Training}
+\section{Applicability of the Koksma--Hlawka Inequality to DNN Training}
 Generally, training data is generated using \acl{mc} sampling, where points $x_i$ are drawn independently and identically distributed (i.i.d.) according to a probability measure $\mu$ on $[0,1]^s$. Under this approach, statistical learning theory provides an estimate for the expected generalization error $\mathbb{E}[\mathcal{E}_G]$ as follows:
 \begin{equation*}
 \mathcal{E}_G \sim \mathcal{E}_T + \mathcal{O}\left(\frac{1}{\sqrt{N}}\right),
 \end{equation*}
-where $\mathcal{E}_T$ is the empirical training error. Both, the generalization
+where $\mathcal{E}_T$ is the empirical training error. Both the generalization
 and training error will be formally introduced in Section~\ref{sec:dnn-error}.
 However, as argued in~\cite{mishra2021enhancing}, this rate is unsatisfactory in
 many-query problems because:
@@ -72,19 +71,19 @@ many-query problems because:
 \end{itemize}
 
 A promising alternative to random sampling is to use \acf{qmc} sampling.
-Low-discrepancy sequences, as the introduced Sobol' or Halton sequence, provide
+Low-discrepancy sequences, such as the introduced Sobol' or Halton sequence, provide
 a way to sample the domain $[0,1]^s$ more uniformly than random sampling. In
-\acl{qmc} theory, the Koksma-Hlawka inequality (Theorem~\ref{thm:koksma-hlawka})
+\acl{qmc} theory, the Koksma--Hlawka inequality (Theorem~\ref{thm:koksma-hlawka})
 applied to the difference $f-\hat{f}$ gives an error bound of the form
 \begin{equation*}
 |\mathcal{E}_G - \mathcal{E}_T| \leq V_{\mathrm{HK}}(|f - \hat{f}|) \cdot D^*_N \leq  V_{\mathrm{HK}}(|f - \hat{f}|) \cdot C_s \cdot \frac{(\log N)^s}{N}.
 \end{equation*}
 The left part of the inequality will be formally derived in
 Theorem~\ref{thm:generalization_gap}. The right part follows from the known
-discrepancy for low-discrepancy sequences. It is not immediately clear, whether
+discrepancy for low-discrepancy sequences. It is not immediately clear whether
 the Koksma--Hlawka inequality can be applied to the generalization gap
 $|\mathcal{E}_G - \mathcal{E}_T|$ in the context of training \acp{dnn}. This is
-because the Koksma-Hlawka inequality requires the integrand to have bounded
+because the Koksma--Hlawka inequality requires the integrand to have bounded
 variation in the sense of Hardy--Krause to ensure a finite bound.
 
 In the following chapters, it will be shown that under mild assumptions on the

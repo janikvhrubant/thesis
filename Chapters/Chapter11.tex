@@ -8,7 +8,7 @@ in Chapter~\ref{chapter9} and Chapter~\ref{chapter10}. The focus is on assessing
 the impact of different sampling strategies --- classical \acl{mc} and the
 \acl{qmc} methods based on Halton and Sobol' low-discrepancy sequences --- on
 the quality of simulated X-ray images. The chapter first outlines the
-experimental setup, then introduces the evaluation metrics and finally presents
+experimental setup, then introduces the evaluation metrics and finally, presents
 the evaluation of both primary and scattered intensities. A concluding section
 summarizes the findings and highlights promising directions for future research.
 
@@ -18,8 +18,9 @@ summarizes the findings and highlights promising directions for future research.
 
 All evaluations are carried out using the simulation framework introduced in
 Chapter~\ref{chapter9}. The experiments are configured via YAML-based setup
-files to ensure reproducibility. The YAML-based setup is provided here to ensure
-that the experiments can be exactly reproduced by the reader.
+files for reproducibility. The YAML-based setup is included so readers can
+reproduce the experiments. Due to the stochastic nature of the \ac{mc} method,
+results may vary between runs.
 
 For the evaluation, two main scene setups are considered: To determine how
 evenly distributed the simulated photons are, a homogeneous phantom is used. To
@@ -27,15 +28,15 @@ evaluate the accuracy of scatter estimation, a phantom with an embedded
 high-density object is employed. The following sections detail the
 configuration of these setups. 
 
-\subsection{Homogeneous Water-Wall Phantom}
+\subsection{Homogeneous Water--Wall Phantom}
 \label{sec:water_wall_phantom}
 
-The first evaluation setup consists of a homogeneous water-wall phantom, which
+The first evaluation setup consists of a homogeneous water--wall phantom, which
 is used to assess the uniformity of primary and scattered intensities across the
 detector. The configuration setup is described in the following.
 
 \subsubsection*{Phantom}
-The following setup configuration is used to set up the water-wall phantom:
+The following configuration sets up the water--wall phantom:
 
 \begin{lstlisting}
 PHANTOM:
@@ -46,17 +47,17 @@ PHANTOM:
     detector_distance: 1.0
 \end{lstlisting}
 
-The phantom object is a \texttt{WaterWall}. The \texttt{shape: [200, 200,
-1200]} specifies the \emph{number of voxels} along $(x,y,z)$. With cubic voxels
-of size \texttt{voxel\_size} $=0.1\,\mathrm{cm}=1\,\mathrm{mm}$, the physical
-dimensions of the voxel grid are $200\,\mathrm{mm} \times 200\,\mathrm{mm}
-\times 1200\,\mathrm{mm}$ (i.e., $20\,\mathrm{cm} \times 20\,\mathrm{cm} \times
+The phantom object is a \texttt{WaterWall}. The \texttt{shape: [200, 200, 1200]}
+specifies the \emph{number of voxels} along $(x,y,z)$. With cubic voxels of size
+\texttt{voxel\_size} $=0.1\,\mathrm{cm}=1\,\mathrm{mm}$, the physical dimensions
+of the voxel grid are $200\,\mathrm{mm} \times 200\,\mathrm{mm} \times
+1200\,\mathrm{mm}$ (i.e., $20\,\mathrm{cm} \times 20\,\mathrm{cm} \times
 120\,\mathrm{cm}$). The wall thickness is set to \texttt{wall\_thickness}
 $=7.0\,\mathrm{cm}$, such that the relevant beam--phantom interaction
-corresponds to a water layer of $7\,\mathrm{cm}$.  
-The detector is placed directly behind the phantom, with
-\texttt{detector\_distance} $=1.0$ corresponding to a $1\,\mathrm{cm}$ gap
-between the water-wall and the detector plane.
+corresponds to a water layer of $7\,\mathrm{cm}$. The detector is placed
+directly behind the phantom, with \texttt{detector\_distance} $=1.0$
+corresponding to a $1\,\mathrm{cm}$ gap between the water--wall and the detector
+plane.
 
 A visualization of the scene setup is shown in
 Figure~\ref{fig:water_wall_scene}.
@@ -94,7 +95,7 @@ Figure~\ref{fig:water_wall_scene}.
 
     % Water wall slab
     \draw[slab] (\xwallL,\ys) rectangle (\xwallR,\yh); \node[note,align=center]
-    at ({(\xwallL+\xwallR)/2},\yh+0.4) {Water-Wall};
+    at ({(\xwallL+\xwallR)/2},\yh+0.4) {Water--Wall};
     % Thickness dimension (7 cm)
     \draw (\xwallL,\ys-0.6) -- node[below=2pt] {\small $7\,\mathrm{cm}$}
     (\xwallR,\ys-0.6); \draw[thick] (\xwallL,\ys-0.4) -- (\xwallL,\ys-0.8);
@@ -111,7 +112,7 @@ Figure~\ref{fig:water_wall_scene}.
 
 \end{tikzpicture}
 }
-\caption{Schematic setup of the water-wall scene.}
+\caption{Schematic setup of the water--wall scene.}
 \label{fig:water_wall_scene}
 \end{figure}
 
@@ -135,16 +136,16 @@ simulated photons \texttt{num\_photons} is varied between $0.5 \times 10^6$ and
 $5 \times 10^6$ in steps of $0.5 \times 10^6$.
 
 The parameter \texttt{num\_scatters} defines the maximum number of scattering
-events per photon for the forced fixed detection algorithm (see Chapter
-\ref{chapter10}). The \texttt{batch\_size} controls the number of photons
-processed per iteration in the vectorized setup of the algorithms. The setup of
-this value depends on the hardware used (here set to $10^5$). The photons are
-emitted from an extended quadratic source that spans across the cross-section of
-the $200\times 200\times 1200$ scene. The emission direction is set to be
-perpendicular to the plane. This corresponds to the \emph{extended source model}
-as described in Section~\ref{sec:photon_position_direction}.
+events per photon for the forced fixed detection algorithm (see
+Chapter~\ref{chapter10}). The \texttt{batch\_size} controls the number of
+photons processed per iteration in the vectorized setup of the algorithms. The
+setup of this value depends on the hardware used (here set to $10^5$). The
+photons are emitted from an extended quadratic source that spans across the
+cross-section of the $200\times 200\times 1200$ scene. The emission direction is
+set to be perpendicular to the plane. This corresponds to the \emph{extended
+source model} as described in Section~\ref{sec:photon_position_direction}.
 
-This setup ensures that the evaluation systematically compares the three
+This setup allows a systematic comparison of the three
 sampling strategies under increasing photon counts, while keeping the geometry
 and transport parameters fixed.
 
@@ -152,10 +153,10 @@ and transport parameters fixed.
 \subsection{Bone-in-Water Phantom}
 \label{sec:bone_in_water_phantom}
 
-The second evaluation setup consists of a water-wall phantom with embedded bone
+The second evaluation setup consists of a water--wall phantom with embedded bone
 structures. This configuration is used to assess the robustness of scatter
 estimation in the presence of high-density inclusions, which introduce stronger
-attenuation and more complex scattering behaviour compared to the homogeneous
+attenuation and more complex scattering behavior compared to the homogeneous
 case. The configuration is as follows:
 
 \subsubsection*{Phantom}
@@ -180,17 +181,17 @@ physical dimensions of the voxel grid are $200\,\mathrm{mm} \times
 200\,\mathrm{mm} \times 1200\,\mathrm{mm}$ (i.e., $20\,\mathrm{cm} \times
 20\,\mathrm{cm} \times 120\,\mathrm{cm}$). The wall thickness is again set to
 \texttt{wall\_thickness} $=7.0\,\mathrm{cm}$, ensuring comparability with the
-homogeneous water-wall setup. The detector is placed directly behind the
+homogeneous water--wall setup. The detector is placed directly behind the
 phantom, with \texttt{detector\_distance} $=1.0$ corresponding to a
 $1\,\mathrm{cm}$ gap between phantom and detector plane.
 
-In contrast to the homogeneous water-wall, this phantom includes
-\texttt{n\_bones} $=3$ bone structures embedded within the water-wall. The bones
+In contrast to the homogeneous water--wall, this phantom includes
+\texttt{n\_bones} $=3$ bone structures embedded within the water--wall. The bones
 cylinders lie perpendicular to the detector grid as depicted in Figure
 \ref{fig:bone_water_cone_beam}. The parameter \texttt{wall\_material\_id} $=1$
 specifies water as the background material, while \texttt{bone\_material\_id}
-$=2$ assigns bone as the material for the inclusions. The material-id does not
-only reference a material, but also the typical density of the material, which
+$=2$ assigns bone as the material for the inclusions. The material ID not
+only references a material, but also its typical density, which
 is used to compute the attenuation coefficients. This setup introduces regions
 of high attenuation and anisotropic scattering, thereby providing a more
 challenging and realistic test for the evaluation of \ac{qmc} methods in scatter
@@ -198,13 +199,13 @@ estimation.
 
 \subsubsection*{Photon Sampling}
 The photon generation and transport are configured mostly identically to the
-homogeneous water-wall setup. The only difference is that instead of the
+homogeneous water--wall setup. The only difference is that instead of the
 extended source model, the point source model is used here, where the source
 point is set to be at the center of the opposite side of the detector. This
 corresponds to a typical cone-beam CT setup.
 
 Figure~\ref{fig:bone_water_cone_beam} illustrates the scene setup with the point
-source emitting cone-beam rays through the water-wall containing bone cylinders.
+source emitting cone-beam rays through the water--wall containing bone cylinders.
 
 \begin{figure}[H]
 \centering
@@ -243,7 +244,7 @@ source emitting cone-beam rays through the water-wall containing bone cylinders.
 
     % Water wall slab
     \draw[slab] (\xwallL,\ymin) rectangle (\xwallR,\ymax); \node[note] at
-    ({(\xwallL+\xwallR)/2},\ymax+0.4) {Water-Wall};
+    ({(\xwallL+\xwallR)/2},\ymax+0.4) {Water--Wall};
     % ----------
     \draw[fill=orange!60,draw=none] ({\xwallL+0.7},-1.225) rectangle
     ({\xwallR-0.7},-2.325); \draw[draw=orange!80!black,thick]
@@ -306,7 +307,7 @@ source emitting cone-beam rays through the water-wall containing bone cylinders.
 
 \end{tikzpicture}
 }
-\caption{Point source emitting cone-beam rays through a water-wall containing bone cylinders.}
+\caption{Point source emitting cone-beam rays through a water--wall containing bone cylinders.}
 \label{fig:bone_water_cone_beam}
 \end{figure}
 
@@ -320,21 +321,21 @@ inherent feature and, in the case of scatter estimation, the very reason
 for carrying out the simulation. The stochastic nature of photon transport 
 allows one to approximate the distribution of scattered photons on the 
 detector plane with increasing accuracy as the number of simulated photons 
-grows. Since no analytical reference solution is available and, within the 
-scope of this work, it was not feasible to generate sufficiently resolved 
+grows. Since no analytical reference solution is available and within the 
+scope of this work it was not feasible to generate sufficiently resolved 
 reference simulations for the same phantoms, a direct error estimate by 
 comparison to a ground truth could not be obtained.  
 
-Instead, alternative metrics were employed to assess the quality of the 
-simulations. A particularly relevant metric is the \emph{variance}, which 
-is illustrated by means of the \emph{water-wall} phantom (see 
-Chapter~999). Due to the homogeneity of this phantom, one expects the 
-intensity of scattered photons to be uniformly distributed across all 
-detector pixels. Deviations from this expectation manifest themselves as 
-increased variance in the pixel intensities. Variance therefore serves as a 
-suitable measure in this context, since it admits a well-defined reference 
-value and provides a quantitative assessment of departures from the ideal 
-uniform distribution:  
+Instead, alternative metrics were employed to assess the quality of the
+simulations. A particularly relevant metric is the \emph{variance}, which is
+illustrated by means of the \emph{water--wall} phantom (see
+Chapter~\ref{sec:water_wall_phantom}). Due to the homogeneity of this phantom,
+one expects the intensity of scattered photons to be uniformly distributed
+across all detector pixels. Deviations from this expectation manifest themselves
+as increased variance in the pixel intensities. Variance therefore serves as a
+suitable measure in this context, since it admits a well-defined reference value
+and provides a quantitative assessment of departures from the ideal uniform
+distribution:  
 
 \begin{definition}[Variance in discrete detector images]\ \\
 Let $I \in \mathbb{R}^{m \times n}$ denote a discrete detector image with 
@@ -344,12 +345,13 @@ pixel intensities $I_{i,j}$. The \emph{variance} of the image is defined as
     \bigl(I_{i,j} - \overline{I}\bigr)^2,
 \]
 where $\overline{I}$ denotes the mean intensity over all pixels.
+\label{def:variance_image}
 \end{definition}  
 
 In addition to the global variance, another important measure is obtained 
 from analyzing one-dimensional intensity profiles across the detector. In 
-the case of the water-wall phantom, the expected profile is smooth and 
-uniform. To quantify deviations from this behaviour, the \emph{total 
+the case of the water--wall phantom, the expected profile is smooth and 
+uniform. To quantify deviations from this behavior, the \emph{total 
 variation} of the profile is computed and used as an additional evaluation 
 metric. While variance captures global deviations from uniformity, total 
 variation measures local oscillations and irregularities along the profile.  
@@ -363,6 +365,7 @@ of $x$ is defined as
 \]
 Low values of $\mathrm{TV}(x)$ correspond to smooth and stable profiles, 
 whereas large values indicate frequent or strong oscillations.
+\label{def:total_variation}
 \end{definition}
 
 
@@ -372,18 +375,16 @@ The evaluation results are based on the application of the simulation framework
 developed throughout this work
 (GitHub\footnote{\url{https://github.com/janikvhrubant/photon-imaging-sim}}).
 This framework allows for simulating X-ray photon transport through voxelized
-phantoms using different sampling strategies. As the quasi-random \ac{mc}
-sampling strategy is non-deterministic, the evaluation for the \ac{mc} method
-was repeated five times for each configuration. The variation results were then
-averaged. To not bias the plots, a representative plot is shown for the \ac{mc}
+phantoms using different sampling strategies. Because the pseudo-random \ac{mc}
+sampling strategy is non-deterministic, the simulations for the \ac{mc} method were repeated five times per configuration and the results were averaged. To avoid biasing the plots, a representative plot is shown for the \ac{mc}
 method in the following.
 
 \subsection{Primary Intensities}
 
-Although expected primary intensities can be directly computed by tracing only
+Although primary intensities can be computed directly by tracing only
 the straight rays from the source to each detector pixel and computing their
 attenuation along the way, in physically correct photon simulations they arise
-naturally whether wanted or not. Primary intensities arise from photons with
+naturally whether desired or not. Primary intensities arise from photons with
 various directions and energies that reach the detector without any interaction.
 This leads to a certain amount of noise in the primary intensities, which can be
 reduced by increasing the number of simulated photons. As the following
@@ -419,14 +420,14 @@ noise level of the primary intensities.
 Figure~\ref{fig:primary_intensities_comparison} shows the simulated primary
 intensities for the bone-in-water phantom using different sampling strategies
 for the initial direction and photon energy. Whereas the \ac{mc} result exhibits
-noticable noise, the Halton and Sobol' results are significantly smoother with
+noticeable noise, the Halton and Sobol' results are significantly smoother with
 almost no visible noise. In the simulation shown, $5 \times 10^6$ photons are
 used for each sampling strategy.
 
 The noise can be further observed in the intensity profile along the horizontal
 red line. In Figure~\ref{fig:primary_intensity_profile}, the intensity profiles
 for the sampling strategies are compared. They all show the expected intensity
-drop in the regions where the bone cylinders are located, however, the \ac{mc}
+drop in the regions where the bone cylinders are located. However, the \ac{mc}
 profile is significantly noisier than the Halton and Sobol' profiles.
 
 \begin{figure}[H]
@@ -437,9 +438,9 @@ profile is significantly noisier than the Halton and Sobol' profiles.
     \label{fig:primary_intensity_profile}
 \end{figure}
 
-To confirm these results qualitatively, the noise according to
-Definition~\textcolor{red}{TODO} is computed for the primary intensities in the
-bone-in-water phantom for each sampling strategy and various numbers of
+To confirm these results quantitatively, the noise according to
+Definition~\ref{def:variance_image} is computed for the primary intensities in
+the water--wall phantom for each sampling strategy and various numbers of
 simulated photons. Figure \ref{fig:primary_intensity_noise} summarizes the
 results in a plot. Before calculating the noise, the intensities on the detector
 are normalized by the number of simulated photons to ensure comparability for
@@ -448,7 +449,7 @@ different numbers of photons.
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.6\linewidth]{Figures/primary_noise_boneWall.png}
-    \caption{Plot of noise levels for primary intensities in Water-Wall Phantom for varying numbers of simulated photons.}
+    \caption{Plot of noise levels for primary intensities in water--wall Phantom for varying numbers of simulated photons.}
     \label{fig:primary_intensity_noise}
 \end{figure}
 
@@ -471,7 +472,7 @@ In an experimental setup, the scattering is simulated for the bone-in-water
 phantom introduced in Section~\ref{sec:bone_in_water_phantom}, applying the
 three different sampling strategies \ac{mc}, Halton and Sobol'. The
 resulting scattered intensities are shown in
-Figure~\ref{fig:scattered_intensities_comparison}. Within this experiments $5
+Figure~\ref{fig:scattered_intensities_comparison}. Within these experiments $5
 \times 10^6$ photons are simulated for each sampling strategy and the number of
 scattering events is set to $10$.
 
@@ -495,15 +496,13 @@ scattering events is set to $10$.
         \captionsetup{justification=centering}
         \caption{Sobol' sampling}
     \end{subfigure}
-    \caption{Simulated scatter intensities for an X-ray of the bone-in-water phantom using Monte Carlo, Halton and Sobol' sampling.}
+    \caption{Simulated scattered intensities for an X-ray of the bone-in-water phantom using Monte Carlo, Halton and Sobol' sampling.}
     \label{fig:scattered_intensities_comparison}
 \end{figure}
 
 Along the horizontal red line, the intensity profiles are extracted for the
 three sampling strategies, as shown in
-Figure~\ref{fig:scattered_intensity_profile}. As in the overall intensity grids,
-one can observe the challenging nature of scatter estimation, as the scattered
-intensities are significantly noisier than the primary intensities.
+Figure~\ref{fig:scattered_intensity_profile}. As in the full images, scattered intensities are significantly noisier than primary intensities. 
 
 \begin{figure}[H]
     \centering
@@ -516,9 +515,8 @@ intensities are significantly noisier than the primary intensities.
 As it is difficult to visually assess the noise levels in the scattered
 intensity images, a quantitative evaluation is performed by computing the total
 variation along the profiles. In Table~\ref{tab:scatter_line_variances}, the
-advantages of the Halton and Sobol sampling strategies are summarized. For the
-stated horizontal red line, the total variation for Halton sampling is $8\%$
-lower than the \ac{mc}. And the Sobol variation is $18\%$ lower than the \ac{mc}
+advantages of the Halton and Sobol' sampling strategies are summarized. For the horizontal red line, the total variation with Halton sampling is $8\%$
+lower than \ac{mc}; the Sobol variation is $18\%$ lower than the \ac{mc}
 variation.
 
 \begin{table}[H]
@@ -537,7 +535,7 @@ variation.
     \label{tab:scatter_line_variances}
 \end{table}
 
-For a more detailed evaluation of the noise levels, the water-wall phantom is
+For a more detailed evaluation of the noise levels, the water--wall phantom is
 used again. This phantom is homogeneous and therefore the scattered intensities
 are expected to be spatially uniform across the entire detector. This allows a
 meaningful computation of the variance as a second metric for the evaluation of
@@ -562,39 +560,39 @@ the noise levels.
         \captionsetup{justification=centering}
         \caption{Sobol'}
     \end{subfigure}
-    \caption{Comparison of intensity grids of scattered photons for the Water-Wall phantom using different sampling strategies.}
+    \caption{Comparison of intensity grids of scattered photons for the water--wall phantom using different sampling strategies.}
     \label{fig:three_images_side_by_side}
 \end{figure}
 
 As shown in Figure~\ref{fig:three_images_side_by_side}, the scattered
 intensities diminish towards the edges of the detector. This is due to the
 bounded scene and the detection geometry which captures photon intensities up to
-the edges of the scene. To avoid biasing the variance computation, the
-uniformity variance is computed only on the central $100 \times 100$ pixels of
-the detector and cut off at the blue lines.
+the edges of the scene. To avoid biasing the variance computation, the variance
+is computed only on the central $100 \times 100$ pixels of the detector and is
+bounded by the blue lines.
 
 Tracking the variance within this region of interest for different numbers of
 simulated photons, the results are summarized in
 Figure~\ref{fig:scattered_intensities_waterWall}. Here, the intensities are
 again normalized by the number of simulated photons to ensure comparability. The
-order quantities range from $0.5 \times 10^6$ to $5 \times 10^6$ in steps of
+photon counts range from $0.5 \times 10^6$ to $5 \times 10^6$ in steps of
 $0.5 \times 10^6$.
 
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.7\linewidth]{Figures/scatter_noise_waterWall.png}
-    \caption{Noise of scattered photons on the water wall for different photon quantities.}
+    \caption{Noise of scattered photons on the water--wall for different photon quantities.}
     \label{fig:scattered_intensities_waterWall}
 \end{figure}
 
 This experiment confirms the advantages of \ac{qmc} sampling for scatter
 estimation. Sobol' sampling consistently achieves the lowest noise levels. For
-the highest number of simulated photons ($5 \times 10^6$), the Sobol's sampling
+the highest number of simulated photons ($5 \times 10^6$), the Sobol' sampling
 strategy achieves a variance that is $16\%$ lower than the \ac{mc} variance. The
-Halton sampling strategy does perform similar to the \ac{mc} sampling in this
+Halton sampling strategy performs similarly to the \ac{mc} sampling in this
 experiment.
 
-The different results for the two experiments can be explained by the
+The different results for the two experiments follow from the
 initialization type of the photons. Furthermore, the different phantoms have a
 significantly different attenuation behavior due to the bone structures.
 
@@ -602,36 +600,36 @@ significantly different attenuation behavior due to the bone structures.
 
 The evaluation of \ac{qmc} methods for X-ray scatter estimation
 demonstrated their potential to reduce noise levels in simulated images. Using
-both a homogeneous water-wall phantom and a more complex bone-in-water phantom,
+both a homogeneous water--wall phantom and a more complex bone-in-water phantom,
 the experiments showed that low-discrepancy sequences such as Halton and Sobol'
 can outperform traditional \ac{mc} sampling in terms of noise reduction.
 
-Already the primary step, the distribution of primary intensities, benefits
+Even at the primary stage, the distribution of primary intensities benefits 
 significantly from the use of \ac{qmc} methods. Both Halton and Sobol'
 sequences produced noticeably smoother primary intensity images compared to
 standard \ac{mc} sampling. Therefore, only the first three random values per
 photon are needed.
 
 Scattered intensities require more extensive sampling due to the complex
-interactions involved. For every scattered photon, 3 further random values are
-needed for each scattering event (scatter angle with energy, azimuthal angle,
-free path length). The number of scattering events is set to $10$ in the
+interactions involved. For every scattered photon, three further random values
+are needed for each scattering event (scatter angle with energy, azimuthal
+angle, free path length). The number of scattering events is set to $10$ in the
 experiments. This results in a total of $3 + 3 \times 10 = 33$ random values per
 photon. Here, the Sobol' sequence consistently achieved the lowest noise levels,
 with reductions of up to $18\%$ in the bone-in-water phantom and $16\%$ in the
-water-wall phantom compared to \ac{mc} sampling.
+water--wall phantom compared to \ac{mc} sampling.
 
 When sampling scattered photons, the photon intensity (for the forced fixed
 detection simulation) and the photon energy decrease at every scattering event.
 Therefore, the first scattering events contribute the most to the overall
-intensity at the detector grid. Since $6$ random values are needed for the
-photon generation and the first scattering event, low discrepancy sequences as
-the Halton sequence show their curse of dimensionality with almost no advantage
-over \ac{mc} simulations. As the experiments suggest, the Sobol' sequence
-overcomes this problem. This can be explained by the fact that the Sobol'
-sequence maintains low discrepancy in higher dimensions better than the Halton
-sequence. In \cite{morokoff1995quasi}, it is shown that the Halton sequence
-starts suffering beginning from the 6th dimension.
+intensity at the detector grid. Since six random values are needed for the
+photon generation and the first scattering event, low-discrepancy sequences as
+the Halton sequence suffer from the curse of dimensionality yielding little
+advantage over \ac{mc} simulations. As the experiments suggest, the Sobol'
+sequence overcomes this problem. This can be explained by the fact that the
+Sobol' sequence maintains low-discrepancy in higher dimensions better than the
+Halton sequence. In \cite{morokoff1995quasi}, it is shown that the Halton
+sequence starts to suffer from the sixth dimension.
 
 \section{Future Work}
 
@@ -640,16 +638,15 @@ understanding the benefits of \ac{qmc} methods in X-ray scatter
 estimation. However, several avenues for future research remain open.
 
 As shown in the experiments, the curse of dimensionality affects the performance
-of low-discrepancy sequences. This suggests that using low-discrepancy sequences
-for the first few random values and switching to pseudo-random sampling for
-later values could be a promising hybrid approach. Therefore, future work could
+of low-discrepancy sequences. This suggests a hybrid approach: use low-discrepancy sequences
+for the first few random values and switch to pseudo-random sampling for
+later values. Therefore, future work could
 explore such hybrid sampling strategies and evaluate their effectiveness in
 reducing noise levels.
 
 It would be interesting to extend the evaluation to an optimization problem,
-where the goal is to minimize the noise level for a certain phantom and figure
-out the optimal number of \ac{qmc} dimensions to use.
+where the goal is to minimize the noise level for a certain phantom and determine the optimal number of \ac{qmc} dimensions to use.
 
-Further enhancements to the simulation framework could include the integration
-of this hybrid approach and enhancing its robustness for a wider range of
+Further enhancements to the simulation framework could include integrating this
+hybrid approach and enhancing the framework's robustness for a wider range of
 phantoms and imaging scenarios.

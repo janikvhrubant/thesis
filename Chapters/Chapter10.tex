@@ -10,33 +10,33 @@ In standard \ac{mc} X-ray simulations a random variable determines whether a pho
 escapes the phantom or undergoes a scattering event. Thus, only a fraction of
 the simulated photons actually reaches the detector and contributes to the final image.
 To attain a satisfactory photon distribution at the detector, a very large
-number of photons with differrent directions, energies and scatter behaviors
+number of photons with different directions, energies and scatter behaviors
 must be simulated. To reduce the variance and accelerate convergence,
 low-discrepancy sequences are used in this thesis to sample the initial photon
 properties and the stochastic processes during photon transport.
 
-For comparing the performance of the conservative approach of \ac{mc} sampling, to the proposed Sobol' and Halton based sampling, a simulation algorithm has been developed, which is based on the \emph{Forced Fixed Detection} approach. Forced fixed detection is a further variance reduction technique, which is applied in \cite{fd2001,qmcXray2023}. 
+To compare the performance of conventional \ac{mc} sampling with the proposed Sobol' and Halton based sampling, a simulation algorithm has been developed, which is based on the \emph{Forced Fixed Detection} approach. Forced fixed detection is a variance reduction technique applied in \cite{fd2001,qmcXray2023}. 
 
-Therefore, a fixed number of photon scatter events is predefined. Then, at each scatter event, the escape probability is calculated. This represents the intensity of the photon energy which is not being scattered but instead directly forced to contribute to the detector signal. For the remaining intensity, a free path length is sampled from the exponential distribution according to Beer-Lambert's law and the photon is scattered. Again, the photon intensity is updated according to the probability of staying in the phantom and being scattered respectively. Thus every photon that is simulated definetly contributes to the detector signal, which is not the case in conventional \ac{mc} simulations.
+Therefore, a fixed number of photon scatter events is predefined. Then, at each scatter event, the escape probability is calculated. This represents the portion of the photon intensity which is not scattered but is directly forced to contribute to the detector signal. For the remaining intensity, a free path length is sampled from the exponential distribution according to Beer-Lambert's law and the photon is scattered. Again, the photon intensity is updated according to the probability of staying in the phantom and being scattered respectively. Thus, every simulated photon definetly contributes to the detector signal, which is not the case in conventional \ac{mc} simulations.
 
 \section{Preliminaries}
 
 Before delving into the detailed description of the simulation algorithm, some
 preliminary assumptions are outlined. 
 
-First, as already outlined in Section~\ref{sec:scattering_attenuation} the phantom is assumed to be surrounded by air. Furthermore, the
+First, as outlined in Section~\ref{sec:scattering_attenuation}, the phantom is assumed to be surrounded by air. Furthermore, the
 attenuation of air is neglected. Thus, it is assumed that no attenuation occurs outside the phantom.
 
 The phantom is assumed to be convex, such that a photon, which left the phantom,
 cannot re-enter it. This simplifies the implementation. However, the algorithm
-can be extended to handle non-convex phantoms as well. Either by applying the
+can be extended to handle non-convex phantoms as well. This can be handled either by applying the
 ray traversal algorithm (Algorithm~\ref{alg:rayTraversalMain}) multiple times to check whether the photon re-enters the
 phantom or by setting the attenuation of air to a very small value.
 
 The positions of the photons are represented in spatial coordinates with a
 specific unit scale. The \emph{voxel size} $\lambda$ represents the size of a
 voxel in centimeters and is used for scaling. Thus, a photon with position
-$P=(x,y,z)$ denoted in centimeters, corresponds to the voxel coordinates
+$P=(x,y,z)$ denoted in centimeters corresponds to the voxel coordinates
 $P'=(\frac{x}{\lambda}, \frac{y}{\lambda}, \frac{z}{\lambda})$.
 
 %-------------------------------------------------------------------------------
@@ -49,7 +49,7 @@ The algorithm begins by initializing a sampling technique (e.g. Monte
 Carlo, Sobol', Halton), a predefined number of photons, the beam geometry, the
 phantom geometry and a fixed number of scatter events $N$.
 
-Then a total of $3(N+1)$ random values $(u_k)_{k=0}^{3(N+1)}$ per photon are
+Then a total of $3(N+1)$ random values $(u_k)_{k=0}^{3(N+1)}$ per photon is
 sampled according to the sampling technique chosen.
 
 With that in place, a set of photons, each assigned an initial energy $E_0$
@@ -60,7 +60,7 @@ position, direction and energy of each photon, a total of three random values is
 required per photon: $u_0, u_1, u_2$.
 
 The photons are placed within a voxel grid composed of cubic voxels that define
-the geometry of the scene. Each voxel encodes an integer value identifying a
+the geometry of the scene. Each voxel encodes an integer identifying a
 specific material or tissue type and density. 
 
 \begin{figure}[H]
@@ -110,27 +110,27 @@ Therefore, at every scatter point $A_i$ with $i \in \{0, \ldots, N-1\}$, the esc
     p(A_i, \vec{\omega}_i, E_i) := \exp\bigg(-\int\limits_{\overrightarrow{A_iC_i}} \mu(x, E_i) dx\bigg)
 \end{equation}
 
-is computed according to Beer-Lambert's law (Eq.~\ref{eq:lambert_beer_law})
+is computed according to the Beer-Lambert law (Eq.~\ref{eq:lambert_beer_law})
 depending on the current direction $\vec{\omega}_i$ and photon energy $E_i$.
-$C_i$ denotes the exit point of the phantom in photon direction. $\mu$ refers to
+$C_i$ denotes the exit point of the phantom along the photon direction. $\mu$ refers to
 the attenuation coefficient depending on the position $x$ in the phantom and the
 photon energy $E_i$.
 
-With the caluclated escape probability, the free path length $t_i$ is sampled attributing the random value
-$u_{3i}$ while forcing the photon to stay within the phantom. The \emph{forced}
-aspect of the forced fixed detection algorithm implies that the photon is
-guaranteed to scatter $N$ times within the phantom before completely exiting the
-phantom. This is ensured by forcing the next scatter point to be inbetween
-the current position $A_i$ and the exit point $C_i$. To apply the uniform
-distribution of $u_{3i}$, a target value is computed according to Beer-Lambert's
-law \eqref{eq:lambert_beer_law}:
+With the calculated escape probability, the free path length $t_i$ is sampled
+attributing the random value $u_{3i}$ while forcing the photon to stay within
+the phantom. The \emph{forced} aspect of the forced fixed detection algorithm
+implies that the photon is guaranteed to scatter $N$ times within the phantom
+before completely exiting the phantom. This is ensured by forcing the next
+scatter point to be in between the current position $A_i$ and the exit point
+$C_i$. To use the uniform variate $u_{3i}$, a target value is computed
+according to the Beer-Lambert law \eqref{eq:lambert_beer_law}:
 
 \begin{equation*}
     \exp(-\int\limits_0^{t_i} \mu(A_{i} + s \cdot \vec{\omega}_{i}, E_{i}) ds) = 1 - u_{3i} * (1 - p(A_i, \vec{\omega}_i, E_i))\,.
 \end{equation*}
 
 As the target value needs to be in the range $[p(A_i, \vec{\omega}_i, E_i), 1]$,
-the right hand side is constructed as such. Consequently, the following equation
+the right-hand side is constructed as such. Consequently, the following equation
 is solved for $t_i$ as in
 Algorithm~\ref{alg:forcedDetectionStep} (line~\ref{alg:forcedDetectionStep:line:freePathLength}-\ref{alg:forcedDetectionStep:line:freePathLengthEnd}):
 
@@ -161,12 +161,12 @@ point $i \in \{0, \ldots, N\}$. Following the forced fixed detection approach, t
         Algorithm~\ref{alg:forcedDetectionStep} (line
         \ref{alg:forcedDetectionStep:line:ExitPoint}).
         In case $i=0$, this intensity is accounted as primary intensity.
-    \item \textbf{Photons stays in the phantom and scatters:}\\
+    \item \textbf{Photon stays in the phantom and scatters:}\\
         The leftover intensity $W_i \cdot (1 - p(A_i, \vec{\omega}_i, E_i))$
         splits into two: the absorbed intensity which will no longer be considered and the Compton scattered
         intensity. This ratio is determined by the ratio of the Compton
         scattering coefficient $\mu_{\text{CS}}$ and the photoelectric
-        coefficient $\mu_{\text{\text{PE}}}$. Thus, the leftover intensity after
+        coefficient $\mu_{\text{PE}}$. Thus, the leftover intensity after
         Compton scattering is
         \begin{equation*}
             W_{i+1} = W_i \cdot (1 - p(A_i, \vec{\omega}_i, E_i)) \cdot \frac{\mu_{\text{CS}}(A_{i+1}, E_i)}{\mu_{\text{CS}}(A_{i+1}, E_i) + \mu_{\text{PE}}(A_{i+1}, E_i)}\,.
@@ -178,7 +178,7 @@ point $i \in \{0, \ldots, N\}$. Following the forced fixed detection approach, t
 \end{itemize}
 
 This process is repeated according to the maximum scatter order $N$. The
-leftover intensity $W_N$ after the last forced scatter event is forwarded to the
+leftover intensity $W_N$ after the last forced scatter event is sent to the
 detector without any further scattering.
 
 An overview of the different rays and their paths is illustrated in Figure~\ref{fig:rayPaths}.
@@ -235,11 +235,11 @@ purpose and implementation of each sub-algorithm in detail.
 \subsection{Photon Generation}
 \label{sec:photonDirectionSampling}
 
-To initialize a photon, the three properties energy, position and direction must
-be sampled. The photon energy is sampled independently from the position and
-direction as the spectral distribution accounts for the whole beam angle. For
-the generation, a total of three random variables $u_0,u_1,u_2 \in [0,1]$ are
-applied per photon.
+To initialize a photon, the three properties --- energy, position and direction
+--- must be sampled. The photon energy is sampled independently from the
+position and direction as the spectral distribution accounts for the whole beam
+angle. For the generation, a total of three random variables $u_0,u_1,u_2 \in
+[0,1]$ are applied per photon.
 
 \subsubsection{Photon Energy Sampling}
 
@@ -266,7 +266,7 @@ the \ac{cdf}, the following algorithm is adopted:
 This algorithm constructs the \ac{cdf} and returns two arrays: one with the
 energy nodes and one with the corresponding \ac{cdf} values. To determine the
 photon energy $\mathcal{E}$ according to random variable $u_0$, a loop is
-applied to find the index $j$ such that $\mathrm{CDF}[j-1] \le u_1 <
+applied to find the index $j$ such that $\mathrm{CDF}[j-1] \le u_0 <
 \mathrm{CDF}[j]$. The corresponding energy is then $\mathcal{E} = E[j]$.
 
 \subsubsection{Photon Position and Direction Sampling: Point Source Model}
@@ -279,9 +279,9 @@ angle $\Theta$. This requires two independent random variables $u_1, u_2 \in
 
 The following algorithm is applying the method as described in
 Section~\ref{sec:photon_position_direction} and samples the direction
-$\vec{\omega}$ for a beam with angle $\Theta$ in cone axis $(0,0,1)$ For general
-applicability, the algorithm is projecting the cone axis for a given direction
-$\vec{\textbf{a}} \in \mathbb{R}^3$.
+$\vec{\omega}$ for a beam with half-opening angle $\Theta$ in cone axis
+$(0,0,1)$ For general applicability, the algorithm is projecting the cone axis
+for a given direction $\vec{\textbf{a}} \in \mathbb{R}^3$.
 
 \begin{algorithm}[H]
 \caption{Photon Direction Sampling for a Point Source}
@@ -305,14 +305,14 @@ $\vec{\textbf{a}} \in \mathbb{R}^3$.
 \end{algorithm}
 
 Whereas the algorithm yields the direction $\vec{\omega}$, the start position is
-simply set to be the sourse position: $S = \mathcal{S}^*$
+simply set to be the source position: $S = \mathcal{S}^*$
 
 \subsubsection{Photon Position Sampling for an Extended Source}
-For the extended source model, the 4 edge points of the rectangle source within
-a plane $P$ must be given: $P_1, P_2, P_3, P_4 \in \mathbb{R}^3$. The initial
-position $S$ of each photon is sampled by the simple algorithm conducting the
-calculation from section \ref{sec:photon_position_direction}. Again two random
-values $u_1, u_2 \in [0,1]$ are required.
+For the extended source model, the four edge points of the rectangle source
+within a plane $P$ must be given: $P_1, P_2, P_3, P_4 \in \mathbb{R}^3$. The
+initial position $S$ of each photon is sampled by the simple calculation from
+section \ref{sec:photon_position_direction}. Again two random values $u_1, u_2
+\in [0,1]$ are required.
 
 \begin{algorithm}[H]
 \caption{Photon Position Sampling for an Extended Source}
@@ -328,24 +328,32 @@ values $u_1, u_2 \in [0,1]$ are required.
 \end{algorithmic}
 \end{algorithm}
 
-For the extended source modelling, the photon direction is set to be the
-perpendicular direction of the plane $P$.
-
+For the extended source modeling, the photon direction is set to be the direction normal to the plane $P$.
 
 \subsection{Ray Traversal}
 \label{sec:rayTraversal}
 
 The ray traversal algorithm is used for traversing the photon through the voxel
 grid until either a certain material is reached or the photon exits the grid.
-The algorithm is intended to stop when a certain material is reached in the voxel grid. Firstly, if the photon starts in air the algorithm is used to project the photon until it reaches the phantom. Therefore, it consistently checks whether the next voxel is still air or not. Secondly, the algorithm is used to traverse the photon through the phantom to determine the exit point $C$ of the phantom. Here, the algorithm checks whether the next voxel is still a material that is not air. When exiting the phantom, the algorithm is applied to traverse air until it exits the voxel grid and reaches the detector plane. Here, the algorithm is applied as long as the next voxel material is air. As the phantom is assumed to be convex, the photon must exit the grid after leaving the phantom and its projection through air.
+The algorithm stops when a specified material is reached in the voxel grid.
+Firstly, if the photon starts in air the algorithm is used to project the photon
+until it reaches the phantom. Therefore, it consistently checks whether the next
+voxel is still air or not. Secondly, the algorithm is used to traverse the
+photon through the phantom to determine the exit point $C$ of the phantom. Here,
+the algorithm checks whether the next voxel is still a material that is not air.
+When exiting the phantom, the algorithm is applied to traverse air until it
+exits the voxel grid and reaches the detector plane. Here, the algorithm is
+applied as long as the next voxel material is air. As the phantom is assumed to
+be convex, the photon must exit the grid after leaving the phantom and its
+projection through air.
 
 The last two applications of the ray traversal algorithm are used within the
 \emph{Forced Fixed Detection} algorithm to traverse the photon through the
-phantom and onto the detector. Hereby, it is important to capture the traversed
-voxel indices with the according distances, to proportionally consider the
+phantom and onto the detector. It is important to record the traversed voxel
+indices with the corresponding distances, to proportionally consider the
 attenuation effects.
 
-For the initialization of the ray traversal algorithm, the following inputs are required:
+To initialize the ray-traversal algorithm, the following inputs are required:
 \begin{itemize}
     \item The voxel grid $materialGrid \in \mathbb{Z}^{X \times Y \times Z}$
     representing the materials of the scene including the phantom. $X,Y,Z$ represent
@@ -357,12 +365,12 @@ For the initialization of the ray traversal algorithm, the following inputs are 
 
 Traversing the ray in the grid means traversing the ray through the cubic
 voxels. For the determination of the attenuation along the path, the precisely
-determined distances within each voxel, the voxel indices and their
-corresponding materials need to be tracked. For quickly determining the sampled
+determined per-voxel distances, the voxel indices and their
+corresponding materials must be tracked. For quickly determining the sampled
 free path length, the starting points in each voxel are also captured. 
 
 This algorithm proceeds voxel by voxel. To carry out the ray traversal within a
-specific voxel, the component algorithm \ref{alg:rayTraversalStep} is applied at
+specific voxel, the component Algorithm \ref{alg:rayTraversalStep} is applied at
 each voxel along the ray.
 
 \begin{algorithm}[H]
@@ -392,18 +400,18 @@ Algorithm~\ref{alg:rayTraversalStep} computes for each component $x,y,z$ the
 distance to the next voxel boundary depending on the direction of the ray. To
 justify the correct sign, it distinguishes between the following cases:
 \begin{itemize}
-    \item When the direction component is positive (line~\ref{alg:rayTraversalStep:line:positive}), the distance potential is between the current position and the next voxel index, i.e. $1 - (\tilde{A}_i - \lfloor\tilde{A}_i\rfloor)$.
-    \item When the direction component is negative and the current position is not at the voxel boundary (line~\ref{alg:rayTraversalStep:line:negative}), the distance potential is between the current position and the previous voxel index, i.e. $\tilde{A}_i - \lfloor\tilde{A}_i\rfloor$. As the direction is negative, the distance potential is negated.
-    \item When the direction component is negative and the current position is at the voxel boundary (line~\ref{alg:rayTraversalStep:line:negativeBoundary}), the distance potential is between the current position and the previous voxel index, i.e. for the grid $1$. As the direction is negative, the distance potential is negated.
+    \item When the direction component is positive (line~\ref{alg:rayTraversalStep:line:positive}), the offset to the next boundary is between the current position and the next voxel index, i.e. $1 - (\tilde{A}_i - \lfloor\tilde{A}_i\rfloor)$.
+    \item When the direction component is negative and the current position is not at the voxel boundary (line~\ref{alg:rayTraversalStep:line:negative}), the offset to the next boundary is between the current position and the previous voxel index, i.e. $\tilde{A}_i - \lfloor\tilde{A}_i\rfloor$. As the direction is negative, the offset to the next boundary is negated.
+    \item When the direction component is negative and the current position is at the voxel boundary (line~\ref{alg:rayTraversalStep:line:negativeBoundary}), the offset to the next boundary is between the current position and the previous voxel index, i.e. for the grid $1$. As the direction is negative, the offset to the next boundary is negated.
 \end{itemize}
 
-Then it normalizes the distance by the respective component of the direction
+It then normalizeseach offset by the respective component of the direction
 vector. The minimum of these three distances in the direction of the ray is the
 distance to the next voxel boundary. The position is then updated accordingly.
 
 The main ray traversal algorithm (Algorithm~\ref{alg:rayTraversalMain}) applies
 Algorithm~\ref{alg:rayTraversalStep} iteratively until the stopping criterion is
-met. Whereas the stopping criterion in algorithm~\ref{alg:rayTraversalMain} is solely running as long as
+met. Whereas the stopping criterion in Algorithm~\ref{alg:rayTraversalMain} is solely running as long as
 the current material is not air, the algorithm can be easily adapted to stop at
 any other material and therefore be applied in the different scenarios described
 above.
@@ -411,7 +419,7 @@ above.
 Further, the algorithm converts the position $A$ in world coordinates to voxel
 coordinates $\tilde{A}$ and vice versa. It captures the crossed voxel indices,
 their corresponding materials, the entry points in world coordinates and the
-distances in centimeters within each voxel in the arrays $crossedVoxels$,
+per-voxel distances in centimeters in the arrays $crossedVoxels$,
 $crossedMaterials$, $entryPoints$ and $distances$ respectively.
 
 The algorithm returns the following values:
@@ -419,7 +427,7 @@ The algorithm returns the following values:
 \begin{itemize}
     \item The array $crossedVoxels$ contains all voxel indices of voxels that the ray traversed.
     \item The array $crossedMaterials$ contains the corresponding materials of the crossed voxels.
-    \item The array $entryPoints$ contains the starting points in the according voxel in world coordinates.
+    \item The array $entryPoints$ contains the starting points in the corresponding voxels in world coordinates.
     \item The array $distances$ contains the distances in centimeters such that their unit is consistent with the attenuation coefficients.
     \item The exit point $C$ in world coordinates where the ray exits the phantom or the voxel grid.
 \end{itemize}
@@ -476,7 +484,7 @@ The algorithm returns the following values:
 The Compton scattering algorithm strictly follows the description in
 Section~\ref{sec:physicsComptonScattering}. The algorithm implements the
 Klein--Nishina formula (Eq.~\ref{eq:kleinNishina}) to sample the scattering
-angle $\theta$ with the acceptance-rejection method. The energy update is
+angle $\theta$ with the acceptance--rejection method. The energy update is
 applied with the Compton formula (Eq.~\ref{eq:compton_formula}). Finally, the
 new direction $\vec{\omega}'$ is computed with the sampled angles $\theta$ and
 azimuthal angle $\phi$.
@@ -488,7 +496,7 @@ The algorithm requires the following inputs:
     \item Two random variables $u_1, u_2 \in [0,1]$.
 \end{itemize}
 
-As described in Section~\ref{sec:physicsComptonScattering}, the algorithm samples the scattering angle $\theta$ with the acceptance-rejection method.
+As described in Section~\ref{sec:physicsComptonScattering}, the algorithm samples the scattering angle $\theta$ with the acceptance--rejection method.
 
 \begin{algorithm}[H]
 \caption{Compton Scattering (Klein--Nishina + Acceptance--Rejection)}
@@ -589,8 +597,8 @@ iteratively for $N$ forced scatter events.
         \State $A^\prime \gets A + goalDist \cdot \vec{\omega}$
         \State $escapeIntensity \gets W \cdot escapeProb \cdot E$
         \State $W^\prime \gets W \cdot (1 - escapeProb) \cdot \frac{\mu_\textrm{CS}}{\mu_\textrm{CS} + \mu_\textrm{PE}}$
-        \State Apply Algorithm~\textcolor{red}{TODO:REFERENCE-ALGORITHM} for Compton Scattering with direction $\vec{\omega}$, energy $E$ and random variables $u_2, u_3$ to obtain new direction $\vec{\omega}^\prime$ and energy $E^\prime$ \label{alg:forcedDetectionStep:line:compton}
-        \State Apply \autoref{alg:rayTraversalMain} to traverse the ray from exit point $C$ of the phantom through air until it exits the grid and obtain detector position $\hat{C}$ \label{alg:forcedDetectionStep:line:ExitPoint}
+        \State Apply \autoref{alg:comptonScattering} for Compton Scattering with direction $\vec{\omega}$, energy $E$ and random variables $u_2, u_3$ to obtain new direction $\vec{\omega}^\prime$ and energy $E^\prime$ \label{alg:forcedDetectionStep:line:compton}
+        \State Apply \autoref{alg:rayTraversalMain} to traverse the ray from exit point $C$ of the phantom through air until it exits the grid and obtain the detector position $\hat{C}$ \label{alg:forcedDetectionStep:line:ExitPoint}
         \State \Return $A^\prime, W^\prime, E^\prime, \vec{\omega}^\prime$ for the scattered photon, $escapeIntensity, \hat{C}$ for the escaped
         \Statex \hspace*{\widthof{\textbf{return} }} photon
     \end{algorithmic}
@@ -610,7 +618,7 @@ coefficients $\mu(\cdot, E_i)$ along the ray multiplied by the corresponding
 distances within each voxel. Here, the algorithm iteratively finds the index $J$
 such that the cumulative sum of the attenuation coefficients up to index $J$ is
 less than or equal to the target attenuation $attGoal$ as described in line
-\ref{alg:forcedDetectionStep:line:freePathLength} of algorithm \ref{alg:forcedDetectionStep}.
+\ref{alg:forcedDetectionStep:line:freePathLength} of Algorithm~\ref{alg:forcedDetectionStep}.
 
 \begin{algorithm}[H]
     \caption{Forced Fixed Detection: Main Algorithm}
@@ -643,10 +651,10 @@ less than or equal to the target attenuation $attGoal$ as described in line
 
         \State Apply \autoref{alg:rayTraversalMain} to traverse the photon from $A_N$ with direction $\vec{\omega}_N$ through the phantom and obtain exit position $C_N$ and arrays: $materials,\ distances$
 
-        \State Initialize array $atts$ with attenuation coefficient $\mu(\cdot,
+        \State Initialize array $atts$ with the attenuation coefficients $\mu(\cdot,
         E_N)$ according to material in $materials$
 
-        \State $lastInt \gets W_N \cdot E_N \cdot \exp(- \langle distances , atts \rangle )$ \Comment{final escaped intensity}
+        \State $lastInt \gets W_N \cdot E_N \cdot \exp(- \langle distances , atts \rangle )$ \Comment{final escaping intensity}
 
         \State Append $C_N, lastInt$ to $exitPoss, exitInts$
 
@@ -697,9 +705,13 @@ Then the photon is traversed through air to the phantom with Algorithm~\ref{alg:
 \Require Sampling strategy: Monte Carlo / Halton / Sobol'
 \Require Number of scatter events $N$
 
-\State Initialize randoms $(u_i)_{i=0}^{3N+2} \in [0,1]^{3(N+1)}$ according to the sampling strategy
+\State Initialize random numbers $(u_i)_{i=0}^{3N+2} \in [0,1]^{3(N+1)}$ according to the sampling strategy
 
-\State Initialize photon with position $S$, energy $E_0$, direction $\vec{\omega}_0$  according to the source model and the corresponding \autoref{alg:photonEnergySampling}-\ref{alg:extendedSourceSampling} applying 3 random values $u_0,u_1,u_2$ as described in Section~\ref{sec:photonDirectionSampling}
+\State Initialize photon with position $S$, energy $E_0$, direction
+$\vec{\omega}_0$  according to the source model and the corresponding
+\autoref{alg:photonEnergySampling}-\ref{alg:extendedSourceSampling} using three
+random values $u_0,u_1,u_2$ as described in
+Section~\ref{sec:photonDirectionSampling}
 
 \State Traverse photon through air to phantom with \autoref{alg:rayTraversalMain} to obtain initial position $A_0$ in phantom
 
@@ -711,7 +723,7 @@ Then the photon is traversed through air to the phantom with Algorithm~\ref{alg:
 
 Algorithm \ref{alg:mainSimulation} simulates the scattering of a single photon.
 In practice, the algorithm is applied for a large number of photons to obtain
-statistically significant results that are relevant for real world applications
+statistically significant results that are relevant for real-world applications
 such as CT imaging. In the implementation for this thesis, the algorithm is
 further vectorized to simulate the scattering of multiple photons in parallel
 and speed up the computation.

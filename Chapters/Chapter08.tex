@@ -43,7 +43,7 @@ $$l = \overrightarrow{\mathcal{S}\mathcal{D}}$$
 Under idealized conditions, the attenuation process is governed by the
 \emph{Lambert-Beer law}, which describes an exponential decay in intensity $I$
 as the beam interacts with the material. As stated in
-\cite[Chap.~7]{medicalImagingSystemsIntro2019:}, this relationship is given by:
+\cite[Chapter 7]{medicalImagingSystemsIntro2019:}, this relationship is given by:
 
 \begin{equation}
     \label{eq:lambert_beer_law}
@@ -53,17 +53,17 @@ as the beam interacts with the material. As stated in
 Here, $I_0(E)$ denotes the incident intensity of X-rays with initial energy $E$
 at the source $\mathcal{S}$. $\mu(x,E)$ represents the linear attenuation
 coefficient at spatial location $x$ along the path $l$, for energy $E$. The
-attenuation coefficient is representing the attenuation per unit length and has
-usually the unit $\frac{1}{cm}$. The resulting intensity $I$ is measured at the
+attenuation coefficient represents the attenuation per unit length and usually
+has the unit $\frac{1}{cm}$. The resulting intensity $I$ is measured at the
 detector element $\mathcal{D}$.
 
 Although exponential attenuation along straight-line paths such as
 $\overrightarrow{\mathcal{S}\mathcal{D}}$ is the idealized model for X-ray
 imaging, this assumption is systematically violated in practice. As X-rays
-traverse the scanned phantom, they undergo scattering interactions - such as
-Compton or Rayleigh scattering - that alter their trajectories. Despite
+traverse the scanned phantom, they undergo scattering interactions --- such as
+Compton or Rayleigh scattering --- that alter their trajectories. Despite
 deviating from the primary path, these scattered X-rays may still reach the
-detector, adding unintended signals at the detector. As a result, the measured
+detector, adding unintended signals to the detector. As a result, the measured
 intensities no longer represent pure line integrals of the attenuation map. This
 discrepancy introduces nonlinear errors and visible artifacts in the
 reconstructed image, ultimately degrading both visual quality and quantitative
@@ -72,20 +72,18 @@ accuracy.
 Scattered radiation is a major source of image artifacts --- such as cupping and
 streaks --- and reduces both spatial and contrast resolution. These effects not
 only degrade visual image quality but also compromise the accuracy of
-quantitative measurements. But precise CT-images are important for various
+quantitative measurements. Precise CT-images are important for various
 clinical applications, such as treatment planning in radiation therapy.
-Generating accurate three-dimensional models of the phantom is crucial for more
-precise dose calculations, strong enough to be effective but sufficiently weak
+Generating accurate three-dimensional models of the phantom is crucial for
+precise dose calculations --- strong enough to be effective but sufficiently weak
 to minimize unintended tissue damage.
 
-In clinical practice, such three-dimensional patient models are represented in
-\acfp{hu}, which encode tissue-specific attenuation properties and serve as the
-basis for accurate dose calculation in radiation therapy
-\cite[Chapter~8]{medicalImagingSystemsIntro2019:}.
+In clinical practice, such three-dimensional patient models are represented in \acfp{hu}, which quantify tissue-specific attenuation properties and form the standard basis for accurate dose calculations in radiation therapy \cite[Chapter~8]{medicalImagingSystemsIntro2019:}.
+
 
 In \ac{ct}, the reconstruction algorithm produces a volumetric map of effective
 attenuation coefficients, from which each voxel value is normalized according to
-the Hounsfield definition. The resulting HU values form the basis of the
+the Hounsfield definition. The resulting \ac{hu} values form the basis for the
 displayed grayscale intensities in the \ac{ct} image.
 
 \acs{hu} provide a dimensionless measure of X-ray attenuation. They are defined
@@ -97,11 +95,11 @@ water and air:
 \end{equation}
 where $\mu_\text{water}$ and $\mu_\text{air}$ denote the attenuation
 coefficients of water and air, respectively. By convention, water is assigned
-$0$~HU and air $-1000$~HU, while dense bone can exceed $+1000$~HU. Although HU
-reduce scanner- and protocol-dependent variability, they still depend on factors
-such as tube voltage and reconstruction settings. They are therefore best
-understood as a standardized but not absolute measure of tissue attenuation in
-clinical \ac{ct} imaging.
+$0$~HU and air $-1000$~HU, while dense bone can exceed $+1000$~HU. Although
+\ac{hu} reduce scanner- and protocol-dependent variability, they still depend on
+factors such as tube voltage and reconstruction settings. They are therefore
+best understood as a standardized but not absolute measure of tissue attenuation
+in clinical \ac{ct} imaging.
 
 The impact of scatter becomes especially pronounced in modern \ac{ct} systems
 using high-energy X-rays or large-area flat-panel detectors, where scatter may
@@ -110,7 +108,7 @@ thus essential for achieving high-fidelity \ac{ct} images, particularly in
 clinical applications where precision and reliability are paramount
 \citep{medicalImagingSystemsIntro2019:}.
 
-For precise estimation of the models and HU values respectively, it is therefore
+For precise estimation of the models and \ac{HU} values respectively, it is therefore
 important to correct for scatter effects in the acquired projection data.
 
 
@@ -151,7 +149,7 @@ classified into the following categories:
 In \citeyear{mcffd2011}, \citeauthor{mcffd2011} already demonstrated promising
 results\cite{mcffd2011} using computationally expensive \ac{mc} simulations of
 CT scans of a cylindrical phantom with two bone inserts. By using scatter
-correction methods, the image quality lead to significant improvements.
+correction methods, the image quality leads to significant improvements.
 Motivated by the work of \citeauthor{mcffd2011}, who applied scatter correction
 to CT images via \ac{mc} photon simulation, this part of the thesis aims to
 develop more efficient simulations using \ac{qmc} methods.
@@ -159,10 +157,10 @@ develop more efficient simulations using \ac{qmc} methods.
 In this thesis, a \ac{qmc} simulation method is presented that further enhances
 the efficiency of \ac{mc} photon simulations. In
 Figure~\ref{fig:scatter_correction_comparison}, the \ac{qmc} simulation, which
-will be explained in detail in the following chapters, is used to simulate a
+will be explained in detail in the following chapters, is used to simulate an
 X-ray image of a similar phantom composition as by \citeauthor{mcffd2011}. The
-Sobol' sampling method was used and $5e{+}6$ photons were simulated from a
-spectrum with a maximum energy of 35\,keV which corresponds to a 35\,kVp X-ray
+Sobol' sampling method was used and $5 \times 10^6$ photons were simulated from
+a spectrum with a maximum energy of 35\,keV which corresponds to a 35\,kVp X-ray
 tube voltage.
 
 \captionsetup{justification=justified,singlelinecheck=false}
@@ -178,7 +176,7 @@ tube voltage.
     \caption{\ac{qmc} generated Cone-Beam X-ray image with $5e{+}6$ photons of a
     70\,mm soft-tissue cylinder with three bone inserts. Left: Simulation of a
     X-ray image with Compton scattering. Right: Image after removing Compton
-    scatters.}
+    scatter.}
     \label{fig:scatter_correction_comparison}
 \end{figure}
 
@@ -186,20 +184,20 @@ tube voltage.
 \section{Monte Carlo Photon Simulation}
 
 For the implementation of scatter correction methods, the rays need to be
-simulated on photon level. Therefore, each photon must be simulated by following
-its physical interactions and hereby fulfilling the mathematical distributions
-of attenuation. Scatter correction using \ac{mc} methods proceeds by first
-estimating a three-dimensional phantom from the X-ray projections. An \ac{mc}
-photon transport simulation is then performed to estimate the scatter signal
-$I_\text{scattered}$ for each detector pixel. The corrected signal is obtained
-by subtracting the scatter contribution from the measured intensity:
+simulated at the photon level. Therefore, each photon must be simulated by
+following its physical interactions, thereby fulfilling the mathematical
+distributions of attenuation. Scatter correction using \ac{mc} methods proceeds
+by first estimating a three-dimensional phantom from the X-ray projections. An
+\ac{mc} photon transport simulation is then performed to estimate the scatter
+signal $I_\text{scattered}$ for each detector pixel. The corrected signal is
+obtained by subtracting the scatter contribution from the measured intensity:
 
 \begin{equation}
     \label{eq:scatter_correction}
     I_{\text{corrected}} = I_\text{measured} - I_\text{scattered} \,.
 \end{equation}
 
-The \ac{mc} simulation is widely regarded as the gold standard for scatter
+\ac{mc} simulation is widely regarded as the gold standard for scatter
 correction in CT and related imaging modalities as they capture the stochastic
 nature of photon transport, including Compton and Rayleigh scattering,
 photoelectric absorption and multiple scattering events, based directly on
@@ -282,7 +280,7 @@ where time and computational resources are limited.
 One broadly adopted simulation framework is the \emph{Geant4} toolkit
 \cite{geant4}. Initially released in 1998 for high-energy physics applications,
 Geant4 has since been extended to support medical physics and imaging. However,
-as the architecture of Geant4 is built around \ac{mc} methods, an adoption of
+as the architecture of Geant4 is built around \ac{mc} methods, so adopting
 \ac{qmc} would require significant structural changes
 \cite{doigniesInterview2025,doignies2024echantillonnage}. This limitation might
 be one explanation why \ac{qmc} methods have so far not found widespread
@@ -297,11 +295,11 @@ produced results in close agreement with reference \ac{mc} simulations. Reported
 relative differences were below $1.5\%$, while the efficiency improvement factor
 varied between $4$ and $46$, depending on the geometry. Subsequent work is
 supporting this approach \cite{lin2025scatter,doignies2024echantillonnage}. As
-this chinese resource group has not yet published their code, it was not
+this resource group is not publishing their code, it was not
 possible to compare the results directly.
 
 Therefore, the goal of this thesis is to develop a proof of concept for \ac{qmc}
 photon transport simulation which is more generally applicable, to demonstrate
-the feasibility and argue for the benefits of \ac{qmc} methods in X-ray
+the feasibility of, and argue for the benefits of \ac{qmc} methods in X-ray
 simulation. The developed method will be compared to the same \ac{mc} reference
 simulation, to evaluate the accuracy and efficiency of the \ac{qmc} approach.

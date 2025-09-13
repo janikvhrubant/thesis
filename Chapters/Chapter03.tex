@@ -72,7 +72,7 @@ on the concept of \emph{ladders}:
     \varprod\limits_{j=1}^s \mathcal{Y}^j$, where $\varprod$ denotes the Cartesian product of sets. Each $\mathcal{Y}^j$ is a finite
     subset of $[a_j, b_j]$ for $j = 1, \dots, s$ where $\mathcal{Y}^j = \{y_1^j,
     \dots, y_k^j\}$ is ordered such that $a_j = y_1^j < y_2^j < \dots < y_k^j$.
-    The ladder could consist of a different number of points in each dimension.
+    The ladder may consist of a different number of points in each dimension.
 
     The \emph{successor} of a point $\boldsymbol{y} \in \mathcal{Y}$ in the ladder is defined
     componentwise as
@@ -204,7 +204,7 @@ bounded variation in all axis-aligned directions and projections.
 
 \begin{example} \ \\
 Let $f(x) = \prod\limits_{i=1}^s x_i$, the $s$-dimensional monomial on the
-hypercube $[0,1]^s$. Then it is clear that $f\in C^s$. According to equation~\eqref{eq:variation_hardy_krause_bound} and
+hypercube $[0,1]^s$. Then it is clear that $f \in C^s$. According to equation~\eqref{eq:variation_hardy_krause_bound} and
 Remark~\ref{rem:variation-approximation} the calculation follows as:
 
 \begin{align*}
@@ -215,22 +215,22 @@ Remark~\ref{rem:variation-approximation} the calculation follows as:
     &= 2^s - 1 \,.
 \end{align*}
 
-The notations will also be introduced in Chapter~\ref{chapter6}.
+These notations will also be introduced in Chapter~\ref{chapter6}.
 \end{example}
 
 \begin{example} \ \\
 Consider $f_{d,r}(x) = \left( \max\left\{ \sum\limits_{i=1}^d x_i - \frac{1}{2}, 0
 \right\} \right)^r$. For $d > r + 2$, this function has infinite Vitali and
 hence infinite Hardy--Krause variation. Such examples underline the limitations
-of \ac{qmc} for functions with low smoothness or sharp nonlinearity \cite[Prop.
+of \ac{qmc} for functions with low smoothness or sharp nonlinearities \cite[Prop.
 16]{owen2005multidimensional}.
 \end{example}
 
 In the next section, the Koksma--Hlawka inequality will be presented, which
 highly depends on the concept of function variation introduced in this section.
 These examples illustrate the importance of regularity assumptions. In practice,
-many physically motivated maps -- such as solutions to elliptic or parabolic
-PDEs -- do exhibit sufficient smoothness to ensure bounded Hardy--Krause
+many physically motivated maps --- such as solutions to elliptic or parabolic
+PDEs --- do exhibit sufficient smoothness to ensure bounded Hardy--Krause
 variation, justifying the use of \ac{qmc} error bounds.
 
 % ------------------------------------------------------------------------------
@@ -241,7 +241,7 @@ The Koksma--Hlawka inequality is a central result in \acl{qmc} theory. It
 provides a deterministic error bound for numerical integration that combines two
 distinct concepts: the discrepancy of the point set and the variation of the
 integrand. This inequality formalizes the intuition that more uniformly
-distributed sample points lead to smaller integration errors—provided the
+distributed sample points lead to smaller integration errors --- provided the
 integrand is regular enough.
 
 The inequality relates the \ac{qmc} integration error to the star discrepancy of
@@ -268,8 +268,8 @@ requires $f$ to have bounded variation in the Hardy--Krause sense, which
 excludes some classes of highly irregular or discontinuous functions.
 \end{remark}
 
-The two factors on the right-hand side of the inequality -- discrepancy and
-variation -- capture complementary aspects of integration error.
+The two factors on the right-hand side of the inequality --- discrepancy and
+variation --- capture complementary aspects of integration error.
 
 \begin{itemize}
     \item The \textbf{star discrepancy} $D_N^*(P)$ measures how uniformly the
@@ -283,7 +283,7 @@ variation -- capture complementary aspects of integration error.
 \end{itemize}
 
 Both quantities are required: even a low-discrepancy point set cannot guarantee
-small error if the function has unbounded variation. Conversely, even a smooth
+a small error if the function has unbounded variation. Conversely, even a smooth
 function may incur a large error if the points cluster poorly.
 
 \begin{remark} \ \\
@@ -298,15 +298,15 @@ The Koksma--Hlawka inequality provides valuable insight into the behavior of
 \begin{itemize}
     \item It motivates the use of low-discrepancy sequences such as Halton or
     Sobol', which minimize $D_N^*(P)$.
-    \item It emphasizes the importance of function regularity—only functions
+    \item It emphasizes the importance of function regularity --- only functions
     with bounded Hardy--Krause variation are eligible for the bound.
     \item It establishes a worst-case, deterministic error guarantee, unlike the
     probabilistic bounds of Monte Carlo integration.
 \end{itemize}
 
-In practical terms, the Koksma-Hlawka inequality implies that for sufficiently
+In practical terms, the Koksma--Hlawka inequality implies that for sufficiently
 smooth integrands with bounded Hardy--Krause variation and point sets obtained
-by low-discrepancy sequences, with star discprepancy of order
+by low-discrepancy sequences, with star discrepancy of order
 \eqref{def:low-discrepancy-sequence} by definition, one can achieve integration
 errors fulfilling 
 \begin{equation*}
