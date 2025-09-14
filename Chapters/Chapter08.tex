@@ -125,9 +125,9 @@ classified into the following categories:
 \begin{itemize}
     \item \textbf{Empirical and Analytical Methods:} \\
         These include techniques such as primary modulation, convolution-based
-        correction, and energy windowing. Scatter is typically estimated using
+        correction and energy windowing. Scatter is typically estimated using
         simplified models or empirical kernels, often assuming a smooth
-        background distribution, and then subtracted from the measured signal.
+        background distribution and then subtracted from the measured signal.
         While computationally efficient, these methods rely on assumptions
         regarding the spatial and energy distribution of scattered photons. As a
         result, they may fail to accurately model complex scatter phenomena in
@@ -217,7 +217,7 @@ The general procedure of \ac{mc}-based scatter estimation follows a sequence of 
     material properties and cross-sections.
         
     \item \textbf{Interaction Sampling:} For each interaction, the event type
-    (Compton, Rayleigh, or photoelectric) is sampled, and the photon's energy
+    (Compton, Rayleigh, or photoelectric) is sampled and the photon's energy
     and direction are updated accordingly.
         
     \item \textbf{Detection:} Photons reaching the detector—whether primary or
@@ -258,7 +258,7 @@ Figure~\ref{fig:photon-transport-pseudocode}.
 Although \ac{mc} methods yield highly accurate and physically correct scatter
 estimates, they are computationally demanding since a very large number of
 photons must be simulated. To obtain a statistically stable estimate of the
-scatter distribution, photons with a wide range of energies, directions, and
+scatter distribution, photons with a wide range of energies, directions and
 interaction histories have to be tracked. Moreover, only a fraction of these
 photons eventually reach the detector and contribute to the image, while the
 majority are absorbed or scattered in other directions. Consequently, the
@@ -300,7 +300,7 @@ possible to compare the results directly.
 
 Therefore, the goal of this thesis is to develop a proof of concept for \ac{qmc}
 photon transport simulation which is more generally applicable, to demonstrate
-the feasibility of, and argue for the benefits of \ac{qmc} methods in X-ray
+the feasibility of and argue for the benefits of \ac{qmc} methods in X-ray
 simulation. The developed method will be compared to the same \ac{mc} reference
 simulation, to evaluate the accuracy and efficiency of the \ac{qmc} approach.
 
@@ -310,4 +310,4 @@ X-ray imaging and the limitations of classical Monte Carlo simulations. These
 considerations motivate the development of a more efficient simulation framework
 that incorporates \ac{qmc} methods. To build such a framework, the next chapter
 introduces the fundamental physical laws that govern photon generation,
-attenuation, and scattering, which form the basis of any realistic simulation.
+attenuation and scattering, which form the basis of any realistic simulation.

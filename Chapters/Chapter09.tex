@@ -916,7 +916,7 @@ For the simulations within this thesis, the attenuation coefficients for the
 respective phantoms are retrieved from the \emph{XCOM Photon Cross Sections
 Database} \cite{nistXCOM}. XCOM is standard database provided by the National
 Institute of Standards and Technology (NIST) that comprehends attenuation
-coefficients for elements, compounds, and mixtures at energies ranging from
+coefficients for elements, compounds and mixtures at energies ranging from
 1\,keV to 100\,GeV.
 
 For the behavior of X-ray photons two main effects are considered:
@@ -1029,7 +1029,7 @@ electron radius. Together, this yields the following form of the Klein-Nishina f
 The Klein--Nishina formula describes the angular distribution of the scattering
 probability. Here, $\sigma$ denotes the scattering cross section, which
 quantifies the probability of an interaction by the effective area for
-scattering, and $\Omega$ denotes the solid angle, describing the
+scattering and $\Omega$ denotes the solid angle, describing the
 three-dimensional angular space into which the photon may be scattered. The
 expression $\tfrac{d\sigma}{d\Omega}$ is thus the \emph{differential cross
 section}, which represents the probability density of photons being scattered
@@ -1044,9 +1044,9 @@ Instead the method of \emph{acceptance--rejection sampling} is used.
 Acceptance--rejection sampling is a method for generating random samples from a
 probability distribution $f(x)$ when direct sampling is difficult. The idea is
 to employ a simpler envelope distribution $h(x)$, from which samples can be
-drawn efficiently, and which dominates $f(x)$ up to a constant factor. More
+drawn efficiently and which dominates $f(x)$ up to a constant factor. More
 precisely, one requires a constant $0< c \leq 1$ such that $c\,f(x) \leq h(x)$
-for all $x$. A candidate value $x$ is drawn from $h(x)$, and an auxiliary
+for all $x$. A candidate value $x$ is drawn from $h(x)$ and an auxiliary
 uniform random number $u \sim \mathcal{U}(0,1)$ is generated. The sample $x$ is
 accepted if $u \leq \tfrac{c\,f(x)}{h(x)}$, otherwise it is rejected and the
 procedure is repeated until an acceptance occurs.
@@ -1184,6 +1184,6 @@ without compromising the accuracy of the results.
 The physical principles described in this chapter provide the building blocks
 for modeling photon transport in X-ray imaging. Based on these laws, the
 subsequent Chapter~\ref{chapter10} presents the simulation
-framework, combining photon generation, ray traversal, and interaction
+framework, combining photon generation, ray traversal and interaction
 mechanisms into a coherent algorithmic structure that integrates \ac{qmc}
 sampling strategies.

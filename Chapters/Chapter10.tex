@@ -6,18 +6,30 @@ In this chapter, the algorithms developed for X-ray image simulation are
 presented. To enhance convergence, they integrate different sampling techniques
 and aspects of the \emph{Forced Fixed Detection} approach.
 
-In standard \ac{mc} X-ray simulations a random variable determines whether a photon
-escapes the phantom or undergoes a scattering event. Thus, only a fraction of
-the simulated photons actually reaches the detector and contributes to the final image.
-To attain a satisfactory photon distribution at the detector, a very large
-number of photons with different directions, energies and scatter behaviors
-must be simulated. To reduce the variance and accelerate convergence,
-low-discrepancy sequences are used in this thesis to sample the initial photon
-properties and the stochastic processes during photon transport.
+In standard \ac{mc} X-ray simulations a random variable determines whether a
+photon escapes the phantom or undergoes a scattering event. Thus, only a
+fraction of the simulated photons actually reaches the detector and contributes
+to the final image. To attain a satisfactory photon distribution at the
+detector, a very large number of photons with different directions, energies and
+scatter behaviors must be simulated. To reduce the variance and accelerate
+convergence, low-discrepancy sequences are used in this thesis to sample the
+initial photon properties and the stochastic processes during photon transport.
 
-To compare the performance of conventional \ac{mc} sampling with the proposed Sobol' and Halton based sampling, a simulation algorithm has been developed, which is based on the \emph{Forced Fixed Detection} approach. Forced fixed detection is a variance reduction technique applied in \cite{fd2001,qmcXray2023}. 
+To compare the performance of conventional \ac{mc} sampling with the proposed
+Sobol' and Halton based sampling, a simulation algorithm has been developed,
+which is based on the \emph{Forced Fixed Detection} approach. Forced fixed
+detection is a variance reduction technique applied in
+\cite{fd2001,qmcXray2023}. 
 
-Therefore, a fixed number of photon scatter events is predefined. Then, at each scatter event, the escape probability is calculated. This represents the portion of the photon intensity which is not scattered but is directly forced to contribute to the detector signal. For the remaining intensity, a free path length is sampled from the exponential distribution according to Beer-Lambert's law and the photon is scattered. Again, the photon intensity is updated according to the probability of staying in the phantom and being scattered respectively. Thus, every simulated photon definetly contributes to the detector signal, which is not the case in conventional \ac{mc} simulations.
+Therefore, a fixed number of photon scatter events is predefined. Then, at each
+scatter event, the escape probability is calculated. This represents the portion
+of the photon intensity which is not scattered but is directly forced to
+contribute to the detector signal. For the remaining intensity, a free path
+length is sampled from the exponential distribution according to Beer-Lambert's
+law and the photon is scattered. Again, the photon intensity is updated
+according to the probability of staying in the phantom and being scattered
+respectively. Thus, every simulated photon definetly contributes to the detector
+signal, which is not the case in conventional \ac{mc} simulations.
 
 \section{Preliminaries}
 
@@ -731,7 +743,6 @@ and speed up the computation.
 \bigskip
 Having established the simulation algorithm and the integration of \ac{qmc}
 sampling methods, the next step is to assess their practical benefits.
-Therefore, Chapter~\ref{ch:evaluation_framework} provides a systematic
-evaluation of the framework on representative phantom geometries, analyzing
-accuracy, variance, and noise reduction compared to classical Monte Carlo
-simulations.
+Therefore, Chapter~\ref{chapter11} provides a systematic evaluation of the
+framework on representative phantom geometries, analyzing accuracy, variance and
+noise reduction compared to classical Monte Carlo simulations.

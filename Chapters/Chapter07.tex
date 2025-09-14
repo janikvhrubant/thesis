@@ -28,9 +28,9 @@ As the main goal of this chapter is to evaluate the impact of different sampling
 strategies, the Deep Learning algorithm was applied on training sets sampled
 from three different strategies: pseudo-random sampling and two low-discrepancy
 sequences: Sobol' and Halton as introduced in Chapter~\ref{chapter3}. Each
-training set is obtained by evaluating the ground truth function $f$ at the
+training set is obtained by evaluating the ground truth function $f$ at accordingly
 sampled points. In the experiments, the number of training samples $N$ is varied
-from $64$ up to $8192$. According to the training set, a test set $\mathcal{T}$
+from $32$ up to $8192$. According to the training set, a test set $\mathcal{T}$
 is chosen from the remaining sampling strategies. To ensure comparability and
 uniform coverage of the domain, the test sets are always chosen to be the full
 low-discrepancy sequence with $|\mathcal{T}|=8192$ points. The setup can be
@@ -96,6 +96,10 @@ $\epsilon$ & $1e-8$ \\
 \label{tab:dnn_configs}
 \end{table}
 
+As the training sets are relatively small, splitting the batch size into smaller
+chunks did not show a significant improvement in the training performance.
+Therefore, the batch size was always chosen to be equal to the training set
+size.
 
 \section{Multi-dimensional sum of sines}
 
@@ -380,48 +384,63 @@ Since $R\circ\theta\in C^{1}([0,1]^7)$, we have
 $\widehat{V}_{\mathrm{HK}}(R\circ\theta)<\infty$. For small enough step size
 $\Delta t$, the numerical approximation of $R \circ \theta$
 
-Again, the deep learning algorithm was applied to various trainin
-hyperparameters and showed the best performance for the following
-configurations summarized in Table~\ref{tab:proj_dnn_configs}.
+For the training of the \acp{dnn}, different hyperparameters were evaluated for
+\acp{dnn} training on the different sampled training sets. This led to
+approximately $10000$ \acp{dnn} with accordingly determined test errors.
 
-\begin{table}[H]
-\begin{tabular}{lc}
-\toprule
-\textbf{DNN Architecture }& \\
-Number of hidden layers & $6$ \\
-Number of neurons per layer & $16$ \\
-Activation function & Tanh \\
-\midrule
-\textbf{Adam Parameters} & \\
-Learning Rate & $1.0 \times 10^{-2}$ \\
-Weight Decay & $1.0 \times 10^{-4}$ \\
-$\beta_1$ & $0.9$ \\
-$\beta_2$ & $0.999$ \\
-$\varepsilon$ & $1 \times 10^{-8}$ \\
-\bottomrule
-\end{tabular}
-\caption{DNN and Adam configurations for the projectile motion example.}
-\label{tab:proj_dnn_configs}
-\centering
-\end{table}
+The evaluation over the different hyperparameters is showed
 
-The Deep Learning algorithm was applied for various number of training set sizes
-with $N\in\{32,64,128,256,512,1024,2048,4096,8192\}$ samples drawn from
-\ac{mc} randoms, Sobol' and Halton sequences. The results were again stored
-after each epoch for up to $2000$ epochs.
+To select relevant hyperparamters, the best configurations were chosen. The
+following figures summarize the distribution of the hyperparameter configuration
+for the best $100$ training configurations.
+Figure~\ref{fig:proj_hyperparameter_distribution} illustrates the distribution
+of the $10\%$ best \acp{dnn}. It can be seen, that the advantage of uniform
+training sets is even more pronounced for larger number of epochs.
 
-The training evaluation of the test error on the corresponding test sets for the
-different epochs is illustrated in Figure~\ref{fig:proj_test_error}.
+Figure~\ref{fig:proj_hyperparameter_distribution2} shows the minimal test error
+achieved per number of epochs over all sampling strategies and configurations.
+This indicates, that beginning from $500$ epochs, the test error shows a
+significant improvement and and thus the learning process is likely to perform
+better.
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.55\textwidth]{Figures/testing_error_projectile_trainingsetsizes.png}
-    \caption{Test error for training set size $N=1024$ for the projectile motion function.}
-    \label{fig:proj_test_error}
+    \begin{minipage}{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{Figures/projectile_epochs1.png}
+        \caption{Distribution of number of epochs for \acp{dnn} with best $100$ test errors.}
+        \label{fig:proj_hyperparameter_distribution}
+    \end{minipage}\hfill
+    \begin{minipage}{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{Figures/projectile_epochs2.png}
+        \caption{Minimal test error achieved per number of epochs.}
+        \label{fig:proj_hyperparameter_distribution2}
+    \end{minipage}
 \end{figure}
 
+The correlation between the testing error and the training set sizes for the
+different sampling strategies is illustrated in
+Figure~\ref{fig:proj_training_set_size_distribution}. Here, the $20\%$ best
+perfoming \acp{dnn} in terms of test error are considered. As indicated by
+Figure~\ref{fig:proj_hyperparameter_distribution}, the number of actual
+\acp{dnn} vary for the different sampling strategies due to the differing
+performance. It can be observed, that especially for trainings small test errors
+below $0.25$, the training set size can be halved for Sobol' based training sets
+compared to pseudo-random training sets for comparable results.
 
-TODO: Evaluation mit Plots
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.55\textwidth]{Figures/projectile_setsize.png}
+    \caption{Test errors per training set size for the $20\%$ best performing
+    \acp{dnn}}
+    \label{fig:proj_training_set_size_distribution}
+\end{figure}
+
+The figure indicates the means over the best $20\%$ performing \acp{dnn} for
+each training set size per sampling strategy. The shaded areas indicate the
+deviation from the mean.
+
 
 \section{Conclusion}
 

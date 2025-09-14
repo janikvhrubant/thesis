@@ -278,10 +278,8 @@ headsepline, % Uncomment to get a line under the header
 \end{minipage}
 \begin{minipage}[t]{0.55\textwidth}
 \begin{flushright} \large
-\emph{Supervisors:} \\
-\supname \\% Supervisor name - remove the \href bracket to remove the link
-\vspace{.3cm}
-\examname
+\emph{Supervisor:} \\
+\supname% Supervisor name - remove the \href bracket to remove the link
 \end{flushright}
 \end{minipage}\\[3cm]
  
@@ -402,7 +400,7 @@ erteilt wird.
 \addchaptertocentry{\abstractname}
 This thesis investigates \ac{qmc} methods from their theoretical foundations to applications in machine learning and medical imaging. \ac{qmc} methods replace random sampling by low-discrepancy sequences, thereby improving uniformity and under suitable smoothness conditions convergence rates compared to classical \ac{mc} sampling.
 
-Part~\ref{part1} develops the mathematical framework of \ac{qmc} integration, introducing concepts such as discrepancy, Hardy--Krause variation, and the Koksma--Hlawka inequality, which provides a deterministic error bound and serves as the theoretical basis for the subsequent studies.
+Part~\ref{part1} develops the mathematical framework of \ac{qmc} integration, introducing concepts such as discrepancy, Hardy--Krause variation and the Koksma--Hlawka inequality, which provides a deterministic error bound and serves as the theoretical basis for the subsequent studies.
 
 Part~\ref{part2} examines the use of \ac{qmc} sampling in the training of \ac{dnn}. By revisiting and refining recent theoretical results, it is shown that applying the Koksma--Hlawka inequality to the generalization gap requires stricter regularity assumptions than previously stated. Empirical experiments on benchmark problems confirm that \ac{qmc}-based training sets can reduce generalization error and thus constitute a promising alternative to random sampling in many-query problems.
 
@@ -421,26 +419,28 @@ Overall, the thesis demonstrates both the mathematical foundations and the pract
 
 \section*{Acknowledgements}
 
-First and foremost, I would like to thank my supervisor, Professor Dr. Andreas
-Neuenkirch, for accompanying me on this journey and for his supportive guidance
-throughout the process.
+First and foremost, I would like to thank my supervisor, Professor Dr.\ Andreas
+Neuenkirch, for his supportive guidance and for accompanying me throughout this
+journey.  
 
-I am also thankful to Bastien Doignies and David Sarrut from the CREATIS
+I am also grateful to Bastien Doignies and David Sarrut from the CREATIS
 laboratory at the University of Lyon for the valuable exchanges on their areas
-of expertise, which broadened my perspective.  
+of expertise, which significantly broadened my perspective.  
 
-Furthermore, I would like to thank my fellow student and friend Tobias for his
+Furthermore, I wish to thank my fellow student and friend Tobias for his
 indispensable help in setting up the extensive simulation runs on the latest
 NVIDIA machines. I also extend my gratitude to other friends and relatives who
-generously provided me with computing resources during this time.  
+generously provided me with additional computing resources during this time.  
 
-I wish to acknowledge my colleagues from my time in Newport Beach. The
-experience of working with them has shaped my programming skills in a lasting
-way. The knowledge and practices I acquired there proved essential for the
-successful implementation of the methods developed in this thesis.  
+I would like to acknowledge my colleagues from my time in Newport Beach. The
+experience of working with them profoundly shaped my programming skills and the
+knowledge and practices I acquired there proved essential for the successful
+implementation of the methods developed in this thesis.  
 
 Finally, I am deeply grateful to my family and my four siblings for their
-unwavering support and for making my studies possible.
+unwavering support and for making my studies possible. My heartfelt thanks go to
+Viktoria, whose constant encouragement and valuable academic input, as well as
+her personal support, greatly enriched the completion of this thesis.
 
 
 \end{acknowledgements}
